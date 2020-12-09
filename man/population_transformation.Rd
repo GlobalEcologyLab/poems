@@ -43,7 +43,6 @@ population_transformation(
   \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
   \item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
   \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-  \item{\code{previous_stage_abundance}}{Matrix of previous (time step) abundance for each stage (rows) and population (columns).}
   \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
   \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
 }

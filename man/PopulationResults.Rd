@@ -39,7 +39,7 @@ re-generated \code{\link{Generator}} outputs.
 
 \item{\code{abundance_stages}}{Population abundance for combined stages across simulation time-steps (list of summary lists or replicate arrays for each combined stage).}
 
-\item{\code{abundance_trend}}{Trend or average Sen's \code{\link[trend:sens.slope]{slope}} of total abundance (optionally across a time-step interval).}
+\item{\code{abundance_trend}}{Trend or average Sen's \code{\link[trend:sens.slope]{slope}} of abundance (optionally across a time-step interval).}
 
 \item{\code{ema}}{Array of population expected minimum abundance (EMA) across simulation time-steps.}
 
