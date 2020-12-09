@@ -92,7 +92,7 @@ paleopop_simulator <- function(inputs) {
   # Dispersal and correlation
 
   # Create re-usable dispersal structures
-  dispersal_present <- !is.null(inputs$dispersal_data)
+  dispersal_present <- (!is.null(inputs$dispersal_data) && nrow(inputs$dispersal_data[[1]]))
   if (dispersal_present) {
 
     # Unpack dispersal data and determine compact matrix dimensions
