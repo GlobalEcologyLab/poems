@@ -333,21 +333,32 @@ PopulationResults <- R6Class("PopulationResults",
       }
     },
 
-    #' @field abundance_trend Trend or average Sen's \code{\link[trend:sens.slope]{slope}} of total abundance (optionally across a time-step interval).
+    #' @field abundance_trend Trend or average Sen's \code{\link[trend:sens.slope]{slope}} of abundance (optionally across a time-step interval).
     abundance_trend = function(value) {
       if (missing(value)) {
-        if (is.null(private$.abundance_trend) && !is.null(self$parent)) {
+        if (is.null(private$.abundance_trend)) {
           abundance <- self$abundance
           if (is.list(abundance) && "mean" %in% names(abundance)) {
             abundance <- abundance$mean
           }
           if (is.array(abundance)) {
-            private$.abundance_trend <- array(NA, ncol(as.matrix(abundance)))
-            for (i in 1:ncol(as.matrix(abundance))) {
-              if (is.numeric(self$trend_interval) && min(self$trend_interval) >= 1 && max(self$trend_interval) <= nrow(as.matrix(abundance))) {
-                private$.abundance_trend[i] <- as.numeric(trend::sens.slope(as.matrix(abundance)[self$trend_interval, i])$estimates)
-              } else {
-                private$.abundance_trend[i] <- as.numeric(trend::sens.slope(as.matrix(abundance)[, i])$estimates)
+            if (!is.null(self$parent)) { # all populations
+              private$.abundance_trend <- array(NA, ncol(as.matrix(abundance))) # single or replicates
+              for (i in 1:ncol(as.matrix(abundance))) {
+                if (is.numeric(self$trend_interval) && min(self$trend_interval) >= 1 && max(self$trend_interval) <= nrow(as.matrix(abundance))) {
+                  private$.abundance_trend[i] <- as.numeric(trend::sens.slope(as.matrix(abundance)[self$trend_interval, i])$estimates)
+                } else {
+                  private$.abundance_trend[i] <- as.numeric(trend::sens.slope(as.matrix(abundance)[, i])$estimates)
+                }
+              }
+            } else { # individual populations
+              private$.abundance_trend <- array(NA, nrow(as.matrix(abundance))) # populations
+              for (i in 1:nrow(as.matrix(abundance))) {
+                if (is.numeric(self$trend_interval) && min(self$trend_interval) >= 1 && max(self$trend_interval) <= ncol(as.matrix(abundance))) {
+                  private$.abundance_trend[i] <- as.numeric(trend::sens.slope(as.matrix(abundance)[i, self$trend_interval])$estimates)
+                } else {
+                  private$.abundance_trend[i] <- as.numeric(trend::sens.slope(as.matrix(abundance)[i,])$estimates)
+                }
               }
             }
           }
