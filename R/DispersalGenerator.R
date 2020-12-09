@@ -303,17 +303,22 @@ DispersalGenerator <- R6Class("DispersalGenerator",
         dispersal_rows <- tabulate(nonzero_base_data$source_pop, nbins = populations)
         dispersal_cols <- tabulate(nonzero_base_data$target_pop, nbins = populations)
         nonzero_compact_rows <- max(dispersal_rows, dispersal_cols)
-        compact_emigrant_matrix <- array(1:nonzero_compact_rows, c(nonzero_compact_rows, populations))
-        compact_immigrant_matrix <- compact_emigrant_matrix*(compact_emigrant_matrix <= matrix(dispersal_cols, nrow = nonzero_compact_rows, ncol = populations, byrow = TRUE))
-        compact_emigrant_matrix <- compact_emigrant_matrix*(compact_emigrant_matrix <= matrix(dispersal_rows, nrow = nonzero_compact_rows, ncol = populations, byrow = TRUE))
-        # Map the row of each compact matrix to the original target (for emigrants) or source (for immigrants) populations
-        nonzero_base_data$emigrant_row <- which(compact_emigrant_matrix > 0, arr.ind = TRUE, useNames = FALSE)[,1]
-        nonzero_base_data$immigrant_row <- which(compact_immigrant_matrix > 0, arr.ind = TRUE, useNames = FALSE)[,1]
-        target_sorted_indices <- nonzero_base_data[order(nonzero_base_data$target_pop, nonzero_base_data$source_pop), c("target_pop", "source_pop")]
-        nonzero_base_data$immigrant_row <- nonzero_base_data$immigrant_row[order(target_sorted_indices$source_pop, target_sorted_indices$target_pop)]
+        if (nonzero_compact_rows) {
+          compact_emigrant_matrix <- array(1:nonzero_compact_rows, c(nonzero_compact_rows, populations))
+          compact_immigrant_matrix <- compact_emigrant_matrix*(compact_emigrant_matrix <= matrix(dispersal_cols, nrow = nonzero_compact_rows, ncol = populations, byrow = TRUE))
+          compact_emigrant_matrix <- compact_emigrant_matrix*(compact_emigrant_matrix <= matrix(dispersal_rows, nrow = nonzero_compact_rows, ncol = populations, byrow = TRUE))
+          # Map the row of each compact matrix to the original target (for emigrants) or source (for immigrants) populations
+          nonzero_base_data$emigrant_row <- which(compact_emigrant_matrix > 0, arr.ind = TRUE, useNames = FALSE)[,1]
+          nonzero_base_data$immigrant_row <- which(compact_immigrant_matrix > 0, arr.ind = TRUE, useNames = FALSE)[,1]
+          target_sorted_indices <- nonzero_base_data[order(nonzero_base_data$target_pop, nonzero_base_data$source_pop), c("target_pop", "source_pop")]
+          nonzero_base_data$immigrant_row <- nonzero_base_data$immigrant_row[order(target_sorted_indices$source_pop, target_sorted_indices$target_pop)]
+        } else {
+          nonzero_base_data$emigrant_row <- numeric(0)
+          nonzero_base_data$immigrant_row <- numeric(0)
+        }
 
         # Calculate the sequential changes in dispersals when dispersal friction object is present
-        if (!is.null(self$dispersal_friction) && !is.null(self$distance_data$changes)) {
+        if (!is.null(self$dispersal_friction) && !is.null(self$distance_data$changes) && nonzero_compact_rows) {
 
           # Calculate the initial dispersal data by applying the first (friction) distance changes to the (compact) base data
           compact_matrix[as.matrix(self$distance_data$changes[[1]][, c("compact_row", "source_pop")])] <-
@@ -618,9 +623,9 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field distance_classes Vector of distance interval boundaries for calculating discrete dispersal rates.
     distance_classes = function(value) {
       if (missing(value)) {
-        if (is.null(self$generative_template$distance_classes) && is.numeric(self$dispersal_max_distance)
-            && is.null(self$dispersal_function_data)) { # use max distance to generate classes (up to 1000)
-          seq_step <- max(trunc(self$dispersal_max_distance/1000), 1)
+        if (is.null(self$generative_template$distance_classes) && is.numeric(self$dispersal_max_distance)) {
+          # Use max distance to generate classes (up to 1000|max_distance_classes)
+          seq_step <- max(trunc(self$dispersal_max_distance/self$max_distance_classes), 1)
           self$generative_template$distance_classes <- seq(seq_step, self$dispersal_max_distance, seq_step)
         }
         self$generative_template$distance_classes
@@ -630,6 +635,15 @@ DispersalGenerator <- R6Class("DispersalGenerator",
         } else {
           self$generative_template$distance_classes <- value
         }
+      }
+    },
+
+    #' @field max_distance_classes The maximum number of distance classes when they are calculated automatically via the maximum distance (default: 1000).
+    max_distance_classes = function(value) {
+      if (missing(value)) {
+        self$generative_template$max_distance_classes
+      } else {
+        self$generative_template$max_distance_classes <- value
       }
     },
 
@@ -680,17 +694,9 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     dispersal_proportion = function(value) {
       if (missing(value)) {
         if (any(self$get_attribute_aliases("dispersal_proportion") %in% self$inputs)) {
-          if (!is.null(private$.dispersal_proportion) && !is.null(self$proportion_multiplier)) {
-            private$.dispersal_proportion*self$proportion_multiplier
-          } else {
-            private$.dispersal_proportion
-          }
+          private$.dispersal_proportion
         } else {
-          if (!is.null(self$generative_template$dispersal_proportion) && !is.null(self$proportion_multiplier)) {
-            self$generative_template$dispersal_proportion*self$proportion_multiplier
-          } else {
-            self$generative_template$dispersal_proportion
-          }
+          self$generative_template$dispersal_proportion
         }
       } else {
         if (any(self$get_attribute_aliases("dispersal_proportion") %in% self$inputs)) {
@@ -753,11 +759,13 @@ DispersalGenerator <- R6Class("DispersalGenerator",
           # Use maximum distance to derive function data index
           if (!(names(self$dispersal_function_data)[1] %in% self$get_attribute_aliases(c("dispersal_proportion", "dispersal_breadth", "dispersal_max_distance")))) {
             # Assume first column provides distance intervals (non-inclusive lower bounds)
-            self$dispersal_index <- as.numeric(cut(value, breaks = c(self$dispersal_function_data[, 1], Inf)))
+            dispersal_index <- as.numeric(cut(value, breaks = c(self$dispersal_function_data[, 1], Inf)))
+            if (is.finite(dispersal_index)) self$dispersal_index <- dispersal_index
           } else if (any(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_max_distance"))) {
             # Use max_distance column as distance intervals (non-inclusive lower bounds)
             function_data_column <- which(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_max_distance"))
-            self$dispersal_index <- as.numeric(cut(value, breaks = c(self$dispersal_function_data[[function_data_column]], Inf)))
+            dispersal_index <- as.numeric(cut(value, breaks = c(self$dispersal_function_data[[function_data_column]], Inf)))
+            if (is.finite(dispersal_index)) self$dispersal_index <- dispersal_index
           }
         }
       }

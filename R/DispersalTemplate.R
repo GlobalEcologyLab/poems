@@ -45,6 +45,7 @@ DispersalTemplate <- R6Class("DispersalTemplate",
     # .occupancy_mask         [inherited]
     .dispersal_friction = NULL,
     .distance_classes = NULL,
+    .max_distance_classes = 1000,
     .distance_scale = 1,
     .distance_data = NULL,
     .dispersal_function_data = NULL,
@@ -182,6 +183,16 @@ DispersalTemplate <- R6Class("DispersalTemplate",
         private$.distance_classes <- value
       }
     },
+
+    #' @field max_distance_classes The maximum number of distance classes when they are calculated automatically via the maximum distance (default: 1000).
+    max_distance_classes = function(value) {
+      if (missing(value)) {
+        private$.max_distance_classes
+      } else {
+        private$.max_distance_classes <- value
+      }
+    },
+
 
     #' @field distance_scale Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.
     distance_scale = function(value) {
