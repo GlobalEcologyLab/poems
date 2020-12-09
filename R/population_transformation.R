@@ -24,7 +24,6 @@
 #'     \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
 #'     \item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
 #'     \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-#'     \item{\code{previous_stage_abundance}}{Matrix of previous (time step) abundance for each stage (rows) and population (columns).}
 #'     \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
 #'     \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
 #'   }
@@ -74,8 +73,7 @@ population_transformation <- function(replicates,
     if (is.function(transformation)) { # user-defined function
 
       ## Create a nested function for applying user-defined transformation to stage abundance ##
-      user_defined_function <- function(r, tm, carrying_capacity, stage_abundance, occupied_indices,
-                                        previous_stage_abundance) {
+      user_defined_function <- function(r, tm, carrying_capacity, stage_abundance, occupied_indices) {
 
         # Add attributes to be made available to the user-defined function
         params$r <- r
@@ -83,7 +81,6 @@ population_transformation <- function(replicates,
         params$carrying_capacity <- carrying_capacity
         params$stage_abundance <- stage_abundance
         params$occupied_indices <- occupied_indices
-        params$previous_stage_abundance <- previous_stage_abundance
 
         # Run user-defined transformation function
         tryCatch({

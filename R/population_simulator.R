@@ -66,7 +66,6 @@
 #'         \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
 #'         \item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
 #'         \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-#'         \item{\code{previous_stage_abundance}}{Matrix of previous (time step) abundance for each stage (rows) and population (columns).}
 #'         \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
 #'         \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
 #'       }
@@ -321,9 +320,6 @@ population_simulator <- function(inputs) {
     ### Simulation time steps ###
     for (tm in 1:time_steps) {
 
-      # Set previous (time step) abundance
-      previous_stage_abundance <- stage_abundance
-
       # Set transition 3D array (a Leslie/Lefkovitch matrix for each population)
       transition_array <- array(stage_matrix, c(stages, stages, populations))
 
@@ -380,8 +376,7 @@ population_simulator <- function(inputs) {
 
         ## Translocation calculations ##
         if (process == "translocation" && is.function(translocation_function)) {
-          transformed <- translocation_function(r, tm, carrying_capacity, stage_abundance, occupied_indices,
-                                                previous_stage_abundance)
+          transformed <- translocation_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
           stage_abundance <- transformed$stage_abundance
           if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
         }
@@ -390,8 +385,7 @@ population_simulator <- function(inputs) {
         if (process == "harvest") {
           if (occupied_populations && is.function(harvest_function)) {
             preharvest_abundance <- stage_abundance
-            transformed <- harvest_function(r, tm, carrying_capacity, stage_abundance, occupied_indices,
-                                            previous_stage_abundance)
+            transformed <- harvest_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
             stage_abundance <- transformed$stage_abundance
             if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
             harvested <- preharvest_abundance - stage_abundance
@@ -405,8 +399,7 @@ population_simulator <- function(inputs) {
 
         ## Mortality calculations ##
         if (occupied_populations && process == "mortality" && is.function(mortality_function)) {
-          transformed <- mortality_function(r, tm, carrying_capacity, stage_abundance, occupied_indices,
-                                            previous_stage_abundance)
+          transformed <- mortality_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
           stage_abundance <- transformed$stage_abundance
           if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
         }
@@ -418,8 +411,7 @@ population_simulator <- function(inputs) {
 
         ## Other user-defined abundance transformation functions ##
         if (process %in% other_user_defined && is.function(other_functions[[process]])) {
-          transformed <- other_functions[[process]](r, tm, carrying_capacity, stage_abundance, occupied_indices,
-                                                    previous_stage_abundance)
+          transformed <- other_functions[[process]](r, tm, carrying_capacity, stage_abundance, occupied_indices)
           stage_abundance <- transformed$stage_abundance
           if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
         }
