@@ -5,7 +5,7 @@ test_that("initialization and parameter setting", {
   # Default initialization
   dispersal_gen <- DispersalGenerator$new()
   expect_equal(dispersal_gen$get_attributes(c("description", "inputs", "outputs")),
-               list(description = "Dispersal", inputs = c("dispersal_proportion", "dispersal_breadth", "dispersal_max_distance"),
+               list(description = "dispersal", inputs = c("dispersal_proportion", "dispersal_breadth", "dispersal_max_distance"),
                     outputs = c("dispersal_data")))
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates)
   expect_warning(dispersal_gen <- DispersalGenerator$new(region = Region$new()),
@@ -15,9 +15,8 @@ test_that("initialization and parameter setting", {
   expect_silent(dispersal_gen <- DispersalGenerator$new(region = Region$new(coordinates = coordinates, use_raster = FALSE)))
   # Dispersal function parameters
   dispersal_gen$dispersal_function_data <- data.frame(breadth = seq(130, 100, -10), max_distance = seq(200, 350, 50))
-  dispersal_gen$proportion_multiplier <- 0.5
   dispersal_gen$dispersal_proportion <- 0.8
-  expect_equal(dispersal_gen$dispersal_proportion, 0.5*0.8)
+  expect_equal(dispersal_gen$dispersal_proportion, 0.8)
   dispersal_gen$dispersal_index <- 3
   expect_equal(dispersal_gen$dispersal_breadth, 110)
   expect_equal(dispersal_gen$dispersal_max_distance, 300)
@@ -309,7 +308,7 @@ test_that("cloning and generation", {
   expect_null(dispersal_clone$error_messages)
   # Generation
   expect_equal(dispersal_gen$generate(),
-               list(error_messages = "Dispersal generation requires inputs: dispersal_proportion, dispersal_breadth, dispersal_max_distance"))
+               list(error_messages = "dispersal generation requires inputs: dispersal_proportion, dispersal_breadth, dispersal_max_distance"))
   generated_output <- dispersal_gen$generate(input_values = list(proportion = 0.4, breadth = 110, max_distance = 300))
   expect_named(generated_output, "dispersal_data")
   expect_equal(generated_output$dispersal_data, dispersal_clone$dispersal_data)
@@ -325,7 +324,7 @@ test_that("cloning and generation", {
   expect_null(dispersal_clone$error_messages)
   # Generation
   expect_equal(dispersal_gen$generate(),
-               list(error_messages = "Dispersal generation requires inputs: breadth"))
+               list(error_messages = "dispersal generation requires inputs: breadth"))
   generated_output <- dispersal_gen$generate(input_values = list(breadth = 120))
   expect_named(generated_output, "dispersal_data")
   expect_equal(generated_output$dispersal_data, dispersal_clone$dispersal_data)

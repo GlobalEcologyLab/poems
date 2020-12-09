@@ -10,6 +10,7 @@ test_that("parameter generation with single replicate", {
   results_model <- PopulationResults$new(results = file.path(TEST_DIRECTORY, "sample_1_results.RData"))
   expect_equal(results_model$get_attributes(),
                list(abundance = abundance,
+                    abundance_trend = array(apply(abundance, 1, function (a) trend::sens.slope(as.matrix(a))$estimates)),
                     extirpation = apply(abundance, 1, function(a) min(which(a == 0))),
                     occupancy = +(abundance > 0)))
   expect_equal(results_model$all$get_attributes(),

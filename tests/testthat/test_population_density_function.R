@@ -193,9 +193,9 @@ test_that("user-defined density dependence", {
   occupied_indices <- (1:7)[-5]
   expect_equal(logistic_function(transition_array = stage_array, carrying_capacity, stage_abundance, occupied_indices)[,,occupied_indices],
                density_function(transition_array = stage_array, carrying_capacity, stage_abundance, occupied_indices)[,,occupied_indices])
-  expect_named(simulator$attached$params, c("simulator", "a", "b", "transition_array", "carrying_capacity", "stage_abundance",
-                                            "population_abundance", "density_abundance", "occupied_indices", "growth_rate_max",
-                                            "calculate_multipliers", "apply_multipliers"))
+  expect_named(simulator$attached$params, c("simulator", "a", "b", "transition_array", "fecundity_mask", "fecundity_max",
+                                            "carrying_capacity", "stage_abundance", "population_abundance", "density_abundance",
+                                            "occupied_indices", "growth_rate_max", "calculate_multipliers", "apply_multipliers"))
   expect_equal(simulator$attached$params[c("a", "b", "transition_array", "carrying_capacity", "stage_abundance",
                                            "population_abundance", "density_abundance", "occupied_indices", "growth_rate_max")],
                list(a = 1, b = 2,

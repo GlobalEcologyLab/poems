@@ -90,11 +90,11 @@ test_that("module parameter passing and order", {
                                       "translocation", "transition"))
   expected_abundance <- array(10, 10)
   for (i in 2:10) expected_abundance[i] <- round(expected_abundance[i - 1]*1.2)
-  expected_density_params <- c("simulator", "transition_array", "carrying_capacity", "stage_abundance",
+  expected_density_params <- c("simulator", "transition_array", "fecundity_mask", "carrying_capacity", "stage_abundance",
                                "population_abundance", "density_abundance", "occupied_indices", "growth_rate_max")
   expected_transform_params <- c("replicates", "time_steps", "years_per_step", "populations", "stages",
                                  "demographic_stochasticity", "density_stages", "simulator", "r", "tm",
-                                 "carrying_capacity", "stage_abundance", "occupied_indices", "previous_stage_abundance")
+                                 "carrying_capacity", "stage_abundance", "occupied_indices")
   expected_dispersal_params <- c("replicates", "time_steps", "years_per_step", "populations", "stages",
                                  "demographic_stochasticity", "density_stages", "dispersal_stages",
                                  "dispersal_target_k", "dispersal_target_n",  "simulator", "r", "tm",
