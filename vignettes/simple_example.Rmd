@@ -2,7 +2,7 @@
 title: "Simple workflow example for a population model"
 author: "Global ChEC Lab"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_document
 geometry: margin=2cm
 vignette: >
   %\VignetteIndexEntry{Simple Example}
@@ -24,6 +24,8 @@ desired patterns. Although the package is designed to facilitate building comple
 models and running multitudes of sample simulations, the scale and complexity of this 
 demonstration model is deliberately minimal so as to easily examine the outputs at every 
 stage of the workflow.
+
+## Setup
 
 We begin by loading the *poems* package and setting our output directory.
 
@@ -120,7 +122,6 @@ model_template <- PopulationModel$new(region = region,
                                       harvest = harvest,
                                       results_selection = c("abundance", "harvested"),
                                       attribute_aliases = harvest_rate_alias)
-
 ```
 
 ### Step 2: Build generators for dynamically generating model parameters
@@ -329,8 +330,8 @@ graphics::legend("bottomleft", legend = c("Summary metrics", "Targets", "Selecte
 ## Summary
 This demonstration has provided an overview of the *poems* workflow and modules via a
 simple population model example. We hope it has given you the foundation to progress to 
-our more advanced vignettes, and towards utilizing the package for your own modeling 
-projects.
+our more advanced Tasmanian *Thylacine* vignette, and towards utilizing the package for 
+your own modeling projects.
 
 Thank you :-)
 
