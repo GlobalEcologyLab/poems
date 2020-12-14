@@ -168,6 +168,9 @@ DispersalGenerator <- R6Class("DispersalGenerator",
             length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
           return(geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/self$distance_scale)
         } else { # assume coordinates in metres
+          if (is.na(raster::crs(self$region$region_raster))) {
+            warning("No coordinate reference system (CRS) specified: assuming coordinates are in metres", call. = FALSE)
+          }
           return(as.matrix(stats::dist(coordinates))/self$distance_scale)
         }
       } else {
