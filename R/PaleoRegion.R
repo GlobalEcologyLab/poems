@@ -23,9 +23,10 @@ PaleoRegion <- R6Class("PaleoRegion",
 
     ## Methods ##
 
-    # Inherited methods (from GenericClass) #
+    # Inherited methods (from GenericClass & Region) #
     #   new_clone(...)
     #   raster_is_consistent(check_raster)
+    #   raster_from_values(values)
 
     # Overwritten/overridden methods #
 

@@ -78,6 +78,27 @@ Region <- R6Class("Region",
       } else {
         return(FALSE)
       }
+    },
+
+    #' @description
+    #' Converts an array (or matrix) of values into a raster (or stack) consistent with the region raster (matching extent, resolution, and finite/NA cells).
+    #' @param values An array (or matrix) of values to be placed in the raster (or stack) having dimensions consistent with the region cell number.
+    #' @return  A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the region raster.
+    raster_from_values = function(values) {
+      value_matrix <- as.matrix(values)
+      if (!self$use_raster) {
+        stop("Raster (or stack) can only be generated when the use_raster parameter is TRUE", call. = FALSE)
+      }
+      if (nrow(value_matrix) != self$region_cells) {
+        stop("Values must have a length or dimensions consistent with the number of region (non-NA) cells", call. = FALSE)
+      }
+      if (ncol(value_matrix) > 1) { # stack/brick
+        value_raster <- raster::stack(replicate(ncol(value_matrix), self$region_raster))
+      } else {
+        value_raster <- self$region_raster
+      }
+      value_raster[self$region_indices] <- value_matrix
+      return(value_raster)
     }
 
   ), # end public

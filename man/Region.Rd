@@ -38,6 +38,7 @@ defined via a list of longitude/latitude cell coordinates (WGS84), or a
 \itemize{
 \item \href{#method-new}{\code{Region$new()}}
 \item \href{#method-raster_is_consistent}{\code{Region$raster_is_consistent()}}
+\item \href{#method-raster_from_values}{\code{Region$raster_from_values()}}
 \item \href{#method-clone}{\code{Region$clone()}}
 }
 }
@@ -97,6 +98,26 @@ Returns a boolean to indicate if a raster is consistent with the region raster (
 }
 \subsection{Returns}{
 Boolean to indicate if the raster is consistent with the region raster.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-raster_from_values"></a>}}
+\if{latex}{\out{\hypertarget{method-raster_from_values}{}}}
+\subsection{Method \code{raster_from_values()}}{
+Converts an array (or matrix) of values into a raster (or stack) consistent with the region raster (matching extent, resolution, and finite/NA cells).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Region$raster_from_values(values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{An array (or matrix) of values to be placed in the raster (or stack) having dimensions consistent with the region cell number.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the region raster.
 }
 }
 \if{html}{\out{<hr>}}

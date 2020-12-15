@@ -47,6 +47,7 @@ which cells are included at each time step.
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Region" data-id="raster_from_values">}\href{../../poems/html/Region.html#method-raster_from_values}{\code{poems::Region$raster_from_values()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="poems" data-topic="Region" data-id="raster_is_consistent">}\href{../../poems/html/Region.html#method-raster_is_consistent}{\code{poems::Region$raster_is_consistent()}}\out{</span>}
 }
 \out{</details>}

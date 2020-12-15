@@ -72,3 +72,25 @@ test_that("via region raster", {
   region <- Region$new(region_raster = raster::raster(file.path(test_path("test_inputs"), "Test_1_2.grd")))
   expect_false(raster::fromDisk(region$region_raster))
 })
+
+test_that("raster from values", {
+  region <- Region$new(coordinates = array(c(1:4, 4:1), c(7, 2)), use_raster = FALSE)
+  expect_error(region$raster_from_values(1:7),
+               "Raster (or stack) can only be generated when the use_raster parameter is TRUE", fixed = TRUE)
+  region$use_raster <- TRUE
+  expect_error(region$raster_from_values(array(1:3, c(3, 2))),
+               "Values must have a length or dimensions consistent with the number of region (non-NA) cells", fixed = TRUE)
+  # Array
+  value_raster <- region$raster_from_values(1:7)
+  expect_is(value_raster, "RasterLayer")
+  expect_equal(value_raster[region$region_indices], 1:7)
+  expect_true(region$raster_is_consistent(value_raster))
+  # Matrix
+  expect_error(region$raster_from_values(array(1:35, c(5, 7))),
+               "Values must have a length or dimensions consistent with the number of region (non-NA) cells", fixed = TRUE)
+  value_raster <- region$raster_from_values(array(1:35, c(7, 5)))
+  expect_is(value_raster, "RasterBrick")
+  expect_equal(unname(value_raster[region$region_indices]), array(1:35, c(7, 5)))
+  expect_true(region$raster_is_consistent(value_raster))
+})
+
