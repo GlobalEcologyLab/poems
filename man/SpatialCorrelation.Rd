@@ -32,6 +32,8 @@ the decomposed matrix can also generated for computational efficiency.
 
 \item{\code{coordinates}}{Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).}
 
+\item{\code{distance_scale}}{Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.}
+
 \item{\code{correlation_amplitude}}{Correlation function: \emph{a*exp(-distance/b)} \emph{a} parameter. Represents the amplitude or maximum magnitude of correlation values between model cells.}
 
 \item{\code{correlation_breadth}}{Correlation function: \emph{a*exp(-distance/b)} \emph{b} parameter. Represents the breadth of the correlation between region cells. Typically estimated via average distance between correlated region cells.}

@@ -64,9 +64,12 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         }
         if (!self$region$use_raster || (is.logical(use_longlat) && use_longlat) ||
             length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
-          return(geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo))
+          return(geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/self$distance_scale)
         } else { # assume coordinates in metres
-          return(as.matrix(stats::dist(coordinates)))
+          if (is.na(raster::crs(self$region$region_raster))) {
+            warning("No coordinate reference system (CRS) specified: assuming coordinates are in metres", call. = FALSE)
+          }
+          return(as.matrix(stats::dist(coordinates))/self$distance_scale)
         }
       } else {
         stop("Distance matrix calculation requires region to be set first", call. = FALSE)
@@ -289,10 +292,11 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("region", "correlation_amplitude", "correlation_breadth", "correlation_matrix",
+    .model_attributes = c("region", "distance_scale", "correlation_amplitude", "correlation_breadth", "correlation_matrix",
                           "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
                           "t_decomposition_compact_map"),
     # .region            [inherited]
+    .distance_scale = 1,
     .correlation_amplitude = NULL,
     .correlation_breadth = NULL,
     .correlation_matrix = NULL,
@@ -302,8 +306,8 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     .t_decomposition_compact_map = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "coordinates", "correlation_amplitude", "correlation_breadth", "correlation_matrix",
-                           "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
+    .active_attributes = c("region", "distance_scale", "coordinates", "correlation_amplitude", "correlation_breadth",
+                           "correlation_matrix", "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
                            "t_decomposition_compact_map")
 
     # Dynamic attributes #
@@ -356,6 +360,15 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         super$coordinates
       } else {
         super$coordinates <- value
+      }
+    },
+
+    #' @field distance_scale Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.
+    distance_scale = function(value) {
+      if (missing(value)) {
+        private$.distance_scale
+      } else {
+        private$.distance_scale <- value
       }
     },
 

@@ -37,7 +37,11 @@ test_that("calculate distance matrix", {
   expect_equal(spatial_correlation$calculate_distance_matrix(), distance_matrix1)
   spatial_correlation$region$use_raster <- TRUE
   expect_equal(spatial_correlation$calculate_distance_matrix(), distance_matrix1)
+  # Scaling factor for km
+  spatial_correlation$distance_scale <- 1000
+  expect_equal(spatial_correlation$calculate_distance_matrix(), distance_matrix1/1000)
   # Coordinates in metres
+  spatial_correlation$distance_scale <- 1
   raster2 <- raster::raster(vals = spatial_correlation$region$region_raster[], nrows = 4, ncol = 4,
                             xmn = 0, xmx = 4000, ymn = 0, ymx = 4000, crs = "+proj=utm +ellps=GRS80")
   coordinates2 <- data.frame(x = c(0:3, 3:1), y = c(0, 0:3, 3:2))*1000 + 500 # metres
@@ -46,6 +50,8 @@ test_that("calculate distance matrix", {
                  "Spatial region has not been defined within the region object")
   spatial_correlation$region$use_raster <- TRUE
   expect_equal(spatial_correlation$calculate_distance_matrix(), distance_matrix2)
+  spatial_correlation$distance_scale <- 1000
+  expect_equal(spatial_correlation$calculate_distance_matrix(), distance_matrix2/1000)
 })
 
 test_that("calculate correlations", {
