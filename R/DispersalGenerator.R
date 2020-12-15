@@ -594,7 +594,7 @@ DispersalGenerator <- R6Class("DispersalGenerator",
                       (self$region$use_raster && !self$region$raster_is_consistent(value$region$region_raster)))) {
             stop("Dispersal friction object is inconsistent with the dispersal generator region/coordinates", call. = FALSE)
           } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$friction_values) &&
-                     class(value$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick") &&
+                     any(class(value$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick")) &&
                      (self$region$use_raster && !self$region$raster_is_consistent(value$friction_values) ||
                       !self$region$use_raster)) {
             stop("Friction value raster is inconsistent with the dispersal generator region", call. = FALSE)

@@ -101,7 +101,7 @@ DispersalFriction <- R6Class("DispersalFriction",
                                         .errorhandling = c("stop")) %dopar% {
           suppressWarnings({
             # Calculate raster, transition matrix, then least cost distances for friction for time step
-            if (class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+            if (any(class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
               conductance_rast <- raster::subset(self$friction_values, i)
             } else { # assume friction matrix
               conductance_rast <- raster_region$region_raster
@@ -179,7 +179,7 @@ DispersalFriction <- R6Class("DispersalFriction",
             warning("Spatial region has not been defined within the region object", call. = FALSE)
           }
           if (!is.null(self$friction_values)) {
-            if (class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+            if (any(class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
               value$use_raster = TRUE
               if (!value$raster_is_consistent(self$friction_values)) {
                 stop("Region must be consistent with the friction values raster", call. = FALSE)
@@ -204,7 +204,7 @@ DispersalFriction <- R6Class("DispersalFriction",
       } else {
         region <- Region$new(coordinates = value, use_raster = FALSE)
         if (!is.null(value) && !is.null(self$friction_values)) {
-          if (class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+          if (any(class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
             region$use_raster <- TRUE
             if (!region$raster_is_consistent(self$friction_values)) {
               stop("Region coordinates must be consistent with the friction values raster", call. = FALSE)
@@ -252,7 +252,7 @@ DispersalFriction <- R6Class("DispersalFriction",
           }
         }
         if (!is.null(value)) {
-          if (class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+          if (any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
             if (!is.null(self$region) && !self$region$raster_is_consistent(value)) {
               stop("Friction values raster must be consistent with the defined region raster", call. = FALSE)
             }

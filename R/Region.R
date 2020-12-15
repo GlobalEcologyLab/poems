@@ -66,7 +66,7 @@ Region <- R6Class("Region",
     raster_is_consistent = function(check_raster) {
       region_raster <- self$region_raster
       if (!is.null(region_raster)) {
-        if (class(check_raster) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+        if (any(class(check_raster) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
           region_non_finites <- which(!is.finite(region_raster[]))
           return(identical(raster::extent(check_raster), raster::extent(region_raster)) &&
                    identical(raster::res(check_raster), raster::res(region_raster)) &&

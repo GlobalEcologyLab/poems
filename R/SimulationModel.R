@@ -212,7 +212,7 @@ SimulationModel <- R6Class("SimulationModel",
                        }
                        values_consistent <- array(NA, length(param_value))
                        for (i in 1:length(param_value)) {
-                         if (!is.null(self$region) && class(param_value[[i]]) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+                         if (!is.null(self$region) && any(class(param_value[[i]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
                            values_consistent[i] <- (self$region$raster_is_consistent(param_value[[i]]) &&
                                                       raster::nlayers(param_value[[i]]) %in% c(1, self$time_steps))
                          } else if (!is.null(self$region) && is.numeric(param_value[[i]])) {

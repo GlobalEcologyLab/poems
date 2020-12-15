@@ -36,7 +36,7 @@ PaleoRegion <- R6Class("PaleoRegion",
     #' @param ... Additional parameters passed individually.
     initialize = function(template_raster = NULL, remove_zeros = FALSE, ...) {
       if (!is.null(template_raster)) {
-        if (!(class(template_raster) %in% c("RasterLayer", "RasterBrick", "RasterStack"))) {
+        if (!(any(class(template_raster) %in% c("RasterLayer", "RasterBrick", "RasterStack")))) {
           stop("Template raster should be a raster::RasterLayer, RasterBrick, RasterStack (or inherited class) object", call. = FALSE)
         }
         if (remove_zeros) {

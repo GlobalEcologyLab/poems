@@ -106,7 +106,7 @@ SimulationResults <- R6Class("SimulationResults",
           if (!param %in% private$.active_attributes) { # not handled in an accessor
             if (is.null(attribute_list[[param]]) && !is.null(self$parent)) { # calculate via parent
               parent_value <- self$parent$get_attributes(param, remove_burn_in = FALSE)[[param]]
-              if (class(parent_value) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+              if (any(class(parent_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
                 parent_value <- parent_value[]
               }
               if (is.matrix(parent_value)) {
@@ -132,7 +132,7 @@ SimulationResults <- R6Class("SimulationResults",
               if (is.matrix(attribute_list[[param]][])) {
                 if (ncol(attribute_list[[param]][]) > self$burn_in_steps) {
                   duration_indices <- (self$burn_in_steps + 1):ncol(as.matrix(attribute_list[[param]][]))
-                  if (class(attribute_list[[param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+                  if (any(class(attribute_list[[param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
                     attribute_list[[param]] <- attribute_list[[param]][[duration_indices]]
                   } else {
                     attribute_list[[param]] <- attribute_list[[param]][, duration_indices]
@@ -172,7 +172,7 @@ SimulationResults <- R6Class("SimulationResults",
       params <- c(list(...), params) # prioritise individual parameters
       for (param in names(params)) { # check region raster consistency
         if (!param %in% private$.active_attributes) { # not handled in an accessor
-          if (class(params[[param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+          if (any(class(params[[param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
             if (!is.null(self$region) && !self$region$raster_is_consistent(params[[param]])) {
               self$error_messages <- sprintf("The %s result is not consistent with the defined region raster", param)
               params[[param]] <- NULL
@@ -301,7 +301,7 @@ SimulationResults <- R6Class("SimulationResults",
           private$.occupancy_mask
         }
       } else {
-        if (class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+        if (any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
           if (!is.null(self$region) && !self$region$raster_is_consistent(value)) {
             stop("Occupancy mask raster must be consistent with the defined region raster", call. = FALSE)
           }

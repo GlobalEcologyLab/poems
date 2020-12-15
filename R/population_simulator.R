@@ -158,7 +158,7 @@ population_simulator <- function(inputs) {
 
   # Initial abundance for each stage and population
   if ("PopulationModel" %in% class(inputs) && !is.null(inputs$region) && inputs$region$use_raster &&
-      class(inputs$initial_abundance) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+      any(class(inputs$initial_abundance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
     initial_abundance <- as.matrix(inputs$initial_abundance[inputs$region$region_indices])
   } else {
     initial_abundance <- as.matrix(inputs$initial_abundance)
@@ -214,7 +214,7 @@ population_simulator <- function(inputs) {
 
   # Capacity and density dependence setup (generates functions)
   if ("PopulationModel" %in% class(inputs) && !is.null(inputs$region) && inputs$region$use_raster &&
-      class(inputs$carrying_capacity) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+      any(class(inputs$carrying_capacity) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
     carrying_capacity_matrix <- matrix(inputs$carrying_capacity[inputs$region$region_indices], nrow = populations)
   } else {
     carrying_capacity_matrix <- matrix(inputs$carrying_capacity, nrow = populations)

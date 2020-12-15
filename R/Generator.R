@@ -107,7 +107,7 @@ Generator <- R6Class("Generator",
       }
       for (param in names(attribute_list)) {
         # Check consistency of any rasters
-        if (!is.null(self$region) && class(attribute_list[[param]])[1] %in% c("RasterLayer", "RasterStack", "RasterBrick") &&
+        if (!is.null(self$region) && any(class(attribute_list[[param]])[1] %in% c("RasterLayer", "RasterStack", "RasterBrick")) &&
             !self$region$raster_is_consistent(attribute_list[[param]])) {
           self$error_messages <- paste("Region is inconsistent with template generated raster for attribute: ", param)
         }
@@ -422,7 +422,7 @@ Generator <- R6Class("Generator",
           }
           if (!is.null(distr_param_values[[distr_param]])) {
             if (!is.null(self$region) && self$region$use_raster &&
-                class(distr_param_values[[distr_param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+                any(class(distr_param_values[[distr_param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
               distr_param_values[[distr_param]] <- distr_param_values[[distr_param]][self$region$region_indices]
             }
             if (distr_type %in% c("uniform", "triangular")) {
@@ -794,7 +794,7 @@ Generator <- R6Class("Generator",
           }
         }
         if (!is.null(self$region)) {
-          if (class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+          if (any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
             if (!self$region$raster_is_consistent(value)) {
               stop("Occupancy mask raster must be consistent with the defined region raster", call. = FALSE)
             }

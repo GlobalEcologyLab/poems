@@ -87,7 +87,7 @@ PopulationModel <- R6Class("PopulationModel",
                        } else TRUE,
                      initial_abundance =
                        if (is.numeric(self$populations) && is.numeric(self$stages)) {
-                         if (class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+                         if (any(class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
                            if (!is.null(self$region) && self$region$use_raster && !is.null(self$region$region_raster)) {
                              (self$region$raster_is_consistent(param_value) &&
                                 self$region$region_cells == self$populations &&
@@ -138,7 +138,7 @@ PopulationModel <- R6Class("PopulationModel",
                      correlation = NA,
                      carrying_capacity =
                        if (is.numeric(self$populations) && is.numeric(self$time_steps)) {
-                         if (class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+                         if (any(class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
                            if (!is.null(self$region) && self$region$use_raster && !is.null(self$region$region_raster)) {
                              (self$region$raster_is_consistent(param_value) &&
                                 self$region$region_cells == self$populations &&
