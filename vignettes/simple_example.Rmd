@@ -39,9 +39,7 @@ OUTPUT_DIR <- tempdir()
 The *poems* workflow, which implements a pattern-oriented modeling (POM) approach 
 (Grimm et al., 2005), is achieved via a framework of interoperable components:
 
-\begin{center}
-\includegraphics[width=6.5in]{workflow.pdf}
-\end{center}
+![](workflow.png)
 
 The workflow is summarized by the following six steps:
 
@@ -66,7 +64,7 @@ function prior to initializing the template model with all the fixed parameters.
 First, we'll define our study region (denoted U Island) with some longitude-latitude
 coordinates.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Demonstration example region (U Island)
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -135,7 +133,7 @@ initial abundance, carrying capacity, and dispersal.
 Firstly, our initial abundance and carrying capacity generator utilizes an example
 (mock) habitat suitability for our defined study region. 
 
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Example habitat suitability
 example_hs <- c(0.8, 1, 0.7, 0.9, 0.6, 0.7, 0.8 )
 example_hs_raster <- region$region_raster
@@ -312,7 +310,7 @@ become acquainted with the analysis that this information facilitates (see the *
 documentation). As our simple example only uses two metrics/targets, we can visualize
 the congruence of the selected models with the targets via a simple plot.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 6}
+```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 5}
 # Plot the simulation, targets, and selected metrics
 graphics::plot(x = results_manager$summary_metric_data$total_h,
                y = results_manager$summary_metric_data$trend_n,

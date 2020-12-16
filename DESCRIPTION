@@ -1,7 +1,7 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling and Simulation
-Version: 0.1.0
+Version: 0.2.0
 Author: Global ChEC Lab
 Maintainer: Sean Haythorne <sean.haythorne@adelaide.edu.au>
 Description: The poems package provides a framework of interoperable R6 classes for 

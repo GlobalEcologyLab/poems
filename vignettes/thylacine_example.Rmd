@@ -71,27 +71,27 @@ vignette we will 'scope' data variables included in the package with *poems::* t
 highlight where they have come from, although this is unnecessary when the package is 
 loaded (via *library(poems)*).
 
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
-# Raster of Tasmania (note: islands removed where there was no evidence of thylacine
-# occupancy).
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
+# Raster of Tasmania (note: islands removed where there was no evidence of thylacine occupancy).
 raster::plot(poems::tasmania_raster, main = "Tasmania raster",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
-```
-
-Note that when the *raster* is used as a template for the *Region* object, its occupiable
-cell indices are set in the order in which they are stored in the *raster*.
-
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
-# Tasmania study region (795 cells stored in the order shown)
-region <- Region$new(template_raster = tasmania_raster)
-raster::plot(region$region_raster, main = "Tasmanian study region (cell indices)",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
              colNA = "blue")
 ```
 
 The grid-cell size was selected as a reasonable approximation to *thylacine* 
 territorial range (Guiler & Godard, 1998 ???).
+
+To define our region, we will use this *raster* of Tasmania as a template for the 
+*Region* object, which will set the occupiable cell indices in the order in which they 
+are stored in the *raster*.
+
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
+# Tasmania study region (795 cells stored in the order shown)
+region <- Region$new(template_raster = tasmania_raster)
+raster::plot(region$region_raster, main = "Tasmanian study region (cell indices)",
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             colNA = "blue")
+```
 
 ##### IBRA bioregions
 We partition our study region into Interim Bioregionalisation of Australia (IBRA) 
@@ -104,9 +104,8 @@ bioregions, as well as a *data frame* containing information about each IBRA, ar
 included with the *poems* package. Here we also collate lists of indices and the
 number of cells for each bioregion.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
-# Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell
-# distribution
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
+# Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell distribution
 ibra_raster <- poems::tasmania_ibra_raster
 raster::plot(ibra_raster, main = "Tasmania study IBRA bioregions", colNA = "blue",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)")
@@ -356,7 +355,7 @@ species distribution model (SDM) for the *thylacine* ...
 The initial habitat suitability *raster* has also been included with the *poems*
 package.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Initial thylacine habitat suitability
 hs_raster <- poems::thylacine_hs_raster
 raster::plot(hs_raster, main = "Initial thylacine habitat suitability", colNA = "blue",
@@ -379,8 +378,7 @@ along with sampled values (inputs) for initial carrying capacity, percentage dec
 
 ```{r, message = FALSE}
 # Build a carrying capacity generator model based on habitat suitability and sampled
-# initial capacity, initial fraction (phi), & decline rate per year in selected
-# bioregions.
+# initial capacity, initial fraction (phi), & decline rate per year in selected bioregions.
 capacity_gen <- Generator$new(
   description = "capacity",
   time_steps = 80, # years (1888-1967)
@@ -422,7 +420,7 @@ capacity_gen$add_function_template(
 We can test our generator with some example (mid-value) sample inputs and
 examine plots of the output initial abundance and carrying capacity (final).
 
-```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Generate example initial abundance and declining carrying capacity time-series
 generated_k <- capacity_gen$generate(input_values = list(k_init = 2800,
                                                          k_decline = 0.04,
@@ -496,7 +494,7 @@ carrying capacity, stage matrix, and dispersal data. We will do this by cloning 
 model template and setting our example parameters before running the population 
 simulator.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Run the model with example parameters
 model <- model_template$clone()
 model$set_attributes(initial_abundance = example_initial_abundance,
@@ -833,16 +831,30 @@ Note that each selected model (via its index in the sample data frame) have a
 corresponding weight value, which is indicative of the congruence between each model's 
 summary metrics and the corresponding target patterns.
 
-Let's now plot the distributions of our summary metrics of our selected model ensemble, 
-as well as those of the full 20,000 model simulations, to examine how well our 
-individual (uncombined) metric targets have been matched.
+### Selected model ensemble
+Now that we have selected our model ensemble we can now examine:
+
+* how well our summary metric targets were matched;
+* which model parameters were most influential in our ensemble selection; and
+* the impact of model stochasticity on our ensemble selection.
+
+We can also verify our model via historic bounty record data not explicity utilized in
+our validation and model selection. 
+
+Lastly, we can use our model ensemble to examine the spatiotemporal extirpation pattern 
+of our simulated *thylacine* decline.
+
+##### Model ensemble summary metrics
+To examine how well our individual (uncombined) metric targets have been matched, let's 
+now plot the distributions of our summary metrics of our selected model ensemble, as 
+well as those of the full 20,000 model simulations.
 
 When in demonstration mode, we will load pre-generated example matrices, provided with 
 the *poems* package, containing bounty slope and IBRA bioregion extirpations for all 
 20,000 sample simulations. The example matrices also include cell extirpation dates, and
 a time-series and IBRA distribution of total bounty, which we will use later.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Load pre-generated example matrices
 if (DEMONSTRATION) {
   summary_matrix_list <- poems::thylacine_example_matrices
@@ -874,7 +886,7 @@ distribution our full sample set does not facilitate model congruence with the t
 suggesting that our harvest function may be inadequate for generating the expected 
 temporal contour of the total *thylacine* bounty.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 8}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 10}
 # Plot the simulation, targets, and selected metrics for extirpation
 extirpation <- cbind(summary_matrix_list$ibra_extirpation, 
                      summary_metric_data$total_extinction)
@@ -900,14 +912,14 @@ simulated extirpation dates for individual IBRA bioregions vary in their congrue
 with the target values. We may wish assess the degree to which our sampled model 
 harvest parameters can influence the spatial dynamics of the *thylacine* decline.
 
-##### Model ensemble analysis
+##### Model ensemble parameters
 We can now examine the features of our selected model ensemble to analyse its properties
 and adequacy. We can plot the distribution of our 200 selected model parameters in 
 comparison to the (uniform) distribution of the full 20,000 simulated models. Here we
 will examine two notable example parameters: density Allee effect and harvest 
 catchability.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Allee effect
 hist(sample_data$density_allee, breaks = 30, main = "Model ensemble Allee effect", 
      xlab = "Allee effect", ylim = c(0, 1000), col = "gray", yaxt = "n")
@@ -932,7 +944,7 @@ which parameter combinations contributed to our selected model ensemble's congru
 with our metric targets. Here we examine one notable correlation between our selected
 model opportunistic harvest rate and our catchability parameter.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 6}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 7}
 plot(x = sample_data$harvest_ohr, y = sample_data$harvest_q, ylim = c(0, 0.0055),
      xlab = "Opportunistic harvest rate", ylab = "Bio-economic harvest catchability",
      main = "Opportunistic harvest vs. catchability", col = "gray")
@@ -955,7 +967,7 @@ select fewer or more models via our validator's *tolerance* parameter, or revisi
 our model structure. We may also wish to examine the role (demographic) stochasticity 
 has played in our model selection.
 
-##### Impacts of stochasticity
+##### Model ensemble stochasticity
 We will now re-run each of our selected 200 models ten times, so as to examine the 
 impact of demographic stochasticity on our summary metrics. Again, in demonstration 
 mode, we will only run the first two re-run simulations, then load example re-run 
@@ -1016,7 +1028,7 @@ Now we can compare the distributions of our metrics for all, selected, and re-ru
 to better assess the impact of stochasticity. Note that simulations that persist are 
 represented via an extirpation date of 1968.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Bounty slope error
 bounty_slope_error <- summary_metric_data$bounty_slope_error
 hist(bounty_slope_error, breaks = 140, main = "Thylacine bounty slope error",
@@ -1066,7 +1078,7 @@ of the metrics have widened in our model ensemble replicate re-runs. We could fu
 analyze the effects of stochasticity by exploring approaches for identifying which of 
 our selected models are congruent with our target metrics most frequently.
 
-##### Verifying and using the model ensemble
+##### Model ensemble verification
 We can verify the adequacy of our model by examining how well it produces observed data 
 patterns that were not (explicitly) utilized in the model validation and selection 
 stages. While the slopes of the bounty were used for validating and selecting our model 
@@ -1076,7 +1088,7 @@ compare our simulated bounty submitted, to the historical (time-series) records
 calculate a weighted average of simulated bounty submitted for the selected ensemble 
 and their replicates.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Compare weighted ensemble model to actual historical bounty time-series
 historic_bounty <- poems::thylacine_bounty_record
 selected_bounty <- summary_matrix_list$total_bounty
@@ -1094,7 +1106,7 @@ legend("topright", legend = c("Model ensemble bounty", "Actual bounty"),
 We can also compare our simulated total bounty submitted, both across IBRA bioregions
 and Tasmania-wide, to our historical bounty record.
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6.5, fig.height = 4}
+```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Compare weighted ensemble model to actual historical bioregion bounty values
 selected_bounty <- cbind(summary_matrix_list$ibra_bounty, 
                          rowSums(summary_matrix_list$ibra_bounty))
@@ -1119,17 +1131,18 @@ including developing a harvest function with mechanisms and parameterization tha
 better model spatiotemporal responses to the bounty reward. With an improved model we 
 could gain insight into spatiotemporal dynamics of the *thylacine* decline. 
 
+##### Model ensemble usage
 Although our model ensemble could be improved to better match spatiotemporal patterns, 
-as a final demonstration let's examine its spatiotemporal extirpation pattern. 
+as a final demonstration let's examine how we can use our ensemble to examine our 
+simulated spatiotemporal extirpation pattern. 
 
-```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 6}
+```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Calculate the weighted cell extirpation dates
 selected_extirp <- summary_matrix_list$extirpation
 weighted_extirpation <- colSums(selected_extirp*selected_weights/sum(selected_weights))
 
 # Plot the weighted cell extirpation dates
-extirpation_raster <- region$region_raster
-extirpation_raster[region$region_indices] <- weighted_extirpation
+extirpation_raster <- region$raster_from_values(weighted_extirpation)
 raster::plot(extirpation_raster, main = "Thylacine model ensemble extirpation",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
              zlim = c(1888, 1940), col = grDevices::heat.colors(100), colNA = "blue")
@@ -1137,26 +1150,38 @@ raster::plot(extirpation_raster, main = "Thylacine model ensemble extirpation",
 
 ## Summary
 Building and utilizing our model ensemble for the *thylacine* has provided a relatively 
-advanced demonstration of the *poems* workflow and its modules. We have delved into
-constructing a customized model with user-defined density dependence and harvest 
-functions. We built generators for dynamically generating stage matrices, initial 
-abundances, carrying capacities, and dispersal rates for our sampled models. We ran
-multiple Latin hypercube sampled models via a *poems* simulation manager. We then 
-collated and calculated summary metrics, based on functions we defined within a results
-manager. After which, we fed our sample model parameters, our summary metrics, and 
-target values for these metrics (derived from historical bounty and sighting records),
-into an ABC validator, and ran it to select our model ensemble. We then examined how
-well our ensemble matched our target metrics, and analysed the influence that our model
-parameters and stochasticity had on the ensemble selection. We also verified our model 
-via the bounty records. Generally, we found that the spatiotemporal patterns of the 
-historic response to the bounty reward were not well-matched by our model ensemble 
-simulations, although the congruence with expected patterns was at the Tasmania-wide 
-level was reasonable. 
+advanced demonstration of the *poems* 6-step workflow and its modules.
 
-Although our *thylacine* model is sufficient for demonstration purposes, we hope that 
-this vignette has provided you with a feature-rich example to use as a guide for 
-building your own customized models to explore the spatiotemporal dynamics of
-populations of interest in your research and practice.
+1. First we delved into constructing a customized model with user-defined density 
+   dependence and harvest functions. 
+1. We then built generators for dynamically generating stage matrices, initial 
+   abundances, carrying capacities, and dispersal rates for our sampled models. 
+1. We generated sample model parameters via Latin hypercube sampling.
+1. We ran these sampled models via a *poems* simulation manager.
+1. We then collated and calculated summary metrics, based on functions we defined 
+   within a results manager. 
+1. After which, we fed our sample model parameters, our summary metrics, and target 
+   values for those metrics (derived from historical bounty and sighting records),
+   into an ABC validator, and ran it to select our model ensemble. 
+
+We then examined how well our model ensemble matched our target metrics, and analysed 
+the influence that our model parameters and stochasticity had on the ensemble selection. 
+We also verified our model via the bounty records to see how well it matched patterns 
+that was not explicitly used in the model validation and ensemble selection.
+
+Generally, we found that the spatiotemporal patterns of the historic response to the 
+bounty reward were not well-matched by our model ensemble simulations, although the 
+congruence with expected patterns at the Tasmania-wide level was reasonable. However,
+the purpose of our, mostly qualitative visualization-based, analyses of our *thylacine* 
+model was to demonstrate *poems* features, rather than to produce a definitive model 
+simulating the decline of the *thylacine*.
+
+In performing these steps we explored much of the functionality offered by *poems*. We 
+hope that this vignette has provided you with a feature-rich example to use as a guide 
+for building your own customized models with *poems*, to explore the spatiotemporal 
+dynamics of populations of interest in your research and practice.
+
+Thank you :-)
 
 ## References
 Allee, W. C. (1931). *Animal Aggregations: A Study in General Sociology*. University of 
