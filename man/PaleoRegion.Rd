@@ -40,6 +40,7 @@ which cells are included at each time step.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{PaleoRegion$new()}}
+\item \href{#method-raster_from_values}{\code{PaleoRegion$raster_from_values()}}
 \item \href{#method-clone}{\code{PaleoRegion$clone()}}
 }
 }
@@ -47,7 +48,6 @@ which cells are included at each time step.
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Region" data-id="raster_from_values">}\href{../../poems/html/Region.html#method-raster_from_values}{\code{poems::Region$raster_from_values()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="poems" data-topic="Region" data-id="raster_is_consistent">}\href{../../poems/html/Region.html#method-raster_is_consistent}{\code{poems::Region$raster_is_consistent()}}\out{</span>}
 }
 \out{</details>}
@@ -71,6 +71,26 @@ Initialization method sets temporally changing raster layers for paleontological
 \item{\code{...}}{Additional parameters passed individually.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-raster_from_values"></a>}}
+\if{latex}{\out{\hypertarget{method-raster_from_values}{}}}
+\subsection{Method \code{raster_from_values()}}{
+Converts an array (or matrix) of values into a raster (or stack) consistent with the region raster (matching extent, resolution, and finite/NA cells), and with the temporal mask (if any) applied.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PaleoRegion$raster_from_values(values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{An array (or matrix) of values to be placed in the raster (or stack) having dimensions consistent with the region cell number.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the region raster with temporal mask (if any) applied.
 }
 }
 \if{html}{\out{<hr>}}

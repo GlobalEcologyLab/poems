@@ -45,10 +45,22 @@ PaleoRegion <- R6Class("PaleoRegion",
         }
         finite_indices <- which(apply(as.matrix(template_raster[]), 1, function(x) any(is.finite(x))))
         self$temporal_mask <- is.finite(template_raster[finite_indices])
-        template_raster[[1]][finite_indices] <- 1:length(finite_indices)
         self$region_raster <- template_raster[[1]]
+        self$region_raster[finite_indices] <- 1:length(finite_indices)
       }
       super$initialize(...)
+    },
+
+    #' @description
+    #' Converts an array (or matrix) of values into a raster (or stack) consistent with the region raster (matching extent, resolution, and finite/NA cells), and with the temporal mask (if any) applied.
+    #' @param values An array (or matrix) of values to be placed in the raster (or stack) having dimensions consistent with the region cell number.
+    #' @return  A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the region raster with temporal mask (if any) applied.
+    raster_from_values = function(values) {
+      value_raster <- super$raster_from_values(values)
+      if (!is.null(self$temporal_mask)) {
+        value_raster[self$region_indices] <- value_raster[self$region_indices]*(self$temporal_mask | NA)
+      }
+      return(value_raster)
     }
 
   ), # end public
