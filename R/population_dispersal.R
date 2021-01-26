@@ -149,7 +149,7 @@ population_dispersal <- function(replicates,
     # Release variables from memory
     dispersal_rows <- NULL; dispersal_cols <- NULL; compact_emigrant_matrix = NULL; compact_immigrant_matrix = NULL; target_sorted_indices = NULL
 
-  } else if (is.list(dispersal) && is.data.frame(dispersal[[1]])) { # compact matrix data in list (as per DispersalModel class)
+  } else if (is.list(dispersal) && is.data.frame(dispersal[[1]]) && nrow(dispersal[[1]])) { # compact matrix data in list (as per DispersalModel class)
 
     # Unpack dispersal data and determine compact matrix dimensions
     dispersal_data <- dispersal[[1]]
