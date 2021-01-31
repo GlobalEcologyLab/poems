@@ -88,6 +88,9 @@ paleopop_simulator <- function(inputs) {
   occupancy_threshold <- inputs$occupancy_threshold
   dispersal_target_k <- inputs$dispersal_target_k
   carrying_capacities <- matrix(inputs$carrying_capacity, nrow = populations)
+  if (any(is.na(carrying_capacities))) {
+    carrying_capacities[which(is.na(carrying_capacities))] <- 0
+  }
 
   # Dispersal and correlation
 
