@@ -10,6 +10,25 @@
 #' generate (optionally temporal) correlated normal deviates. A compacted version of
 #' the decomposed matrix can also generated for computational efficiency.
 #'
+#' @examples
+#' # U Island example region
+#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+#' region <- Region$new(template_raster = template_raster)
+#' # Spatial correlation
+#' env_corr <- SpatialCorrelation$new(region = region, amplitude = 0.4, breadth = 500)
+#' env_corr$calculate_distance_matrix() # m
+#' env_corr$calculate_correlations(decimals = 5)
+#' env_corr$correlation_matrix
+#' env_corr$calculate_cholesky_decomposition(decimals = 2)
+#' env_corr$t_decomposition_matrix
+#' env_corr$get_compact_decomposition()
+#' # Scale to km
+#' env_corr$distance_scale <- 1000
+#' env_corr$calculate_distance_matrix() # km
+#'
 #' @importFrom R6 R6Class
 #' @include SpatialModel.R
 #' @export SpatialCorrelation

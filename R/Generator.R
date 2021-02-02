@@ -7,6 +7,48 @@
 #' \emph{default} in inherited classes), using simulation sample parameters
 #' (\emph{inputs}).
 #'
+#' @examples
+#' # U Island example region
+#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- coordinates[c(7, 9, 12, 14, 17:19),]
+#' region <- Region$new(coordinates = coordinates, use_raster = FALSE)
+#' # Spatial correlation
+#' spatial_correlation <- SpatialCorrelation$new(region = region, correlation_amplitude = 0.6,
+#'                                               correlation_breadth = 300)
+#' spatial_correlation$calculate_compact_decomposition(decimals = 4)
+#' # Example habitat suitability
+#' hs_mean <- array(c(0.5, 0.3, 0.7, 0.9, 0.6, 0.7, 0.8), c(7, 5))
+#' # Generator
+#' capacity_gen <- Generator$new(description = "capacity",
+#'                               region = region,
+#'                               time_steps = 5,
+#'                               spatial_correlation = spatial_correlation,
+#'                               temporal_correlation = 0.9,
+#'                               hs_mean = hs_mean, # template attached
+#'                               hs_sd = 0.1, # template attached
+#'                               inputs = c("density_max", "initial_n"),
+#'                               outputs = c("initial_abundance", "carrying_capacity"))
+#' capacity_gen$add_generative_requirements(list(hs_sample = "distribution",
+#'                                               carrying_capacity = "function",
+#'                                               initial_abundance = "function"))
+#' capacity_gen$add_distribution_template("hs_sample",
+#'                                        distr_type = "beta",
+#'                                        distr_params = list(mean = "hs_mean",
+#'                                                            sd = "hs_sd"))
+#' capacity_gen$add_function_template("initial_abundance",
+#'                                    function_def = function(params) {
+#'                                      stats::rmultinom(1, size = params$initial_n,
+#'                                                       prob = params$hs_sample[,1])
+#'                                    },
+#'                                    call_params = c("initial_n", "hs_sample"))
+#' capacity_gen$add_function_template("carrying_capacity",
+#'                                    function_def = function(params) {
+#'                                      round(params$density_max*params$hs_sample)
+#'                                    },
+#'                                    call_params = c("density_max", "hs_sample"))
+#' capacity_gen$generate(input_values = list(initial_n = 400, density_max = 100))
+#'
 #' @importFrom R6 R6Class
 #' @include SpatialModel.R
 #' @include GenerativeTemplate.R
@@ -476,7 +518,7 @@ Generator <- R6Class("Generator",
                beta =
                  {
                    if (all(c("mean", "sd") %in% names(distr_param_values))) { # transform
-                     distr_param_values$sd <- array(distr_param_values$sd, dim(distr_param_values$mean*distr_param_values$sd))
+                     distr_param_values$sd <- array(distr_param_values$sd, dim(as.matrix(distr_param_values$mean*distr_param_values$sd)))
                      finite_indices <- which(is.finite(distr_param_values$mean*distr_param_values$sd))
                      # Limit sd to < sqrt(mean*(1 - mean))
                      distr_param_values$sd[finite_indices] <- pmin(distr_param_values$sd[finite_indices],

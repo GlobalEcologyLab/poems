@@ -6,6 +6,23 @@
 #' (\emph{public}, \emph{active}, \emph{attached}), attribute aliases, attribute
 #' attachment, and error and warning message attributes.
 #'
+#' @examples
+#' model1 <- GenericModel$new(model_attributes = c("a", "b", "c"),
+#'                            attribute_aliases = list(A = "a"),
+#'                            params = list(a = 1, b = 2), c = 3)
+#' # Get/set attributes
+#' model1$get_attribute_names()
+#' model1$set_attributes(d = 4)
+#' model1$get_attributes()
+#' model1$get_attribute("A")
+#' model1$get_attribute("B")
+#' model1$get_attribute_aliases() # all attribute names
+#' # New cloning
+#' model2 <- model1$new_clone(e = 5)
+#' model2$get_attributes()
+#' model2$modelattributes
+#' model2$attribute_aliases
+#'
 #' @importFrom R6 R6Class
 #' @include GenericClass.R
 #' @export GenericModel
@@ -57,7 +74,7 @@ GenericModel <- R6Class("GenericModel",
     #' Returns an array of all attribute names including public and private model attributes, as well as attached attributes, error and warning messages.
     #' @return Array of all attribute names.
     get_attribute_names = function() {
-      return(c(self$model_attributes, names(self$attached), "error_messages", "warning_messages"))
+      return(unique(c(self$model_attributes, names(self$attached), "error_messages", "warning_messages")))
     },
 
     #' @description

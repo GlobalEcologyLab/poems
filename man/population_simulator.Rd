@@ -129,3 +129,30 @@ across multiple replicate runs. Processes ran at each simulation time-step inclu
   \item Results collection
 }
 }
+\examples{
+# U Island example region
+coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+region <- Region$new(template_raster = template_raster)
+# Harvest function
+harvest <- list(rate = 0.3,
+                function(params) round(params$stage_abundance*(1 - params$rate)))
+# Population model
+stage_matrix <- matrix(c(0,   2.5, # Leslie/Lefkovitch matrix
+                         0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE)
+pop_model <- PopulationModel$new(region = region,
+                                 time_steps = 10, # years
+                                 populations = region$region_cells, # 7
+                                 stage_matrix = stage_matrix,
+                                 initial_abundance = rep(10, 7),
+                                 carrying_capacity = array(70:1, c(7, 10)),
+                                 harvest = harvest,
+                                 results_selection = c("abundance", "harvested"))
+# Simulations
+population_simulator(pop_model) # model
+inputs <- pop_model$get_attributes()
+population_simulator(inputs) # list
+
+}

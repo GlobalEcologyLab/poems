@@ -8,6 +8,42 @@
 #' sampled parameters. Also provided are methods for checking the consistency and
 #' completeness of model parameters.
 #'
+#' @examples
+#' # U Island example region
+#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+#' region <- Region$new(template_raster = template_raster)
+#' # Model template
+#' template_model <- SimulationModel$new(simulation_function = "test_simulator",
+#'                                       region = region, time_steps = 10)
+#' template_model$model_attributes <- c(template_model$model_attributes,
+#'                                      "a", "b", "c", "d")
+#' template_model$model_attributes
+#' template_model$required_attributes <- c(template_model$required_attributes[1:2],
+#'                                         "a", "b", "c", "d")
+#' template_model$required_attributes
+#' template_model$get_attributes(template_model$required_attributes)
+#' template_model$simulation_function
+#' # Nested model
+#' nested_model <- SimulationModel$new(template_model = template_model)
+#' nested_model$region$region_cells
+#' nested_model$set_sample_attributes(a = 1:7, b = 1:10, c = 1:15)
+#' nested_model$sample_attributes
+#' nested_model$get_attributes(c("a", "b", "c", "d"))
+#' # Completeness and consistency
+#' nested_model$is_complete()
+#' nested_model$incomplete_attributes()
+#' nested_model$is_consistent()
+#' nested_model$inconsistent_attributes()
+#' nested_model$set_attributes(c = array(1:70, c(7, 10)), d = 15)
+#' nested_model$is_complete()
+#' nested_model$is_consistent()
+#' # Attached attributes
+#' nested_model$attached
+#' template_model$attached
+#'
 #' @importFrom R6 R6Class
 #' @include SpatialModel.R
 #' @export SimulationModel

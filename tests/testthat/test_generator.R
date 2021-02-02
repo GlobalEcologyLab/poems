@@ -422,7 +422,7 @@ test_that("sample distribution template with correlation (uniform)", {
   expect_error(generator$spatial_correlation <- SpatialCorrelation$new(region = region$clone()),
                "The spatial correlation object must have the same region class object as this generator")
   spatial_correlation <- SpatialCorrelation$new(region = region, correlation_amplitude = 0.6,
-                                              correlation_breadth = 200)
+                                                correlation_breadth = 200)
   generator$spatial_correlation <- spatial_correlation
   expect_null(generator$sample_distribution("attr5"))
   expect_equal(generator$error_messages[2],

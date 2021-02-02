@@ -3,6 +3,24 @@
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class with generic (abstract) new cloning functionality.
 #'
+#' @examples
+#' object1 <- GenericClass$new()
+#' class(object1)
+#' # Referencing
+#' object_ref <- object1
+#' objectref$attached$a <- 1
+#' object1$attached
+#' # Cloning
+#' object2 <- object1$clone()
+#' object2$attached$b <- 2
+#' object1$attached
+#' object2$attached
+#' # New cloning
+#' object3 <- object1$new_clone()
+#' object3$attached$c <- 3
+#' object1$attached
+#' object3$attached
+#'
 #' @importFrom R6 R6Class
 #' @export GenericClass
 

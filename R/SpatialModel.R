@@ -5,6 +5,19 @@
 #' spatially-explicit model. It extends \code{\link{GenericModel}} with the addition of
 #' a study region specification.
 #'
+#' @examples
+#' # U Island example region
+#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+#' region <- Region$new(template_raster = template_raster)
+#' # Example spatial model
+#' model1 <- SpatialModel$new(region = region, a_layers = 3)
+#' model1$coordinates
+#' model1$set_attributes(a_values = array(8:28, c(7, 3)))
+#' model1$region$raster_from_values(model1$get_attribute("a_values"))
+#'
 #' @importFrom R6 R6Class
 #' @include GenericModel.R
 #' @include Region.R

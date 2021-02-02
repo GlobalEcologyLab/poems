@@ -11,6 +11,18 @@ distributions: \code{\link[stats:Uniform]{uniform}},
 \code{\link[stats:Beta]{beta}} or \code{\link[metRology:qtri]{triangular}}.
 It generates a data frame of sample values.
 }
+\examples{
+lhs_gen <- LatinHypercubeSampler$new(parameter_names = c("size", "age", "km", "price"))
+lhs_gen$set_class_parameter("size", c("small", "medium", "large"))
+lhs_gen$set_uniform_parameter("age", lower = 18, upper = 70, decimals = 0)
+lhs_gen$set_normal_parameter("km", mean = 50000, sd = 20000, decimals = 0)
+lhs_gen$set_lognormal_parameter("price", mean = 30000, sd = 10000, decimals = 0)
+lhs_gen$set_beta_parameter("tread", mean = 0.7, sd = 0.1, decimals = 2)
+lhs_gen$set_triangular_parameter("rating", lower = 0, upper = 10, mode = 5,
+                                 decimals = 1)
+lhs_gen$generate_samples(number = 10, random_seed = 123)
+
+}
 \section{Super class}{
 \code{\link[poems:GenericClass]{poems::GenericClass}} -> \code{LatinHypercubeSampler}
 }
