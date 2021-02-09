@@ -5,6 +5,49 @@
 #' metrics and/or matrices from simulation results, as well as optionally regenerating
 #' values via generators.
 #'
+#' @examples
+#' # U Island example region
+#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+#' region <- Region$new(template_raster = template_raster)
+#' raster::plot(region$region_raster, main = "Example region (indices)",
+#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'              colNA = "blue")
+#' # Results manager
+#' results_manager <- ResultsManager$new(
+#'   sample_data = data.frame(index = 1:3),
+#'   simulation_results = PopulationResults$new(region = region),
+#'   summary_metrics = c("trend_n", "total_h"),
+#'   summary_matrices = c("n", "h"),
+#'   summary_functions = list(
+#'     trend_n = function(results) {
+#'       round(results$all$abundance_trend, 2)
+#'     },
+#'     total_h = function(results) {
+#'       sum(results$harvested)
+#'     },
+#'     n = "all$abundance", # string
+#'     h = "all$harvested"),
+#'   parallel_cores = 2,
+#'   results_dir = tempdir())
+#' # Write example result files
+#' results <- list()
+#' for (i in 1:3) {
+#'   results[[i]] <- list(abundance = t(apply(matrix(11:17), 1,
+#'                                            function(n) round(n*exp(-(0:9)/i)))))
+#'   results[[i]]$harvested <- round(results[[i]]$abundance*i/7)
+#'   file_name <- paste0(results_manager$get_results_filename(i), ".RData")
+#'   saveRDS(results[[i]], file.path(tempdir(), file_name))
+#' }
+#' # Generate result metrics and matrices
+#' gen_output <- results_manager$generate()
+#' gen_output$summary
+#' dir(tempdir(), "*.txt") # plus generation log
+#' results_manager$summary_metric_data
+#' results_manager$summary_matrix_list
+#'
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%
 #' @importFrom R6 R6Class
@@ -503,7 +546,7 @@ ResultsManager <- R6Class("ResultsManager",
       }
     },
 
-    #' @field generators A list of generators (\code{\link{Generator}} or inherited class) objects for generating simulation model values.
+    #' @field generators A list of generators (\code{\link{Generator}} or inherited class) objects for (optionally) regenerating simulation model values.
     generators = function(value) { # inherited
       if (missing(value)) {
         super$generators

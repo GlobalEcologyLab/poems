@@ -19,6 +19,41 @@ may be utilized to modify (equivalent) distances given a (spatiotemporal) fricti
 landscape. When this landscape includes temporal changes, the generated
 \emph{dispersal_data} will be a temporal list of changing dispersal rates.
 }
+\examples{
+# U Island example region
+coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+region <- Region$new(template_raster = template_raster)
+raster::plot(region$region_raster, main = "Example region (indices)",
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             colNA = "blue")
+# Distance-based dispersal generator
+dispersal_gen <- DispersalGenerator$new(region = region,
+                                        dispersal_max_distance = 3000, # in m
+                                        inputs = c("dispersal_p", "dispersal_b"),
+                                        decimals = 5)
+dispersal_gen$calculate_distance_data() # pre-calculate
+dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
+                                           dispersal_b = 700))
+# Dispersal friction for land-only dispersal
+dispersal_gen$distance_data <- NULL # reset
+dispersal_gen$dispersal_friction <- DispersalFriction$new()
+dispersal_gen$calculate_distance_data() # re-calculate
+dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
+                                           dispersal_b = 700))
+# Friction in cells 3 and 6 at time step 2
+dispersal_gen$distance_data <- NULL # reset
+friction_matrix <- array(c(rep(1, 7), 1, 1, 0.5, 1, 1, 0, rep(1, 22)),
+                         c(7, 5)) # conductance
+dispersal_gen$dispersal_friction <-
+  DispersalFriction$new(friction_values = friction_matrix)
+dispersal_gen$calculate_distance_data() # re-calculate
+dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
+                                           dispersal_b = 700))
+
+}
 \section{Super classes}{
 \code{\link[poems:GenericClass]{poems::GenericClass}} -> \code{\link[poems:GenericModel]{poems::GenericModel}} -> \code{\link[poems:SpatialModel]{poems::SpatialModel}} -> \code{\link[poems:Generator]{poems::Generator}} -> \code{DispersalGenerator}
 }

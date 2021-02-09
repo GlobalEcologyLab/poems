@@ -5,6 +5,44 @@
 #' spatially-explicit \code{\link{population_simulator}} results, as well as optional
 #' re-generated \code{\link{Generator}} outputs.
 #'
+#' @examples
+#' # U Island example region
+#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+#' region <- Region$new(template_raster = template_raster)
+#' raster::plot(region$region_raster, main = "Example region (indices)",
+#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'              colNA = "blue")
+#' # Sample results occupancy (ignore cell 2 in last 5 time steps)
+#' occupancy_raster <- region$raster_from_values(array(1, c(7, 13)))
+#' occupancy_raster[region$region_indices][2, 9:13] <- 0
+#' occupancy_raster[region$region_indices]
+#' # Population simulation example results
+#' example_results <- list(abundance = t(apply(matrix(11:17), 1, function(n)  {
+#'   c(rep(n, 3), round(n*exp(-(0:9)/2)))}
+#' )))
+#' example_results$harvested <- round(example_results$abundance*0.3)
+#' example_results
+#' # Population results object
+#' pop_results <- PopulationResults$new(region = region,
+#'                                      time_steps = 13,
+#'                                      burn_in_steps = 3,
+#'                                      occupancy_mask = occupancy_raster,
+#'                                      trend_interval = 1:5)
+#' pop_results$get_attribute_names(all = TRUE)
+#' # Clone (for each population simulation results)
+#' results_clone <- pop_results$new_clone(results = example_results)
+#' results_clone$all$get_attribute("abundance")
+#' results_clone$get_attributes(c("abundance", "all$abundance",
+#'                                "abundance_trend", "all$abundance_trend",
+#'                                "all$ema", # only defined for all
+#'                                "extirpation", "all$extirpation",
+#'                                "all$extinction_location", # only defined for all
+#'                                "harvested", "all$harvested",
+#'                                "occupancy", "all$occupancy"))
+#'
 #' @importFrom R6 R6Class
 #' @include SimulationResults.R
 #' @export PopulationResults
@@ -131,10 +169,18 @@ PopulationResults <- R6Class("PopulationResults",
     },
 
     #' @field occupancy_mask Optional binary mask array (matrix), data frame, or raster (stack) for each cell at each time-step of the simulation including burn-in.
-    occupancy_mask = function(value) { # inherited
+    occupancy_mask = function(value) {
       if (missing(value)) {
-        super$occupancy_mask
+        if (!is.null(super$occupancy_mask) && !is.null(self$region) && self$region$use_raster) {
+          super$occupancy_mask[region$region_indices]
+        } else {
+          super$occupancy_mask
+        }
       } else {
+        if (!is.null(value) && !is.null(self$region) && self$region$use_raster &&
+            !any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+          value <- region$raster_from_values(value)
+        }
         super$occupancy_mask <- value
       }
     },
