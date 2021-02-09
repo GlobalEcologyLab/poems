@@ -83,7 +83,7 @@ test_that("file template reading raster", {
   raster_occupancy_mask <- raster::stack(replicate(10, raster::raster(vals = region$region_raster[],
                                                                       nrows = 4, ncol = 4,
                                                                       xmn = 0, xmx = 4000, ymn = 0, ymx = 4000,
-                                                                      crs = "+proj=utm +ellps=GRS80")))
+                                                                      crs = "+proj=utm +ellps=GRS80 +datum=WGS84")))
   raster_occupancy_mask[][region$region_indices, ] <- occupancy_mask[raster_occupancy_mask[][region$region_indices, 1], ]
   generator <- Generator$new(description = "Test generator", decimals = 4,
                              region = Region$new(coordinates = coordinates, use_raster = TRUE))

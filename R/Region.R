@@ -89,7 +89,8 @@ Region <- R6Class("Region",
           region_non_finites <- which(!is.finite(region_raster[]))
           return(identical(raster::extent(check_raster), raster::extent(region_raster)) &&
                    identical(raster::res(check_raster), raster::res(region_raster)) &&
-                   identical(raster::crs(check_raster), raster::crs(region_raster)) &&
+                   identical(raster::crs(check_raster, asText = TRUE),
+                             raster::crs(region_raster, asText = TRUE)) &&
                    all(!is.finite(check_raster[region_non_finites])))
         } else {
           return(FALSE)
@@ -176,8 +177,10 @@ Region <- R6Class("Region",
     region_raster = function(value) {
       if (missing(value)) {
         if (is.null(private$.region_raster) && !is.null(private$.coordinates) && self$use_raster) {
-          suppressWarnings(raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
-                                                 crs = "+proj=longlat +ellps=WGS84")) # warnings?
+          # suppressWarnings(raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
+          #                                        crs = "+proj=longlat +ellps=WGS84 +datum=WGS84")) # warnings?
+          raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
+                                crs = "+proj=longlat +datum=WGS84 +no_defs")
         } else {
           private$.region_raster
         }

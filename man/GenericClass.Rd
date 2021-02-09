@@ -11,7 +11,7 @@ object1 <- GenericClass$new()
 class(object1)
 # Referencing
 object_ref <- object1
-objectref$attached$a <- 1
+object_ref$attached$a <- 1
 object1$attached
 # Cloning
 object2 <- object1$clone()

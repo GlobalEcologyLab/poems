@@ -76,7 +76,7 @@ population_transitions <- function(populations,
         selected_abundance <- stage_abundance[as.vector(abundance_fecundity_indices[, occupied_indices])]
         generated_newborns[occupied_t_fecundity_indices] <-
           apply(matrix(1:length(shifted_fecundity)), 1,
-                function(i) sum(pmin(rpois(selected_abundance[i], shifted_fecundity[i]), fecundity_max)))
+                function(i) sum(pmin(stats::rpois(selected_abundance[i], shifted_fecundity[i]), fecundity_max)))
       } else {
         generated_newborns[occupied_t_fecundity_indices] <-
           stats::rpois(length(occupied_t_fecundity_indices),

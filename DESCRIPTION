@@ -1,7 +1,7 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling and Simulation
-Version: 0.2.1
+Version: 0.3.0
 Author: Global ChEC Lab
 Maintainer: Sean Haythorne <sean.haythorne@adelaide.edu.au>
 Description: The poems package provides a framework of interoperable R6 classes for 
@@ -19,8 +19,9 @@ Description: The poems package provides a framework of interoperable R6 classes 
     The user may also define functionality for translocations, harvesting, mortality, 
     and other processes, as well as define the sequence order for the simulator 
     processes. The framework could also be adapted for use with other model simulators 
-    by utilizing its extendable (inheritable) base classes.    
-License: GPL (>= 3)
+    by utilizing its extendable (inheritable) base classes.
+Depends: R (>= 3.6.0)
+License: GPL-3 + file LICENSE
 URL: https://github.com/GlobalEcologyLab/poems
 Encoding: UTF-8
 LazyData: true

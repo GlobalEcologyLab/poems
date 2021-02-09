@@ -29,7 +29,7 @@ test_that("initialization and parameter setting", {
   # Consistency of region/coordinates and friction raster values
   dispersal_friction$region$use_raster <- TRUE
   raster2 <- raster::raster(vals = rep(1, 16), nrows = 4, ncol = 4,
-                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80")
+                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
   expect_error(dispersal_friction$friction_values <- raster::stack(replicate(10, raster2)),
                "Friction values raster must be consistent with the defined region raster")
   dispersal_friction$friction_values <- raster::stack(replicate(10, +(dispersal_friction$region$region_raster > 0)))
@@ -115,7 +115,7 @@ test_that("distance multiplier calculations", {
   # Raster region and barrier friction values with coordinates in metres
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
-                                                       crs = "+proj=utm +ellps=GRS80"))
+                                                       crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))
   friction_values <- raster::stack(replicate(10, region$region_raster))
   friction_values[region$region_indices] <- barrier_friction_matrix
   dispersal_friction <- DispersalFriction$new(region = region, friction_values = friction_values)

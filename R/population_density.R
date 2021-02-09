@@ -81,9 +81,11 @@ population_density <- function(populations,
       if (length(above_capacity_indices)) {
 
         # Limit stage abundances via affected capacity/abundance ratio
-        stage_abundance[density_stage_indices, above_capacity_indices] <-
-          round(stage_abundance[density_stage_indices, above_capacity_indices]*
-                  rep(carrying_capacity[above_capacity_indices]/density_abundance[above_capacity_indices], each = density_stages))
+        limited_stage_abundance <- stage_abundance
+        limited_stage_abundance[density_stage_indices, above_capacity_indices] <-
+          (stage_abundance[density_stage_indices, above_capacity_indices]*
+             rep(carrying_capacity[above_capacity_indices]/density_abundance[above_capacity_indices], each = density_stages))
+        stage_abundance[density_stage_indices, above_capacity_indices] <- round(limited_stage_abundance[density_stage_indices, above_capacity_indices])
 
         # Ensure the ceiling values are used (correct differences resulting from rounding)
         ceiling_corrections <- (carrying_capacity[above_capacity_indices] -
@@ -91,7 +93,7 @@ population_density <- function(populations,
                                            n = length(above_capacity_indices)))
         for (i in which(ceiling_corrections != 0)) {
           sample_indices <- sample(1:density_stages, size = abs(ceiling_corrections[i]), replace = TRUE,
-                                   prob = stage_abundance[density_stage_indices, above_capacity_indices[i]])
+                                   prob = limited_stage_abundance[density_stage_indices, above_capacity_indices[i]])
           for (sample_index in sample_indices) {
             stage_abundance[density_stage_indices[sample_index], above_capacity_indices[i]] <-
               stage_abundance[density_stage_indices[sample_index], above_capacity_indices[i]] + ifelse(ceiling_corrections[i] > 0, 1, -1)

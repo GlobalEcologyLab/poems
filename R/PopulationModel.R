@@ -464,7 +464,11 @@ PopulationModel <- R6Class("PopulationModel",
       if (missing(value)) {
         if (is.null(self$template_model) || "fecundity_mask" %in% self$sample_attributes) {
           if (is.null(private$.fecundity_mask) && is.matrix(self$stage_matrix)) {
-            +upper.tri(self$stage_matrix)
+            if (nrow(self$stage_matrix) > 1) {
+              +upper.tri(self$stage_matrix)
+            } else {
+              +(self$stage_matrix > 0)
+            }
           } else {
             private$.fecundity_mask
           }

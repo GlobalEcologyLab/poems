@@ -72,7 +72,15 @@
 #' \describe{
 #'   \item{Year}{Year during bounty period from 1888 to 1909}
 #'   \item{Total}{Total Tasmania-wide bounty submitted}
-#'   \item{emph{IBRA columns}}{Bounty submitted for each bioregion (as per \code{abbr} in \code{\link{tasmania_ibra_data}})}
+#'   \item{FUR}{Bounty submitted in IBRA bioregion: Furneaux}
+#'   \item{BEN}{Bounty submitted in IBRA bioregion: Ben Lomond}
+#'   \item{TNM}{Bounty submitted in IBRA bioregion: Tasmanian Northern Midlands}
+#'   \item{TSE}{Bounty submitted in IBRA bioregion: Tasmanian South East}
+#'   \item{TW}{Bounty submitted in IBRA bioregion: Tasmanian West}
+#'   \item{TNS}{Bounty submitted in IBRA bioregion: Tasmanian Northern Slopes}
+#'   \item{TSR}{Bounty submitted in IBRA bioregion: Tasmanian Southern Ranges}
+#'   \item{TCH}{Bounty submitted in IBRA bioregion: Tasmanian Central Highlands}
+#'   \item{KIN}{Bounty submitted in IBRA bioregion: King}
 #' }
 #' @source TBA
 "thylacine_bounty_record"

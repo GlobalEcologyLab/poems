@@ -47,7 +47,7 @@ test_that("calculate distance matrix and classes", {
   # Raster region with coordinates in metres
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
-                                                       crs = "+proj=utm +ellps=GRS80"))
+                                                       crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))
   dispersal_gen <- DispersalGenerator$new(region = region)
   expect_equal(dispersal_gen$calculate_distance_matrix(), as.matrix(stats::dist(region$coordinates)))
   # Distance classes
@@ -160,7 +160,7 @@ test_that("connect dispersal friction object", {
                "Friction matrix dimensions are inconsistent with the dispersal generator region/coordinates")
   dispersal_gen$region$use_raster <- TRUE
   raster2 <- raster::raster(vals = rep(1, 16), nrows = 4, ncol = 4,
-                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80")
+                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
   expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(friction_values = raster::stack(replicate(10, raster2))),
                "Friction value raster is inconsistent with the dispersal generator region")
   friction_values <- raster::stack(replicate(10, dispersal_gen$region$region_raster))

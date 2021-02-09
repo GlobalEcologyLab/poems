@@ -2,7 +2,7 @@
 title: "Workflow example for the Tasmanian thylacine"
 author: "Global ChEC Lab"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 geometry: margin=2cm
 vignette: >
   %\VignetteIndexEntry{Thylacine example}
