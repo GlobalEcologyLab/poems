@@ -87,10 +87,11 @@ Region <- R6Class("Region",
       if (!is.null(region_raster)) {
         if (any(class(check_raster) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
           region_non_finites <- which(!is.finite(region_raster[]))
-          return(identical(raster::extent(check_raster), raster::extent(region_raster)) &&
-                   identical(raster::res(check_raster), raster::res(region_raster)) &&
-                   identical(raster::crs(check_raster, asText = TRUE),
-                             raster::crs(region_raster, asText = TRUE)) &&
+          # return(identical(raster::extent(check_raster), raster::extent(region_raster)) &&
+          #          identical(raster::res(check_raster), raster::res(region_raster)) &&
+          #          raster::compareCRS(raster::crs(check_raster), raster::crs(region_raster)) &&
+          #          all(!is.finite(check_raster[region_non_finites])))
+          return(raster::compareRaster(check_raster, region_raster, stopiffalse = FALSE) &&
                    all(!is.finite(check_raster[region_non_finites])))
         } else {
           return(FALSE)
@@ -178,9 +179,9 @@ Region <- R6Class("Region",
       if (missing(value)) {
         if (is.null(private$.region_raster) && !is.null(private$.coordinates) && self$use_raster) {
           # suppressWarnings(raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
-          #                                        crs = "+proj=longlat +ellps=WGS84 +datum=WGS84")) # warnings?
+          #                                        crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")) # warnings?
           raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
-                                crs = "+proj=longlat +datum=WGS84 +no_defs")
+                                crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
         } else {
           private$.region_raster
         }

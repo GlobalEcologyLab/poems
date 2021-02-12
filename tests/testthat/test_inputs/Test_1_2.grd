@@ -1,6 +1,6 @@
 [general]
 creator=R package 'raster'
-created=2021-02-08 16:18:18
+created=2021-02-10 11:12:42
 [georeference]
 nrows=4
 ncols=4
@@ -8,19 +8,18 @@ xmin=0.5
 ymin=0.5
 xmax=4.5
 ymax=4.5
-projection=+proj=longlat +ellps=WGS84 +datum=WGS84 +towgs84=0,0,0
+projection=+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0
 [data]
 datatype=FLT4S
 byteorder=little
-nbands=1
+nbands=10
 bandorder=BIL
-categorical=FALSE
-minvalue=1.01875436306
-maxvalue=1.15767538547516
+minvalue=1.0187543412827:0.972447325769854:0.926140310257004:0.879833294744154:0.833526279231304:0.787219263718453:0.740912248205603:0.694605232692753:0.648298217179903:0.601991201667053
+maxvalue=1.15767538782125:1.1113683723084:1.06506135679555:1.0187543412827:0.972447325769854:0.926140310257004:0.879833294744154:0.833526279231304:0.787219263718453:0.740912248205603
 nodatavalue=-3.4e+38
 [legend]
 legendtype=
 values=
 color=
 [description]
-layername=X1
+layername=cell.1:cell.2:cell.3:cell.4:cell.5:cell.6:cell.7:cell.8:cell.9:cell.10
