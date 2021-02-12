@@ -281,6 +281,8 @@ DispersalFriction <- R6Class("DispersalFriction",
             value <- utils::read.csv(file = value)
           } else if (length(grep(".RDATA", toupper(value), fixed = TRUE)) || length(grep(".RDS", toupper(value), fixed = TRUE))) {
             value <- readRDS(file = value)
+          } else if (length(grep(".GRD", toupper(value), fixed = TRUE))) {
+            value <- raster::brick(value)
           } else {
             value <- utils::read.table(file = value)
           }
