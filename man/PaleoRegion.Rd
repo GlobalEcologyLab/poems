@@ -41,6 +41,7 @@ which cells are included at each time step.
 \itemize{
 \item \href{#method-new}{\code{PaleoRegion$new()}}
 \item \href{#method-raster_from_values}{\code{PaleoRegion$raster_from_values()}}
+\item \href{#method-temporal_mask_raster}{\code{PaleoRegion$temporal_mask_raster()}}
 \item \href{#method-clone}{\code{PaleoRegion$clone()}}
 }
 }
@@ -91,6 +92,19 @@ Converts an array (or matrix) of values into a raster (or stack) consistent with
 }
 \subsection{Returns}{
 A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the region raster with temporal mask (if any) applied.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-temporal_mask_raster"></a>}}
+\if{latex}{\out{\hypertarget{method-temporal_mask_raster}{}}}
+\subsection{Method \code{temporal_mask_raster()}}{
+Returns the temporal mask as a raster stack/brick object consistent with the region raster.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PaleoRegion$temporal_mask_raster()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A \emph{RasterStack/Brick}) object with temporal mask values of 1 (true) and NA elsewhere.
 }
 }
 \if{html}{\out{<hr>}}

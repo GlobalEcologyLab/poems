@@ -61,6 +61,15 @@ PaleoRegion <- R6Class("PaleoRegion",
         value_raster[self$region_indices] <- value_raster[self$region_indices]*(self$temporal_mask | NA)
       }
       return(value_raster)
+    },
+
+    #' @description
+    #' Returns the temporal mask as a raster stack/brick object consistent with the region raster.
+    #' @return  A \emph{RasterStack/Brick}) object with temporal mask values of 1 (true) and NA elsewhere.
+    temporal_mask_raster = function() {
+      if (!is.null(self$temporal_mask)) {
+        return(self$raster_from_values(self$temporal_mask))
+      }
     }
 
   ), # end public
