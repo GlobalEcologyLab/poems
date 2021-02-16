@@ -9,9 +9,11 @@ test_that("initialization and parameter setting", {
   expect_equal(generator$attribute_aliases,
                list(attr0 = "template_attached$attr0", attr1 = "template_attached$attr1"))
   expect_equal(generator$template_attached, list(attr0 = 0, attr1 = 1))
+  expect_true(generator$generate_rasters)
   expect_error(generator$occupancy_mask <- array(c(1, 1, 0, 0, 1, 1, 1)),
                "Occupancy mask must be a raster layer, stack or brick consistent with the defined region")
   generator$region$use_raster <- FALSE
+  expect_false(generator$generate_rasters)
   expect_silent(generator$occupancy_mask <- array(c(1, 1, 0, 0, 1, 1, 1)))
   expect_equal(generator$get_attributes(c("description", "coordinates", "decimals", "occupancy_mask")),
                list(description = "Test generator", coordinates = coordinates, decimals = 4,
@@ -72,6 +74,16 @@ test_that("file template reading data frame", {
   expect_equal(generator$get_attribute("a3"), round(test_data*generator$occupancy_mask, 4))
   generator$attached$attr3 <- NULL # clear
   expect_equal(generator$get_attribute("a3_1"), test_data[1])
+  # Generate rasters
+  region = Region$new(coordinates = coordinates, use_raster = TRUE)
+  generator <- Generator$new(description = "Test generator", decimals = 4, outputs = "attr3",
+                             region = region, occupancy_mask = region$raster_from_values(occupancy_mask))
+  generator$add_generative_requirements(attr3 = "file")
+  generator$add_file_template("attr3", path_template = file.path(TEST_DIRECTORY, "Test_%s_%s.csv"),
+                              path_params = c("attr1", "attr2"), file_type = "CSV")
+  generator$set_attributes(attr1 = 1, attr2 = 2)
+  expect_equal(unname(generator$get_attribute("attr3")[region$region_indices]),
+               unname(round(as.matrix(test_data*occupancy_mask), 4)))
 })
 
 test_that("file template reading raster", {
@@ -127,6 +139,17 @@ test_that("file template reading raster", {
   expect_equal(generator$get_attribute("a3_8"), test_raster[8])
   generator$attached$attr3 <- NULL # clear
   expect_equal(generator$get_attribute("a3_X5"), test_raster[][, 5])
+  # Generate arrays from rasters
+  generator <- Generator$new(description = "Test generator", decimals = 4, outputs = "attr3",
+                             region = region, generate_rasters = FALSE,
+                             occupancy_mask = raster_occupancy_mask)
+  expect_equal(unname(generator$occupancy_mask), occupancy_mask)
+  generator$add_generative_requirements(attr3 = "file")
+  generator$add_file_template("attr3", path_template = file.path(TEST_DIRECTORY, "Test_%s_%s.grd"),
+                              path_params = c("attr1", "attr2"))
+  generator$set_attributes(attr1 = 1, attr2 = 2)
+  expect_equal(unname(generator$get_attribute("attr3")),
+               unname(round(as.matrix(test_raster[region$region_indices]*occupancy_mask), 4)))
 })
 
 test_that("function execution template", {
@@ -262,7 +285,6 @@ test_that("sample distribution template with rasters (uniform)", {
   attr3_matrix[which(region$region_indices == 3), 1:4] <- c(NA, NA, NA, 0)
   set.seed(123)
   expected_attr5_matrix <- stats::qunif(stats::runif(7), min = 0, max = attr3_matrix)
-
   generator$attached$attr5 <- NULL # clear
   expect_equal(unname(generator$sample_distribution("attr5")[region$region_indices]), expected_attr5_matrix)
   generator$attached$attr5 <- NULL # clear
@@ -275,6 +297,11 @@ test_that("sample distribution template with rasters (uniform)", {
   expected_attr5_matrix[which(expected_attr5_matrix > 1)] <- 1
   expect_equal(unname(generator$get_attribute("attr5")[region$region_indices]),
                round(expected_attr5_matrix, 4))
+  # Generate arrays from rasters
+  generator$generate_rasters <- FALSE
+  generator$occupancy_mask <- raster_occupancy_mask
+  expect_equal(generator$occupancy_mask, raster_occupancy_mask[region$region_indices])
+  expect_equal(unname(generator$get_attribute("attr5")), round(expected_attr5_matrix, 4))
 })
 
 test_that("sample distribution template (normal)", {
@@ -554,7 +581,7 @@ test_that("inheritance", {
   # Generation
   expect_true(generator$generative_requirements_satisfied()) # default with no requirements set
   expect_equal(generator$generate(),
-               list(error_messages = "Test generator 2 generation requires settings for: inputs, outputs"))
+               list(error_messages = "Test generator 2 generation requires settings for: outputs"))
   generator$inputs <- c("a1", "a2")
   generator$outputs <- c("a3")
   expect_equal(generator$generate(),

@@ -102,6 +102,8 @@ capacity_gen$generate(input_values = list(hs_file = 1,
 
 \item{\code{time_steps}}{Number of simulation time steps.}
 
+\item{\code{generate_rasters}}{Boolean to indicate if rasters should be generated (defaults to TRUE when region uses rasters).}
+
 \item{\code{decimals}}{Number of decimal places applied to generated data outputs (default: NULL = no rounding).}
 
 \item{\code{occupancy_mask}}{Optional binary mask array (matrix), data frame, or raster (stack) for generated (time-series) data outputs.}

@@ -44,6 +44,7 @@ GenerativeTemplate <- R6Class("GenerativeTemplate",
     .spatial_correlation = NULL,
     .temporal_correlation = 1,
     .time_steps = 1,
+    .generate_rasters = NULL,
     .decimals = NULL,
     .occupancy_mask = NULL
 
@@ -139,6 +140,15 @@ GenerativeTemplate <- R6Class("GenerativeTemplate",
         private$.time_steps
       } else {
         private$.time_steps <- value
+      }
+    },
+
+    #' @field generate_rasters Boolean to indicate if rasters should be generated (default: NULL).
+    generate_rasters = function(value) {
+      if (missing(value)) {
+        private$.generate_rasters
+      } else {
+        private$.generate_rasters <- value
       }
     },
 

@@ -170,6 +170,18 @@ Generator <- R6Class("Generator",
           if (!is.null(self$decimals)) {
             attribute_list[[param]][] <- round(attribute_list[[param]][], self$decimals)
           }
+          # Generate raster or array?
+          if (!is.null(self$region)) {
+            if (class(attribute_list[[param]])[1] %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
+              if (!self$generate_rasters) { # raster to array
+                attribute_list[[param]] <- attribute_list[[param]][self$region$region_indices]
+              }
+            } else {
+              if (self$generate_rasters && nrow(as.matrix(attribute_list[[param]])) == self$region$region_cells) { # array to raster
+                attribute_list[[param]] <- self$region$raster_from_values(attribute_list[[param]])
+              }
+            }
+          }
           # Apply occupancy mask
           if (!is.null(self$occupancy_mask)) {
             if (length(as.matrix(attribute_list[[param]][])) < length(as.matrix(self$occupancy_mask[]))) {
@@ -196,8 +208,8 @@ Generator <- R6Class("Generator",
     #' @param input_values List of sample input values for generator attributes.
     #' @return List containing generated model output attributes and/or any error/warning messages.
     generate = function(input_values = list()) {
-      if (is.null(self$inputs) || is.null(self$outputs)) {
-        missing <- c("inputs", "outputs")[which(c(is.null(self$inputs), is.null(self$outputs)))]
+      if ((is.null(self$inputs) && length(input_values)) || is.null(self$outputs)) {
+        missing <- c("inputs", "outputs")[which(c(is.null(self$inputs) && length(input_values), is.null(self$outputs)))]
         return(list(error_messages = sprintf("%s generation requires settings for: %s", self$description, paste(missing, collapse = ", "))))
       }
       inputs_present <- 0
@@ -579,15 +591,8 @@ Generator <- R6Class("Generator",
 
         # Return as raster or values
         value_list <- list()
-        if (!is.null(self$region) && self$region$use_raster && self$region$region_cells > 0) {
-          time_steps <- length(generated_values)/self$region$region_cells
-          if (time_steps > 1) {
-            generated_raster <- raster::stack(replicate(time_steps, self$region$region_raster))
-          } else {
-            generated_raster <- self$region$region_raster
-          }
-          generated_raster[self$region$region_indices] <- generated_values
-          value_list[[param]] <- generated_raster
+        if (!is.null(self$region) && self$generate_rasters) {
+          value_list[[param]] <- self$region$raster_from_values(generated_values)
         } else {
           value_list[[param]] <- generated_values
         }
@@ -667,7 +672,7 @@ Generator <- R6Class("Generator",
     # Attributes accessible via model get/set methods #
     .active_attributes = c("region", "coordinates", "description", "inputs", "outputs", "file_templates", "function_templates",
                            "distribution_templates", "uses_correlations", "spatial_correlation", "temporal_correlation",
-                           "time_steps", "decimals", "occupancy_mask", "template_attached"),
+                           "time_steps", "generate_rasters", "decimals", "occupancy_mask", "template_attached"),
 
     # Dynamic attributes #
     # .attribute_aliases [inherited]
@@ -822,6 +827,29 @@ Generator <- R6Class("Generator",
       }
     },
 
+    #' @field generate_rasters Boolean to indicate if rasters should be generated (defaults to TRUE when region uses rasters).
+    generate_rasters = function(value) {
+      if (missing(value)) {
+        if (is.null(self$generative_template$generate_rasters)) {
+          if (!is.null(self$region)) {
+            self$region$use_raster
+          } else {
+            FALSE
+          }
+        } else {
+          self$generative_template$generate_rasters
+        }
+      } else {
+        if (!is.null(value)) {
+          value <- as.logical(value)
+          if (value && is.null(self$region)) {
+            stop("Rasters can only be generated when a region is defined that uses rasters", call. = FALSE)
+          }
+        }
+        self$generative_template$generate_rasters <- value
+      }
+    },
+
     #' @field decimals Number of decimal places applied to generated data outputs (default: NULL = no rounding).
     decimals = function(value) {
       if (missing(value)) {
@@ -841,6 +869,8 @@ Generator <- R6Class("Generator",
             value <- utils::read.csv(file = value)
           } else if (length(grep(".RDATA", toupper(value), fixed = TRUE)) || length(grep(".RDS", toupper(value), fixed = TRUE))) {
             value <- readRDS(file = value)
+          } else if (length(grep(".GRD", toupper(value), fixed = TRUE))) {
+            value <- raster::brick(value)
           } else {
             value <- utils::read.table(file = value)
           }
@@ -850,7 +880,10 @@ Generator <- R6Class("Generator",
             if (!self$region$raster_is_consistent(value)) {
               stop("Occupancy mask raster must be consistent with the defined region raster", call. = FALSE)
             }
-          } else if (self$region$use_raster) {
+            if (!self$generate_rasters) {
+              value <- value[self$region$region_indices]
+            }
+          } else if (self$generate_rasters) {
             stop("Occupancy mask must be a raster layer, stack or brick consistent with the defined region", call. = FALSE)
           }
         }
