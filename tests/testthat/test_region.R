@@ -88,9 +88,10 @@ test_that("raster from values", {
   # Matrix
   expect_error(region$raster_from_values(array(1:35, c(5, 7))),
                "Values must have a length or dimensions consistent with the number of region (non-NA) cells", fixed = TRUE)
-  value_raster <- region$raster_from_values(array(1:35, c(7, 5)))
+  value_matrix <- array(1:35, c(7, 5), dimnames = list(NULL, paste0("t", 1:5)))
+  value_raster <- region$raster_from_values(value_matrix)
   expect_is(value_raster, "RasterBrick")
-  expect_equal(unname(value_raster[region$region_indices]), array(1:35, c(7, 5)))
+  expect_equal(value_raster[region$region_indices], value_matrix)
   expect_true(region$raster_is_consistent(value_raster))
 })
 

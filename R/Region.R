@@ -115,6 +115,7 @@ Region <- R6Class("Region",
         value_raster <- self$region_raster
       }
       value_raster[self$region_indices] <- value_matrix
+      names(value_raster) <- colnames(value_matrix)
       return(value_raster)
     }
 
