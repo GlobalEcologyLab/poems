@@ -28,15 +28,15 @@ LazyData: true
 RoxygenNote: 7.1.1
 Imports:
     abc (>= 2.1),
-    doParallel (>= 1.0.14),
-    foreach (>= 1.4.4),
-    gdistance (>= 1.2.2),
-    geosphere (>= 1.5.7),
-    lhs (>= 1.0),
+    doParallel (>= 1.0.16),
+    foreach (>= 1.5.1),
+    gdistance (>= 1.3.6),
+    geosphere (>= 1.5.10),
+    lhs (>= 1.1.1),
     metRology (>= 0.9.28.1),
-    R6 (>= 2.4.0),
-    raster (>= 3.0.12),
-    trend (>= 1.1.1)
+    R6 (>= 2.5.0),
+    raster (>= 3.4.5),
+    trend (>= 1.1.4)
 Collate: 
     'GenericClass.R'
     'Region.R'
