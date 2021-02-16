@@ -347,7 +347,7 @@ Generator <- R6Class("Generator",
         path_params <- self$file_templates[[param]]$path_params
         path_param_list <- self$get_attributes(path_params)
         if (all(path_params %in% names(path_param_list))) {
-          file_path <- eval(parse(text = paste0("sprintf(path_template, ", paste(unlist(path_param_list), sep = "", collapse = ", "), ")")))
+          file_path <- eval(parse(text = paste0("sprintf(path_template, ", paste0(sprintf("path_param_list[[%d]]", 1:length(path_param_list)), collapse = ", "), ")")))
           if (is.character(file_path) && file.exists(file_path)) {
             value_list <- list()
             if (self$file_templates[[param]]$file_type == "CSV") {
