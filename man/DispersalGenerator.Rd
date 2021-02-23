@@ -45,10 +45,10 @@ dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
                                            dispersal_b = 700))
 # Friction in cells 3 and 6 at time step 2
 dispersal_gen$distance_data <- NULL # reset
-friction_matrix <- array(c(rep(1, 7), 1, 1, 0.5, 1, 1, 0, rep(1, 22)),
-                         c(7, 5)) # conductance
+conductance_matrix <- array(c(rep(1, 7), 1, 1, 0.5, 1, 1, 0, rep(1, 22)),
+                            c(7, 5))
 dispersal_gen$dispersal_friction <-
-  DispersalFriction$new(friction_values = friction_matrix)
+  DispersalFriction$new(conductance = conductance_matrix)
 dispersal_gen$calculate_distance_data() # re-calculate
 dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
                                            dispersal_b = 700))

@@ -27,7 +27,7 @@ test_that("initialization and parameter setting", {
   expect_equal(dispersal_gen$dispersal_max_distance, 250)
   # Fixed function parameters
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, inputs = c("dispersal_r"),
-                                        dispersal_proportion = 0.4, dispersal_breadth = 130)
+                                          dispersal_proportion = 0.4, dispersal_breadth = 130)
   expect_equal(dispersal_gen$generative_template$dispersal_proportion, 0.4)
   expect_equal(dispersal_gen$generative_template$dispersal_breadth, 130)
 })
@@ -156,19 +156,19 @@ test_that("connect dispersal friction object", {
   dispersal_gen$distance_data <- NULL
   expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(coordinates = coordinates[1:15,]),
                "Dispersal friction object is inconsistent with the dispersal generator region/coordinates")
-  expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(friction_values = array(1, c(15, 10))),
-               "Friction matrix dimensions are inconsistent with the dispersal generator region/coordinates")
+  expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(conductance = array(1, c(15, 10))),
+               "Conductance matrix dimensions are inconsistent with the dispersal generator region/coordinates")
   dispersal_gen$region$use_raster <- TRUE
   raster2 <- raster::raster(vals = rep(1, 16), nrows = 4, ncol = 4,
                             xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
-  expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(friction_values = raster::stack(replicate(10, raster2))),
-               "Friction value raster is inconsistent with the dispersal generator region")
-  friction_values <- raster::stack(replicate(10, dispersal_gen$region$region_raster))
-  friction_values[dispersal_gen$region$region_indices] <- array(1, c(16, 10))
+  expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(conductance = raster::stack(replicate(10, raster2))),
+               "Conductance raster is inconsistent with the dispersal generator region")
+  conductance_raster <- raster::stack(replicate(10, dispersal_gen$region$region_raster))
+  conductance_raster[dispersal_gen$region$region_indices] <- array(1, c(16, 10))
   dispersal_gen$region$use_raster <- FALSE
   expect_error(dispersal_gen$dispersal_friction <-
-                 DispersalFriction$new(friction_values = friction_values),
-               "Friction value raster is inconsistent with the dispersal generator region")
+                 DispersalFriction$new(conductance = conductance_raster),
+               "Conductance raster is inconsistent with the dispersal generator region")
   # Copy region/coordinates
   region <- dispersal_gen$region
   dispersal_gen$dispersal_friction <- DispersalFriction$new()
@@ -180,12 +180,12 @@ test_that("connect dispersal friction object", {
   dispersal_gen$region <- NULL
   region$use_raster <- TRUE
   dispersal_gen$dispersal_friction <- DispersalFriction$new(region = region,
-                                                                     friction_values = friction_values)
-  expect_true(dispersal_gen$region$raster_is_consistent(friction_values))
+                                                            conductance = conductance_raster)
+  expect_true(dispersal_gen$region$raster_is_consistent(conductance_raster))
 })
 
 test_that("calculate distance data with dispersal friction object", {
-  # Region and barrier friction values with longlat coordinates
+  # Region and conductance values with longlat coordinates
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000
   # Distance data base as before
@@ -194,12 +194,12 @@ test_that("calculate distance data with dispersal friction object", {
   distance_data_base <- dispersal_gen$distance_data$base
   dispersal_gen$distance_data <- NULL
   # Dispersal friction
-  friction_matrix = array(1, c(16, 10))
-  friction_matrix[1, 1] <- 0.5
-  friction_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
-  friction_matrix[, 4] = array(c(0, 0.2, 0, 0.8), 16) # frictional landscape columns
+  conductance_matrix = array(1, c(16, 10))
+  conductance_matrix[1, 1] <- 0.5
+  conductance_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
+  conductance_matrix[, 4] = array(c(0, 0.2, 0, 0.8), 16) # frictional landscape columns
   dispersal_friction = DispersalFriction$new(coordinates = coordinates,
-                                                    friction_values = friction_matrix)
+                                             conductance = conductance_matrix)
   dispersal_gen$dispersal_friction <- dispersal_friction
   # Manually calculate expected distance data changes
   distance_multipliers <- dispersal_friction$calculate_distance_multipliers(as.matrix(distance_data_base[, 1:2]))
@@ -222,19 +222,24 @@ test_that("calculate distance data with dispersal friction object", {
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   expect_equal(dispersal_gen$distance_data$base, distance_data_base)
   expect_equal(dispersal_gen$distance_data$changes, distance_data_changes)
+  # Dispersal friction writing distance multipliers to file (memory performance strategy)
+  dispersal_friction$write_to_dir <- tempdir()
+  dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
+  expect_equal(dispersal_gen$distance_data$base, distance_data_base)
+  expect_equal(dispersal_gen$distance_data$changes, distance_data_changes)
 })
 
 test_that("calculate dispersals with dispersal friction", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000
-  friction_matrix = array(1, c(16, 10))
-  friction_matrix[1, 1] <- 0.5
-  friction_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
-  friction_matrix[, 4] = array(c(0, 0.2, 0, 0.8), 16) # frictional landscape columns
-  dispersal_friction <- DispersalFriction$new(friction_values = friction_matrix)
+  conductance_matrix = array(1, c(16, 10))
+  conductance_matrix[1, 1] <- 0.5
+  conductance_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
+  conductance_matrix[, 4] = array(c(0, 0.2, 0, 0.8), 16) # frictional landscape columns
+  dispersal_friction <- DispersalFriction$new(conductance = conductance_matrix)
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20),
-                                        dispersal_friction = dispersal_friction,
-                                        proportion = 0.4, breadth = 110, max_distance = 300)
+                                          dispersal_friction = dispersal_friction,
+                                          proportion = 0.4, breadth = 110, max_distance = 300)
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   # Manually calculate expected sequence of dispersals
   dispersal_data <- dispersal_gen$distance_data$base[, c("target_pop", "source_pop", "distance_class")]
@@ -275,7 +280,7 @@ test_that("calculate dispersals with dispersal friction", {
   # Calculate dispersal data (t = 1 friction via NAs)
   region <- Region$new(coordinates = coordinates[-c(2, 5, 6),]) # NA cells to isolate (1, 1)
   dispersal_gen <- DispersalGenerator$new(region = region, distance_classes = seq(100, 400, 20),
-                                        proportion = 0.4, breadth = 110, max_distance = 300)
+                                          proportion = 0.4, breadth = 110, max_distance = 300)
   distance_matrix <- geosphere::distm(region$coordinates, region$coordinates, fun = geosphere::distGeo)/1000
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   dispersal_gen$calculate_dispersals()
@@ -314,7 +319,7 @@ test_that("cloning and generation", {
   expect_equal(generated_output$dispersal_data, dispersal_clone$dispersal_data)
   # Fixed function parameters
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20),
-                                        inputs = "breadth", dispersal_proportion = 0.4)
+                                          inputs = "breadth", dispersal_proportion = 0.4)
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   # Cloning
   dispersal_clone <- dispersal_gen$new_clone(breadth = 120)

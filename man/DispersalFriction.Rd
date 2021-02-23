@@ -40,10 +40,10 @@ multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indic
 cbind(dispersal_indices, distance = distances[dispersal_indices],
       multiplier = multipliers[[1]])
 # Distance multipliers with friction in cells at time step 2
-friction_values <- array(c(rep(1, 7), 1, 1, 0.5, 0, 1, 0, 0, rep(1, 21)),
+conductance <- array(c(rep(1, 7), 1, 1, 0.5, 0, 1, 0, 0, rep(1, 21)),
                          c(7, 5)) # conductance
-dispersal_friction$friction_values <- region$raster_from_values(friction_values)
-raster::plot(dispersal_friction$friction_values[[2]], colNA = "blue",
+dispersal_friction$conductance <- region$raster_from_values(conductance)
+raster::plot(dispersal_friction$conductance[[2]], colNA = "blue",
              main = "Example friction/conductance",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)")
 multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
@@ -72,9 +72,11 @@ cbind(dispersal_indices, distance = distances[dispersal_indices],
 
 \item{\code{parallel_cores}}{Number of cores for running the simulations in parallel.}
 
+\item{\code{write_to_dir}}{Directory path for storing distance multipliers when memory performance is an issue.}
+
 \item{\code{transition_directions}}{Number of transition directions or neighbours in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).}
 
-\item{\code{friction_values}}{Matrix/raster of conductance (inverse friction) values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for each grid cell (rows/cells) at each simulation time step (columns/layers).}
+\item{\code{conductance}}{Matrix/raster of conductance (inverse friction) values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for each grid cell (rows/cells) at each simulation time step (columns/layers).}
 
 \item{\code{attribute_aliases}}{A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.}
 

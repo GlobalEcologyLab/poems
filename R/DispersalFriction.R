@@ -37,10 +37,10 @@
 #' cbind(dispersal_indices, distance = distances[dispersal_indices],
 #'       multiplier = multipliers[[1]])
 #' # Distance multipliers with friction in cells at time step 2
-#' friction_values <- array(c(rep(1, 7), 1, 1, 0.5, 0, 1, 0, 0, rep(1, 21)),
+#' conductance <- array(c(rep(1, 7), 1, 1, 0.5, 0, 1, 0, 0, rep(1, 21)),
 #'                          c(7, 5)) # conductance
-#' dispersal_friction$friction_values <- region$raster_from_values(friction_values)
-#' raster::plot(dispersal_friction$friction_values[[2]], colNA = "blue",
+#' dispersal_friction$conductance <- region$raster_from_values(conductance)
+#' raster::plot(dispersal_friction$conductance[[2]], colNA = "blue",
 #'              main = "Example friction/conductance",
 #'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)")
 #' multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
@@ -112,8 +112,8 @@ DispersalFriction <- R6Class("DispersalFriction",
           raster_region <- Region$new(coordinates = self$region$coordinates, use_raster = TRUE)
         }
 
-        if (is.null(self$friction_values)) { # set as 1 for all non-NA cells
-          self$friction_values <- raster_region$region_raster*0 + 1
+        if (is.null(self$conductance)) { # set as 1 for all non-NA cells
+          self$conductance <- raster_region$region_raster*0 + 1
         }
 
         suppressWarnings({
@@ -122,32 +122,38 @@ DispersalFriction <- R6Class("DispersalFriction",
           no_friction_rast[] <- 1 # include NAs # [raster_region$region_indices] <- 1
           no_friction_transitions <- gdistance::transition(no_friction_rast, transitionFunction = mean, directions = self$transition_directions)
           no_friction_transitions <- gdistance::geoCorrection(no_friction_transitions, type = "c", scl = TRUE, multpl = FALSE)
-          no_friction_cost_matrix <- as.matrix(gdistance::costDistance(no_friction_transitions, as.matrix(self$coordinates)))
-          no_friction_costs <- no_friction_cost_matrix[dispersal_indices]
-          no_friction_transitions <- NULL; no_friction_cost_matrix <- NULL # release from memory
+          no_friction_costs <- as.matrix(gdistance::costDistance(no_friction_transitions, as.matrix(self$coordinates)))
+          no_friction_costs <- no_friction_costs[dispersal_indices]
+          no_friction_transitions <- NULL # release from memory
         })
 
         # Calculate the (within range) distance multipliers for each time step in parallel
         doParallel::registerDoParallel(cores = self$parallel_cores)
         self <- self # Ensure that this object consistently becomes available within each parallel thread
-        distance_multipliers <- foreach(i = 1:ncol(as.matrix(self$friction_values[])),
+        distance_multipliers <- foreach(i = 1:ncol(as.matrix(self$conductance[])),
                                         .packages = c("raster"),
                                         .errorhandling = c("stop")) %dopar% {
           suppressWarnings({
             # Calculate raster, transition matrix, then least cost distances for friction for time step
-            if (any(class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-              conductance_rast <- raster::subset(self$friction_values, i)
+            if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+              conductance_rast <- raster::subset(self$conductance, i)
             } else { # assume friction matrix
               conductance_rast <- raster_region$region_raster
-              conductance_rast[raster_region$region_indices] <- self$friction_values[, i]
+              conductance_rast[raster_region$region_indices] <- self$conductance[, i]
             }
             conductance_transitions <- gdistance::transition(conductance_rast, transitionFunction = mean, directions = self$transition_directions)
             conductance_transitions <- gdistance::geoCorrection(conductance_transitions, type = "c", scl = TRUE, multpl = FALSE)
-            conductance_cost_matrix <- as.matrix(gdistance::costDistance(conductance_transitions, as.matrix(self$coordinates)))
-            conductance_costs <- conductance_cost_matrix[dispersal_indices]
-            conductance_transitions <- NULL; conductance_cost_matrix <- NULL # release from memory
+            conductance_costs <- as.matrix(gdistance::costDistance(conductance_transitions, as.matrix(self$coordinates)))
+            conductance_costs <- conductance_costs[dispersal_indices]
+            conductance_transitions <- NULL # release from memory
           })
-          conductance_costs/no_friction_costs # return to parallel rbind
+          if (!is.null(self$write_to_dir)) {
+            file_path <- file.path(self$write_to_dir, sprintf("multipliers_%s.RData", i))
+            saveRDS(conductance_costs/no_friction_costs, file = file_path)
+            file_path # return to parallel rbind
+          } else {
+            conductance_costs/no_friction_costs # return to parallel rbind
+          }
         }
 
       },
@@ -171,14 +177,15 @@ DispersalFriction <- R6Class("DispersalFriction",
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("region", "coordinates", "parallel_cores", "transition_directions", "friction_values"),
+    .model_attributes = c("region", "coordinates", "parallel_cores", "write_to_dir", "transition_directions", "conductance"),
     .region = NULL,
     .parallel_cores = 1,
+    .write_to_dir = NULL,
     .transition_directions = 8,
-    .friction_values = NULL,
+    .conductance = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "coordinates", "parallel_cores", "transition_directions", "friction_values")
+    .active_attributes = c("region", "coordinates", "parallel_cores", "write_to_dir", "transition_directions", "conductance")
 
     # Dynamic attributes #
     # .attribute_aliases [inherited]
@@ -212,15 +219,15 @@ DispersalFriction <- R6Class("DispersalFriction",
           if ((value$use_raster && is.null(value$region_raster)) || (!value$use_raster && is.null(value$coordinates))) {
             warning("Spatial region has not been defined within the region object", call. = FALSE)
           }
-          if (!is.null(self$friction_values)) {
-            if (any(class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+          if (!is.null(self$conductance)) {
+            if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
               value$use_raster = TRUE
-              if (!value$raster_is_consistent(self$friction_values)) {
-                stop("Region must be consistent with the friction values raster", call. = FALSE)
+              if (!value$raster_is_consistent(self$conductance)) {
+                stop("Region must be consistent with the conductance raster", call. = FALSE)
               }
-            } else { # assume friction matrix
-              if (value$region_cells > 0 && value$region_cells != nrow(self$friction_values)) {
-                stop("Region must be consistent with friction matrix dimensions", call. = FALSE)
+            } else { # assume conductance matrix
+              if (value$region_cells > 0 && value$region_cells != nrow(self$conductance)) {
+                stop("Region must be consistent with conductance matrix dimensions", call. = FALSE)
               }
             }
           }
@@ -237,15 +244,15 @@ DispersalFriction <- R6Class("DispersalFriction",
         self$region$coordinates
       } else {
         region <- Region$new(coordinates = value, use_raster = FALSE)
-        if (!is.null(value) && !is.null(self$friction_values)) {
-          if (any(class(self$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+        if (!is.null(value) && !is.null(self$conductance)) {
+          if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
             region$use_raster <- TRUE
-            if (!region$raster_is_consistent(self$friction_values)) {
-              stop("Region coordinates must be consistent with the friction values raster", call. = FALSE)
+            if (!region$raster_is_consistent(self$conductance)) {
+              stop("Region coordinates must be consistent with the conductance raster", call. = FALSE)
             }
           } else { # assume friction matrix
-            if (nrow(value) != nrow(self$friction_values)) {
-              stop("Region coordinates must be consistent with friction matrix dimensions", call. = FALSE)
+            if (nrow(value) != nrow(self$conductance)) {
+              stop("Region coordinates must be consistent with conductance matrix dimensions", call. = FALSE)
             }
           }
         }
@@ -262,6 +269,18 @@ DispersalFriction <- R6Class("DispersalFriction",
       }
     },
 
+    #' @field write_to_dir Directory path for storing distance multipliers when memory performance is an issue.
+    write_to_dir = function(value) {
+      if (missing(value)) {
+        private$.write_to_dir
+      } else {
+        if (!is.character(value) || !dir.exists(value)) {
+          stop("Dispersal friction: write_to_dir must be a existing directory path (string)", call. = FALSE)
+        }
+        private$.write_to_dir <- value
+      }
+    },
+
     #' @field transition_directions Number of transition directions or neighbours in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).
     transition_directions = function(value) {
       if (missing(value)) {
@@ -271,10 +290,10 @@ DispersalFriction <- R6Class("DispersalFriction",
       }
     },
 
-    #' @field friction_values Matrix/raster of conductance (inverse friction) values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for each grid cell (rows/cells) at each simulation time step (columns/layers).
-    friction_values = function(value) {
+    #' @field conductance Matrix/raster of conductance (inverse friction) values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for each grid cell (rows/cells) at each simulation time step (columns/layers).
+    conductance = function(value) {
       if (missing(value)) {
-        private$.friction_values
+        private$.conductance
       } else {
         if (is.character(value) && file.exists(value)) {
           if (length(grep(".CSV", toupper(value), fixed = TRUE))) {
@@ -290,18 +309,16 @@ DispersalFriction <- R6Class("DispersalFriction",
         if (!is.null(value)) {
           if (any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
             if (!is.null(self$region) && !self$region$raster_is_consistent(value)) {
-              stop("Friction values raster must be consistent with the defined region raster", call. = FALSE)
+              stop("Conductance raster must be consistent with the defined region raster", call. = FALSE)
             }
-          } else if (!is.null(self$region) && self$region$use_raster) {
-            stop("Friction values must be a raster layer, stack or brick consistent with the defined region", call. = FALSE)
           } else { # assume matrix-like object
             value <- as.matrix(value)
             if (!is.null(self$region$coordinates) && nrow(value) != nrow(self$region$coordinates)) {
-              stop("Friction values matrix dimensions must be consistent with region/coordinates", call. = FALSE)
+              stop("Conductance matrix dimensions must be consistent with region/coordinates", call. = FALSE)
             }
           }
         }
-        private$.friction_values <- value
+        private$.conductance <- value
       }
     },
 

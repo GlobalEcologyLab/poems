@@ -12,37 +12,38 @@ test_that("initialization and parameter setting", {
   # Region defined as raster
   dispersal_friction <- DispersalFriction$new(region = Region$new(coordinates = coordinates))
   expect_true(dispersal_friction$region$use_raster)
-  # Consistency of region/coordinates and friction matrix values
-  expect_error(dispersal_friction$friction_values <- array(1, c(16, 10)),
-               "Friction values must be a raster layer, stack or brick consistent with the defined region")
-  dispersal_friction$region$use_raster <- FALSE
-  expect_error(dispersal_friction$friction_values <- array(1, c(15, 10)),
-               "Friction values matrix dimensions must be consistent with region/coordinates")
-  expect_silent(dispersal_friction$friction_values <- array(1, c(16, 10)))
+  # Consistency of region/coordinates and conductance matrix values
+  expect_error(dispersal_friction$conductance <- array(1, c(15, 10)),
+               "Conductance matrix dimensions must be consistent with region/coordinates")
+  expect_silent(dispersal_friction$conductance <- array(1, c(16, 10)))
   expect_error(dispersal_friction$coordinates <- coordinates[1:15,],
-               "Region coordinates must be consistent with friction matrix dimensions")
+               "Region coordinates must be consistent with conductance matrix dimensions")
   expect_equal(dispersal_friction$coordinates, coordinates) # unchanged
   expect_error(dispersal_friction$region <-  Region$new(coordinates = coordinates[1:15,]),
-               "Region must be consistent with friction matrix dimensions")
+               "Region must be consistent with conductance matrix dimensions")
   expect_equal(dispersal_friction$coordinates, coordinates) # unchanged
-  expect_equal(nrow(dispersal_friction$friction_values), dispersal_friction$region$region_cells)
-  # Consistency of region/coordinates and friction raster values
+  expect_equal(nrow(dispersal_friction$conductance), dispersal_friction$region$region_cells)
+  # Consistency of region/coordinates and conductance raster values
   dispersal_friction$region$use_raster <- TRUE
   raster2 <- raster::raster(vals = rep(1, 16), nrows = 4, ncol = 4,
                             xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
-  expect_error(dispersal_friction$friction_values <- raster::stack(replicate(10, raster2)),
-               "Friction values raster must be consistent with the defined region raster")
-  dispersal_friction$friction_values <- raster::stack(replicate(10, +(dispersal_friction$region$region_raster > 0)))
+  expect_error(dispersal_friction$conductance <- raster::stack(replicate(10, raster2)),
+               "Conductance raster must be consistent with the defined region raster")
+  dispersal_friction$conductance <- raster::stack(replicate(10, +(dispersal_friction$region$region_raster > 0)))
   expect_error(dispersal_friction$coordinates <- coordinates[1:15,],
-               "Region coordinates must be consistent with the friction values raster")
+               "Region coordinates must be consistent with the conductance raster")
   expect_error(dispersal_friction$region <-  Region$new(coordinates = coordinates[1:15,]),
-               "Region must be consistent with the friction values raster")
-  expect_equal(raster::ncell(dispersal_friction$friction_values), dispersal_friction$region$region_cells)
+               "Region must be consistent with the conductance raster")
+  expect_equal(raster::ncell(dispersal_friction$conductance), dispersal_friction$region$region_cells)
+  # Write to directory
+  expect_error(dispersal_friction$write_to_dir <- test_path("no_such_dir"),
+               "Dispersal friction: write_to_dir must be a existing directory path (string)", fixed = TRUE)
+  expect_silent(dispersal_friction$write_to_dir <- test_path("test_inputs"))
 })
 
 test_that("distance multiplier calculation errors", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  # No coordinates or friction matrix or dispersal indices
+  # No coordinates or conductance matrix or dispersal indices
   dispersal_friction <- DispersalFriction$new()
   expect_error(dispersal_friction$calculate_distance_multipliers(),
                "Distance multipliers calculation requires region/coordinates to be set first")
@@ -54,7 +55,7 @@ test_that("distance multiplier calculation errors", {
   dispersal_indices <- which(distance_matrix > 0 & distance_matrix <= 350000, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
   dispersal_friction <- DispersalFriction$new(coordinates = coordinates,
-                                         friction_values = array(1, c(16, 10)))
+                                              conductance = array(1, c(16, 10)))
   expect_error(dispersal_friction$calculate_distance_multipliers(dispersal_indices = "wrong"),
                "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration")
   expect_error(dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices - 1),
@@ -77,12 +78,12 @@ test_that("distance multiplier calculations", {
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000
   dispersal_indices <- which(distance_matrix > 0 & distance_matrix <= 350, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
-  barrier_friction_matrix = array(1, c(16, 10))
-  barrier_friction_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
-  barrier_friction_matrix[, 3] = array(c(0, 0.2, 0, 0.8), 16) # frictional landscape columns
-  # Non-raster region and barrier friction values
+  conductance_matrix = array(1, c(16, 10))
+  conductance_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
+  conductance_matrix[, 3] = array(c(0, 0.2, 0, 0.8), 16) # frictional landscape columns
+  # Non-raster region and conductance values
   dispersal_friction <- DispersalFriction$new(coordinates = coordinates,
-                                         friction_values = barrier_friction_matrix)
+                                              conductance = conductance_matrix)
   distance_multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices)
   expect_equal(length(distance_multipliers), 10)
   expect_equal(distance_multipliers[[1]], rep(1, nrow(dispersal_indices)))
@@ -105,20 +106,20 @@ test_that("distance multiplier calculations", {
   expect_equal(distance_multipliers[[3]][route_3_to_8_index], 1/mean(c(0, 0.8)))
   route_4_to_12_index <- which(dispersal_indices[, "source_pop"] == 4 & dispersal_indices[, "target_pop"] == 12)
   expect_equal(distance_multipliers[[3]][route_4_to_12_index], 1/0.8)
-  # Raster region and barrier friction values with longlat coordinates
+  # Raster region and conductance values with longlat coordinates
   region <-  Region$new(coordinates = coordinates)
-  friction_values <- raster::stack(replicate(10, region$region_raster))
-  friction_values[region$region_indices] <- barrier_friction_matrix
-  dispersal_friction <- DispersalFriction$new(region = region, friction_values = friction_values)
+  conductance <- raster::stack(replicate(10, region$region_raster))
+  conductance[region$region_indices] <- conductance_matrix
+  dispersal_friction <- DispersalFriction$new(region = region, conductance = conductance)
   expect_equal(dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices),
                distance_multipliers)
-  # Raster region and barrier friction values with coordinates in metres
+  # Raster region and conductance values with coordinates in metres
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
                                                        crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))
-  friction_values <- raster::stack(replicate(10, region$region_raster))
-  friction_values[region$region_indices] <- barrier_friction_matrix
-  dispersal_friction <- DispersalFriction$new(region = region, friction_values = friction_values)
+  conductance <- raster::stack(replicate(10, region$region_raster))
+  conductance[region$region_indices] <- conductance_matrix
+  dispersal_friction <- DispersalFriction$new(region = region, conductance = conductance)
   distance_multipliers2 <- dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices)
   expect_equal(distance_multipliers2[-c(2, 3)], distance_multipliers[-c(2, 3)])
   expect_false(all(unlist(distance_multipliers2[c(2, 3)]) == unlist(distance_multipliers[c(2, 3)])))
@@ -133,7 +134,14 @@ test_that("distance multiplier calculations", {
   expect_equal(distance_multipliers2[[3]][route_2_to_14_index], 1/0.2)
   expect_equal(distance_multipliers2[[3]][route_3_to_8_index], 1/mean(c(0, 0.8)))
   expect_equal(distance_multipliers2[[3]][route_4_to_12_index], 1/0.8)
-  # No friction values uses region raster set to 1 for non-NA values
+  # Write multipliers to directory
+  dispersal_friction$write_to_dir <- tempdir()
+  distance_multipliers3 <- dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices)
+  expect_equal(distance_multipliers3,
+               lapply(1:10, function (i) file.path(tempdir(), sprintf("multipliers_%s.RData", i))))
+  expect_equal(lapply(distance_multipliers3, function(p) readRDS(p)),
+               distance_multipliers2)
+  # No conductance values uses region raster set to 1 for non-NA values
   coordinates <- coordinates[-c(2, 5, 6),] # isolate (1, 1)
   region <-  Region$new(coordinates = coordinates)
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000

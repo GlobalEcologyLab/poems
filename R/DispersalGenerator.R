@@ -42,10 +42,10 @@
 #'                                            dispersal_b = 700))
 #' # Friction in cells 3 and 6 at time step 2
 #' dispersal_gen$distance_data <- NULL # reset
-#' friction_matrix <- array(c(rep(1, 7), 1, 1, 0.5, 1, 1, 0, rep(1, 22)),
-#'                          c(7, 5)) # conductance
+#' conductance_matrix <- array(c(rep(1, 7), 1, 1, 0.5, 1, 1, 0, rep(1, 22)),
+#'                             c(7, 5))
 #' dispersal_gen$dispersal_friction <-
-#'   DispersalFriction$new(friction_values = friction_matrix)
+#'   DispersalFriction$new(conductance = conductance_matrix)
 #' dispersal_gen$calculate_distance_data() # re-calculate
 #' dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
 #'                                            dispersal_b = 700))
@@ -256,7 +256,11 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       if (!is.null(self$dispersal_friction)) {
         distance_multipliers <- self$dispersal_friction$calculate_distance_multipliers(distance_data)
         if (length(distance_multipliers) == 1) { # apply multipliers and update distances
-          distances_within_range <- distances_within_range*distance_multipliers[[1]]
+          if (!is.null(self$dispersal_friction$write_to_dir)) {
+            distances_within_range <- distances_within_range*readRDS(distance_multipliers[[1]])
+          } else {
+            distances_within_range <- distances_within_range*distance_multipliers[[1]]
+          }
           out_of_range <- which(distances_within_range > max(self$distance_classes))
           distances_within_range <- distances_within_range[-out_of_range]
           distance_data <- distance_data[-out_of_range,]
@@ -283,7 +287,11 @@ DispersalGenerator <- R6Class("DispersalGenerator",
         sequential_distance_data <- list()
         for (i in 1:length(distance_multipliers)) {
           previous_distance_classes <- current_distance_classes
-          current_distance_classes <- as.numeric(cut(distances_within_range*distance_multipliers[[i]], breaks = c(0, self$distance_classes, Inf)))
+          if (!is.null(self$dispersal_friction$write_to_dir)) {
+            current_distance_classes <- as.numeric(cut(distances_within_range*readRDS(distance_multipliers[[i]]), breaks = c(0, self$distance_classes, Inf)))
+          } else {
+            current_distance_classes <- as.numeric(cut(distances_within_range*distance_multipliers[[i]], breaks = c(0, self$distance_classes, Inf)))
+          }
           changed_indices <- which(current_distance_classes != previous_distance_classes)
           sequential_distance_data[[i]] <- data.frame(distance_data[changed_indices,], distance_class = current_distance_classes[changed_indices])
         }
@@ -626,15 +634,15 @@ DispersalGenerator <- R6Class("DispersalGenerator",
                       !all(value$coordinates == self$coordinates) ||
                       (self$region$use_raster && !self$region$raster_is_consistent(value$region$region_raster)))) {
             stop("Dispersal friction object is inconsistent with the dispersal generator region/coordinates", call. = FALSE)
-          } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$friction_values) &&
-                     any(class(value$friction_values) %in% c("RasterLayer", "RasterStack", "RasterBrick")) &&
-                     (self$region$use_raster && !self$region$raster_is_consistent(value$friction_values) ||
+          } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$conductance) &&
+                     any(class(value$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick")) &&
+                     (self$region$use_raster && !self$region$raster_is_consistent(value$conductance) ||
                       !self$region$use_raster)) {
-            stop("Friction value raster is inconsistent with the dispersal generator region", call. = FALSE)
-          } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$friction_values) &&
-                     is.matrix(value$friction_values) &&
-                     nrow(value$friction_values) != self$region$region_cells) {
-            stop("Friction matrix dimensions are inconsistent with the dispersal generator region/coordinates ", call. = FALSE)
+            stop("Conductance raster is inconsistent with the dispersal generator region", call. = FALSE)
+          } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$conductance) &&
+                     is.matrix(value$conductance) &&
+                     nrow(value$conductance) != self$region$region_cells) {
+            stop("Conductance matrix dimensions are inconsistent with the dispersal generator region/coordinates ", call. = FALSE)
           } else if (!is.null(self$distance_data)) {
             # Existing distance data will lack temporal changes
             warning("Dispersal generator distance data will need to be re-calculated with the dispersal friction object", call. = FALSE)
