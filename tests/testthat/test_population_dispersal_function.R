@@ -8,6 +8,7 @@ test_that("setup user-defined function", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = function(params) 0.33,
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
                                              dispersal_target_k = 5,
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
@@ -15,28 +16,31 @@ test_that("setup user-defined function", {
   expect_named(formals(dispersal_function), c("r", "tm", "carrying_capacity", "stage_abundance", "occupied_indices"))
   expect_named(environment(dispersal_function)[["params"]],
                c("replicates", "time_steps", "years_per_step", "populations", "stages", "demographic_stochasticity",
-                 "density_stages", "dispersal_stages", "dispersal_target_k", "dispersal_target_n", "simulator"))
+                 "density_stages", "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n",
+                 "simulator"))
   expect_equal(environment(dispersal_function)[["params"]][c("replicates", "time_steps", "years_per_step",
                                                              "populations", "stages", "demographic_stochasticity",
-                                                             "density_stages", "dispersal_stages", "dispersal_target_k",
-                                                             "dispersal_target_n")],
+                                                             "density_stages", "dispersal_stages", "dispersal_source_n_k",
+                                                             "dispersal_target_k", "dispersal_target_n")],
                list(replicates = 4, time_steps = 10, years_per_step = 1, populations = 7, stages = 3,
                     demographic_stochasticity = TRUE, density_stages = c(0, 1, 1), dispersal_stages = c(0, 1, 0.5),
-                    dispersal_target_k = 5, dispersal_target_n = list(threshold = 10, cutoff = 15)))
+                    dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5), dispersal_target_k = 5,
+                    dispersal_target_n = list(threshold = 10, cutoff = 15)))
   # User-defined dispersal as list with function
   dispersal_function <- population_dispersal(replicates = 4, time_steps = 10, years_per_step = 1,
                                              populations = 7, demographic_stochasticity = TRUE,
                                              density_stages = c(0, 1, 1),
                                              dispersal = list(a = 1, function(params) 0.33, b = 2),
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
                                              dispersal_target_k = 5,
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
   expect_is(dispersal_function, "function")
   expect_named(environment(dispersal_function)[["params"]],
                c("replicates", "time_steps", "years_per_step", "populations", "stages", "demographic_stochasticity",
-                 "density_stages", "dispersal_stages", "dispersal_target_k", "dispersal_target_n", "simulator", "a",
-                 "b"))
+                 "density_stages", "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n",
+                 "simulator", "a", "b"))
   expect_equal(environment(dispersal_function)[["params"]][c("a", "b")], list(a = 1, b = 2))
 })
 
@@ -52,6 +56,7 @@ test_that("user-defined dispersal calculations", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = list(a = 1, test_function, b = 2),
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
                                              dispersal_target_k = 5,
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
@@ -66,8 +71,8 @@ test_that("user-defined dispersal calculations", {
                expected_stage_abundance)
   expect_named(simulator$attached$params, c("replicates", "time_steps", "years_per_step", "populations", "stages",
                                             "demographic_stochasticity", "density_stages", "dispersal_stages",
-                                            "dispersal_target_k", "dispersal_target_n", "simulator", "a", "b", "r",
-                                            "tm", "carrying_capacity", "stage_abundance", "occupied_indices"))
+                                            "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n", "simulator",
+                                            "a", "b", "r", "tm", "carrying_capacity", "stage_abundance", "occupied_indices"))
   expect_equal(simulator$attached$params[c("a", "b", "r", "tm", "carrying_capacity", "stage_abundance",
                                            "occupied_indices")],
                list(a = 1, b = 2, r = 2, tm = 6, carrying_capacity = carrying_capacity,
@@ -79,6 +84,7 @@ test_that("user-defined dispersal calculations", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = list(a = 1, test_function, b = 2),
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
                                              dispersal_target_k = 5,
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
@@ -90,6 +96,7 @@ test_that("user-defined dispersal calculations", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = list(a = 1, test_function, b = 2),
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
                                              dispersal_target_k = 5,
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
@@ -104,10 +111,10 @@ test_that("user-defined dispersal calculations", {
 test_that("setup default function", {
   simulator <- SimulatorReference$new()
   region <- Region$new(coordinates = array(c(1:4, 4:1), c(7, 2)))
-  friction_values <- raster::stack(replicate(10, +(region$region_raster > 0)))
-  friction_values[[2]][11] <- 0
+  conductance_raster <- raster::stack(replicate(10, +(region$region_raster > 0)))
+  conductance_raster[[2]][11] <- 0
   dispersal_friction = DispersalFriction$new(region = region,
-                                             friction_values = friction_values)
+                                             conductance = conductance_raster)
   dispersal_gen <- DispersalGenerator$new(dispersal_friction = dispersal_friction,
                                           dispersal_proportion = 0.6, dispersal_breadth = 110,
                                           dispersal_max_distance = 300, distance_scale = 1000,
@@ -133,6 +140,7 @@ test_that("setup default function", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = dispersal_gen$dispersal_data,
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
                                              dispersal_target_k = 5,
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
@@ -140,6 +148,7 @@ test_that("setup default function", {
   expect_equal(environment(dispersal_function)[["dispersal_compact_rows"]], expected_compact_rows)
   expect_equal(environment(dispersal_function)[["dispersal_compact_matrix"]], expected_compact_matrix)
   expect_true(environment(dispersal_function)[["dispersals_change_over_time"]])
+  expect_true(environment(dispersal_function)[["dispersal_depends_on_source_pop_n_k"]])
   expect_true(environment(dispersal_function)[["dispersal_depends_on_target_pop_k"]])
   expect_true(environment(dispersal_function)[["dispersal_depends_on_target_pop_n"]])
   expect_equal(environment(dispersal_function)[["dispersal_target_pop_map"]], expected_target_pop_map)
@@ -164,6 +173,7 @@ test_that("setup default function", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = dispersal_gen$dispersal_matrix,
                                              dispersal_stages = c(0, 1, 0.5),
+                                             dispersal_source_n_k = NULL,
                                              dispersal_target_k = NULL,
                                              dispersal_target_n = NULL,
                                              simulator)
@@ -171,18 +181,30 @@ test_that("setup default function", {
   expect_equal(environment(dispersal_function)[["dispersal_compact_rows"]], expected_compact_rows)
   expect_equal(environment(dispersal_function)[["dispersal_compact_matrix"]], expected_compact_matrix)
   expect_false(environment(dispersal_function)[["dispersals_change_over_time"]])
+  expect_false(environment(dispersal_function)[["dispersal_depends_on_source_pop_n_k"]])
   expect_false(environment(dispersal_function)[["dispersal_depends_on_target_pop_k"]])
   expect_false(environment(dispersal_function)[["dispersal_depends_on_target_pop_n"]])
   expect_equal(environment(dispersal_function)[["dispersal_immigrant_map"]], expected_immigrant_map)
+  expect_warning(dispersal_function <- population_dispersal(replicates = 4, time_steps = 10, years_per_step = 1,
+                                                            populations = 7, demographic_stochasticity = TRUE,
+                                                            density_stages = c(0, 1, 1),
+                                                            dispersal = dispersal_gen$dispersal_matrix,
+                                                            dispersal_stages = c(0, 1, 0.5),
+                                                            dispersal_source_n_k = list(cutoff = 1.5, threshold = -0.5),
+                                                            dispersal_target_k = NULL,
+                                                            dispersal_target_n = NULL,
+                                                            simulator),
+                 "Dispersal density dependence for source N/K threshold must be greater than cutoff => not used")
+  expect_false(environment(dispersal_function)[["dispersal_depends_on_source_pop_n_k"]])
 })
 
 test_that("default dispersal calculations", {
   simulator <- SimulatorReference$new()
   region <- Region$new(coordinates = array(c(1:4, 4:1), c(7, 2)))
-  friction_values <- raster::stack(replicate(10, +(region$region_raster > 0)))
-  friction_values[[2]][11] <- 0
+  conductance_raster <- raster::stack(replicate(10, +(region$region_raster > 0)))
+  conductance_raster[[2]][11] <- 0
   dispersal_friction = DispersalFriction$new(region = region,
-                                             friction_values = friction_values)
+                                             conductance = conductance_raster)
   dispersal_gen <- DispersalGenerator$new(dispersal_friction = dispersal_friction,
                                           dispersal_proportion = 0.6, dispersal_breadth = 110,
                                           dispersal_max_distance = 300, distance_scale = 1000,
@@ -204,6 +226,7 @@ test_that("default dispersal calculations", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = dispersal_gen$dispersal_data,
                                              dispersal_stages = c(0.5, 1, 0),
+                                             dispersal_source_n_k = NULL,
                                              dispersal_target_k = 5,
                                              dispersal_target_n = NULL,
                                              simulator)
@@ -274,6 +297,7 @@ test_that("density dependent dispersal", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = dispersal_gen$dispersal_data,
                                              dispersal_stages = c(0.5, 1, 0),
+                                             dispersal_source_n_k = NULL,
                                              dispersal_target_k = c(5, 5, 5, 10, 15, 20, 25),
                                              dispersal_target_n = list(threshold = 10, cutoff = 15),
                                              simulator)
@@ -325,6 +349,7 @@ test_that("density dependent dispersal", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = dispersal_gen$dispersal_data,
                                              dispersal_stages = c(0.5, 1, 0),
+                                             dispersal_source_n_k = NULL,
                                              dispersal_target_k = NULL,
                                              dispersal_target_n = list(threshold = 10,
                                                                        cutoff = c(15, 15, 15, 15, 20, 25, 30)),
@@ -335,8 +360,6 @@ test_that("density dependent dispersal", {
   # note: density abundance = c(2, 3, 10, 14, 0, 21, 23)
   dd_multipliers <- c(1, 1, 1, (15 - 14)/(15 - 10), 1, (25 - 21)/(25 - 10), (30 - 23)/(30 - 10)) # n \
   dispersal_matrix <- dispersal_matrix*dd_multipliers
-  # dispersal_matrix <- dispersal_matrix*matrix(colSums(dispersal_gen$dispersal_matrix)/colSums(dispersal_matrix),
-  #                                             nrow = 7, ncol = 7, byrow = TRUE)
   dispersal_indices <- which(dispersal_matrix*occupied_matrix > 0)
   set.seed(123)
   for (i in 1:2) {
@@ -356,6 +379,7 @@ test_that("density dependent dispersal", {
                                              density_stages = c(0, 1, 1),
                                              dispersal = dispersal_gen$dispersal_data,
                                              dispersal_stages = c(0.5, 1, 0),
+                                             dispersal_source_n_k = NULL,
                                              dispersal_target_k = NULL,
                                              dispersal_target_n = list(threshold = c(5, 10, 15, 20, 20, 20, 25),
                                                                        cutoff = c(0, 5, 5, 5, 5, 10, 15)),
@@ -366,8 +390,6 @@ test_that("density dependent dispersal", {
   # note: density abundance = c(2, 3, 10, 14, 0, 21, 23)
   dd_multipliers <- c(2/5, 0, (10 - 5)/(15 - 5), (14 - 5)/(20 - 5), 0, 1, (23 - 15)/(25 - 15)) # n /
   dispersal_matrix <- dispersal_matrix*dd_multipliers
-  # dispersal_matrix <- dispersal_matrix*matrix(colSums(dispersal_gen$dispersal_matrix)/colSums(dispersal_matrix),
-  #                                             nrow = 7, ncol = 7, byrow = TRUE)
   dispersal_indices <- which(dispersal_matrix*occupied_matrix > 0)
   set.seed(123)
   for (i in 1:2) {
@@ -384,6 +406,36 @@ test_that("density dependent dispersal", {
         dispersers[r, xi] <- dispersers[r, xi] - 1
       }
     }
+    expected_stage_abundance[i,] <- stage_abundance[i,] - colSums(dispersers) + rowSums(dispersers)
+  }
+  # Check dispersal function
+  set.seed(123)
+  expect_equal(dispersal_function(r = 2, tm = 1, carrying_capacity, stage_abundance, occupied_indices),
+               expected_stage_abundance)
+  # Source abundance divide by carrying capacity N/K threshold > cutoff (leaves over-exploited cells)
+  dispersal_function <- population_dispersal(replicates = 4, time_steps = 10, years_per_step = 1,
+                                             populations = 7, demographic_stochasticity = TRUE,
+                                             density_stages = c(0, 1, 1),
+                                             dispersal = dispersal_gen$dispersal_data,
+                                             dispersal_stages = c(0.5, 1, 0),
+                                             dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
+                                             dispersal_target_k = NULL,
+                                             dispersal_target_n = NULL,
+                                             simulator)
+
+  # Calculate expected abundances
+  dispersal_matrix <- dispersal_gen$dispersal_matrix
+  expected_stage_abundance <- stage_abundance
+  # note: density abundance = c(2, 3, 10, 14, 0, 21, 23)
+  dd_multipliers <- c((2/10 - -0.5)*1/2, 1, 1, (14/10 - -0.5)*1/2, (0/10 - -0.5)*1/2, 1, 1)
+  dispersal_matrix <- dispersal_matrix*matrix(dd_multipliers, nrow = 7, ncol = 7, byrow = TRUE)
+  dispersal_indices <- which(dispersal_matrix*occupied_matrix > 0)
+  set.seed(123)
+  for (i in 1:2) {
+    dispersers <- array(0, c(7, 7))
+    dispersers[dispersal_indices] <- stats::rbinom(length(dispersal_indices),
+                                                   stage_abundance[rep(i, 7),][dispersal_indices],
+                                                   dispersal_matrix[dispersal_indices]*c(0.5, 1)[i])
     expected_stage_abundance[i,] <- stage_abundance[i,] - colSums(dispersers) + rowSums(dispersers)
   }
   # Check dispersal function

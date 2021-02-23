@@ -19,8 +19,9 @@
 #'     \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
 #'     \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
 #'     \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}
-#'     \item{\code{dispersal_target_k}}{Target population carrying capacity threshold for density dependent dispersal.}
-#'     \item{\code{dispersal_target_n}}{Target population abundance threshold and cutoff (list items) for density dependent dispersal.}
+#'     \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold}.}
+#'     \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.}
+#'     \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa.}
 #'     \item{\code{r}}{Simulation replicate.}
 #'     \item{\code{tm}}{Simulation time step.}
 #'     \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
@@ -31,8 +32,9 @@
 #'   }
 #'   returns the post-dispersal abundance matrix
 #' @param dispersal_stages Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).
-#' @param dispersal_target_k Target population carrying capacity threshold for density dependent dispersal.
-#' @param dispersal_target_n Target population abundance threshold and cutoff (list items) for density dependent dispersal.
+#' @param dispersal_source_n_k Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} or visa-versa.
+#' @param dispersal_target_k Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.
+#' @param dispersal_target_n Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa.
 #' @param simulator \code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.
 #' @return Dispersal function: \code{function(r, tm, carrying_capacity, stage_abundance, occupied_indices)}, where:
 #'   \describe{
@@ -53,6 +55,7 @@ population_dispersal <- function(replicates,
                                  density_stages,
                                  dispersal,
                                  dispersal_stages,
+                                 dispersal_source_n_k,
                                  dispersal_target_k,
                                  dispersal_target_n,
                                  simulator) {
@@ -81,8 +84,8 @@ population_dispersal <- function(replicates,
       params <- c(list(replicates = replicates, time_steps = time_steps, years_per_step = years_per_step,
                        populations = populations, stages = stages, demographic_stochasticity = demographic_stochasticity,
                        density_stages = density_stages, dispersal_stages = dispersal_stages,
-                       dispersal_target_k = dispersal_target_k, dispersal_target_n = dispersal_target_n,
-                       simulator = simulator),
+                       dispersal_source_n_k = dispersal_source_n_k, dispersal_target_k = dispersal_target_k,
+                       dispersal_target_n = dispersal_target_n, simulator = simulator),
                   additional_attributes)
 
       ## Create a nested function for applying user-defined dispersal of stage abundance ##
@@ -174,14 +177,35 @@ population_dispersal <- function(replicates,
   dispersal_compact_matrix <- array(0, c(dispersal_compact_rows, populations))
   dispersal_compact_matrix[as.matrix(dispersal_data[, c("emigrant_row", "source_pop")])] <- dispersal_data$dispersal_rate
 
+  # Does dispersal depend on source population abundance N divided by carrying capacity K?
+  dispersal_depends_on_source_pop_n_k <- (is.list(dispersal_source_n_k) && (is.numeric(dispersal_source_n_k$cutoff) ||
+                                                                              is.numeric(dispersal_source_n_k$threshold)))
+
   # Does dispersal depend on target population carrying capacity K or abundance N?
   dispersal_depends_on_target_pop_k <- is.numeric(dispersal_target_k)
   dispersal_depends_on_target_pop_n <- (is.list(dispersal_target_n) && (is.numeric(dispersal_target_n$threshold) ||
                                                                           is.numeric(dispersal_target_n$cutoff)))
+
+  # Setup density dependence dispersal parameters
+  if (dispersal_depends_on_source_pop_n_k) {
+
+    # Convert NULL to zero in source N/K cutoff or one in threshold
+    if (dispersal_depends_on_source_pop_n_k) {
+      if (is.null(dispersal_source_n_k$cutoff)) dispersal_source_n_k$cutoff <- 0
+      if (is.null(dispersal_source_n_k$threshold)) dispersal_source_n_k$threshold <- 1
+    }
+
+    # Check threshold > cutoff
+    if (dispersal_source_n_k$threshold <= dispersal_source_n_k$cutoff) {
+      dispersal_depends_on_source_pop_n_k <- FALSE
+      warning("Dispersal density dependence for source N/K threshold must be greater than cutoff => not used", call. = FALSE)
+    }
+  }
   if (dispersal_depends_on_target_pop_k || dispersal_depends_on_target_pop_n) {
 
-    # Convert NULL to zero in target N threshold or cutoff
     if (dispersal_depends_on_target_pop_n) {
+
+      # Convert NULL to zero in target N threshold or cutoff
       if (is.null(dispersal_target_n$threshold)) dispersal_target_n$threshold <- 0
       if (is.null(dispersal_target_n$cutoff)) dispersal_target_n$cutoff <- 0
     }
@@ -214,11 +238,42 @@ population_dispersal <- function(replicates,
     }
     simulator$attached$dispersal_compact_matrix_tm <- dispersal_compact_matrix_tm
 
-    # Select dispersals for occupied populations and their non-zero indices
+    # Select dispersals for occupied populations
     occupied_dispersals <- dispersal_compact_matrix_tm[, occupied_indices]
+
+    # Calculate density abundance
+    if (dispersal_depends_on_source_pop_n_k || dispersal_depends_on_target_pop_n) {
+      density_abundance <- .colSums(stage_abundance*as.numeric(density_stages), m = length(density_stages), n = populations)
+    }
+
+    # Modify dispersal rates when dispersal depends on source population N/K
+    if (dispersal_depends_on_source_pop_n_k) {
+
+      # Density dependent multipliers
+      dd_multipliers <- array(1, populations)
+
+      # Calculate the source N/K multipliers
+      abundance_on_capacity <- density_abundance/carrying_capacity
+      dd_multipliers[which(abundance_on_capacity <= dispersal_source_n_k$cutoff)] <- 0
+      modify_pop_indices <- which(carrying_capacity > 0 & dd_multipliers > 0 &
+                                    abundance_on_capacity < dispersal_source_n_k$threshold)
+      dd_multipliers[modify_pop_indices] <- ((abundance_on_capacity[modify_pop_indices] -
+                                                array(dispersal_source_n_k$cutoff, populations)[modify_pop_indices])/
+                                               array(dispersal_source_n_k$threshold - dispersal_source_n_k$cutoff,
+                                                     populations)[modify_pop_indices]*
+                                               dd_multipliers[modify_pop_indices])
+
+      # Apply modifying multipliers to dispersals
+      occupied_dispersals <- (occupied_dispersals*matrix(dd_multipliers[occupied_indices],
+                                                         nrow = dispersal_compact_rows,
+                                                         ncol = occupied_populations, byrow = TRUE))
+
+    } # dispersal depends on source pop N/K?
+
+    # Select occupied dispersal non-zero indices
     occupied_dispersal_indices <- which(as.logical(occupied_dispersals)) # > 0
 
-    # Modify dispersal rates when dispersal depends on target population carrying capacity K or abundance N
+    # Modify dispersal rates when dispersal depends on target population K or N
     if (dispersal_depends_on_target_pop_k || dispersal_depends_on_target_pop_n) {
 
       # Density dependent multipliers
@@ -233,7 +288,6 @@ population_dispersal <- function(replicates,
 
       # Calculate the target N multipliers
       if (dispersal_depends_on_target_pop_n) {
-        density_abundance <- .colSums(stage_abundance*as.numeric(density_stages), m = length(density_stages), n = populations)
         if (all(dispersal_target_n$threshold < dispersal_target_n$cutoff)) { # overcrowded cell avoidance \
           dd_multipliers[which(density_abundance >= dispersal_target_n$cutoff)] <- 0
           modify_pop_indices <- which(density_abundance > dispersal_target_n$threshold & dd_multipliers > 0)
@@ -257,7 +311,6 @@ population_dispersal <- function(replicates,
       selected_dd_multipliers <- dd_multipliers[dispersal_target_pop_map[, occupied_indices][occupied_dispersal_indices]]
 
       # Apply modifying multipliers to dispersals
-      # original_occupied_totals <- .colSums(occupied_dispersals, m = nrow(occupied_dispersals), n = ncol(occupied_dispersals))
       modify_indices <- which(selected_dd_multipliers < 1)
       if (length(modify_indices)) {
         modify_dipersal_indices <- occupied_dispersal_indices[modify_indices]
@@ -265,15 +318,7 @@ population_dispersal <- function(replicates,
         occupied_dispersal_indices <- which(as.logical(occupied_dispersals)) # > 0
       }
 
-      # # Restore dispersal total proportion (from source cells)
-      # modified_occupied_totals <- .colSums(occupied_dispersals, m = nrow(occupied_dispersals), n = ncol(occupied_dispersals))
-      # restore_indices <- which(modified_occupied_totals < original_occupied_totals & modified_occupied_totals > 0)
-      # occupied_dispersals[, restore_indices] <- (occupied_dispersals[, restore_indices]*
-      #                                              matrix((original_occupied_totals/modified_occupied_totals)[restore_indices],
-      #                                                     nrow = nrow(occupied_dispersals), ncol = length(restore_indices),
-      #                                                     byrow = TRUE))
-
-    } # dispersal depends on target pop k?
+    } # dispersal depends on target pop N or K?
 
     # Perform dispersal for each participating stage
     for (stage in which(dispersal_stages > 0)) {

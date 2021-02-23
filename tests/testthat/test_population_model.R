@@ -17,9 +17,12 @@ test_that("active get and set", {
   expect_equal(population_model$density_affects, array(c(0, 1, 0, 1, 0, 1, 1, 0, 1), c(3, 3)))
   expect_equal(population_model$get_attributes(c("density_stages", "dispersal_stages", "result_stages")),
                list(density_stages = array(1, 3), dispersal_stages = array(1, 3), result_stages = array(1, 3)))
-  expect_equal(population_model$get_attribute_aliases(c("dispersal_target_k", "dispersal_target_n")),
-               c("dispersal_target_k", "dispersal_target_n", "dispersal_k_threshold", "dispersal_n_threshold",
-                 "dispersal_n_cutoff"))
+  expect_equal(population_model$get_attribute_aliases(c("dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n")),
+               c("dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n",
+                 "dispersal_n_k_cutoff","dispersal_n_k_threshold", "dispersal_k_threshold",
+                 "dispersal_n_threshold", "dispersal_n_cutoff"))
+  population_model$set_attributes(list(dispersal_n_k_cutoff = -0.5, dispersal_n_k_threshold = 1.5))
+  expect_equal(population_model$dispersal_source_n_k, list(cutoff = -0.5, threshold = 1.5))
   population_model$set_attributes(list(dispersal_n_threshold = 1, dispersal_n_cutoff = 2))
   expect_equal(population_model$dispersal_target_n, list(threshold = 1, cutoff = 2))
 })
@@ -30,7 +33,7 @@ test_that("consistency and completeness", {
   population_model <- PopulationModel$new(region = region, time_steps = 10,
                                           stage_matrix = array(c(0, 0.5, 0, 3, 0, 0.7, 4, 0, 0.8), c(3, 3)))
   expect_null(population_model$inconsistent_attributes())
-  expect_length(population_model$inconsistent_attributes(include_nas = TRUE)$not_available, 17)
+  expect_length(population_model$inconsistent_attributes(include_nas = TRUE)$not_available, 18)
   expect_true(population_model$is_consistent())
   expect_equal(population_model$incomplete_attributes(), c("initial_abundance", "carrying_capacity"))
   expect_false(population_model$is_complete())

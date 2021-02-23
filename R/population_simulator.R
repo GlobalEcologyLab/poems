@@ -93,8 +93,9 @@
 #'       returns the post-dispersal abundance matrix
 #'     }
 #'     \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).}
-#'     \item{\code{dispersal_target_k}}{Target population carrying capacity threshold for density dependent dispersal (alias: dispersal_k_threshold).}
-#'     \item{\code{dispersal_target_n}}{Target population abundance threshold and cutoff (list items) for density dependent dispersal (aliases: dispersal_n_threshold & dispersal_n_cutoff).}
+#'     \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} (aliases: \emph{dispersal_n_k_cutoff} & \emph{dispersal_n_k_threshold}).}
+#'     \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold} (alias: \emph{dispersal_k_threshold}).}
+#'     \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa (aliases: \emph{dispersal_n_threshold} & \emph{dispersal_n_cutoff}).}
 #'     \item{\code{abundance_threshold}}{Abundance threshold (that needs to be exceeded) for each population to persist.}
 #'     \item{\code{simulation_order}}{A vector of simulation process names in configured order of execution (default is "transition", "translocation", "harvest" (plus harvested results), "mortality", "dispersal", "results" (except harvested).}
 #'     \item{\code{additional transformation functions}}{Additional user-defined abundance transformation functions (optionally nested in lists with additional attributes) are utilised when listed in \emph{simulation_order} (function as per translocation).}
@@ -281,6 +282,10 @@ population_simulator <- function(inputs) {
   if (is.null(dispersal_stages)) {
     dispersal_stages <- array(1, stages)
   }
+  dispersal_source_n_k <- inputs$dispersal_source_n_k
+  if (is.null(dispersal_source_n_k)) { # try aliases
+    dispersal_source_n_k <- list(cutoff = inputs$dispersal_n_k_cutoff, threshold = inputs$dispersal_n_k_threshold)
+  }
   dispersal_target_k <- inputs$dispersal_target_k
   if (is.null(dispersal_target_k)) { # try alias
     dispersal_target_k <- inputs$dispersal_k_threshold
@@ -290,7 +295,7 @@ population_simulator <- function(inputs) {
     dispersal_target_n <- list(threshold = inputs$dispersal_n_threshold, cutoff = inputs$dispersal_n_cutoff)
   }
   dispersal_function <- population_dispersal(replicates, time_steps, years_per_step, populations, demographic_stochasticity,
-                                             density_stages, inputs$dispersal, dispersal_stages,
+                                             density_stages, inputs$dispersal, dispersal_stages, dispersal_source_n_k,
                                              dispersal_target_k, dispersal_target_n, simulator)
 
   # Abundance threshold

@@ -82,12 +82,18 @@ PopulationModel <- R6Class("PopulationModel",
     #' @param attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
     #' @param ... Parameters passed via a \emph{params} list or individually.
     initialize = function(attribute_aliases = NULL, ...) {
+      if (!"dispersal" %in% names(c(list(...), list(...)$params))) { # set default alias for dispersal
+        attribute_aliases <- c(attribute_aliases, list(dispersal_data = "dispersal"))
+      }
+      if (!"dispersal_source_n_k" %in% names(c(list(...), list(...)$params))) { # set default aliases for source n/k
+        attribute_aliases <- c(attribute_aliases, list(dispersal_n_k_cutoff = "dispersal_source_n_k$cutoff",
+                                                       dispersal_n_k_threshold = "dispersal_source_n_k$threshold"))
+      }
       if (!"dispersal_target_k" %in% names(c(list(...), list(...)$params))) { # set default alias for target k
         attribute_aliases <- c(attribute_aliases, list(dispersal_k_threshold = "dispersal_target_k"))
       }
       if (!"dispersal_target_n" %in% names(c(list(...), list(...)$params))) { # set default aliases for target n
-        attribute_aliases <- c(attribute_aliases, list(dispersal_data = "dispersal",
-                                                       dispersal_n_threshold = "dispersal_target_n$threshold",
+        attribute_aliases <- c(attribute_aliases, list(dispersal_n_threshold = "dispersal_target_n$threshold",
                                                        dispersal_n_cutoff = "dispersal_target_n$cutoff"))
       }
       super$initialize(attribute_aliases = attribute_aliases, ...)
@@ -106,8 +112,9 @@ PopulationModel <- R6Class("PopulationModel",
                                                    "demographic_stochasticity", "standard_deviation", "correlation",
                                                    "carrying_capacity", "density_dependence", "growth_rate_max",
                                                    "density_affects", "density_stages", "translocation", "harvest",
-                                                   "mortality", "dispersal", "dispersal_stages", "dispersal_target_k",
-                                                   "dispersal_target_n", "abundance_threshold", "result_stages"))]
+                                                   "mortality", "dispersal", "dispersal_stages", "dispersal_source_n_k",
+                                                   "dispersal_target_k", "dispersal_target_n", "abundance_threshold",
+                                                   "result_stages"))]
         consistent_list <- super$list_consistency(params[which(!params %in% local_params)])
         for (param in local_params) {
           param_value <- self$get_attribute(param)
@@ -191,6 +198,21 @@ PopulationModel <- R6Class("PopulationModel",
                        },
                      density_dependence = NA,
                      growth_rate_max = , # or
+                     dispersal_source_n_k =
+                       if (is.list(param_value) && all(c("cutoff", "threshold") %in% names(param_value))) {
+                         consistent <- list(cutoff = NA, threshold = NA)
+                         for (name in c("cutoff", "threshold")) {
+                           if (length(param_value[[name]]) == 1) {
+                             consistent[[name]] <- TRUE
+                           } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
+                             consistent[[name]] <- (is.numeric(param_value[[name]]) &&
+                                                      length(param_value[[name]]) == self$populations)
+                           }
+                         }
+                         all(unlist(consistent))
+                       } else {
+                         NA
+                       },
                      dispersal_target_k =
                        if (length(param_value) == 1) {
                          TRUE
@@ -252,8 +274,9 @@ PopulationModel <- R6Class("PopulationModel",
                           "fecundity_max", "demographic_stochasticity", "standard_deviation", "correlation",
                           "carrying_capacity", "density_dependence", "growth_rate_max", "density_affects",
                           "density_stages", "translocation", "harvest", "mortality", "dispersal",
-                          "dispersal_stages", "dispersal_target_k", "dispersal_target_n", "abundance_threshold",
-                          "simulation_order", "results_selection", "result_stages"),
+                          "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k",
+                          "dispersal_target_n", "abundance_threshold", "simulation_order",
+                          "results_selection", "result_stages"),
     # .region             [inherited]
     # .random_seed        [inherited]
     # .replicates         [inherited]
@@ -277,6 +300,7 @@ PopulationModel <- R6Class("PopulationModel",
     .mortality = NULL,
     .dispersal = NULL,
     .dispersal_stages = NULL,
+    .dispersal_source_n_k = list(cutoff = NULL, threshold = NULL), # default for poems simulator
     .dispersal_target_k = NULL,
     .dispersal_target_n = list(threshold = NULL, cutoff = NULL), # default for poems simulator
     .abundance_threshold = NULL,
@@ -290,8 +314,8 @@ PopulationModel <- R6Class("PopulationModel",
                            "fecundity_max", "demographic_stochasticity", "standard_deviation", "correlation",
                            "carrying_capacity", "density_dependence", "growth_rate_max", "density_affects",
                            "density_stages", "translocation", "harvest", "mortality", "dispersal",
-                           "dispersal_stages", "dispersal_target_k", "dispersal_target_n", "abundance_threshold",
-                           "simulation_order", "results_selection", "result_stages"),
+                           "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n",
+                           "abundance_threshold", "simulation_order", "results_selection", "result_stages"),
 
     # Dynamic attributes #
     # .attribute_aliases  [inherited]
@@ -736,6 +760,23 @@ PopulationModel <- R6Class("PopulationModel",
           private$.dispersal_stages <- value
         } else {
           self$template_model$dispersal_stages <- value
+        }
+      }
+    },
+
+    #' @field dispersal_source_n_k Simulator-dependent attribute for describing/parameterizing dispersal dependent on source population abundance divided by carrying capacity (see \code{\link{population_simulator}}).
+    dispersal_source_n_k = function(value) {
+      if (is.null(self$template_model) || "dispersal_source_n_k" %in% self$sample_attributes) {
+        if (missing(value)) {
+          private$.dispersal_source_n_k
+        } else {
+          private$.dispersal_source_n_k <- value
+        }
+      } else {
+        if (missing(value)) {
+          self$template_model$dispersal_source_n_k
+        } else {
+          self$template_model$dispersal_source_n_k <- value
         }
       }
     },

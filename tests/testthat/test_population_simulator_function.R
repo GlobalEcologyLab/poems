@@ -97,8 +97,8 @@ test_that("module parameter passing and order", {
                                  "carrying_capacity", "stage_abundance", "occupied_indices")
   expected_dispersal_params <- c("replicates", "time_steps", "years_per_step", "populations", "stages",
                                  "demographic_stochasticity", "density_stages", "dispersal_stages",
-                                 "dispersal_target_k", "dispersal_target_n",  "simulator", "r", "tm",
-                                 "carrying_capacity", "stage_abundance", "occupied_indices")
+                                 "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n", "simulator",
+                                 "r", "tm", "carrying_capacity", "stage_abundance", "occupied_indices")
   expect_equal(population_simulator(inputs),
                list(all = list(abundance = expected_abundance), abundance = array(expected_abundance, c(1, 10)),
                     extra_params = expected_transform_params, order = inputs$simulation_order[-1],
