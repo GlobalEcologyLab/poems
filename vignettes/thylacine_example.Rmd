@@ -2,7 +2,7 @@
 title: "Workflow example for the Tasmanian thylacine"
 author: "Global ChEC Lab"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_document
 geometry: margin=2cm
 vignette: >
   %\VignetteIndexEntry{Thylacine example}
@@ -27,7 +27,7 @@ government bounty was offered for eradicated *thylacine* during the period 1888 
 approach adapted from Bulte, Horan, and Shogren (2003). We will build our model 
 ensemble by selecting the simulations most congruent to expected extirpation/extinction
 dates and changes (regression slopes) in the number of *thylacines* submitted during 
-the bounty interval, derived from historic bounty, capture and sighting records [REF].
+the bounty interval, derived from historic bounty, capture and sighting records.
 
 ## Setup
 We begin by loading the *poems* package and setting our output directory. We will also
@@ -79,7 +79,7 @@ raster::plot(poems::tasmania_raster, main = "Tasmania raster",
 ```
 
 The grid-cell size was selected as a reasonable approximation to *thylacine* 
-territorial range (Guiler & Godard, 1998 ???).
+territorial range (Guiler & Godard, 1998).
 
 To define our region, we will use this *raster* of Tasmania as a template for the 
 *Region* object, which will set the occupiable cell indices in the order in which they 
@@ -351,9 +351,8 @@ generator (from part 1), by generating some example outputs.
 ##### Initial habitat suitability
 Firstly, our initial abundance and carrying capacity generator utilizes the habitat 
 suitability for our study region. The initial habitat suitability was derived from a 
-species distribution model (SDM) for the *thylacine* ...
-The initial habitat suitability *raster* has also been included with the *poems*
-package.
+species distribution model (SDM) for the *thylacine*. The initial habitat suitability 
+*raster* has also been included with the *poems* package.
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Initial thylacine habitat suitability

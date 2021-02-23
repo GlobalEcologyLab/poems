@@ -2,7 +2,7 @@
 title: "Simple workflow example for a population model"
 author: "Global ChEC Lab"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_document
 geometry: margin=2cm
 vignette: >
   %\VignetteIndexEntry{Simple Example}
@@ -40,8 +40,9 @@ The *poems* workflow, which implements a pattern-oriented modeling (POM) approac
 (Grimm et al., 2005), is achieved via a framework of interoperable components:
 
 \begin{center}
-\includegraphics[width=6.5in]{workflow.pdf}
+  \includegraphics[width=6.5in]{workflow.pdf}
 \end{center}
+![](workflow.png)
 
 The workflow is summarized by the following six steps:
 
