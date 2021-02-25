@@ -88,7 +88,7 @@ Region <- R6Class("Region",
         if (any(class(check_raster) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
           region_non_finites <- which(!is.finite(region_raster[]))
           return(raster::compareRaster(check_raster, region_raster, stopiffalse = FALSE) &&
-                   all(!is.finite(check_raster[region_non_finites])))
+                   (all(!is.finite(check_raster[region_non_finites])) || !self$strict_consistency))
         } else {
           return(FALSE)
         }
@@ -127,7 +127,8 @@ Region <- R6Class("Region",
 
     .coordinates = NULL,
     .region_raster = NULL,
-    .use_raster = NULL
+    .use_raster = NULL,
+    .strict_consistency = TRUE
 
   ), # end private
 
@@ -202,6 +203,15 @@ Region <- R6Class("Region",
         private$.use_raster
       } else {
         private$.use_raster <- value
+      }
+    },
+
+    #' @field strict_consistency Boolean to indicate that, as well as resolution, extent and CRS, consistency checks also ensure that a raster's finite/occupiable cells are the same or a subset of those defined by the region (default TRUE).
+    strict_consistency = function(value) {
+      if (missing(value)) {
+        private$.strict_consistency
+      } else {
+        private$.strict_consistency <- value
       }
     },
 

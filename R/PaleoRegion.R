@@ -81,6 +81,7 @@ PaleoRegion <- R6Class("PaleoRegion",
     # .coordinates        [inherited]
     # .region_raster      [inherited]
     # .use_raster         [inherited]
+    # .strict_consistency [inherited]
     .temporal_mask = NULL
 
   ), # end private
@@ -112,6 +113,15 @@ PaleoRegion <- R6Class("PaleoRegion",
         super$use_raster
       } else {
         super$use_raster <- value
+      }
+    },
+
+    #' @field strict_consistency Boolean to indicate that, as well as resolution, extent and CRS, consistency checks also ensure that a raster's finite/occupiable cells are the same or a subset of those defined by the region (default TRUE).
+    strict_consistency = function(value) { # inherited
+      if (missing(value)) {
+        super$strict_consistency
+      } else {
+        super$strict_consistency <- value
       }
     },
 

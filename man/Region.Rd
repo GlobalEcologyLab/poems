@@ -47,6 +47,8 @@ value_brick[region$region_indices]
 
 \item{\code{use_raster}}{Boolean to indicate that a raster is to be used to define the region (default TRUE).}
 
+\item{\code{strict_consistency}}{Boolean to indicate that, as well as resolution, extent and CRS, consistency checks also ensure that a raster's finite/occupiable cells are the same or a subset of those defined by the region (default TRUE).}
+
 \item{\code{region_cells}}{Dynamically calculated number of region coordinates or raster cells with finite/non-NA values.}
 
 \item{\code{region_indices}}{Dynamically calculated region indices for raster cells with finite/non-NA values (all if not a raster).}
