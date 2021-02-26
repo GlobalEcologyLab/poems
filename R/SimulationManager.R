@@ -190,7 +190,9 @@ SimulationManager <- R6Class("SimulationManager",
 
       # Run sample simulations in parallel
       doParallel::registerDoParallel(cores = self$parallel_cores)
-      simulation_log <- foreach(i = 1:nrow(self$sample_data), .errorhandling = c("pass")) %dopar% {
+      simulation_log <- foreach(i = 1:nrow(self$sample_data),
+                                .packages = c("raster"),
+                                .errorhandling = c("pass")) %dopar% {
 
         # Clone the model
         model <- self$nested_model$clone()

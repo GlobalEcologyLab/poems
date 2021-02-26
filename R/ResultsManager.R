@@ -142,7 +142,9 @@ ResultsManager <- R6Class("ResultsManager",
       # Generate summary metrics in parallel
       doParallel::registerDoParallel(cores = self$parallel_cores)
       self <- self # pass object to parallel
-      generation_log <- foreach(i = 1:nrow(self$sample_data), .errorhandling = c("pass")) %dopar% {
+      generation_log <- foreach(i = 1:nrow(self$sample_data),
+                                .packages = c("raster"),
+                                .errorhandling = c("pass")) %dopar% {
 
         # Initialize the summary metric data for the sample to NAs
         if (length(self$summary_metrics)) {
