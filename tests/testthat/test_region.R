@@ -26,6 +26,10 @@ test_that("raster via coordinates", {
   raster2 <- raster::stack(replicate(10, region$region_raster))
   expect_true(region$raster_is_consistent(raster2))
   raster2[][1, 3] <- 8
+  expect_true(region$strict_consistency) # default
+  region$strict_consistency <- FALSE
+  expect_true(region$raster_is_consistent(raster2))
+  region$strict_consistency <- TRUE
   expect_false(region$raster_is_consistent(raster2))
   raster2[][1:3, 3] <- NA
   expect_true(region$raster_is_consistent(raster2)) # subset ok
@@ -94,4 +98,3 @@ test_that("raster from values", {
   expect_equal(value_raster[region$region_indices], value_matrix)
   expect_true(region$raster_is_consistent(value_raster))
 })
-
