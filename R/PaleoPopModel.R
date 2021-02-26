@@ -94,7 +94,7 @@ PaleoPopModel <- R6Class("PaleoPopModel",
                          (is.list(param_value) && "matrix" %in% names(param_value) && "map" %in% names(param_value) &&
                             is.matrix(param_value$matrix) && ncol(param_value$matrix) == self$populations &&
                             is.matrix(param_value$map) && ncol(param_value$map) == self$populations &&
-                            nrow(param_value$matrix) == nrow(param_value$map) && all(param_value$matrix >= 0) &&
+                            nrow(param_value$matrix) == nrow(param_value$map) &&
                             min(param_value$map, na.rm = TRUE) >= 1 &&
                             max(param_value$map, na.rm = TRUE) <= self$populations)
                        } else {
