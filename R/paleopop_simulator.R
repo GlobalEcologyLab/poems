@@ -272,6 +272,7 @@ paleopop_simulator <- function(inputs) {
       if (length(occupied_indices)) {
         log_common <- log((standard_deviation/transitions[occupied_indices])^2 + 1)
         log_common[which(transitions[occupied_indices] == 0)] <- 0
+        log_common[which(is.infinite(log_common))] <- 0
         transitions[occupied_indices] <- transitions[occupied_indices]*exp(sqrt(log_common)*occupied_correlated_deviates - 0.5*log_common)
       }
 
