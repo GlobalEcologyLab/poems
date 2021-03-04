@@ -371,11 +371,14 @@ DispersalGenerator <- R6Class("DispersalGenerator",
           # Construct the dispersal data from the base (non-friction) data for the non-zero base indices (ensures all indices present for changes)
           self$dispersal_data <- list(data.frame(nonzero_base_data[, c("target_pop", "source_pop", "emigrant_row", "immigrant_row")],
                                                  dispersal_rate = compact_matrix[compact_dispersal_indices]))
-          compact_matrix <- NULL  # release from memory
 
           # Round when required
           if (!is.null(self$decimals)) {
             self$dispersal_data[[1]]$dispersal_rate <- round(self$dispersal_data[[1]]$dispersal_rate, self$decimals)
+            compact_matrix <- compact_matrix*0 > 0 # all FALSE
+            compact_matrix[compact_dispersal_indices] <- TRUE # used to resolve decimal rounding in changes
+          } else {
+            compact_matrix <- NULL  # release from memory
           }
 
           if (type == "data") {
@@ -393,6 +396,11 @@ DispersalGenerator <- R6Class("DispersalGenerator",
               original_distance_classes <- original_distance_class_map[as.matrix(self$distance_data$changes[[i]][, c("compact_row", "source_pop")])]
               nonzero_dispersal_indices <- which(original_distance_classes <= length(which(dispersal_rate_classes > 0)))
               nonzero_change_data <- self$distance_data$changes[[i]][nonzero_dispersal_indices,]
+
+              # Select rows that don't round to zero in the base data
+              if (!is.null(self$decimals)) {
+                nonzero_change_data <- nonzero_change_data[which(compact_matrix[as.matrix(nonzero_change_data[, c("compact_row", "source_pop")])]),]
+              }
 
               # Calculate/construct dispersal rates using class and multiplier (based on non-friction data)
               self$dispersal_data[[i]] <- data.frame(nonzero_change_data[, c("target_pop", "source_pop")],
