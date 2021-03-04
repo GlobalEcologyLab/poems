@@ -57,7 +57,7 @@ PaleoRegion <- R6Class("PaleoRegion",
     #' @return  A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the region raster with temporal mask (if any) applied.
     raster_from_values = function(values) {
       value_raster <- super$raster_from_values(values)
-      if (!is.null(self$temporal_mask)) {
+      if (!is.null(self$temporal_mask) && ncol(as.matrix(values)) == ncol(self$temporal_mask)) {
         value_raster[self$region_indices] <- value_raster[self$region_indices]*(self$temporal_mask | NA)
       }
       return(value_raster)
