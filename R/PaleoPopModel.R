@@ -229,7 +229,7 @@ PaleoPopModel <- R6Class("PaleoPopModel",
                            "results_selection"),
 
     # Dynamic attributes #
-    .attribute_aliases = list(density = "harvest_max_n"),
+    .attribute_aliases = list(density_max = "harvest_max_n"),
     # .template_model    [inherited]
     # .sample_attributes [inherited]
 
