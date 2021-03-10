@@ -635,7 +635,7 @@ calculate these combined (RMSE) metrics using our results manager by including (
 attaching) the target values to our results object. However, if we wish to retain 
 flexibility in how we combine our individual metrics, or how we deal with *NA* values 
 (e.g. no extirpation) in step 6, we can alternatively store our metrics for each slope 
-interval or bioregion in generated  matrix rows and combine the values later. Here we 
+interval or bioregion in generated matrix rows and combine the values later. Here we 
 will demonstrate both approaches, although the matrix approach requires more disk space.
 
 In demonstration mode, we will again only generate metrics for the first two samples.
@@ -647,9 +647,11 @@ with the *poems* package prior to our validation and ensemble selection (in step
 slope_intervals <- c("1888-1894", "1895-1901", "1902-1909")
 targets <- list(
   bounty_slope = array(c(2.36, 3.25, -17.71), dimnames = list(slope_intervals)),
-  ibra_extirpation = array(c(1907, 1929, 1919, 1922, 1935, 1937, 1937, 1932, 1937),
-                           dimnames = list(ibra_data$abbr)),
-  total_extinction = c(1931, 1937) # CI
+  ibra_extirpation = array(c(c(NA, NA), c(1934, 1934), c(1912, 1919), c(1921, 1940),
+                             c(1936, 1938), c(1935, 1935), c(1934, 1942), 
+                             c(1934, 1934), c(1932, 1932)), c(2, 9), 
+                           dimnames = list(c("lower", "upper"), ibra_data$abbr)),
+  total_extinction = c(lower = 1936, upper = 1942) # CI
 )
 
 # Create a results manager for summary metrics and matrices
@@ -695,8 +697,10 @@ results_manager <- ResultsManager$new(
       ibra_extirpation <- results$get_attribute("ibra_extirpation")
       ibra_extirpation[is.na(ibra_extirpation)] <-
         results$get_attribute("extirp_NA_replace")
-      sqrt(mean((results$get_attribute("targets")$ibra_extirpation -
-                   ibra_extirpation)^2))
+      target_CI <- results$get_attribute("targets")$ibra_extirpation
+      sqrt(mean(((ibra_extirpation < target_CI[1,])*(ibra_extirpation - target_CI[1,]) + 
+           (ibra_extirpation > target_CI[2,])*(ibra_extirpation - target_CI[2,]))^2,
+           na.rm = TRUE))
     },
     total_extinction = function(results) {
       (1888:1967)[results$all$extirpation]
@@ -762,9 +766,11 @@ if (DEMONSTRATION) { # Calculate RMSE for bounty slopes
 if (DEMONSTRATION) { # Calculate RMSE for IBRA extirpation
   ibra_extirpation <- summary_matrix_list$ibra_extirpation
   ibra_extirpation[is.na(ibra_extirpation)] <- 1968
-  ibra_extirpation_error2 <- sqrt(rowMeans((ibra_extirpation - 
-                                              matrix(targets$ibra_extirpation, nrow = 2, 
-                                                     ncol = 9, byrow = TRUE))^2))
+  target_CI <- array(targets$ibra_extirpation, c(dim(targets$ibra_extirpation), 2))
+  ibra_extirpation_error2 <- sqrt(rowMeans(
+    ((ibra_extirpation < t(target_CI[1,,]))*(ibra_extirpation - t(target_CI[1,,])) +
+       (ibra_extirpation > t(target_CI[2,,]))*(ibra_extirpation - t(target_CI[2,,])))^2,
+    na.rm = TRUE))
   cbind(ibra_extirpation_error = summary_metric_data$ibra_extirpation_error, 
         ibra_extirpation_error2) # examine
 }
@@ -817,7 +823,7 @@ validator <- Validator$new(
   non_finite_replacements = list(total_extinction_error = function(x) {
     (1968 - targets$total_extinction[2])}),
   output_dir = OUTPUT_DIR)
-suppressWarnings(validator$run(tolerance = 0.01,
+suppressWarnings(validator$run(tolerance = 0.01, sizenet = 1, lambda = 0.0001,
                                output_diagnostics = TRUE))
 dir(OUTPUT_DIR, "*.pdf") # plus validation diagnostics (see abc library documentation)
 head(validator$selected_simulations) # examine
@@ -881,7 +887,7 @@ legend("topright", c("All", "Target", "Selected"), fill = c("gray", "red", "blue
 From this plot we can observe that, although the summary metrics of all 20,000 sample 
 models generally do not align well with our bounty slope targets, our bounty slope 
 metrics have been selected toward their corresponding targets. Generally, the 
-distribution our full sample set does not facilitate model congruence with the targets,
+distribution of our full sample set does not facilitate model congruence with the targets,
 suggesting that our harvest function may be inadequate for generating the expected 
 temporal contour of the total *thylacine* bounty.
 
@@ -899,17 +905,23 @@ graphics::boxplot(cbind(extirpation[selected_indices, 10:1], NA),  horizontal = 
                   ylim = c(1888,1968),border = rep("blue", 10), 
                   width = c(rep(0.5, 10), 1), outline = FALSE, range = 0, 
                   add = TRUE, col = NULL)
-graphics::points(x = targets$ibra_extirpation, y = 10:2, col = "red", pch = 15)
+for (i in 1:9) {
+  graphics::points(x = targets$ibra_extirpation[, i], y = rep(11 - i, 2), 
+                   col = "red", pch = 15)
+  graphics::lines(x = targets$ibra_extirpation[, i], y = rep(11 - i, 2),
+                  col = "red", lwd = 2)
+}
 graphics::points(x = targets$total_extinction, y = c(1, 1), col = "red", pch = 15)
 graphics::lines(x = targets$total_extinction, y = c(1, 1), col = "red", lwd = 2)
 legend("topright", c("All", "Target (CI)", "Selected"), fill = c("gray", "red", "blue"), 
        border = NA, cex = 0.8)
 ```
 
-Here we see that, although our total Tasmania-wide extirpation date matches well, the
-simulated extirpation dates for individual IBRA bioregions vary in their congruence 
-with the target values. We may wish assess the degree to which our sampled model 
-harvest parameters can influence the spatial dynamics of the *thylacine* decline.
+Here we see that the simulated extirpation dates for individual IBRA bioregions vary in 
+their congruence with the target values, with some strong matches, including our total 
+Tasmania-wide extirpation date. These results may contribute insight into the degree to 
+which our sampled model harvest parameters can influence the spatial dynamics of the 
+simulated *thylacine* decline.
 
 ##### Model ensemble parameters
 We can now examine the features of our selected model ensemble to analyse its properties
@@ -930,7 +942,6 @@ hist(sample_data$harvest_q, breaks = 30, main = "Model ensemble harvest catchabi
      xlab = "Harvest catchability (q)", col = "gray") #, yaxt = "n")
 hist(rep(sample_data$harvest_q[selected_indices], 20), breaks = 20, col = "blue", add = TRUE)
 legend("topright", c("All", "Selected"), fill = c("gray", "blue"), cex = 0.8)
-
 ```
 
 From the first plot we could note the general reliance our model has on the Allee effect
@@ -954,10 +965,9 @@ graphics::legend("topright", legend = c("All samples", "Selected"),
 ```
 
 From the diagnostic output (PDF file in our output directory), we can also examine 
-the posterior distributions of our 200 selected model parameters (in red) relative to 
-those of all 20,000 simulations (in black), and their prior distributions (dashed 
-line). This can give us further insight into the influence of each model parameter has 
-had on our model selection. 
+the posterior distributions of our 200 selected model parameters relative to their 
+prior distributions. This can give us further insight into the influence of each 
+model parameter has had on our model selection. 
 
 From these diagnostics and plots we can analyse and assess the adequacy of our model 
 and/or summary metrics. We may choose to refine our model parameter ranges or our 
@@ -1045,7 +1055,7 @@ ibra_extirpation_error <- summary_metric_data$ibra_extirpation_error
 hist(bounty_slope_error, breaks = 140, main = "Thylacine IBRA extirpation error",
      xlim = c(0, 50), xlab = "IBRA extirpation RMSE", col = "grey", yaxt = "n")
 ibra_extirpation_error_r <- summary_metric_data_rerun$ibra_extirpation_error
-hist(rep(ibra_extirpation_error_r, 2), breaks = 40, col = "gold3", add = TRUE)
+hist(rep(ibra_extirpation_error_r, 2), breaks = 50, col = "gold3", add = TRUE)
 hist(rep(ibra_extirpation_error[selected_indices], 5), breaks = 20, col = "blue",
      add = TRUE)
 lines(x = rep(0, 2), y = c(0, 10000), col = "red", lwd = 2)
