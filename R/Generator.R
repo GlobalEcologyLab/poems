@@ -327,9 +327,6 @@ Generator <- R6Class("Generator",
       if (!is.null(random_seed) && !is.numeric(random_seed)) {
         stop("The random seed should be numeric", call. = FALSE)
       }
-      if (!is.null(normalize_threshold) && !is.numeric(normalize_threshold)) {
-        stop("The normalization threshold should be numeric", call. = FALSE)
-      }
       self$distribution_templates[[param]] <- list(distr_type = distr_type,
                                                    distr_params = distr_params,
                                                    sample = sample,
@@ -425,6 +422,9 @@ Generator <- R6Class("Generator",
         }
         random_seed <- self$distribution_templates[[param]][["random_seed"]]
         normalize_threshold <- self$distribution_templates[[param]][["normalize_threshold"]]
+        if (is.character(normalize_threshold)) {
+          normalize_threshold <- self$get_attribute(normalize_threshold)
+        }
 
         # Ensure the spatial correlation object is set when required
         if (self$uses_correlations && is.null(self$spatial_correlation)) {

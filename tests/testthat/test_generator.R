@@ -204,7 +204,7 @@ test_that("function execution template", {
 
 test_that("sample distribution template (uniform)", {
   TEST_DIRECTORY <- test_path("test_inputs")
-  generator <- Generator$new(description = "Test generator", decimals = 4, outputs = "attr5")
+  generator <- Generator$new(description = "Test generator", th20 = 20, decimals = 4, outputs = "attr5")
   generator$add_generative_requirements(attr5 = "distribution")
   expect_equal(generator$generative_requirements_satisfied(), list(attr5 = FALSE, distribution_templates = FALSE))
   expect_error(generator$add_distribution_template("attr5", distr_type = "unknown"),
@@ -240,6 +240,11 @@ test_that("sample distribution template (uniform)", {
   generator$attached$attr5 <- NULL # clear
   generator$distribution_templates$attr5$normalize_threshold <- 5
   expect_equal(generator$sample_distribution("attr5"), 1)
+  generator$add_distribution_template("attr5", distr_type = "uniform",
+                                      distr_params = list(lower = 0, upper = "attr1"),
+                                      sample = "attr2", random_seed = 123,
+                                      normalize_threshold = "th20")
+  expect_equal(generator$sample_distribution("attr5"), 6/20)
 })
 
 test_that("sample distribution template with rasters (uniform)", {
