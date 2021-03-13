@@ -295,7 +295,7 @@ Generator <- R6Class("Generator",
     #' @param param Name of model attribute to be generated via sampling a distribution.
     #' @param distr_type Distribution type to sample from (uniform, normal, lognormal, beta or triangular).
     #' @param distr_params List of distribution parameters and their values or associated model attributes (uniform: lower, upper; normal: mean, sd; lognormal: meanlog, sdlog (or mean, sd); beta: alpha, beta (or mean, sd); triangular: lower, mode, upper).
-    #' @param sample Model attribute(s) name(s) associated with single sample probabilities (0-1) or bounds (e.g. \code{sample = c("p_lower", "p_upper")}).
+    #' @param sample Model attribute(s) name(s) or values associated with single sample probabilities (0-1), or bounds as a vector (e.g. \code{sample = c("p_lower", "p_upper")}), or as a list (e.g. \code{sample = list(mid = "p", window = 0.2)} for bounds p +/- 0.1).
     #' @param random_seed Random seed utilized when sample probability is generated internaly, via bounds, and/or correlated deviates.
     #' @param normalize_threshold Optional normalization threshold is utilized when generated values are to be normalized with a fixed upper limit/threshold.
     add_distribution_template = function(param, distr_type = c("uniform", "normal", "lognormal", "beta", "triangular"), distr_params = list(), sample = NULL, random_seed = NULL, normalize_threshold = NULL) {
@@ -404,11 +404,24 @@ Generator <- R6Class("Generator",
         distr_type <- self$distribution_templates[[param]][["distr_type"]]
         distr_params <- self$distribution_templates[[param]][["distr_params"]]
         sample <- self$distribution_templates[[param]][["sample"]]
-        if (!is.null(sample)) {
+        sample_names <- names(sample)
+        if (is.list(sample) && all(sample_names %in% c("mid", "window"))) { # window-based
+          if (is.character(sample$mid)) sample$mid <- self$get_attribute(sample$mid)
+          if (is.character(sample$window)) sample$window <- self$get_attribute(sample$window)
+          if (is.numeric(sample$mid) && is.numeric(sample$window)) {
+            sample <- c(max(sample$mid - sample$window/2, 0), min(sample$mid + sample$window/2, 1))
+          } else {
+            self$error_messages <- sprintf("The distribution sample for %s utilizes missing parameter(s): %s", param,
+                                           unlist(self$distribution_templates[[param]][["sample"]][which(!sample_names %in% names(sample))]), collapse = ", ")
+            return(NULL)
+          }
+        } else if (!is.null(sample)) { # single or c(lower, upper) bounds
           for (i in 1:length(sample)) {
             if (is.character(sample[i])) {
               sample_value <- self$get_attribute(sample[i])
-              if (!is.null(sample_value)) {
+              if (length(sample_value) > length(sample[i])) {
+                sample <- sample_value
+              } else if (!is.null(sample_value)) {
                 sample[i] <- sample_value
               }
             }

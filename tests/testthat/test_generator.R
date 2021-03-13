@@ -226,6 +226,9 @@ test_that("sample distribution template (uniform)", {
   expect_equal(generator$sample_distribution("attr5"), 6)
   expect_equal(generator$attached$attr5, 6)
   generator$attached$attr5 <- NULL # clear
+  generator$distribution_templates$attr5$sample <- c(0.2, 0.4)
+  expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.2, max = 0.4)*10})
+  generator$attached$attr5 <- NULL # clear
   generator$distribution_templates$attr5$sample <- c(0.2, "attr2")
   expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.2, max = 0.6)*10})
   generator$attached$attr5 <- NULL # clear
@@ -233,6 +236,24 @@ test_that("sample distribution template (uniform)", {
   expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1)*10})
   generator$attached$attr5 <- NULL # clear
   expect_equal(generator$get_attribute("attr5"), {set.seed(123); round(stats::runif(1)*10, 4)})
+  generator$attached$attr5 <- NULL # clear
+  # Sample as a window
+  generator$distribution_templates$attr5$sample <- list(mid = 0.5, window = 0.2)
+  expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.4, max = 0.6)*10})
+  generator$attached$attr5 <- NULL # clear
+  generator$distribution_templates$attr5$sample <- list(mid = "attr2", window = 0.4)
+  expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.4, max = 0.8)*10})
+  generator$attached$attr5 <- NULL # clear
+  generator$distribution_templates$attr5$sample <- list(mid = 0.2, window = "attr2")
+  expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0, max = 0.5)*10})
+  generator$attached$attr5 <- NULL # clear
+  generator$set_attributes(attr3 = 1)
+  generator$distribution_templates$attr5$sample <- list(mid = "attr2", window = "attr3")
+  expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.1, max = 1)*10})
+  generator$attached$attr5 <- NULL # clear
+  generator$distribution_templates$attr5$sample <- list(mid = "attr2", window = "attr4")
+  expect_null(generator$sample_distribution("attr5"))
+  expect_equal(generator$error_messages[3], "The distribution sample for attr5 utilizes missing parameter(s): attr4")
   # Add normalization threshold
   generator$distribution_templates$attr5$normalize_threshold <- 20
   generator$distribution_templates$attr5$sample <- "attr2"

@@ -305,7 +305,7 @@ Adds a distribution template for generating a given model attribute via sampling
 
 \item{\code{distr_params}}{List of distribution parameters and their values or associated model attributes (uniform: lower, upper; normal: mean, sd; lognormal: meanlog, sdlog (or mean, sd); beta: alpha, beta (or mean, sd); triangular: lower, mode, upper).}
 
-\item{\code{sample}}{Model attribute(s) name(s) associated with single sample probabilities (0-1) or bounds (e.g. \code{sample = c("p_lower", "p_upper")}).}
+\item{\code{sample}}{Model attribute(s) name(s) or values associated with single sample probabilities (0-1), or bounds as a vector (e.g. \code{sample = c("p_lower", "p_upper")}), or as a list (e.g. \code{sample = list(mid = "p", window = 0.2)} for bounds p +/- 0.1).}
 
 \item{\code{random_seed}}{Random seed utilized when sample probability is generated internaly, via bounds, and/or correlated deviates.}
 
