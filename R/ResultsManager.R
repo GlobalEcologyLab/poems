@@ -236,19 +236,21 @@ ResultsManager <- R6Class("ResultsManager",
         }
       }
       if (!is.null(self$summary_matrices)) {
-        self$summary_matrix_list <- list()
+        summary_matrix_list <- list()
         for (matrix_name in self$summary_matrices) {
-          self$summary_matrix_list[[matrix_name]] <- array(NA, c(nrow(self$sample_data), summary_matrix_columns[[matrix_name]]))
+          summary_matrix_list[[matrix_name]] <- array(NA, c(nrow(self$sample_data), summary_matrix_columns[[matrix_name]]))
         }
         for (i in 1:nrow(self$sample_data)) {
           # Merge summary matrix list rows
           for (matrix_name in self$summary_matrices) {
             if (!is.null(generation_log[[i]]$summary_matrix_list) && matrix_name %in% names(generation_log[[i]]$summary_matrix_list)) {
               values <- generation_log[[i]]$summary_matrix_list[[matrix_name]]
-              self$summary_matrix_list[[matrix_name]][i, 1:length(values)] <- values
+              summary_matrix_list[[matrix_name]][i, 1:length(values)] <- values
             }
           }
         }
+        self$summary_matrix_list <- summary_matrix_list
+        summary_matrix_list <- NULL # release from memory
       }
 
       # Summarize and write log to a file
