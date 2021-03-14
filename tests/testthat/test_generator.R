@@ -226,10 +226,16 @@ test_that("sample distribution template (uniform)", {
   expect_equal(generator$sample_distribution("attr5"), 6)
   expect_equal(generator$attached$attr5, 6)
   generator$attached$attr5 <- NULL # clear
-  generator$distribution_templates$attr5$sample <- c(0.2, 0.4)
+  generator$distribution_templates$attr5 <- NULL
+  generator$add_distribution_template("attr5", distr_type = "uniform",
+                                      distr_params = list(lower = 0, upper = "attr1"),
+                                      sample = c(0.2, 0.4), random_seed = 123)
   expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.2, max = 0.4)*10})
   generator$attached$attr5 <- NULL # clear
-  generator$distribution_templates$attr5$sample <- c(0.2, "attr2")
+  generator$distribution_templates$attr5 <- NULL
+  generator$add_distribution_template("attr5", distr_type = "uniform",
+                                      distr_params = list(lower = 0, upper = "attr1"),
+                                      sample = c(0.2, "attr2"), random_seed = 123)
   expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.2, max = 0.6)*10})
   generator$attached$attr5 <- NULL # clear
   generator$distribution_templates$attr5$sample <- NULL
@@ -238,7 +244,10 @@ test_that("sample distribution template (uniform)", {
   expect_equal(generator$get_attribute("attr5"), {set.seed(123); round(stats::runif(1)*10, 4)})
   generator$attached$attr5 <- NULL # clear
   # Sample as a window
-  generator$distribution_templates$attr5$sample <- list(mid = 0.5, window = 0.2)
+  generator$distribution_templates$attr5 <- NULL
+  generator$add_distribution_template("attr5", distr_type = "uniform",
+                                      distr_params = list(lower = 0, upper = "attr1"),
+                                      sample = list(mid = 0.5, window = 0.2), random_seed = 123)
   expect_equal(generator$sample_distribution("attr5"), {set.seed(123); stats::runif(1, min = 0.4, max = 0.6)*10})
   generator$attached$attr5 <- NULL # clear
   generator$distribution_templates$attr5$sample <- list(mid = "attr2", window = 0.4)
