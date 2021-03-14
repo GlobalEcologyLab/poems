@@ -321,8 +321,8 @@ Generator <- R6Class("Generator",
       } else if (!is.list(distr_params) || !all(expected_distr_params %in% names(distr_params))) {
         stop(sprintf("The distribution parameters should be a list containing %s distribution parameters: %s", distr_type, paste(expected_distr_params, collapse = ", ")), call. = FALSE)
       }
-      if (!is.null(sample) && !all(unlist(lapply(sample, is.character)))) {
-        stop("The sample attribute name(s) should be string(s)", call. = FALSE)
+      if (!is.null(sample) && !(all(unlist(lapply(sample, is.numeric)) | unlist(lapply(sample, is.character))))) {
+        stop("The sample attribute(s) should be parameter name string(s) or numeric", call. = FALSE)
       }
       if (!is.null(random_seed) && !is.numeric(random_seed)) {
         stop("The random seed should be numeric", call. = FALSE)
