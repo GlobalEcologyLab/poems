@@ -6,9 +6,9 @@ test_that("initialization and parameter setting", {
   expect_is(sim_manager$model_simulator, "ModelSimulator")
   expect_null(sim_manager$model_simulator$simulation_function)
   sim_manager$model_template <- PopulationModel$new()
-  expect_equal(sim_manager$model_simulator$simulation_function, "population_simulator")
+  expect_true(is.function(sim_manager$model_simulator$simulation_function))
   sim_manager <- SimulationManager$new(model_template = PopulationModel$new())
-  expect_equal(sim_manager$model_simulator$simulation_function, "population_simulator")
+  expect_true(is.function(sim_manager$model_simulator$simulation_function))
   # Invalid attributes
   expect_error(sim_manager$model_template <- "dummy",
                "Model template must be a SimulationModel or inherited class object")

@@ -186,6 +186,9 @@ ModelSimulator <- R6Class("ModelSimulator",
           if (is.null(value) || is.function(value) ||
               (is.character(value) &&
                tryCatch(is.function(eval(parse(text = value))), error = function(e) FALSE))) {
+            if (is.character(value)) {
+              value <- eval(parse(text = value))
+            }
             private$.simulation_function <- value
           } else {
             stop(paste("Could not assign function", value), call. = FALSE)
