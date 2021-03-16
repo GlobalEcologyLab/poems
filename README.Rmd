@@ -70,7 +70,7 @@ coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
-initial_abundance <-   c(round(stats::runif(4, 100, 300)), 0, 0, 0)
+initial_abundance <- seq(0, 300, 50)
 raster::plot(region$raster_from_values(initial_abundance), 
              main = "Initial abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
@@ -82,10 +82,10 @@ pop_model <- PopulationModel$new(
   populations = 7,
   initial_abundance = initial_abundance,
   stage_matrix = matrix(c(0, 2.5, # Leslie/Lefkovitch matrix
-                          0.5, 0.8), nrow = 2, ncol = 2, byrow = TRUE),
+                          0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE),
   carrying_capacity = rep(200, 7),
   density_dependence = "logistic",
-  dispersal = (!diag(nrow = 7, ncol = 7))*0.2,
+  dispersal = (!diag(nrow = 7, ncol = 7))*0.05,
   result_stages = c(1, 2))
 
 # Run single simulation
@@ -95,7 +95,6 @@ raster::plot(region$raster_from_values(results$abundance[,5]),
              main = "Final abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
 ```
-
 
 Further examples utilizing the POM workflow and more advanced features of *poems*
 can be found in the accompanying vignettes.

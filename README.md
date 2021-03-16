@@ -67,7 +67,7 @@ coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
-initial_abundance <-   c(round(stats::runif(4, 100, 300)), 0, 0, 0)
+initial_abundance <- seq(0, 300, 50)
 raster::plot(region$raster_from_values(initial_abundance), 
              main = "Initial abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
@@ -84,10 +84,10 @@ pop_model <- PopulationModel$new(
   populations = 7,
   initial_abundance = initial_abundance,
   stage_matrix = matrix(c(0, 2.5, # Leslie/Lefkovitch matrix
-                          0.5, 0.8), nrow = 2, ncol = 2, byrow = TRUE),
+                          0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE),
   carrying_capacity = rep(200, 7),
   density_dependence = "logistic",
-  dispersal = (!diag(nrow = 7, ncol = 7))*0.2,
+  dispersal = (!diag(nrow = 7, ncol = 7))*0.05,
   result_stages = c(1, 2))
 
 # Run single simulation
@@ -95,47 +95,47 @@ results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1]  800 1041 1102 1213 1263
+#> [1] 1071 1064 1218 1272 1277
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 479 666 656 733 759
+#> [1] 666 620 743 781 764
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 321 375 446 480 504
+#> [1] 405 444 475 491 513
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   99  148  142  175  184
-#> [2,]   84  164  159  163  199
-#> [3,]   91  163  161  171  182
-#> [4,]  110  154  170  181  184
-#> [5,]  161  146  146  164  169
-#> [6,]  134  125  161  187  168
-#> [7,]  121  141  163  172  177
+#> [1,]   48  101  140  176  196
+#> [2,]   96  136  152  192  177
+#> [3,]  152  156  198  177  186
+#> [4,]  183  165  188  186  196
+#> [5,]  165  171  171  202  181
+#> [6,]  201  176  191  163  166
+#> [7,]  226  159  178  176  175
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   61   88   90  113  115
-#> [2,]   44  112   90  102  124
-#> [3,]   61  106   94   93  106
-#> [4,]   71  106  105  114  113
-#> [5,]  100   88   80  100   92
-#> [6,]   72   71  100  110   93
-#> [7,]   70   95   97  101  116
+#> [1,]   27   64   81  104  114
+#> [2,]   49   83   92  124  109
+#> [3,]  102   86  124  101  116
+#> [4,]  117   92  118  117  114
+#> [5,]   92  102  102  122  115
+#> [6,]  132   98  123  103   92
+#> [7,]  147   95  103  110  104
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   38   60   52   62   69
-#> [2,]   40   52   69   61   75
-#> [3,]   30   57   67   78   76
-#> [4,]   39   48   65   67   71
-#> [5,]   61   58   66   64   77
-#> [6,]   62   54   61   77   75
-#> [7,]   51   46   66   71   61
+#> [1,]   21   37   59   72   82
+#> [2,]   47   53   60   68   68
+#> [3,]   50   70   74   76   70
+#> [4,]   66   73   70   69   82
+#> [5,]   73   69   69   80   66
+#> [6,]   69   78   68   60   74
+#> [7,]   79   64   75   66   71
 raster::plot(region$raster_from_values(results$abundance[,5]),
              main = "Final abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
