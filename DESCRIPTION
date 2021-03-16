@@ -1,7 +1,7 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling and Simulation
-Version: 0.4.4
+Version: 0.5.0
 Author: Global ChEC Lab
 Maintainer: Sean Haythorne <sean.haythorne@adelaide.edu.au>
 Description: The poems package provides a framework of interoperable R6 classes for 
@@ -51,11 +51,8 @@ Collate:
     'LatinHypercubeSampler.R'
     'ModelSimulator.R'
     'SimulationModel.R'
-    'PaleoPopModel.R'
-    'SimulationResults.R'
-    'PaleoPopResults.R'
-    'PaleoRegion.R'
     'PopulationModel.R'
+    'SimulationResults.R'
     'PopulationResults.R'
     'ResultsManager.R'
     'SimulationManager.R'
@@ -63,7 +60,6 @@ Collate:
     'SpatialCorrelation.R'
     'Validator.R'
     'data.R'
-    'paleopop_simulator.R'
     'poems.R'
     'population_density.R'
     'population_dispersal.R'
