@@ -1,2 +1,2 @@
 # poems
-Pattern-oriented ensemble modelling and simulation (with spatially explicit populations)
+Pattern-oriented ensemble modelling system for spatially explicit population simulations 
