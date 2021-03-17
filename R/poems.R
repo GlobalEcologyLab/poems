@@ -10,11 +10,11 @@
 #' known patterns. By default, model validation and selection utilizes an approximate
 #' Bayesian computation (ABC) approach (Beaumont, Zhang, & Balding, 2002), although
 #' alternative user-defined functionality could be employed. The package also includes
-#' a customizable spatially explicit demographic population model simulation engine,
-#' which includes default functionality for density dependence, correlated
-#' environmental stochasiticity, stage-based transitions, and distance-based dispersal.
-#' The user may also define functionality for translocations, harvesting, mortality,
-#' and other processes, as well as define the sequence order for the simulator
+#' a spatially explicit demographic population model simulation engine, which includes
+#' default functionality for density dependence, correlated environmental stochasticity,
+#' stage-based transitions, and distance-based dispersal. The user may customize the
+#' simulator by defining functionality for translocations, harvesting, mortality,
+#' and other processes, as well as defining the sequence order for the simulator
 #' processes. The framework could also be adapted for use with other model simulators
 #' by utilizing its extendable (inheritable) base classes.
 #'
@@ -22,8 +22,8 @@
 #' The \emph{poems} framework utilizes a hierarchy  of extendable (inheritable)
 #' \code{\link[R6:R6Class]{R6}} class objects that work together to manage a POM
 #' workflow for building an ensemble of simulation models.
-#' \if{latex}{\cr \figure{poems.framework.pdf}{options: width=5.5in}}
-#' \if{html}{\figure{poems.framework.png}}
+#' \if{latex}{\cr \figure{framework.pdf}{options: width=5.5in}}
+#' \if{html}{\figure{framework.png}}
 #' \enumerate{ The workflow is summarized in the following steps:
 #'   \item Create a simulation model template (a \code{\link{SimulationModel}} or
 #'     inherited class object) with appropriate fixed parameters for the study domain.

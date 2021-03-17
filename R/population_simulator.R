@@ -27,7 +27,7 @@
 #'     \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
 #'     \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
 #'     \item{\code{demographic_stochasticity}}{Boolean for choosing demographic stochasticity for transition, dispersal, harvest and/or other processes (default is TRUE).}
-#'     \item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasicity to transition rates.}
+#'     \item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasticity to transition rates.}
 #'     \item{\code{correlation}}{List containing either an environmental correlation matrix (correlation_matrix), a pre-calculated transposed (Cholesky) decomposition matrix (t_decomposition_matrix), or a compact transposed (Cholesky) decomposition matrix (t_decomposition_compact_matrix) and a corresponding map of population indices (t_decomposition_compact_map), as per \code{\link{SpatialCorrelation}} class attributes.}
 #'     \item{\code{carrying_capacity}}{Array (matrix) of carrying capacity values at each population cell (\emph{populations} rows by \emph{time_steps} columns when across time).}
 #'     \item{\code{density_dependence}}{Density dependence can be "ceiling" (default), "logistic" (Ricker), or a user-defined function (optionally nested in a list with additional attributes) for adjusting transition rates: \code{function(params)}, where \emph{params} is a list passed to the function containing:

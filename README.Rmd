@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# poems: Pattern-oriented ensemble modelling system for spatially explicit population simulations
+# poems: Pattern-oriented ensemble modelling system (for spatially explicit population simulations)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -34,13 +34,13 @@ By default, model validation and selection utilizes an approximate Bayesian comp
 (ABC) approach (Beaumont et al., 2002) using the *abc* package (Csillery et al., 2015). 
 However, alternative user-defined functionality could be employed. 
 
-The package includes a customizable spatially explicit demographic population model 
-simulation engine, which incorporates default functionality for density dependence, 
-correlated environmental stochasiticity, stage-based transitions, and distance-based 
-dispersal. The user may also define functionality for translocations, harvesting, 
-mortality, and other processes, as well as define the sequence order for the 
-simulator processes. The framework could also be adapted for use with other model 
-simulators by utilizing its extendable (inheritable) base classes.
+The package includes a spatially explicit demographic population model simulation
+engine, which incorporates default functionality for density dependence, correlated 
+environmental stochasticity, stage-based transitions, and distance-based dispersal. 
+The user may customize the simulator by defining functionality for trans-locations, 
+harvesting, mortality, and other processes, as well as defining the sequence order 
+for the simulator processes. The framework could also be adapted for use with other 
+model simulators by utilizing its extendable (inheritable) base classes.
 
 ## Installation
 

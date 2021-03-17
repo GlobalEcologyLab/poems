@@ -1,10 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# poems: Pattern-oriented ensemble modelling system for spatially explicit population simulations
+# poems: Pattern-oriented ensemble modelling system (for spatially explicit population simulations)
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The poems package provides a framework of interoperable *R6* (Chang,
@@ -27,13 +26,13 @@ Bayesian computation (ABC) approach (Beaumont et al., 2002) using the
 *abc* package (Csillery et al., 2015). However, alternative user-defined
 functionality could be employed.
 
-The package includes a customizable spatially explicit demographic
-population model simulation engine, which incorporates default
-functionality for density dependence, correlated environmental
-stochasiticity, stage-based transitions, and distance-based dispersal.
-The user may also define functionality for translocations, harvesting,
-mortality, and other processes, as well as define the sequence order for
-the simulator processes. The framework could also be adapted for use
+The package includes a spatially explicit demographic population model
+simulation engine, which incorporates default functionality for density
+dependence, correlated environmental stochasticity, stage-based
+transitions, and distance-based dispersal. The user may customize the
+simulator by defining functionality for trans-locations, harvesting,
+mortality, and other processes, as well as defining the sequence order
+for the simulator processes. The framework could also be adapted for use
 with other model simulators by utilizing its extendable (inheritable)
 base classes.
 
@@ -76,7 +75,6 @@ raster::plot(region$raster_from_values(initial_abundance),
 <img src="man/figures/README-example-1.png" width="100%" style="display: block; margin: auto;" />
 
 ``` r
-
 # Set population model
 pop_model <- PopulationModel$new(
   region = region,
@@ -95,47 +93,47 @@ results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1] 1071 1064 1218 1272 1277
+#> [1] 1034 1215 1267 1331 1369
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 666 620 743 781 764
+#> [1] 611 735 763 784 837
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 405 444 475 491 513
+#> [1] 423 480 504 547 532
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   48  101  140  176  196
-#> [2,]   96  136  152  192  177
-#> [3,]  152  156  198  177  186
-#> [4,]  183  165  188  186  196
-#> [5,]  165  171  171  202  181
-#> [6,]  201  176  191  163  166
-#> [7,]  226  159  178  176  175
+#> [1,]   59  133  176  182  182
+#> [2,]   96  123  160  202  203
+#> [3,]  137  186  175  187  187
+#> [4,]  150  177  183  188  214
+#> [5,]  182  186  212  194  198
+#> [6,]  226  189  182  183  201
+#> [7,]  184  221  179  195  184
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   27   64   81  104  114
-#> [2,]   49   83   92  124  109
-#> [3,]  102   86  124  101  116
-#> [4,]  117   92  118  117  114
-#> [5,]   92  102  102  122  115
-#> [6,]  132   98  123  103   92
-#> [7,]  147   95  103  110  104
+#> [1,]   30   78  100  107  106
+#> [2,]   61   71   93  120  116
+#> [3,]   79  107  107  114  113
+#> [4,]   90  111  111  105  135
+#> [5,]  112  110  140  109  125
+#> [6,]  134  117  115  114  115
+#> [7,]  105  141   97  115  127
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   21   37   59   72   82
-#> [2,]   47   53   60   68   68
-#> [3,]   50   70   74   76   70
-#> [4,]   66   73   70   69   82
-#> [5,]   73   69   69   80   66
-#> [6,]   69   78   68   60   74
-#> [7,]   79   64   75   66   71
+#> [1,]   29   55   76   75   76
+#> [2,]   35   52   67   82   87
+#> [3,]   58   79   68   73   74
+#> [4,]   60   66   72   83   79
+#> [5,]   70   76   72   85   73
+#> [6,]   92   72   67   69   86
+#> [7,]   79   80   82   80   57
 raster::plot(region$raster_from_values(results$abundance[,5]),
              main = "Final abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
