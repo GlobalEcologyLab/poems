@@ -1,7 +1,7 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling System
-Version: 0.5.1
+Version: 1.0.0
 Authors@R: c(
     person("Sean", "Haythorne", email = "sean.haythorne@adelaide.edu.au", role = c("aut", "cre")),
     person("Damien", "Fordham", email = "damien.fordham@adelaide.edu.au", role = "aut"),
