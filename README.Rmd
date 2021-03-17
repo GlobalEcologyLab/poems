@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# poems: Pattern-oriented ensemble modelling system (for spatially explicit population simulations)
+# poems: Pattern-oriented ensemble modeling system (for spatially explicit population simulations)
 
 <!-- badges: start -->
 <!-- badges: end -->

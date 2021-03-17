@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# poems: Pattern-oriented ensemble modelling system (for spatially explicit population simulations)
+# poems: Pattern-oriented ensemble modeling system (for spatially explicit population simulations)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -93,47 +93,47 @@ results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1] 1034 1215 1267 1331 1369
+#> [1] 1078 1162 1256 1282 1305
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 611 735 763 784 837
+#> [1] 650 691 748 780 743
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 423 480 504 547 532
+#> [1] 428 471 508 502 562
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   59  133  176  182  182
-#> [2,]   96  123  160  202  203
-#> [3,]  137  186  175  187  187
-#> [4,]  150  177  183  188  214
-#> [5,]  182  186  212  194  198
-#> [6,]  226  189  182  183  201
-#> [7,]  184  221  179  195  184
+#> [1,]   43   96  125  155  159
+#> [2,]   97  122  151  166  170
+#> [3,]  128  149  176  164  193
+#> [4,]  178  204  214  210  197
+#> [5,]  208  204  210  216  204
+#> [6,]  201  181  199  179  204
+#> [7,]  223  206  181  192  178
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   30   78  100  107  106
-#> [2,]   61   71   93  120  116
-#> [3,]   79  107  107  114  113
-#> [4,]   90  111  111  105  135
-#> [5,]  112  110  140  109  125
-#> [6,]  134  117  115  114  115
-#> [7,]  105  141   97  115  127
+#> [1,]   31   43   73   92   87
+#> [2,]   59   66   99  108   98
+#> [3,]   73   93  106   93  115
+#> [4,]  110  128  125  121  107
+#> [5,]  129  134  131  131  112
+#> [6,]  121  102  115  113  116
+#> [7,]  127  125   99  122  108
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   29   55   76   75   76
-#> [2,]   35   52   67   82   87
-#> [3,]   58   79   68   73   74
-#> [4,]   60   66   72   83   79
-#> [5,]   70   76   72   85   73
-#> [6,]   92   72   67   69   86
-#> [7,]   79   80   82   80   57
+#> [1,]   12   53   52   63   72
+#> [2,]   38   56   52   58   72
+#> [3,]   55   56   70   71   78
+#> [4,]   68   76   89   89   90
+#> [5,]   79   70   79   85   92
+#> [6,]   80   79   84   66   88
+#> [7,]   96   81   82   70   70
 raster::plot(region$raster_from_values(results$abundance[,5]),
              main = "Final abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
