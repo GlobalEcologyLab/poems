@@ -15,7 +15,7 @@ constructing compacted dispersal matrices. It dynamically generates attributes
 defined as \emph{outputs} (default: \emph{dispersal_data}) given sampled
 \emph{inputs} (default: \emph{dispersal_proportion} and
 \emph{dispersal_max_distance}). An optional \code{\link{DispersalFriction}} object
-may be utilized to modify (equivalent) distances given a (spatiotemporal) frictional
+may be utilized to modify (equivalent) distances given a (spatio-temporal) frictional
 landscape. When this landscape includes temporal changes, the generated
 \emph{dispersal_data} will be a temporal list of changing dispersal rates.
 }
@@ -105,7 +105,7 @@ dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
 
 \item{\code{max_distance_classes}}{The maximum number of distance classes when they are calculated automatically via the maximum distance (default: 1000).}
 
-\item{\code{distance_scale}}{Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.}
+\item{\code{distance_scale}}{Scale of distance values in meters (default = 1). Usage: set to 1 for values in meters, or to 1000 for values in kilometers.}
 
 \item{\code{distance_data}}{Data frame of distance classes including indices for the construction of compact matrices (columns: target_pop, source_pop, compact_row, distance_class).}
 
@@ -240,7 +240,7 @@ Sets the distance classes to a sequence of values from minimum to maximum in ste
 \if{html}{\out{<a id="method-calculate_distance_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-calculate_distance_matrix}{}}}
 \subsection{Method \code{calculate_distance_matrix()}}{
-Returns a matrix with the calculated distance (in metres by default) between each pair of region cells.
+Returns a matrix with the calculated distance (in meters by default) between each pair of region cells.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DispersalGenerator$calculate_distance_matrix(use_longlat = NULL)}\if{html}{\out{</div>}}
 }

@@ -54,7 +54,7 @@ generation), rounding decimals, occupancy mask, and other
 
 \item{\code{max_distance_classes}}{The maximum number of distance classes when they are calculated automatically via the maximum distance (default: 1000).}
 
-\item{\code{distance_scale}}{Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.}
+\item{\code{distance_scale}}{Scale of distance values in meters (default = 1). Usage: set to 1 for values in meters, or to 1000 for values in kilometers.}
 
 \item{\code{distance_data}}{Data frame of distance classes including indices for the construction of compact matrices (columns: target_pop, source_pop, compact_row, distance_class).}
 

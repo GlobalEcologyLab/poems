@@ -105,7 +105,7 @@ SimulationResults <- R6Class("SimulationResults",
     #' @description
     #' Returns an array of all attribute names including public and private model attributes, as well as attached attributes, error and warning messages.
     #' @param all Boolean to indicate if a nested list for all cells (when present) should be also listed (default is FALSE).
-    #' @return Array of all attribute names with optional inclusion of attrribute names of nested results for all cells.
+    #' @return Array of all attribute names with optional inclusion of attribute names of nested results for all cells.
     get_attribute_names = function(all = FALSE) {
       if (all && !is.null(self$all) && length(self$all$get_attribute_names())) {
         return(c(super$get_attribute_names(), paste0("all$", self$all$get_attribute_names())))

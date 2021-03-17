@@ -113,7 +113,7 @@ test_that("distance multiplier calculations", {
   dispersal_friction <- DispersalFriction$new(region = region, conductance = conductance)
   expect_equal(dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices),
                distance_multipliers)
-  # Raster region and conductance values with coordinates in metres
+  # Raster region and conductance values with coordinates in meters
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
                                                        crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))

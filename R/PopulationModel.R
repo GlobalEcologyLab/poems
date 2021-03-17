@@ -542,7 +542,7 @@ PopulationModel <- R6Class("PopulationModel",
       }
     },
 
-    #' @field standard_deviation Standard deviation matrix (or single value) for applying environmental stochasicity to transition rates.
+    #' @field standard_deviation Standard deviation matrix (or single value) for applying environmental stochasticity to transition rates.
     standard_deviation = function(value) {
       if (missing(value)) {
         if (is.null(self$template_model) || "standard_deviation" %in% self$sample_attributes) {
@@ -709,7 +709,7 @@ PopulationModel <- R6Class("PopulationModel",
       }
     },
 
-    #' @field mortality Simulator-dependent function, attribute or list of attributes for describing/parameterizing a temporospatial mortality strategy (see \code{\link{population_simulator}}).
+    #' @field mortality Simulator-dependent function, attribute or list of attributes to describe/parameterize a spatio-temporal mortality strategy (see \code{\link{population_simulator}}).
     mortality = function(value) {
       if (missing(value)) {
         if (is.null(self$template_model) || "mortality" %in% self$sample_attributes) {

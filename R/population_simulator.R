@@ -4,7 +4,7 @@
 #' across multiple replicate runs. Processes ran at each simulation time-step include:
 #' \enumerate{
 #'   \item Density dependence calculations (ceiling, logistic, or user-defined)
-#'   \item Enviromental stochasticity calculations
+#'   \item Environmental stochasticity calculations
 #'   \item Stage transition (stochastic) calculations
 #'   \item Translocation calculations (user-defined)
 #'   \item Harvest calculations (user-defined)
@@ -52,7 +52,7 @@
 #'     \item{\code{density_affects}}{Matrix of booleans or numeric (0-1) indicating the transition vital rates affected by density (default is all).}
 #'     \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density (default is all).}
 #'     \item{\code{density_precision}}{Numeric precision of the calculated multipliers (used when stages > 1) applied to affected transition rates (default is 3 decimal places).}
-#'     \item{\code{translocation}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying translocation or temporospatial management (to abundances): \code{function(params)}, where \emph{params} is a list passed to the function containing:
+#'     \item{\code{translocation}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying translocation or spatio-temporal management (to abundances): \code{function(params)}, where \emph{params} is a list passed to the function containing:
 #'       \describe{
 #'         \item{\code{replicates}}{Number of replicate simulation runs.}
 #'         \item{\code{time_steps}}{Number of simulation time steps.}
@@ -116,7 +116,7 @@
 #'     \item{\code{harvested_stages}}{List of matrices or 3D arrays of individuals harvested for unique stage combinations when present: each \emph{populations} rows by \emph{time_steps} columns (by \emph{replicates} deep).}
 #'     \item{\code{all$harvested}}{Array or matrix of individuals harvested across populations: \emph{time_steps} (rows by \emph{replicates} columns).}
 #'     \item{\code{all$harvested_stages}}{List of arrays or matrices of individuals harvested across populations for unique stage combinations when present: each \emph{time_steps} (rows by \emph{replicates} columns).}
-#'     \item{\code{all$occupancy}}{Array or matrix of the number of populations occupied at each time-step: \emph{time_steps} (rows by \emph{replicates} colums).}
+#'     \item{\code{all$occupancy}}{Array or matrix of the number of populations occupied at each time-step: \emph{time_steps} (rows by \emph{replicates} columns).}
 #'     \item{\code{additional results}}{Additional results may be attached via user-defined functions (using \code{params$simulator$results}).}
 #'   }
 #'
@@ -366,7 +366,7 @@ population_simulator <- function(inputs) {
       ## Run simulation processes in configured order ##
       for (process in simulation_order) {
 
-        ## Transition, density dependence and environmental stochasicity calculations ##
+        ## Transition, density dependence and environmental stochasticity calculations ##
         if (process == "transition") {
 
           if (occupied_populations) {

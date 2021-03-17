@@ -78,7 +78,7 @@ raster::plot(region$region_raster, main = "Example region (cell indices)",
              colNA = "blue")
 ```
 
-##### Enviromental correlation
+##### Environmental correlation
 Next, we'll define a distance-based spatial correlation for applying environmental 
 stochasticity within our model. The generated correlation data is compacted for 
 computational efficiency (with large-scale models).
@@ -146,7 +146,7 @@ raster::plot(example_hs_raster, main = "Example habitat suitability",
 ```
 
 ##### Initial abundance and carrying capacity generator
-The generator utilizes generic templating functionality for user-defined custom
+The generator utilizes generic template functionality for user-defined custom
 functions. It uses sampled input parameters (initial total abundance and maximum cell
 density), along with habitat suitability, to generate the desired output model 
 parameters (initial abundance and carrying capacity) via these user-defined functions. 
@@ -253,7 +253,7 @@ an intermediate *PopulationResults* class object, which dynamically generates fu
 results. We need to define functions for calculating summary metrics, as well as any 
 matrices (one row of values per simulation) that we may be interested in examining. Each
 metric (or matrix) is associated with a user-defined function that utilizes results object 
-attributes, or alternatively direct access to an attribure may be defined via a string.
+attributes, or alternatively direct access to an attribute may be defined via a string.
 Once generated, the result metrics (a data frame) and/or matrices (a list) can be 
 accessed via the manager. We may utilize the collated results in a variety of ways. 
 However, with the objective of selecting the best models, we wish to compare (or 
@@ -282,18 +282,18 @@ results_manager$summary_matrix_list
 ```
 
 ### Step 6: Build a validator to select a model ensemble
-We now select and analyse our 'best' models via a *Validator* class object, which by
+We now select and analyze our 'best' models via a *Validator* class object, which by
 default utilizes an approximate Bayesian computation (ABC) approach (Beaumont, Zhang, 
 & Balding, 2002) provided by the *abc* library (Csillery et al., 2015). The validator
 can be configured appropriately for a problem domain (see the *abc* documentation). 
 Here we use the default configuration to select the best 3 models, along with a weight
 value, which is indicative of the congruence between each model's summary metrics and 
 the corresponding target patterns. Also provided (with the default settings) is a 
-diagnostic output (PDF) file, containing statistical information for analysing the 
+diagnostic output (PDF) file, containing statistical information for analyzing the 
 contribution of model parameters in the selection/validation process (see the *abc* 
 documentation). For our simple demonstration the metrics and corresponding targets are 
 relatively trivial, having the aim of producing stable population abundances with high 
-harvest. However, the package facilitates the use more complex spatiotemporal metrics 
+harvest. However, the package facilitates the use more complex spatio-temporal metrics 
 and targets (demonstrated in more advanced vignettes).
 
 ```{r, message = FALSE}

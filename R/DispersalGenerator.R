@@ -12,7 +12,7 @@
 #' defined as \emph{outputs} (default: \emph{dispersal_data}) given sampled
 #' \emph{inputs} (default: \emph{dispersal_proportion} and
 #' \emph{dispersal_max_distance}). An optional \code{\link{DispersalFriction}} object
-#' may be utilized to modify (equivalent) distances given a (spatiotemporal) frictional
+#' may be utilized to modify (equivalent) distances given a (spatio-temporal) frictional
 #' landscape. When this landscape includes temporal changes, the generated
 #' \emph{dispersal_data} will be a temporal list of changing dispersal rates.
 #'
@@ -188,7 +188,7 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @description
-    #' Returns a matrix with the calculated distance (in metres by default) between each pair of region cells.
+    #' Returns a matrix with the calculated distance (in meters by default) between each pair of region cells.
     #' @param use_longlat Optional boolean indicating use of (WGS84) coordinates in longitude (degrees West) and latitude (degrees North).
     #' @return Matrix with distances between region cells.
     calculate_distance_matrix = function(use_longlat = NULL) {
@@ -200,9 +200,9 @@ DispersalGenerator <- R6Class("DispersalGenerator",
         if (!self$region$use_raster || (is.logical(use_longlat) && use_longlat) ||
             length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
           return(geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/self$distance_scale)
-        } else { # assume coordinates in metres
+        } else { # assume coordinates in meters
           if (is.na(raster::crs(self$region$region_raster))) {
-            warning("No coordinate reference system (CRS) specified: assuming coordinates are in metres", call. = FALSE)
+            warning("No coordinate reference system (CRS) specified: assuming coordinates are in meters", call. = FALSE)
           }
           return(as.matrix(stats::dist(coordinates))/self$distance_scale)
         }
@@ -699,7 +699,7 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       }
     },
 
-    #' @field distance_scale Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.
+    #' @field distance_scale Scale of distance values in meters (default = 1). Usage: set to 1 for values in meters, or to 1000 for values in kilometers.
     distance_scale = function(value) {
       if (missing(value)) {
         self$generative_template$distance_scale

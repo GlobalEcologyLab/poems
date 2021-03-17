@@ -74,7 +74,7 @@ cbind(dispersal_indices, distance = distances[dispersal_indices],
 
 \item{\code{write_to_dir}}{Directory path for storing distance multipliers when memory performance is an issue.}
 
-\item{\code{transition_directions}}{Number of transition directions or neighbours in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).}
+\item{\code{transition_directions}}{Number of transition directions or neighbors in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).}
 
 \item{\code{conductance}}{Matrix/raster of conductance (inverse friction) values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for each grid cell (rows/cells) at each simulation time step (columns/layers).}
 

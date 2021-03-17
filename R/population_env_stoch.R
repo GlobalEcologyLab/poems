@@ -7,14 +7,14 @@
 #' @param fecundity_matrix Matrix of transition fecundity rates (Leslie/Lefkovitch matrix with non-zero fecundities only).
 #' @param fecundity_max Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).
 #' @param survival_matrix Matrix of transition survival rates (Leslie/Lefkovitch matrix with non-zero survivals only).
-#' @param standard_deviation Standard deviation matrix for applying environmental stochasicity to transition rates.
+#' @param standard_deviation Standard deviation matrix for applying environmental stochasticity to transition rates.
 #' @param correlation List containing either an environmental correlation matrix (correlation_matrix), a pre-calculated transposed (Cholesky) decomposition matrix (t_decomposition_matrix), or a compact transposed (Cholesky) decomposition matrix (t_decomposition_compact_matrix) and a corresponding map of population indices (t_decomposition_compact_map), as per \emph{SpatialCorrelation} class attributes.
 #' @return Environmental stochasticity calculation function: \code{function(fecundity_array, survival_array, occupied_indices)}, where:
 #'   \describe{
 #'     \item{\code{fecundity_array}}{3D array of fecundity rates (\emph{stages} rows by \emph{stages} columns by \emph{populations} deep).}
 #'     \item{\code{survival_array}}{3D array of survival rates (\emph{stages} rows by \emph{stages} columns by \emph{populations} deep).}
 #'     \item{\code{occupied_indices}}{Array of indices for those populations occupied.}
-#'     \item{\code{returns}}{List containg stochastically varied fecundity and survival arrays.}
+#'     \item{\code{returns}}{List containing stochastically varied fecundity and survival arrays.}
 #'   }
 #' @export population_env_stoch
 

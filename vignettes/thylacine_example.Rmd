@@ -97,7 +97,7 @@ raster::plot(region$region_raster, main = "Tasmanian study region (cell indices)
 We partition our study region into Interim Bioregionalisation of Australia (IBRA) 
 bioregions for several purposes. Our harvest function will distribute our simulated 
 harvest across these bioregions. We will also use these IBRA bioregions to approximate 
-patial differences in habitat suitability decline. Finally, in step 6, we will utilize
+spatial differences in habitat suitability decline. Finally, in step 6, we will utilize
 estimated extirpation dates for each IBRA bioregion when selecting our model ensemble.
 A *raster* of the approximate distribution of our study region cells across IBRA 
 bioregions, as well as a *data frame* containing information about each IBRA, are 
@@ -128,13 +128,13 @@ approach (Ricker, 1954). Although the *poems* package has the Ricker logistic fu
 as a predefined function operating at the population grid-cell level (via 
 *density_dependence = "logistic"*), this was found to be inadequate for our *thylacine*
 model due to the low density of the *thylacine* at the grid-cell level. Instead our
-density dependence function will operate at a neighbourhood level, where each 
-cell's neighbourhood include its adjacent cells (thus up to 9 cells in total).
+density dependence function will operate at a neighborhood level, where each 
+cell's neighborhood include its adjacent cells (thus up to 9 cells in total).
 This approach considers the mobility of the *thylacine* when calculating annual
 reproduction and survival rates, whereby individuals have the ability to search for
-mates or more suitable habitat in neighbouring cells.
+mates or more suitable habitat in neighboring cells.
 
-In order to first define our neighbourhoods for our density dependence function, it is
+In order to first define our neighborhoods for our density dependence function, it is
 convenient to partially skip ahead to step 2 (building generators) and build our
 dispersal generator. 
 
@@ -156,39 +156,39 @@ use its calculated distance data to define our neigbourhoods based on a 14 km ra
 fromveach grid cell.
 
 ```{r, message = FALSE}
-# Define neighbourhoods (of up to 9 cells) based on a 14 km range from each grid cell
+# Define neighborhoods (of up to 9 cells) based on a 14 km range from each grid cell
 # for density dependence calculations (using a dispersal generator)
 distance_data <- dispersal_gen$distance_data[[1]]
 nh_data <- distance_data[which(distance_data$distance_class <= 14), 2:1]
-neighbourhoods <- as.list(1:795)
+neighborhoods <- as.list(1:795)
 for (i in 1:nrow(nh_data)) {
-  neighbourhoods[[nh_data$source_pop[i]]] <- c(neighbourhoods[[nh_data$source_pop[i]]],
+  neighborhoods[[nh_data$source_pop[i]]] <- c(neighborhoods[[nh_data$source_pop[i]]],
                                                nh_data$target_pop[i])
 }
-neighbourhoods[1:3] # examine
+neighborhoods[1:3] # examine
 ```
 
 We can now define our density dependence function, which is list-nested with our 
-neighbourhoods and an Allee effect (Allee, 1931) parameter. We apply a Tasmania-wide Allee 
-effect to suppress sustained low unviable populations. Additional functionality is also 
-included to prevent reproduction when a neighbourhood has a single *thylacine*. We also 
+neighborhoods and an Allee effect (Allee, 1931) parameter. We apply a Tasmania-wide Allee 
+effect to suppress sustained low, non-viable populations. Additional functionality is also 
+included to prevent reproduction when a neighborhood has a single *thylacine*. We also 
 define an alias to the Allee parameter so we can sample it later.
 
 ```{r, message = FALSE}
-# User-defined function for Ricker logistic density dependence via neighbourhoods, with
-# Allee effects; also remove fecundities if single thylacine in a neighbourhood
+# User-defined function for Ricker logistic density dependence via neighborhoods, with
+# Allee effects; also remove fecundities if single thylacine in a neighborhood
 density_dependence <- list(
-  neighbourhoods = neighbourhoods,
+  neighborhoods = neighborhoods,
   allee = 25, # Tasmania-wide Allee effect parameter
   function (params) {
     
-    # Apply logistic density dependence using neighbourhoods
+    # Apply logistic density dependence using neighborhoods
     growth_rate_max <- params$growth_rate_max
-    nh_density_abundance <- unlist(lapply(params$neighbourhoods,
+    nh_density_abundance <- unlist(lapply(params$neighborhoods,
                                           function (nh_indices) {
                                             sum(params$density_abundance[nh_indices])
                                           }))
-    nh_carrying_capacity <- unlist(lapply(params$neighbourhoods,
+    nh_carrying_capacity <- unlist(lapply(params$neighborhoods,
                                           function (nh_indices) {
                                             sum(params$carrying_capacity[nh_indices])
                                           }))
@@ -215,7 +215,7 @@ density_dependence <- list(
 density_aliases <- list(density_allee = "density_dependence$allee")
 ```
 
-Note that after calculating a modified growth rate via neighbourhood abundance and 
+Note that after calculating a modified growth rate via neighborhood abundance and 
 carrying capacity for each cell, we utilize a lookup table (calculated at the time of 
 simulation) so as to apply a multiplier to the stage matrix corresponding to each cell, 
 thus modifying its equivalent growth rate appropriately.
@@ -843,10 +843,10 @@ Now that we have selected our model ensemble we can now examine:
 * which model parameters were most influential in our ensemble selection; and
 * the impact of model stochasticity on our ensemble selection.
 
-We can also verify our model via historic bounty record data not explicity utilized in
+We can also verify our model via historic bounty record data not explicitly utilized in
 our validation and model selection. 
 
-Lastly, we can use our model ensemble to examine the spatiotemporal extirpation pattern 
+Lastly, we can use our model ensemble to examine the spatio-temporal extirpation pattern 
 of our simulated *thylacine* decline.
 
 ##### Model ensemble summary metrics
@@ -924,7 +924,7 @@ which our sampled model harvest parameters can influence the spatial dynamics of
 simulated *thylacine* decline.
 
 ##### Model ensemble parameters
-We can now examine the features of our selected model ensemble to analyse its properties
+We can now examine the features of our selected model ensemble to analyze its properties
 and adequacy. We can plot the distribution of our 200 selected model parameters in 
 comparison to the (uniform) distribution of the full 20,000 simulated models. Here we
 will examine two notable example parameters: density Allee effect and harvest 
@@ -969,7 +969,7 @@ the posterior distributions of our 200 selected model parameters relative to the
 prior distributions. This can give us further insight into the influence of each 
 model parameter has had on our model selection. 
 
-From these diagnostics and plots we can analyse and assess the adequacy of our model 
+From these diagnostics and plots we can analyze and assess the adequacy of our model 
 and/or summary metrics. We may choose to refine our model parameter ranges or our 
 summary metrics. We may also choose to simulate a more extensive parameter space, 
 select fewer or more models via our validator's *tolerance* parameter, or revisit 
@@ -1132,18 +1132,18 @@ legend("topleft", c("Model ensemble bounty", "Actual bounty", "Note: Total/2"),
        fill = c("blue", "red", NA), border = NA, cex = 0.8)
 ```
 
-We could perform more thorough statistical analyses to verify our model ensemble. 
-However, from our comparitive plots of *thylacine* bounty submissions we have gained 
+We could perform more thorough statistical analyzes to verify our model ensemble. 
+However, from our comparative plots of *thylacine* bounty submissions we have gained 
 insight into how well our ensemble model matches the bounty record both temporally and 
 spatially. We could thus devise ways in which to improve future versions of our model,
 including developing a harvest function with mechanisms and parameterization that 
-better model spatiotemporal responses to the bounty reward. With an improved model we 
-could gain insight into spatiotemporal dynamics of the *thylacine* decline. 
+better model spatio-temporal responses to the bounty reward. With an improved model we 
+could gain insight into spatio-temporal dynamics of the *thylacine* decline. 
 
 ##### Model ensemble usage
-Although our model ensemble could be improved to better match spatiotemporal patterns, 
+Although our model ensemble could be improved to better match spatio-temporal patterns, 
 as a final demonstration let's examine how we can use our ensemble to examine our 
-simulated spatiotemporal extirpation pattern. 
+simulated spatio-temporal extirpation pattern. 
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Calculate the weighted cell extirpation dates
@@ -1173,21 +1173,21 @@ advanced demonstration of the *poems* 6-step workflow and its modules.
    values for those metrics (derived from historical bounty and sighting records),
    into an ABC validator, and ran it to select our model ensemble. 
 
-We then examined how well our model ensemble matched our target metrics, and analysed 
+We then examined how well our model ensemble matched our target metrics, and analyzed 
 the influence that our model parameters and stochasticity had on the ensemble selection. 
 We also verified our model via the bounty records to see how well it matched patterns 
 that was not explicitly used in the model validation and ensemble selection.
 
-Generally, we found that the spatiotemporal patterns of the historic response to the 
+Generally, we found that the spatio-temporal patterns of the historic response to the 
 bounty reward were not well-matched by our model ensemble simulations, although the 
 congruence with expected patterns at the Tasmania-wide level was reasonable. However,
-the purpose of our, mostly qualitative visualization-based, analyses of our *thylacine* 
+the purpose of our, mostly qualitative visualization-based, analyzes of our *thylacine* 
 model was to demonstrate *poems* features, rather than to produce a definitive model 
 simulating the decline of the *thylacine*.
 
 In performing these steps we explored much of the functionality offered by *poems*. We 
 hope that this vignette has provided you with a feature-rich example to use as a guide 
-for building your own customized models with *poems*, to explore the spatiotemporal 
+for building your own customized models with *poems*, to explore the spatio-temporal 
 dynamics of populations of interest in your research and practice.
 
 Thank you :-)

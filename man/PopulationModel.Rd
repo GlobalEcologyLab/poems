@@ -91,7 +91,7 @@ nested_model$harvest$rate
 
 \item{\code{demographic_stochasticity}}{Boolean for choosing demographic stochasticity for transition, dispersal, harvest and/or other processes.}
 
-\item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasicity to transition rates.}
+\item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasticity to transition rates.}
 
 \item{\code{correlation}}{Simulator-dependent attribute or list of attributes for describing/parameterizing the correlation strategy utilized when applying environmental stochasticity and/or other processes (see \code{\link{population_simulator}}).}
 
@@ -109,7 +109,7 @@ nested_model$harvest$rate
 
 \item{\code{harvest}}{Simulator-dependent function, attribute or list of attributes for describing/parameterizing a harvest (organism removal/hunting) strategy (see \code{\link{population_simulator}}).}
 
-\item{\code{mortality}}{Simulator-dependent function, attribute or list of attributes for describing/parameterizing a temporospatial mortality strategy (see \code{\link{population_simulator}}).}
+\item{\code{mortality}}{Simulator-dependent function, attribute or list of attributes to describe/parameterize a spatio-temporal mortality strategy (see \code{\link{population_simulator}}).}
 
 \item{\code{dispersal}}{Simulator-dependent function, attribute or list of attributes for describing/parameterizing the dispersal (migration) strategy utilized (see \code{\link{population_simulator}}).}
 

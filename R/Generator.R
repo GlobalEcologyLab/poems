@@ -296,7 +296,7 @@ Generator <- R6Class("Generator",
     #' @param distr_type Distribution type to sample from (uniform, normal, lognormal, beta or triangular).
     #' @param distr_params List of distribution parameters and their values or associated model attributes (uniform: lower, upper; normal: mean, sd; lognormal: meanlog, sdlog (or mean, sd); beta: alpha, beta (or mean, sd); triangular: lower, mode, upper).
     #' @param sample Model attribute(s) name(s) or values associated with single sample probabilities (0-1), or bounds as a vector (e.g. \code{sample = c("p_lower", "p_upper")}), or as a list (e.g. \code{sample = list(mid = "p", window = 0.2)} for bounds p +/- 0.1).
-    #' @param random_seed Random seed utilized when sample probability is generated internaly, via bounds, and/or correlated deviates.
+    #' @param random_seed Random seed utilized when sample probability is generated internally, via bounds, and/or correlated deviates.
     #' @param normalize_threshold Optional normalization threshold is utilized when generated values are to be normalized with a fixed upper limit/threshold.
     add_distribution_template = function(param, distr_type = c("uniform", "normal", "lognormal", "beta", "triangular"), distr_params = list(), sample = NULL, random_seed = NULL, normalize_threshold = NULL) {
       if (!is.character(param)) {

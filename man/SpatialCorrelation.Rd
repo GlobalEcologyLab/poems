@@ -52,7 +52,7 @@ env_corr$calculate_distance_matrix() # km
 
 \item{\code{coordinates}}{Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).}
 
-\item{\code{distance_scale}}{Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.}
+\item{\code{distance_scale}}{Scale of distance values in meters (default = 1). Usage: set to 1 for values in meters, or to 1000 for values in kilometers.}
 
 \item{\code{correlation_amplitude}}{Correlation function: \emph{a*exp(-distance/b)} \emph{a} parameter. Represents the amplitude or maximum magnitude of correlation values between model cells.}
 
@@ -126,7 +126,7 @@ Initialization method sets given attributes individually and/or from a list.
 \if{html}{\out{<a id="method-calculate_distance_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-calculate_distance_matrix}{}}}
 \subsection{Method \code{calculate_distance_matrix()}}{
-Returns a matrix with the calculated distance (in metres by default) between each pair of region cells.
+Returns a matrix with the calculated distance (in meters by default) between each pair of region cells.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SpatialCorrelation$calculate_distance_matrix(use_longlat = NULL)}\if{html}{\out{</div>}}
 }

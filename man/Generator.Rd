@@ -307,7 +307,7 @@ Adds a distribution template for generating a given model attribute via sampling
 
 \item{\code{sample}}{Model attribute(s) name(s) or values associated with single sample probabilities (0-1), or bounds as a vector (e.g. \code{sample = c("p_lower", "p_upper")}), or as a list (e.g. \code{sample = list(mid = "p", window = 0.2)} for bounds p +/- 0.1).}
 
-\item{\code{random_seed}}{Random seed utilized when sample probability is generated internaly, via bounds, and/or correlated deviates.}
+\item{\code{random_seed}}{Random seed utilized when sample probability is generated internally, via bounds, and/or correlated deviates.}
 
 \item{\code{normalize_threshold}}{Optional normalization threshold is utilized when generated values are to be normalized with a fixed upper limit/threshold.}
 }

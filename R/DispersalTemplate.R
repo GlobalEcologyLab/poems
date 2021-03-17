@@ -194,7 +194,7 @@ DispersalTemplate <- R6Class("DispersalTemplate",
     },
 
 
-    #' @field distance_scale Scale of distance values in metres (default = 1). Usage: set to 1 for values in metres, or to 1000 for values in kilometres.
+    #' @field distance_scale Scale of distance values in meters (default = 1). Usage: set to 1 for values in meters, or to 1000 for values in kilometers.
     distance_scale = function(value) {
       if (missing(value)) {
         private$.distance_scale

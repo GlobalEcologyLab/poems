@@ -156,7 +156,7 @@ Returns an array of all attribute names including public and private model attri
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Array of all attribute names with optional inclusion of attrribute names of nested results for all cells.
+Array of all attribute names with optional inclusion of attribute names of nested results for all cells.
 }
 }
 \if{html}{\out{<hr>}}

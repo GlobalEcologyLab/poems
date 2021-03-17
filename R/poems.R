@@ -64,7 +64,7 @@
 #' }
 #'
 #' @section Population modeling components:
-#' \itemize{ The customizable spatially explicit demographic population model
+#' \itemize{ The spatially explicit demographic population model
 #'   simulation engine and its associated classes are summarized by the following:
 #'   \item \code{\link{population_simulator}} function: The simulation engine's main
 #'     function processes the model input parameters, controls the flow, calling other
@@ -102,7 +102,7 @@
 #'     dispersal calculations.
 #'   \item \code{\link{DispersalFriction}} class: Provides functionality for
 #'     adjusting the (equivalent) distance between population cells given a
-#'     spatiotemporal frictional landscape. These adjustments may be utilized by the
+#'     spatio-temporal frictional landscape. These adjustments may be utilized by the
 #'     \code{\link{DispersalGenerator}}.
 #'   \item \code{\link{PopulationResults}} class: Inherited from
 #'     \code{\link{SimulationResults}}, this class encapsulates the results generated

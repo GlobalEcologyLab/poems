@@ -44,7 +44,7 @@ test_that("calculate distance matrix and classes", {
   # Scaling factor for km
   dispersal_gen$distance_scale <- 1000
   expect_equal(dispersal_gen$calculate_distance_matrix(), distance_matrix/1000)
-  # Raster region with coordinates in metres
+  # Raster region with coordinates in meters
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
                                                        crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))

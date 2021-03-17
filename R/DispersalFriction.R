@@ -281,7 +281,7 @@ DispersalFriction <- R6Class("DispersalFriction",
       }
     },
 
-    #' @field transition_directions Number of transition directions or neighbours in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).
+    #' @field transition_directions Number of transition directions or neighbors in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).
     transition_directions = function(value) {
       if (missing(value)) {
         private$.transition_directions
