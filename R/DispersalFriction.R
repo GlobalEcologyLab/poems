@@ -15,37 +15,31 @@
 #' reducing the effective dispersal range.
 #'
 #' @examples
-#' # U Island example region
+#' #' U Island example region
 #' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 #'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
-#' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
-#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster #' full extent
+#' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA #' make U Island
 #' region <- Region$new(template_raster = template_raster)
 #' raster::plot(region$region_raster, main = "Example region (indices)",
 #'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
 #'              colNA = "blue")
-#' # Dispersal distances
+#'
+#' #' Dispersal distances
 #' dispersal_gen <- DispersalGenerator$new(region = region)
 #' dispersal_gen$set_attributes(params = list(p = 0.5, b = 700, r = 3000))
-#' distances <- round(dispersal_gen$calculate_distance_matrix()) # in m
+#' distances <- round(dispersal_gen$calculate_distance_matrix()) #' in m
 #' dispersal_gen$calculate_distance_data()
 #' dispersal_indices <- as.matrix(dispersal_gen$distance_data$base[,1:2])
-#' # Dispersal friction
-#' dispersal_friction <- DispersalFriction$new(region = region)
-#' # Distance multipliers for land-only dispersal
+#'
+#' #' Distance multipliers with friction in cell 4
+#' dispersal_friction <- DispersalFriction$new(region = region,
+#'                                             conductance = c(1, 1, 1, 0.5, 1, 1, 1))
 #' multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
 #' cbind(dispersal_indices, distance = distances[dispersal_indices],
 #'       multiplier = multipliers[[1]])
-#' # Distance multipliers with friction in cells at time step 2
-#' conductance <- array(c(rep(1, 7), 1, 1, 0.5, 0, 1, 0, 0, rep(1, 21)),
-#'                          c(7, 5)) # conductance
-#' dispersal_friction$conductance <- region$raster_from_values(conductance)
-#' raster::plot(dispersal_friction$conductance[[2]], colNA = "blue",
-#'              main = "Example friction/conductance",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)")
-#' multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
-#' cbind(dispersal_indices, distance = distances[dispersal_indices],
-#'       multiplier = multipliers[[2]])
+#'
+#' #' Note that crossing the water is avoided.
 #'
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%
