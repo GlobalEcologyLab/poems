@@ -1,7 +1,7 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling System
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Sean", "Haythorne", email = "sean.haythorne@adelaide.edu.au", role = c("aut", "cre")),
     person("Damien", "Fordham", email = "damien.fordham@adelaide.edu.au", role = "aut"),
@@ -25,7 +25,7 @@ Description: The poems package provides a framework of interoperable R6 classes 
     simulator processes. The framework could also be adapted for use with other model
     simulators by utilizing its extendable (inheritable) base classes.
 Depends: R (>= 3.6.0)
-License: GPL-3 + file LICENSE
+License: GPL-3
 URL: https://github.com/GlobalEcologyLab/poems
 Encoding: UTF-8
 LazyData: true
