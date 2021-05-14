@@ -150,10 +150,10 @@ Validator <- R6Class("Validator",
       if (output_diagnostics) {
         if (!is.null(self$output_dir)) {
           if (length(grep("abc::abc", deparse(self$validation_call_function), fixed = TRUE)) > 0) {
-            if (method %in% c("loclinear", "neuralnet")) {
+            if (method %in% c("loclinear", "neuralnet", "ridge")) {
               self$generate_diagnostics()
             } else {
-              warning("ABC diagnostics can only be generated with ABC method neuralnet or loclinear", call. = FALSE)
+              warning("ABC diagnostics can only be generated with ABC method neuralnet, ridge or loclinear", call. = FALSE)
             }
           } else {
             self$generate_diagnostics()
@@ -270,9 +270,9 @@ Validator <- R6Class("Validator",
       }
 
       if (length(grep("abc::abc", deparse(self$validation_call_function), fixed = TRUE)) > 0) {
-        # Diagnostics plot can only be generated when ABC method is "loclinear" or "neuralnet"
-        if (!(self$validator_return_object$method %in% c("loclinear", "neuralnet"))) {
-          stop("Validation diagnostics can only be generated when ABC methods neuralnet or loclinear were utilized", call. = FALSE)
+        # Diagnostics plot can only be generated when ABC method is "loclinear", "ridge" or "neuralnet"
+        if (!(self$validator_return_object$method %in% c("loclinear", "neuralnet", "ridge"))) {
+          stop("Validation diagnostics can only be generated when ABC methods neuralnet, ridge, or loclinear were utilized", call. = FALSE)
         }
       }
 
