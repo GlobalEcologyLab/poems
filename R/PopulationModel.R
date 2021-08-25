@@ -162,7 +162,7 @@ PopulationModel <- R6Class("PopulationModel",
                        },
                      result_stages =
                        if (is.numeric(param_value) && is.numeric(self$stages)) {
-                         (length(param_value) == self$stages && all(+param_value %in% c(0, 1)))
+                         (length(param_value) == self$stages)
                        } else {
                          NA
                        },
