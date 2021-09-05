@@ -190,9 +190,9 @@ test_that("run validator and generate diagnostics", {
   validator$generate_diagnostics()
   expect_true(file.exists(file.path(validator$output_dir, "validation_diagnostics.pdf")))
   expect_warning(test <- utils::capture.output(validator$run(tol = 0.1, method = "rejection", output_diagnostics = TRUE)),
-                 "ABC diagnostics can only be generated with ABC method neuralnet or loclinear")
+                 "ABC diagnostics can only be generated with ABC method neuralnet, ridge or loclinear")
   expect_error(validator$generate_diagnostics(),
-               "Validation diagnostics can only be generated when ABC methods neuralnet or loclinear were utilized")
+               "Validation diagnostics can only be generated when ABC methods neuralnet, ridge, or loclinear were utilized")
   # Selected simulations
   expect_warning(test <- utils::capture.output(validator$run(tol = 0.4)), "Validation function generated warning")
   expect_equal(validator$random_indices, last_random_indices)

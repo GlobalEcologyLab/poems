@@ -47,7 +47,7 @@ test_that("calculate distance matrix and classes", {
   # Raster region with coordinates in meters
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
-                                                       crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))
+                                                       crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   dispersal_gen <- DispersalGenerator$new(region = region)
   expect_equal(dispersal_gen$calculate_distance_matrix(), as.matrix(stats::dist(region$coordinates)))
   # Distance classes
@@ -160,7 +160,8 @@ test_that("connect dispersal friction object", {
                "Conductance matrix dimensions are inconsistent with the dispersal generator region/coordinates")
   dispersal_gen$region$use_raster <- TRUE
   raster2 <- raster::raster(vals = rep(1, 16), nrows = 4, ncol = 4,
-                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
+                            crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   expect_error(dispersal_gen$dispersal_friction <- DispersalFriction$new(conductance = raster::stack(replicate(10, raster2))),
                "Conductance raster is inconsistent with the dispersal generator region")
   conductance_raster <- raster::stack(replicate(10, dispersal_gen$region$region_raster))

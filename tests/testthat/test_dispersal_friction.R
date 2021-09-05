@@ -26,7 +26,8 @@ test_that("initialization and parameter setting", {
   # Consistency of region/coordinates and conductance raster values
   dispersal_friction$region$use_raster <- TRUE
   raster2 <- raster::raster(vals = rep(1, 16), nrows = 4, ncol = 4,
-                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                            xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
+                            crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   expect_error(dispersal_friction$conductance <- raster::stack(replicate(10, raster2)),
                "Conductance raster must be consistent with the defined region raster")
   dispersal_friction$conductance <- raster::stack(replicate(10, +(dispersal_friction$region$region_raster > 0)))
@@ -116,7 +117,7 @@ test_that("distance multiplier calculations", {
   # Raster region and conductance values with coordinates in meters
   region <-  Region$new(region_raster = raster::raster(vals = 1:16, nrows = 4, ncol = 4,
                                                        xmn = 0, xmx = 400000, ymn = 0, ymx = 400000,
-                                                       crs = "+proj=utm +ellps=GRS80 +datum=WGS84"))
+                                                       crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   conductance <- raster::stack(replicate(10, region$region_raster))
   conductance[region$region_indices] <- conductance_matrix
   dispersal_friction <- DispersalFriction$new(region = region, conductance = conductance)

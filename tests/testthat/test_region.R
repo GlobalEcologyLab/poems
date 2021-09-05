@@ -37,7 +37,7 @@ test_that("raster via coordinates", {
                "Region is already associated with a raster (and its coordinates)", fixed = TRUE)
   raster3 <- raster::raster(vals = c(NA, NA, 4, 6, NA, 2, NA, 7, NA, NA, 5, NA, 1, 3, NA, NA),
                             nrows = 4, ncol = 4, xmn = 0, xmx = 4000, ymn = 0, ymx = 4000,
-                            crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                            crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   expect_false(region$raster_is_consistent(raster3))
   expect_error(region$region_raster <- raster3, "Region is already associated with a set of coordinates")
   expect_silent(region$coordinates <- NULL)
@@ -47,7 +47,7 @@ test_that("raster via coordinates", {
 test_that("via template raster", {
   raster2 <- raster::raster(vals = c(NA, NA, 1, 1, NA, 1, NA, 1, NA, NA, 1, NA, 1, 1, NA, NA),
                             nrows = 4, ncol = 4, xmn = 0, xmx = 4000, ymn = 0, ymx = 4000,
-                            crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                            crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   expect_error(region <- Region$new(template_raster = array(1:10, c(5, 2))),
                "Template raster should be a raster::RasterLayer (or inherited class) object", fixed = TRUE)
   expect_error(region <- Region$new(coordinates = array(c(1:4, 4:1), c(7, 2)), template_raster = raster2),
@@ -62,7 +62,7 @@ test_that("via template raster", {
 test_that("via region raster", {
   raster2 <- raster::raster(vals = c(NA, NA, 4, 6, NA, 2, NA, 7, NA, NA, 5, NA, 1, 3, NA, NA),
                             nrows = 4, ncol = 4, xmn = 0, xmx = 4000, ymn = 0, ymx = 4000,
-                            crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                            crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   expect_error(region <- Region$new(region_raster = array(1:10, c(5, 2))),
                "Region raster should be a raster::RasterLayer (or inherited class) object", fixed = TRUE)
   expect_error(region <- Region$new(coordinates = array(c(1:4, 4:1), c(7, 2)), region_raster = raster2),

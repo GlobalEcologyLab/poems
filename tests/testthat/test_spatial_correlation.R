@@ -43,7 +43,8 @@ test_that("calculate distance matrix", {
   # Coordinates in meters
   spatial_correlation$distance_scale <- 1
   raster2 <- raster::raster(vals = spatial_correlation$region$region_raster[], nrows = 4, ncol = 4,
-                            xmn = 0, xmx = 4000, ymn = 0, ymx = 4000, crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                            xmn = 0, xmx = 4000, ymn = 0, ymx = 4000,
+                            crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   coordinates2 <- data.frame(x = c(0:3, 3:1), y = c(0, 0:3, 3:2))*1000 + 500 # meters
   distance_matrix2 <- as.matrix(stats::dist(coordinates2))
   expect_warning(spatial_correlation$region <- Region$new(region_raster = raster2, use_raster = FALSE),

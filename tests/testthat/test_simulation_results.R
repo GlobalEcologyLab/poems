@@ -102,7 +102,7 @@ test_that("set (region) raster results", {
   expect_equal(sim_results$error_messages,
                "The abundance result must be a raster layer, stack or brick (consistent with the defined region)")
   abundance_raster <- raster::stack(replicate(10, 1*(region$region_raster > 0)))
-  raster::crs(abundance_raster) <- "+proj=utm +ellps=GRS80 +datum=WGS84"
+  raster::crs(abundance_raster) <- "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
   abundance_raster[region$region_indices] <- abundance
   sim_results$set_attributes(list(abundance = abundance_raster))
   expect_equal(sim_results$error_messages[2],
@@ -130,7 +130,7 @@ test_that("set (region) raster occupancy mask", {
   raster_occupancy_mask <- raster::raster(vals = +(region$region_raster[] > 0),
                                           nrows = 3, ncol = 3,
                                           xmn = 0, xmx = 3000, ymn = 0, ymx = 3000,
-                                          crs = "+proj=utm +ellps=GRS80 +datum=WGS84")
+                                          crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
   expect_error(sim_results <- SimulationResults$new(region = region, time_steps = 10,
                                                  occupancy_mask = raster_occupancy_mask),
                "Occupancy mask raster must be consistent with the defined region raster")
