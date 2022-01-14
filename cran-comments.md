@@ -1,25 +1,28 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Omitted the "+ file LICENSE" reference and the file which is part of
-R anyway.
+* Altered CRS in raster definitions in package tests to avoid anticipated 
+  errors due to upcoming PROJ 8.
 
-* There is no reference about the method at this stage. We intend to publish a 
-software note, which we can add in the Description
-field in the form Authors (year) <doi:.....> later. Thanks.
+* Added references to package description.
 
 ## Test environments
 * win-builder (devel and release)
-* local OS X (10.12.6) install, R 3.6.2
+* local OS X (12.1) install, R 4.1.1
 
 There were no ERRORs or WARNINGs.
 
-There was 1 NOTE (on win-builder only):
+There was 2+ NOTES (on win-builder only):
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Sean Haythorne <sean.haythorne@adelaide.edu.au>'
 
-New submission
+* Examples with CPU (user + system) or elapsed time > 10s
+                  user system elapsed
+DispersalFriction 5.06   0.17   10.64
+(there was a repeat of this note in one of the win-builder logs)
+
+Package update submission
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.

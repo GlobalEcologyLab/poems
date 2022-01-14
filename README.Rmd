@@ -103,6 +103,7 @@ can be found in the accompanying vignettes.
 
 Beaumont, M. A., Zhang, W., & Balding, D. J. (2002). 'Approximate Bayesian computation
 in population genetics'. *Genetics*, vol. 162, no. 4, pp, 2025–2035.
+<doi:10.1093/genetics/162.4.2025>
 
 Chang, W. (2020). 'R6: Encapsulated Classes with Reference Semantics'. *R package version 2.5.0*. 
 Retrieved from  <https://CRAN.R-project.org/package=R6>
@@ -114,8 +115,9 @@ Bayesian Computation (ABC)'. *R package version 2.1*. Retrieved from
 Grimm, V., Revilla, E., Berger, U., Jeltsch, F., Mooij, W. M., Railsback, S. F.,
 Thulke, H. H., Weiner, J., Wiegand, T., DeAngelis, D. L., (2005). 'Pattern-Oriented
 Modeling of Agent-Based Complex Systems: Lessons from Ecology'. *Science*
-vol. 310, no. 5750, pp. 987–991.
+vol. 310, no. 5750, pp. 987–991. <doi:10.1126/science.1116681>
 
 Iman R. L., Conover W. J. (1980). 'Small sample sensitivity analysis techniques for computer 
 models, with an application to risk assessment'. *Commun Stat Theor Methods* A9, pp. 1749–1842.
+<doi:10.1080/03610928008827996>
 
