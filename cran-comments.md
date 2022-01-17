@@ -1,8 +1,9 @@
-## Resubmission
-This is a resubmission. In this version I have:
+## Package update
+This is a package update. In this version I have:
 
 * Altered CRS in raster definitions in package tests to avoid anticipated 
-  errors due to upcoming PROJ 8.
+  errors due to upcoming PROJ 8
+  [#1](https://github.com/GlobalEcologyLab/poems/issues/1)
 
 * Added references to package description.
 
@@ -22,7 +23,12 @@ Maintainer: 'Sean Haythorne <sean.haythorne@adelaide.edu.au>'
 DispersalFriction 5.06   0.17   10.64
 (there was a repeat of this note in one of the win-builder logs)
 
+These examples or the functionality they utilize have not changed since the 
+package was originally submitted and accepted on CRAN.
+
 Package update submission
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package.
+
+I have ran downstream dependencies via revdepcheck::revdep_check(), which
+resulted in an OK status for the only dependent package: paleopop 2.1.2.
