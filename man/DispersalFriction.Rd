@@ -18,6 +18,7 @@ landscape. In this example the resultant distance multiplier would be 5, thus
 reducing the effective dispersal range.
 }
 \examples{
+\dontrun{
 #' U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -28,7 +29,6 @@ raster::plot(region$region_raster, main = "Example region (indices)",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
              colNA = "blue")
 
-\dontrun{
 #' Dispersal distances
 dispersal_gen <- DispersalGenerator$new(region = region)
 dispersal_gen$set_attributes(params = list(p = 0.5, b = 700, r = 3000))
@@ -42,9 +42,9 @@ dispersal_friction <- DispersalFriction$new(region = region,
 multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
 cbind(dispersal_indices, distance = distances[dispersal_indices],
       multiplier = multipliers[[1]])
-}
 
 #' Note that crossing the water is avoided.
+}
 
 }
 \section{Super classes}{

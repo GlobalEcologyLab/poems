@@ -7,7 +7,7 @@ This is a resubmission. In this version I have:
   validation problems.
 * Updated version number to 1.0.3.
 * Placed a \dontrun{} around an already trivial, yet computationally heavy,
-  example that ran over the recommended time.
+  examples that ran over the recommended time.
 * Otherwise no other code changes.
 
 ## Test environments

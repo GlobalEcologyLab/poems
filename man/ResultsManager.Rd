@@ -9,6 +9,7 @@ metrics and/or matrices from simulation results, as well as optionally regenerat
 values via generators.
 }
 \examples{
+\dontrun{
 # U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -18,7 +19,6 @@ region <- Region$new(template_raster = template_raster)
 raster::plot(region$region_raster, main = "Example region (indices)",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
              colNA = "blue")
-\dontrun{
 # Results manager
 results_manager <- ResultsManager$new(
   sample_data = data.frame(index = 1:3),
