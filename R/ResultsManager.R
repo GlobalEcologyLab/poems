@@ -15,6 +15,7 @@
 #' raster::plot(region$region_raster, main = "Example region (indices)",
 #'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
 #'              colNA = "blue")
+#' \dontrun{
 #' # Results manager
 #' results_manager <- ResultsManager$new(
 #'   sample_data = data.frame(index = 1:3),
@@ -47,6 +48,7 @@
 #' dir(tempdir(), "*.txt") # plus generation log
 #' results_manager$summary_metric_data
 #' results_manager$summary_matrix_list
+#' }
 #'
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%
