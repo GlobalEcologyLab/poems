@@ -71,19 +71,19 @@ generation), rounding decimals, occupancy mask, and other
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-clone}{\code{DispersalTemplate$clone()}}
+\item \href{#method-DispersalTemplate-clone}{\code{DispersalTemplate$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenerativeTemplate" data-id="initialize">}\href{../../poems/html/GenerativeTemplate.html#method-initialize}{\code{poems::GenerativeTemplate$initialize()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenerativeTemplate" data-id="initialize"><a href='../../poems/html/GenerativeTemplate.html#method-GenerativeTemplate-initialize'><code>poems::GenerativeTemplate$initialize()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DispersalTemplate-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalTemplate-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

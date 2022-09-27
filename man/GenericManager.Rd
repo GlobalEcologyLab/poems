@@ -42,23 +42,23 @@ via generators.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{GenericManager$new()}}
-\item \href{#method-get_attribute}{\code{GenericManager$get_attribute()}}
-\item \href{#method-get_message_sample}{\code{GenericManager$get_message_sample()}}
-\item \href{#method-get_results_filename}{\code{GenericManager$get_results_filename()}}
-\item \href{#method-clone}{\code{GenericManager$clone()}}
+\item \href{#method-GenericManager-new}{\code{GenericManager$new()}}
+\item \href{#method-GenericManager-get_attribute}{\code{GenericManager$get_attribute()}}
+\item \href{#method-GenericManager-get_message_sample}{\code{GenericManager$get_message_sample()}}
+\item \href{#method-GenericManager-get_results_filename}{\code{GenericManager$get_results_filename()}}
+\item \href{#method-GenericManager-clone}{\code{GenericManager$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-GenericManager-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericManager-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets any included attributes (\emph{sample_data}, \emph{generators}, \emph{parallel_cores}, \emph{results_dir}, \emph{results_filename_attributes}) and attaches other attributes individually listed.
 \subsection{Usage}{
@@ -74,8 +74,8 @@ Initialization method sets any included attributes (\emph{sample_data}, \emph{ge
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute}{}}}
+\if{html}{\out{<a id="method-GenericManager-get_attribute"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericManager-get_attribute}{}}}
 \subsection{Method \code{get_attribute()}}{
 Returns a named manager or attached attribute.
 \subsection{Usage}{
@@ -94,8 +94,8 @@ Selected attribute value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_message_sample"></a>}}
-\if{latex}{\out{\hypertarget{method-get_message_sample}{}}}
+\if{html}{\out{<a id="method-GenericManager-get_message_sample"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericManager-get_message_sample}{}}}
 \subsection{Method \code{get_message_sample()}}{
 Substitutes the specified sample details into a status message (using sprintf) and returns the result.
 \subsection{Usage}{
@@ -116,8 +116,8 @@ Status message with substituted sample details.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_results_filename"></a>}}
-\if{latex}{\out{\hypertarget{method-get_results_filename}{}}}
+\if{html}{\out{<a id="method-GenericManager-get_results_filename"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericManager-get_results_filename}{}}}
 \subsection{Method \code{get_results_filename()}}{
 Constructs and returns the results filename based on the sample data frame index and results filename attributes.
 \subsection{Usage}{
@@ -136,8 +136,8 @@ Results filename with substituted sample details.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GenericManager-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericManager-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

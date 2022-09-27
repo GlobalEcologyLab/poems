@@ -102,28 +102,28 @@ results_manager$summary_matrix_list
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ResultsManager$new()}}
-\item \href{#method-generate}{\code{ResultsManager$generate()}}
-\item \href{#method-calculate_result_attachments}{\code{ResultsManager$calculate_result_attachments()}}
-\item \href{#method-calculate_summaries}{\code{ResultsManager$calculate_summaries()}}
-\item \href{#method-log_generation}{\code{ResultsManager$log_generation()}}
-\item \href{#method-calculate_summary_weighted_averages}{\code{ResultsManager$calculate_summary_weighted_averages()}}
-\item \href{#method-clone}{\code{ResultsManager$clone()}}
+\item \href{#method-ResultsManager-new}{\code{ResultsManager$new()}}
+\item \href{#method-ResultsManager-generate}{\code{ResultsManager$generate()}}
+\item \href{#method-ResultsManager-calculate_result_attachments}{\code{ResultsManager$calculate_result_attachments()}}
+\item \href{#method-ResultsManager-calculate_summaries}{\code{ResultsManager$calculate_summaries()}}
+\item \href{#method-ResultsManager-log_generation}{\code{ResultsManager$log_generation()}}
+\item \href{#method-ResultsManager-calculate_summary_weighted_averages}{\code{ResultsManager$calculate_summary_weighted_averages()}}
+\item \href{#method-ResultsManager-clone}{\code{ResultsManager$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_attribute">}\href{../../poems/html/GenericManager.html#method-get_attribute}{\code{poems::GenericManager$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_message_sample">}\href{../../poems/html/GenericManager.html#method-get_message_sample}{\code{poems::GenericManager$get_message_sample()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_results_filename">}\href{../../poems/html/GenericManager.html#method-get_results_filename}{\code{poems::GenericManager$get_results_filename()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_attribute"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_attribute'><code>poems::GenericManager$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_message_sample"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_message_sample'><code>poems::GenericManager$get_message_sample()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_results_filename"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_results_filename'><code>poems::GenericManager$get_results_filename()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ResultsManager-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method optionally copies attributes from a simulation (results) manager, sets any included attributes (\emph{sample_data}, \emph{simulation_results}, \emph{generators}, \emph{result_attachment_functions}, \emph{summary_metrics}, \emph{summary_functions}, \emph{parallel_cores}, \emph{results_dir}, \emph{results_ext}, \emph{results_filename_attributes}), and attaches other attributes individually listed.
 \subsection{Usage}{
@@ -141,8 +141,8 @@ Initialization method optionally copies attributes from a simulation (results) m
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate"></a>}}
-\if{latex}{\out{\hypertarget{method-generate}{}}}
+\if{html}{\out{<a id="method-ResultsManager-generate"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-generate}{}}}
 \subsection{Method \code{generate()}}{
 Generates the summary metric data and/or matrix list via the summary functions for each simulation sample, and creates/writes a generation log.
 \subsection{Usage}{
@@ -161,8 +161,8 @@ Generation log as a list.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_result_attachments"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_result_attachments}{}}}
+\if{html}{\out{<a id="method-ResultsManager-calculate_result_attachments"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-calculate_result_attachments}{}}}
 \subsection{Method \code{calculate_result_attachments()}}{
 Calculates and attaches intermediate values to the sample result model (via the result attachment functions).
 \subsection{Usage}{
@@ -178,8 +178,8 @@ Calculates and attaches intermediate values to the sample result model (via the 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_summaries"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_summaries}{}}}
+\if{html}{\out{<a id="method-ResultsManager-calculate_summaries"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-calculate_summaries}{}}}
 \subsection{Method \code{calculate_summaries()}}{
 Calculates the summary metrics and/or matrices for the results of a sample simulation (via the summary functions).
 \subsection{Usage}{
@@ -200,8 +200,8 @@ Generation log entry as a (nested) list, including generated summary metric data
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-log_generation"></a>}}
-\if{latex}{\out{\hypertarget{method-log_generation}{}}}
+\if{html}{\out{<a id="method-ResultsManager-log_generation"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-log_generation}{}}}
 \subsection{Method \code{log_generation()}}{
 Summarizes the log generated within the generate method and writes it to a text file in the results directory.
 \subsection{Usage}{
@@ -220,8 +220,8 @@ Extended generation log as a nested with added summary and failure/warning indic
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_summary_weighted_averages"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_summary_weighted_averages}{}}}
+\if{html}{\out{<a id="method-ResultsManager-calculate_summary_weighted_averages"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-calculate_summary_weighted_averages}{}}}
 \subsection{Method \code{calculate_summary_weighted_averages()}}{
 Calculates the weighted averages for each of the summary matrices (providing the sample data has a \emph{weight} column).
 \subsection{Usage}{
@@ -237,8 +237,8 @@ Calculates the weighted averages for each of the summary matrices (providing the
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ResultsManager-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ResultsManager-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

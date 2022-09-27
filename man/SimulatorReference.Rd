@@ -19,12 +19,12 @@ and results (passed by reference).
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-clone}{\code{SimulatorReference$clone()}}
+\item \href{#method-SimulatorReference-clone}{\code{SimulatorReference$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulatorReference-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulatorReference-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

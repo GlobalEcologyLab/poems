@@ -124,38 +124,38 @@ dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DispersalGenerator$new()}}
-\item \href{#method-generative_requirements_satisfied}{\code{DispersalGenerator$generative_requirements_satisfied()}}
-\item \href{#method-set_distance_classes}{\code{DispersalGenerator$set_distance_classes()}}
-\item \href{#method-calculate_distance_matrix}{\code{DispersalGenerator$calculate_distance_matrix()}}
-\item \href{#method-calculate_distance_data}{\code{DispersalGenerator$calculate_distance_data()}}
-\item \href{#method-calculate_dispersals}{\code{DispersalGenerator$calculate_dispersals()}}
-\item \href{#method-clone}{\code{DispersalGenerator$clone()}}
+\item \href{#method-DispersalGenerator-new}{\code{DispersalGenerator$new()}}
+\item \href{#method-DispersalGenerator-generative_requirements_satisfied}{\code{DispersalGenerator$generative_requirements_satisfied()}}
+\item \href{#method-DispersalGenerator-set_distance_classes}{\code{DispersalGenerator$set_distance_classes()}}
+\item \href{#method-DispersalGenerator-calculate_distance_matrix}{\code{DispersalGenerator$calculate_distance_matrix()}}
+\item \href{#method-DispersalGenerator-calculate_distance_data}{\code{DispersalGenerator$calculate_distance_data()}}
+\item \href{#method-DispersalGenerator-calculate_dispersals}{\code{DispersalGenerator$calculate_dispersals()}}
+\item \href{#method-DispersalGenerator-clone}{\code{DispersalGenerator$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names">}\href{../../poems/html/GenericModel.html#method-get_attribute_names}{\code{poems::GenericModel$get_attribute_names()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes">}\href{../../poems/html/GenericModel.html#method-set_attributes}{\code{poems::GenericModel$set_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_distribution_template">}\href{../../poems/html/Generator.html#method-add_distribution_template}{\code{poems::Generator$add_distribution_template()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_file_template">}\href{../../poems/html/Generator.html#method-add_file_template}{\code{poems::Generator$add_file_template()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_function_template">}\href{../../poems/html/Generator.html#method-add_function_template}{\code{poems::Generator$add_function_template()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_generative_requirements">}\href{../../poems/html/Generator.html#method-add_generative_requirements}{\code{poems::Generator$add_generative_requirements()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="generate">}\href{../../poems/html/Generator.html#method-generate}{\code{poems::Generator$generate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="get_attributes">}\href{../../poems/html/Generator.html#method-get_attributes}{\code{poems::Generator$get_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="new_clone">}\href{../../poems/html/Generator.html#method-new_clone}{\code{poems::Generator$new_clone()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="read_file">}\href{../../poems/html/Generator.html#method-read_file}{\code{poems::Generator$read_file()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="run_function">}\href{../../poems/html/Generator.html#method-run_function}{\code{poems::Generator$run_function()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="sample_distribution">}\href{../../poems/html/Generator.html#method-sample_distribution}{\code{poems::Generator$sample_distribution()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_distribution_template"><a href='../../poems/html/Generator.html#method-Generator-add_distribution_template'><code>poems::Generator$add_distribution_template()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_file_template"><a href='../../poems/html/Generator.html#method-Generator-add_file_template'><code>poems::Generator$add_file_template()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_function_template"><a href='../../poems/html/Generator.html#method-Generator-add_function_template'><code>poems::Generator$add_function_template()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_generative_requirements"><a href='../../poems/html/Generator.html#method-Generator-add_generative_requirements'><code>poems::Generator$add_generative_requirements()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="generate"><a href='../../poems/html/Generator.html#method-Generator-generate'><code>poems::Generator$generate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="get_attributes"><a href='../../poems/html/Generator.html#method-Generator-get_attributes'><code>poems::Generator$get_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="new_clone"><a href='../../poems/html/Generator.html#method-Generator-new_clone'><code>poems::Generator$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="read_file"><a href='../../poems/html/Generator.html#method-Generator-read_file'><code>poems::Generator$read_file()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="run_function"><a href='../../poems/html/Generator.html#method-Generator-run_function'><code>poems::Generator$run_function()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="sample_distribution"><a href='../../poems/html/Generator.html#method-Generator-sample_distribution'><code>poems::Generator$sample_distribution()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets the generative template and requirements, optionally the dispersal friction object, as well as any attributes passed via a \emph{params} list or individually.
 \subsection{Usage}{
@@ -185,8 +185,8 @@ Initialization method sets the generative template and requirements, optionally 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generative_requirements_satisfied"></a>}}
-\if{latex}{\out{\hypertarget{method-generative_requirements_satisfied}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-generative_requirements_satisfied"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-generative_requirements_satisfied}{}}}
 \subsection{Method \code{generative_requirements_satisfied()}}{
 Returns a boolean to indicate that all the default, file and/or function template settings that are required for attribute generation are present.
 \subsection{Usage}{
@@ -198,8 +198,8 @@ Boolean to indicate that the required settings for attribute generation are pres
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_distance_classes"></a>}}
-\if{latex}{\out{\hypertarget{method-set_distance_classes}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-set_distance_classes"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-set_distance_classes}{}}}
 \subsection{Method \code{set_distance_classes()}}{
 Sets the distance classes to a sequence of values from minimum to maximum in steps of interval size.
 \subsection{Usage}{
@@ -223,8 +223,8 @@ Sets the distance classes to a sequence of values from minimum to maximum in ste
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_distance_matrix"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_distance_matrix}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-calculate_distance_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-calculate_distance_matrix}{}}}
 \subsection{Method \code{calculate_distance_matrix()}}{
 Returns a matrix with the calculated distance (in meters by default) between each pair of region cells.
 \subsection{Usage}{
@@ -243,8 +243,8 @@ Matrix with distances between region cells.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_distance_data"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_distance_data}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-calculate_distance_data"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-calculate_distance_data}{}}}
 \subsection{Method \code{calculate_distance_data()}}{
 Calculates the distance class for within-range populations using the set/provided distance classes. Also calculates indices for constructing compact matrices.
 \subsection{Usage}{
@@ -262,8 +262,8 @@ Calculates the distance class for within-range populations using the set/provide
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_dispersals"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_dispersals}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-calculate_dispersals"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-calculate_dispersals}{}}}
 \subsection{Method \code{calculate_dispersals()}}{
 Calculates, using the conditional dispersal limiting function for a simulation sample, a dispersal matrix, or a list of data frames of non-zero dispersal rates and indices for constructing a compact dispersal matrix (default), and optional changing rates over time (via \code{\link{DispersalFriction}} object).
 \subsection{Usage}{
@@ -282,8 +282,8 @@ Returns character string message when calculation prerequisites are not met (for
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DispersalGenerator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalGenerator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

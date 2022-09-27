@@ -53,22 +53,16 @@ simulator1$results
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ModelSimulator$new()}}
-\item \href{#method-new_clone}{\code{ModelSimulator$new_clone()}}
-\item \href{#method-get_attribute}{\code{ModelSimulator$get_attribute()}}
-\item \href{#method-run}{\code{ModelSimulator$run()}}
-\item \href{#method-clone}{\code{ModelSimulator$clone()}}
+\item \href{#method-ModelSimulator-new}{\code{ModelSimulator$new()}}
+\item \href{#method-ModelSimulator-new_clone}{\code{ModelSimulator$new_clone()}}
+\item \href{#method-ModelSimulator-get_attribute}{\code{ModelSimulator$get_attribute()}}
+\item \href{#method-ModelSimulator-run}{\code{ModelSimulator$run()}}
+\item \href{#method-ModelSimulator-clone}{\code{ModelSimulator$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ModelSimulator-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ModelSimulator-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets the population model, and optionally the simulation function, the sample ID, and any attached attributes listed individually.
 \subsection{Usage}{
@@ -95,8 +89,8 @@ Initialization method sets the population model, and optionally the simulation f
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-ModelSimulator-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ModelSimulator-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -115,8 +109,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute}{}}}
+\if{html}{\out{<a id="method-ModelSimulator-get_attribute"></a>}}
+\if{latex}{\out{\hypertarget{method-ModelSimulator-get_attribute}{}}}
 \subsection{Method \code{get_attribute()}}{
 Returns selected named simulator or attached attribute.
 \subsection{Usage}{
@@ -135,8 +129,8 @@ Selected parameter/attribute value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-ModelSimulator-run"></a>}}
+\if{latex}{\out{\hypertarget{method-ModelSimulator-run}{}}}
 \subsection{Method \code{run()}}{
 Runs a model simulator (function), stores the results, and creates a status log entry as a list.
 \subsection{Usage}{
@@ -148,8 +142,8 @@ A list representing a simulation log entry with a \emph{successful} boolean and 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ModelSimulator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ModelSimulator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

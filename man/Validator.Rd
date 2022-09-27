@@ -78,29 +78,29 @@ validator$selected_simulations # top 5 models
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Validator$new()}}
-\item \href{#method-run}{\code{Validator$run()}}
-\item \href{#method-resolve_nonfinite_metrics}{\code{Validator$resolve_nonfinite_metrics()}}
-\item \href{#method-center_scale_inputs}{\code{Validator$center_scale_inputs()}}
-\item \href{#method-generate_diagnostics}{\code{Validator$generate_diagnostics()}}
-\item \href{#method-clone}{\code{Validator$clone()}}
+\item \href{#method-Validator-new}{\code{Validator$new()}}
+\item \href{#method-Validator-run}{\code{Validator$run()}}
+\item \href{#method-Validator-resolve_nonfinite_metrics}{\code{Validator$resolve_nonfinite_metrics()}}
+\item \href{#method-Validator-center_scale_inputs}{\code{Validator$center_scale_inputs()}}
+\item \href{#method-Validator-generate_diagnostics}{\code{Validator$generate_diagnostics()}}
+\item \href{#method-Validator-clone}{\code{Validator$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names">}\href{../../poems/html/GenericModel.html#method-get_attribute_names}{\code{poems::GenericModel$get_attribute_names()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes">}\href{../../poems/html/GenericModel.html#method-get_attributes}{\code{poems::GenericModel$get_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="new_clone">}\href{../../poems/html/GenericModel.html#method-new_clone}{\code{poems::GenericModel$new_clone()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes">}\href{../../poems/html/GenericModel.html#method-set_attributes}{\code{poems::GenericModel$set_attributes()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attributes'><code>poems::GenericModel$get_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="new_clone"><a href='../../poems/html/GenericModel.html#method-GenericModel-new_clone'><code>poems::GenericModel$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Validator-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Validator-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets given attributes individually and/or from a list.
 \subsection{Usage}{
@@ -118,8 +118,8 @@ Initialization method sets given attributes individually and/or from a list.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-Validator-run"></a>}}
+\if{latex}{\out{\hypertarget{method-Validator-run}{}}}
 \subsection{Method \code{run()}}{
 Pre-processes inputs, runs validator function for input parameters, and stores the function (and optionally diagnostic) outputs (see \code{\link[abc:abc]{abc}} documentation if using the default).
 \subsection{Usage}{
@@ -155,8 +155,8 @@ Pre-processes inputs, runs validator function for input parameters, and stores t
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resolve_nonfinite_metrics"></a>}}
-\if{latex}{\out{\hypertarget{method-resolve_nonfinite_metrics}{}}}
+\if{html}{\out{<a id="method-Validator-resolve_nonfinite_metrics"></a>}}
+\if{latex}{\out{\hypertarget{method-Validator-resolve_nonfinite_metrics}{}}}
 \subsection{Method \code{resolve_nonfinite_metrics()}}{
 Attempts to resolve any non-finite simulation summary metric values (and optionally changing them to NAs) via the non finite replacements parameter (a list of values/functions for replacing non-finite values).
 \subsection{Usage}{
@@ -172,8 +172,8 @@ Attempts to resolve any non-finite simulation summary metric values (and optiona
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-center_scale_inputs"></a>}}
-\if{latex}{\out{\hypertarget{method-center_scale_inputs}{}}}
+\if{html}{\out{<a id="method-Validator-center_scale_inputs"></a>}}
+\if{latex}{\out{\hypertarget{method-Validator-center_scale_inputs}{}}}
 \subsection{Method \code{center_scale_inputs()}}{
 Centers and scales the model parameters, result summary metrics and observed targets.
 \subsection{Usage}{
@@ -182,8 +182,8 @@ Centers and scales the model parameters, result summary metrics and observed tar
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate_diagnostics"></a>}}
-\if{latex}{\out{\hypertarget{method-generate_diagnostics}{}}}
+\if{html}{\out{<a id="method-Validator-generate_diagnostics"></a>}}
+\if{latex}{\out{\hypertarget{method-Validator-generate_diagnostics}{}}}
 \subsection{Method \code{generate_diagnostics()}}{
 Generates the validation diagnostics (see \code{\link[abc:abc]{abc}} documentation if using default) as a PDF file in the output directory.
 \subsection{Usage}{
@@ -199,8 +199,8 @@ Generates the validation diagnostics (see \code{\link[abc:abc]{abc}} documentati
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Validator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Validator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

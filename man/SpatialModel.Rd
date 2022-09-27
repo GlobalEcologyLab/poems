@@ -52,25 +52,25 @@ model1$region$raster_from_values(model1$get_attribute("a_values"))
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SpatialModel$new()}}
-\item \href{#method-new_clone}{\code{SpatialModel$new_clone()}}
-\item \href{#method-clone}{\code{SpatialModel$clone()}}
+\item \href{#method-SpatialModel-new}{\code{SpatialModel$new()}}
+\item \href{#method-SpatialModel-new_clone}{\code{SpatialModel$new_clone()}}
+\item \href{#method-SpatialModel-clone}{\code{SpatialModel$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names">}\href{../../poems/html/GenericModel.html#method-get_attribute_names}{\code{poems::GenericModel$get_attribute_names()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes">}\href{../../poems/html/GenericModel.html#method-get_attributes}{\code{poems::GenericModel$get_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes">}\href{../../poems/html/GenericModel.html#method-set_attributes}{\code{poems::GenericModel$set_attributes()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attributes'><code>poems::GenericModel$get_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SpatialModel-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialModel-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets given attributes individually and/or from a list.
 \subsection{Usage}{
@@ -88,8 +88,8 @@ Initialization method sets given attributes individually and/or from a list.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-SpatialModel-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialModel-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -108,8 +108,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SpatialModel-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialModel-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

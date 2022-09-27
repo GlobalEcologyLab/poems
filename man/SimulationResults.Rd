@@ -82,25 +82,25 @@ results_clone$get_attribute("all$abundance")
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SimulationResults$new()}}
-\item \href{#method-new_clone}{\code{SimulationResults$new_clone()}}
-\item \href{#method-get_attribute_names}{\code{SimulationResults$get_attribute_names()}}
-\item \href{#method-get_attributes}{\code{SimulationResults$get_attributes()}}
-\item \href{#method-set_attributes}{\code{SimulationResults$set_attributes()}}
-\item \href{#method-clone}{\code{SimulationResults$clone()}}
+\item \href{#method-SimulationResults-new}{\code{SimulationResults$new()}}
+\item \href{#method-SimulationResults-new_clone}{\code{SimulationResults$new_clone()}}
+\item \href{#method-SimulationResults-get_attribute_names}{\code{SimulationResults$get_attribute_names()}}
+\item \href{#method-SimulationResults-get_attributes}{\code{SimulationResults$get_attributes()}}
+\item \href{#method-SimulationResults-set_attributes}{\code{SimulationResults$set_attributes()}}
+\item \href{#method-SimulationResults-clone}{\code{SimulationResults$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SimulationResults-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationResults-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets attributes from a results list or file, and sets object attributes individually and/or from a list.
 \subsection{Usage}{
@@ -120,8 +120,8 @@ Initialization method sets attributes from a results list or file, and sets obje
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-SimulationResults-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationResults-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -140,8 +140,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute_names"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute_names}{}}}
+\if{html}{\out{<a id="method-SimulationResults-get_attribute_names"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationResults-get_attribute_names}{}}}
 \subsection{Method \code{get_attribute_names()}}{
 Returns an array of all attribute names including public and private model attributes, as well as attached attributes, error and warning messages.
 \subsection{Usage}{
@@ -160,8 +160,8 @@ Array of all attribute names with optional inclusion of attribute names of neste
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationResults-get_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationResults-get_attributes}{}}}
 \subsection{Method \code{get_attributes()}}{
 Returns a list of values for selected attributes or attribute aliases (when array of parameter names provided) or all attributes (when no params).
 \subsection{Usage}{
@@ -182,8 +182,8 @@ List of selected or all attributes values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-set_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationResults-set_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationResults-set_attributes}{}}}
 \subsection{Method \code{set_attributes()}}{
 Sets given attributes (optionally via alias names) individually and/or from a list.
 \subsection{Usage}{
@@ -201,8 +201,8 @@ Sets given attributes (optionally via alias names) individually and/or from a li
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulationResults-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationResults-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

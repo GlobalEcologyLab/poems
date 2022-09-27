@@ -96,32 +96,32 @@ template_model$attached
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SimulationModel$new()}}
-\item \href{#method-new_clone}{\code{SimulationModel$new_clone()}}
-\item \href{#method-get_attribute_names}{\code{SimulationModel$get_attribute_names()}}
-\item \href{#method-get_attributes}{\code{SimulationModel$get_attributes()}}
-\item \href{#method-set_attributes}{\code{SimulationModel$set_attributes()}}
-\item \href{#method-set_sample_attributes}{\code{SimulationModel$set_sample_attributes()}}
-\item \href{#method-is_consistent}{\code{SimulationModel$is_consistent()}}
-\item \href{#method-list_consistency}{\code{SimulationModel$list_consistency()}}
-\item \href{#method-inconsistent_attributes}{\code{SimulationModel$inconsistent_attributes()}}
-\item \href{#method-is_complete}{\code{SimulationModel$is_complete()}}
-\item \href{#method-list_completeness}{\code{SimulationModel$list_completeness()}}
-\item \href{#method-incomplete_attributes}{\code{SimulationModel$incomplete_attributes()}}
-\item \href{#method-clone}{\code{SimulationModel$clone()}}
+\item \href{#method-SimulationModel-new}{\code{SimulationModel$new()}}
+\item \href{#method-SimulationModel-new_clone}{\code{SimulationModel$new_clone()}}
+\item \href{#method-SimulationModel-get_attribute_names}{\code{SimulationModel$get_attribute_names()}}
+\item \href{#method-SimulationModel-get_attributes}{\code{SimulationModel$get_attributes()}}
+\item \href{#method-SimulationModel-set_attributes}{\code{SimulationModel$set_attributes()}}
+\item \href{#method-SimulationModel-set_sample_attributes}{\code{SimulationModel$set_sample_attributes()}}
+\item \href{#method-SimulationModel-is_consistent}{\code{SimulationModel$is_consistent()}}
+\item \href{#method-SimulationModel-list_consistency}{\code{SimulationModel$list_consistency()}}
+\item \href{#method-SimulationModel-inconsistent_attributes}{\code{SimulationModel$inconsistent_attributes()}}
+\item \href{#method-SimulationModel-is_complete}{\code{SimulationModel$is_complete()}}
+\item \href{#method-SimulationModel-list_completeness}{\code{SimulationModel$list_completeness()}}
+\item \href{#method-SimulationModel-incomplete_attributes}{\code{SimulationModel$incomplete_attributes()}}
+\item \href{#method-SimulationModel-clone}{\code{SimulationModel$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SimulationModel-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets template model and sets given attributes individually and/or from a list.
 \subsection{Usage}{
@@ -141,8 +141,8 @@ Initialization method sets template model and sets given attributes individually
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-SimulationModel-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -161,8 +161,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute_names"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute_names}{}}}
+\if{html}{\out{<a id="method-SimulationModel-get_attribute_names"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-get_attribute_names}{}}}
 \subsection{Method \code{get_attribute_names()}}{
 Returns a list of all attribute names including public and private model attributes, as well as attached attributes (including those from the template model).
 \subsection{Usage}{
@@ -174,8 +174,8 @@ List of all attribute names.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationModel-get_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-get_attributes}{}}}
 \subsection{Method \code{get_attributes()}}{
 Returns a list of values for selected attributes or attribute aliases (when array of parameter names provided) or all attributes (when no params).
 \subsection{Usage}{
@@ -194,8 +194,8 @@ List of selected or all attributes values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-set_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationModel-set_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-set_attributes}{}}}
 \subsection{Method \code{set_attributes()}}{
 Sets given attributes (optionally via alias names) individually and/or from a list.
 \subsection{Usage}{
@@ -213,8 +213,8 @@ Sets given attributes (optionally via alias names) individually and/or from a li
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_sample_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-set_sample_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationModel-set_sample_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-set_sample_attributes}{}}}
 \subsection{Method \code{set_sample_attributes()}}{
 Sets the names (only - when \emph{params} is a vector) and values (when \emph{params} is a list and/or when name-value pairs are provided) of the sample attributes for the model.
 \subsection{Usage}{
@@ -232,8 +232,8 @@ Sets the names (only - when \emph{params} is a vector) and values (when \emph{pa
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_consistent"></a>}}
-\if{latex}{\out{\hypertarget{method-is_consistent}{}}}
+\if{html}{\out{<a id="method-SimulationModel-is_consistent"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-is_consistent}{}}}
 \subsection{Method \code{is_consistent()}}{
 Returns a boolean to indicate if (optionally selected or all) model attributes (such as dimensions) are consistent/valid.
 \subsection{Usage}{
@@ -252,8 +252,8 @@ Boolean to indicate consistency of selected/all attributes.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list_consistency"></a>}}
-\if{latex}{\out{\hypertarget{method-list_consistency}{}}}
+\if{html}{\out{<a id="method-SimulationModel-list_consistency"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-list_consistency}{}}}
 \subsection{Method \code{list_consistency()}}{
 Returns a boolean to indicate if (optionally selected or all) model attributes (such as dimensions) are consistent/valid.
 \subsection{Usage}{
@@ -272,8 +272,8 @@ List of booleans (or NAs) to indicate consistency of selected/all attributes.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-inconsistent_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-inconsistent_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationModel-inconsistent_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-inconsistent_attributes}{}}}
 \subsection{Method \code{inconsistent_attributes()}}{
 Returns a list of attributes necessary to simulate the model that are inconsistent/invalid.
 \subsection{Usage}{
@@ -292,8 +292,8 @@ List of inconsistent attributes which prevent the model simulation (and optional
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_complete"></a>}}
-\if{latex}{\out{\hypertarget{method-is_complete}{}}}
+\if{html}{\out{<a id="method-SimulationModel-is_complete"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-is_complete}{}}}
 \subsection{Method \code{is_complete()}}{
 Returns a boolean to indicate if all attributes necessary to simulate the model have been set and are consistent/valid.
 \subsection{Usage}{
@@ -305,8 +305,8 @@ Boolean to indicate model completeness (and consistency).
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list_completeness"></a>}}
-\if{latex}{\out{\hypertarget{method-list_completeness}{}}}
+\if{html}{\out{<a id="method-SimulationModel-list_completeness"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-list_completeness}{}}}
 \subsection{Method \code{list_completeness()}}{
 Returns a list of booleans (or NAs) for each parameter to indicate attributes that are necessary to simulate the model have been set and are consistent/valid.
 \subsection{Usage}{
@@ -318,8 +318,8 @@ List of booleans (or NAs) for each parameter to indicate to indicate completenes
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-incomplete_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-incomplete_attributes}{}}}
+\if{html}{\out{<a id="method-SimulationModel-incomplete_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-incomplete_attributes}{}}}
 \subsection{Method \code{incomplete_attributes()}}{
 Returns a list of attributes necessary to simulate the model that are incomplete/inconsistent/invalid.
 \subsection{Usage}{
@@ -338,8 +338,8 @@ List of incomplete attributes which prevent the model simulation (and optionally
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulationModel-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationModel-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
