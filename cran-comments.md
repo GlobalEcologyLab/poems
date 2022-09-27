@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Updated my email as a maintainer, my previous email at the University of 
+  Adelaide was deactivated. I am now based at the University of Melbourne.
+* Change RoxygenNote: 7.1.2 in DESCRIPTION for devtools::check()
+There were no ERRORS, WARNINGS or NOTES.
+
 ## Package update
 This is a package update. In this version I have:
 
