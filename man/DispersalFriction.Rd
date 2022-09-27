@@ -28,6 +28,7 @@ raster::plot(region$region_raster, main = "Example region (indices)",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
              colNA = "blue")
 
+\dontrun{
 #' Dispersal distances
 dispersal_gen <- DispersalGenerator$new(region = region)
 dispersal_gen$set_attributes(params = list(p = 0.5, b = 700, r = 3000))
@@ -38,7 +39,6 @@ dispersal_indices <- as.matrix(dispersal_gen$distance_data$base[,1:2])
 #' Distance multipliers with friction in cell 4
 dispersal_friction <- DispersalFriction$new(region = region,
                                             conductance = c(1, 1, 1, 0.5, 1, 1, 1))
-\dontrun{
 multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
 cbind(dispersal_indices, distance = distances[dispersal_indices],
       multiplier = multipliers[[1]])

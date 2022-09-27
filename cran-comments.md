@@ -16,7 +16,7 @@ This is a resubmission. In this version I have:
 
 There were no ERRORs or WARNINGs.
 
-There was 2+ NOTES (on win-builder only):
+There was 1 NOTE (on win-builder only):
 
 * checking CRAN incoming feasibility ... [26s] NOTE
   Maintainer: 'Sean Haythorne <sean.haythorne@unimelb.edu.au>'
@@ -24,15 +24,6 @@ There was 2+ NOTES (on win-builder only):
   New submission
 
   Package was archived on CRAN
-
-* checking examples ... [38s] NOTE
-  Examples with CPU (user + system) or elapsed time > 10s
-                  user system elapsed
-  DispersalFriction 7.55   0.26   17.97
-
-These examples or the functionality they utilize have not changed since the 
-package was last submitted and accepted on CRAN. Are the checking machines 
-just getting slower?
 
 ## Downstream dependencies
 
