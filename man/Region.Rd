@@ -58,22 +58,22 @@ value_brick[region$region_indices]
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Region$new()}}
-\item \href{#method-raster_is_consistent}{\code{Region$raster_is_consistent()}}
-\item \href{#method-raster_from_values}{\code{Region$raster_from_values()}}
-\item \href{#method-clone}{\code{Region$clone()}}
+\item \href{#method-Region-new}{\code{Region$new()}}
+\item \href{#method-Region-raster_is_consistent}{\code{Region$raster_is_consistent()}}
+\item \href{#method-Region-raster_from_values}{\code{Region$raster_from_values()}}
+\item \href{#method-Region-clone}{\code{Region$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Region-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Region-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets coordinates or raster for region.
 \subsection{Usage}{
@@ -103,8 +103,8 @@ Initialization method sets coordinates or raster for region.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-raster_is_consistent"></a>}}
-\if{latex}{\out{\hypertarget{method-raster_is_consistent}{}}}
+\if{html}{\out{<a id="method-Region-raster_is_consistent"></a>}}
+\if{latex}{\out{\hypertarget{method-Region-raster_is_consistent}{}}}
 \subsection{Method \code{raster_is_consistent()}}{
 Returns a boolean to indicate if a raster is consistent with the region raster (matching extent, resolution, and finite/NA cells).
 \subsection{Usage}{
@@ -123,8 +123,8 @@ Boolean to indicate if the raster is consistent with the region raster.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-raster_from_values"></a>}}
-\if{latex}{\out{\hypertarget{method-raster_from_values}{}}}
+\if{html}{\out{<a id="method-Region-raster_from_values"></a>}}
+\if{latex}{\out{\hypertarget{method-Region-raster_from_values}{}}}
 \subsection{Method \code{raster_from_values()}}{
 Converts an array (or matrix) of values into a raster (or stack) consistent with the region raster (matching extent, resolution, and finite/NA cells).
 \subsection{Usage}{
@@ -143,8 +143,8 @@ A \emph{RasterLayer} (or \emph{RasterStack/Brick}) object consistent with the re
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Region-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Region-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

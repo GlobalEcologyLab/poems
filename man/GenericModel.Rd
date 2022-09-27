@@ -53,25 +53,19 @@ model2$attribute_aliases
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{GenericModel$new()}}
-\item \href{#method-new_clone}{\code{GenericModel$new_clone()}}
-\item \href{#method-get_attribute_names}{\code{GenericModel$get_attribute_names()}}
-\item \href{#method-get_attributes}{\code{GenericModel$get_attributes()}}
-\item \href{#method-get_attribute}{\code{GenericModel$get_attribute()}}
-\item \href{#method-get_attribute_aliases}{\code{GenericModel$get_attribute_aliases()}}
-\item \href{#method-set_attributes}{\code{GenericModel$set_attributes()}}
-\item \href{#method-clone}{\code{GenericModel$clone()}}
+\item \href{#method-GenericModel-new}{\code{GenericModel$new()}}
+\item \href{#method-GenericModel-new_clone}{\code{GenericModel$new_clone()}}
+\item \href{#method-GenericModel-get_attribute_names}{\code{GenericModel$get_attribute_names()}}
+\item \href{#method-GenericModel-get_attributes}{\code{GenericModel$get_attributes()}}
+\item \href{#method-GenericModel-get_attribute}{\code{GenericModel$get_attribute()}}
+\item \href{#method-GenericModel-get_attribute_aliases}{\code{GenericModel$get_attribute_aliases()}}
+\item \href{#method-GenericModel-set_attributes}{\code{GenericModel$set_attributes()}}
+\item \href{#method-GenericModel-clone}{\code{GenericModel$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-GenericModel-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets given attributes individually and/or from a list.
 \subsection{Usage}{
@@ -98,8 +92,8 @@ Initialization method sets given attributes individually and/or from a list.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-GenericModel-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -118,8 +112,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute_names"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute_names}{}}}
+\if{html}{\out{<a id="method-GenericModel-get_attribute_names"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-get_attribute_names}{}}}
 \subsection{Method \code{get_attribute_names()}}{
 Returns an array of all attribute names including public and private model attributes, as well as attached attributes, error and warning messages.
 \subsection{Usage}{
@@ -131,8 +125,8 @@ Array of all attribute names.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attributes}{}}}
+\if{html}{\out{<a id="method-GenericModel-get_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-get_attributes}{}}}
 \subsection{Method \code{get_attributes()}}{
 Returns a list of values for selected attributes or attribute aliases (when array of parameter names provided) or all attributes (when no params).
 \subsection{Usage}{
@@ -151,8 +145,8 @@ List of selected or all attributes values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute}{}}}
+\if{html}{\out{<a id="method-GenericModel-get_attribute"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-get_attribute}{}}}
 \subsection{Method \code{get_attribute()}}{
 Returns the value of an attribute via character name or attribute alias.
 \subsection{Usage}{
@@ -171,8 +165,8 @@ Attribute value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attribute_aliases"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attribute_aliases}{}}}
+\if{html}{\out{<a id="method-GenericModel-get_attribute_aliases"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-get_attribute_aliases}{}}}
 \subsection{Method \code{get_attribute_aliases()}}{
 Returns an array of attribute names and aliases for specified or all attributes.
 \subsection{Usage}{
@@ -191,8 +185,8 @@ Array of selected or all attribute names and aliases.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-set_attributes}{}}}
+\if{html}{\out{<a id="method-GenericModel-set_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-set_attributes}{}}}
 \subsection{Method \code{set_attributes()}}{
 Sets given attributes (optionally via alias names) individually and/or from a list.
 \subsection{Usage}{
@@ -210,8 +204,8 @@ Sets given attributes (optionally via alias names) individually and/or from a li
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GenericModel-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericModel-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

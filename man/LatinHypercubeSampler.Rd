@@ -45,27 +45,27 @@ lhs_gen$generate_samples(number = 10, random_seed = 123)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{LatinHypercubeSampler$new()}}
-\item \href{#method-set_class_parameter}{\code{LatinHypercubeSampler$set_class_parameter()}}
-\item \href{#method-set_uniform_parameter}{\code{LatinHypercubeSampler$set_uniform_parameter()}}
-\item \href{#method-set_normal_parameter}{\code{LatinHypercubeSampler$set_normal_parameter()}}
-\item \href{#method-set_lognormal_parameter}{\code{LatinHypercubeSampler$set_lognormal_parameter()}}
-\item \href{#method-set_beta_parameter}{\code{LatinHypercubeSampler$set_beta_parameter()}}
-\item \href{#method-set_triangular_parameter}{\code{LatinHypercubeSampler$set_triangular_parameter()}}
-\item \href{#method-generate_samples}{\code{LatinHypercubeSampler$generate_samples()}}
-\item \href{#method-clone}{\code{LatinHypercubeSampler$clone()}}
+\item \href{#method-LatinHypercubeSampler-new}{\code{LatinHypercubeSampler$new()}}
+\item \href{#method-LatinHypercubeSampler-set_class_parameter}{\code{LatinHypercubeSampler$set_class_parameter()}}
+\item \href{#method-LatinHypercubeSampler-set_uniform_parameter}{\code{LatinHypercubeSampler$set_uniform_parameter()}}
+\item \href{#method-LatinHypercubeSampler-set_normal_parameter}{\code{LatinHypercubeSampler$set_normal_parameter()}}
+\item \href{#method-LatinHypercubeSampler-set_lognormal_parameter}{\code{LatinHypercubeSampler$set_lognormal_parameter()}}
+\item \href{#method-LatinHypercubeSampler-set_beta_parameter}{\code{LatinHypercubeSampler$set_beta_parameter()}}
+\item \href{#method-LatinHypercubeSampler-set_triangular_parameter}{\code{LatinHypercubeSampler$set_triangular_parameter()}}
+\item \href{#method-LatinHypercubeSampler-generate_samples}{\code{LatinHypercubeSampler$generate_samples()}}
+\item \href{#method-LatinHypercubeSampler-clone}{\code{LatinHypercubeSampler$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-new"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets parameter names when provided.
 \subsection{Usage}{
@@ -83,8 +83,8 @@ Initialization method sets parameter names when provided.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_class_parameter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_class_parameter}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_class_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_class_parameter}{}}}
 \subsection{Method \code{set_class_parameter()}}{
 Sets a parameter to sampled from a vector of classes.
 \subsection{Usage}{
@@ -102,8 +102,8 @@ Sets a parameter to sampled from a vector of classes.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_uniform_parameter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_uniform_parameter}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_uniform_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_uniform_parameter}{}}}
 \subsection{Method \code{set_uniform_parameter()}}{
 Sets a parameter to be sampled from a \code{\link[stats:Uniform]{uniform}} distribution with lower and upper bounds, optionally rounded to a specified number of decimal places.
 \subsection{Usage}{
@@ -130,8 +130,8 @@ Sets a parameter to be sampled from a \code{\link[stats:Uniform]{uniform}} distr
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_normal_parameter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_normal_parameter}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_normal_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_normal_parameter}{}}}
 \subsection{Method \code{set_normal_parameter()}}{
 Sets a parameter to be sampled from a \code{\link[stats:Normal]{normal}} distribution with mean and standard deviation, optionally rounded to a specified number of decimal places.
 \subsection{Usage}{
@@ -158,8 +158,8 @@ Sets a parameter to be sampled from a \code{\link[stats:Normal]{normal}} distrib
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_lognormal_parameter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_lognormal_parameter}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_lognormal_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_lognormal_parameter}{}}}
 \subsection{Method \code{set_lognormal_parameter()}}{
 Sets a parameter to be sampled from a \code{\link[stats:Lognormal]{lognormal}} distribution with log mean and log standard deviation, optionally expressed as regular mean and SD (overriding log mean/sd), and optionally rounded to a specified number of decimal places.
 \subsection{Usage}{
@@ -192,8 +192,8 @@ Sets a parameter to be sampled from a \code{\link[stats:Lognormal]{lognormal}} d
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_beta_parameter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_beta_parameter}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_beta_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_beta_parameter}{}}}
 \subsection{Method \code{set_beta_parameter()}}{
 Sets a parameter to be sampled from a \code{\link[stats:Beta]{beta}} distribution configured with alpha and beta parameters, or optionally with mean and standard deviation (overriding alpha and beta), and optionally rounded to a specified number of decimal places.
 \subsection{Usage}{
@@ -226,8 +226,8 @@ Sets a parameter to be sampled from a \code{\link[stats:Beta]{beta}} distributio
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_triangular_parameter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_triangular_parameter}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_triangular_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_triangular_parameter}{}}}
 \subsection{Method \code{set_triangular_parameter()}}{
 Sets a parameter to be sampled from a \code{\link[metRology:qtri]{triangular}} distribution with lower and upper bounds and mode (peak), optionally rounded to a specified number of decimal places.
 \subsection{Usage}{
@@ -257,8 +257,8 @@ Sets a parameter to be sampled from a \code{\link[metRology:qtri]{triangular}} d
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate_samples"></a>}}
-\if{latex}{\out{\hypertarget{method-generate_samples}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-generate_samples"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-generate_samples}{}}}
 \subsection{Method \code{generate_samples()}}{
 Generates Latin hypercube sample data (via \code{\link[lhs:randomLHS]{randomLHS}}) for the set parameters using corresponding distributions.
 \subsection{Usage}{
@@ -279,8 +279,8 @@ A data frame of generated sample values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

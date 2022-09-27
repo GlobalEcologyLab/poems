@@ -83,26 +83,26 @@ cbind(dispersal_indices, distance = distances[dispersal_indices],
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-calculate_distance_multipliers}{\code{DispersalFriction$calculate_distance_multipliers()}}
-\item \href{#method-clone}{\code{DispersalFriction$clone()}}
+\item \href{#method-DispersalFriction-calculate_distance_multipliers}{\code{DispersalFriction$calculate_distance_multipliers()}}
+\item \href{#method-DispersalFriction-clone}{\code{DispersalFriction$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names">}\href{../../poems/html/GenericModel.html#method-get_attribute_names}{\code{poems::GenericModel$get_attribute_names()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes">}\href{../../poems/html/GenericModel.html#method-get_attributes}{\code{poems::GenericModel$get_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes">}\href{../../poems/html/GenericModel.html#method-set_attributes}{\code{poems::GenericModel$set_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="SpatialModel" data-id="initialize">}\href{../../poems/html/SpatialModel.html#method-initialize}{\code{poems::SpatialModel$initialize()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="SpatialModel" data-id="new_clone">}\href{../../poems/html/SpatialModel.html#method-new_clone}{\code{poems::SpatialModel$new_clone()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attributes'><code>poems::GenericModel$get_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="SpatialModel" data-id="initialize"><a href='../../poems/html/SpatialModel.html#method-SpatialModel-initialize'><code>poems::SpatialModel$initialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="SpatialModel" data-id="new_clone"><a href='../../poems/html/SpatialModel.html#method-SpatialModel-new_clone'><code>poems::SpatialModel$new_clone()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_distance_multipliers"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_distance_multipliers}{}}}
+\if{html}{\out{<a id="method-DispersalFriction-calculate_distance_multipliers"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalFriction-calculate_distance_multipliers}{}}}
 \subsection{Method \code{calculate_distance_multipliers()}}{
 Calculates and returns spatio-temporal dispersal distance multipliers for each in-range migration.
 \subsection{Usage}{
@@ -123,8 +123,8 @@ Temporal list of dispersal distance multiplier arrays with values for each in-ra
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DispersalFriction-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DispersalFriction-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

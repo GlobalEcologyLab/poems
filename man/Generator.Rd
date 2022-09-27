@@ -125,34 +125,34 @@ capacity_gen$generate(input_values = list(hs_file = 1,
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Generator$new()}}
-\item \href{#method-new_clone}{\code{Generator$new_clone()}}
-\item \href{#method-get_attributes}{\code{Generator$get_attributes()}}
-\item \href{#method-generate}{\code{Generator$generate()}}
-\item \href{#method-add_file_template}{\code{Generator$add_file_template()}}
-\item \href{#method-add_function_template}{\code{Generator$add_function_template()}}
-\item \href{#method-add_distribution_template}{\code{Generator$add_distribution_template()}}
-\item \href{#method-read_file}{\code{Generator$read_file()}}
-\item \href{#method-run_function}{\code{Generator$run_function()}}
-\item \href{#method-sample_distribution}{\code{Generator$sample_distribution()}}
-\item \href{#method-add_generative_requirements}{\code{Generator$add_generative_requirements()}}
-\item \href{#method-generative_requirements_satisfied}{\code{Generator$generative_requirements_satisfied()}}
-\item \href{#method-clone}{\code{Generator$clone()}}
+\item \href{#method-Generator-new}{\code{Generator$new()}}
+\item \href{#method-Generator-new_clone}{\code{Generator$new_clone()}}
+\item \href{#method-Generator-get_attributes}{\code{Generator$get_attributes()}}
+\item \href{#method-Generator-generate}{\code{Generator$generate()}}
+\item \href{#method-Generator-add_file_template}{\code{Generator$add_file_template()}}
+\item \href{#method-Generator-add_function_template}{\code{Generator$add_function_template()}}
+\item \href{#method-Generator-add_distribution_template}{\code{Generator$add_distribution_template()}}
+\item \href{#method-Generator-read_file}{\code{Generator$read_file()}}
+\item \href{#method-Generator-run_function}{\code{Generator$run_function()}}
+\item \href{#method-Generator-sample_distribution}{\code{Generator$sample_distribution()}}
+\item \href{#method-Generator-add_generative_requirements}{\code{Generator$add_generative_requirements()}}
+\item \href{#method-Generator-generative_requirements_satisfied}{\code{Generator$generative_requirements_satisfied()}}
+\item \href{#method-Generator-clone}{\code{Generator$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names">}\href{../../poems/html/GenericModel.html#method-get_attribute_names}{\code{poems::GenericModel$get_attribute_names()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes">}\href{../../poems/html/GenericModel.html#method-set_attributes}{\code{poems::GenericModel$set_attributes()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Generator-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets the generative template and requirements as well as any attributes passed via a \emph{params} list or individually.
 \subsection{Usage}{
@@ -172,8 +172,8 @@ Initialization method sets the generative template and requirements as well as a
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-Generator-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -192,8 +192,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attributes"></a>}}
-\if{latex}{\out{\hypertarget{method-get_attributes}{}}}
+\if{html}{\out{<a id="method-Generator-get_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-get_attributes}{}}}
 \subsection{Method \code{get_attributes()}}{
 Returns a list of existing and template-generated values for selected attributes or attribute aliases (when array of parameter names provided), or all existing attributes (when no params).
 \subsection{Usage}{
@@ -212,8 +212,8 @@ List of selected or all attributes values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate"></a>}}
-\if{latex}{\out{\hypertarget{method-generate}{}}}
+\if{html}{\out{<a id="method-Generator-generate"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-generate}{}}}
 \subsection{Method \code{generate()}}{
 Returns a list of generated output values (attributes) corresponding to the sample input values (attributes).
 \subsection{Usage}{
@@ -232,8 +232,8 @@ List containing generated model output attributes and/or any error/warning messa
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_file_template"></a>}}
-\if{latex}{\out{\hypertarget{method-add_file_template}{}}}
+\if{html}{\out{<a id="method-Generator-add_file_template"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-add_file_template}{}}}
 \subsection{Method \code{add_file_template()}}{
 Adds a file template for reading raster/RData(RDS)/CSV files for a given model attribute.
 \subsection{Usage}{
@@ -260,8 +260,8 @@ Adds a file template for reading raster/RData(RDS)/CSV files for a given model a
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_function_template"></a>}}
-\if{latex}{\out{\hypertarget{method-add_function_template}{}}}
+\if{html}{\out{<a id="method-Generator-add_function_template"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-add_function_template}{}}}
 \subsection{Method \code{add_function_template()}}{
 Adds a function template for running a user-defined function to calculate a given model attribute.
 \subsection{Usage}{
@@ -281,8 +281,8 @@ Adds a function template for running a user-defined function to calculate a give
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_distribution_template"></a>}}
-\if{latex}{\out{\hypertarget{method-add_distribution_template}{}}}
+\if{html}{\out{<a id="method-Generator-add_distribution_template"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-add_distribution_template}{}}}
 \subsection{Method \code{add_distribution_template()}}{
 Adds a distribution template for generating a given model attribute via sampling a distribution.
 \subsection{Usage}{
@@ -315,8 +315,8 @@ Adds a distribution template for generating a given model attribute via sampling
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-read_file"></a>}}
-\if{latex}{\out{\hypertarget{method-read_file}{}}}
+\if{html}{\out{<a id="method-Generator-read_file"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-read_file}{}}}
 \subsection{Method \code{read_file()}}{
 Reads and returns the value of a model attribute from a file using the corresponding file template and simulation sample parameters.
 \subsection{Usage}{
@@ -335,8 +335,8 @@ Model attribute value read from a file.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run_function"></a>}}
-\if{latex}{\out{\hypertarget{method-run_function}{}}}
+\if{html}{\out{<a id="method-Generator-run_function"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-run_function}{}}}
 \subsection{Method \code{run_function()}}{
 Returns the calculated value of a model attribute using the corresponding function template and model simulation sample parameters.
 \subsection{Usage}{
@@ -355,8 +355,8 @@ Model attribute value calculated using a function.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sample_distribution"></a>}}
-\if{latex}{\out{\hypertarget{method-sample_distribution}{}}}
+\if{html}{\out{<a id="method-Generator-sample_distribution"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-sample_distribution}{}}}
 \subsection{Method \code{sample_distribution()}}{
 Returns the calculated value of a model attribute using the corresponding distribution template and simulation sample parameters.
 \subsection{Usage}{
@@ -375,8 +375,8 @@ Model attribute value calculated via distribution sampling.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_generative_requirements"></a>}}
-\if{latex}{\out{\hypertarget{method-add_generative_requirements}{}}}
+\if{html}{\out{<a id="method-Generator-add_generative_requirements"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-add_generative_requirements}{}}}
 \subsection{Method \code{add_generative_requirements()}}{
 Adds attribute names and the template setting (\emph{"file"}, \emph{"function"} or \emph{"distribution"}) that is required to generate their values (via a \emph{params} list or individually).
 \subsection{Usage}{
@@ -394,8 +394,8 @@ Adds attribute names and the template setting (\emph{"file"}, \emph{"function"} 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generative_requirements_satisfied"></a>}}
-\if{latex}{\out{\hypertarget{method-generative_requirements_satisfied}{}}}
+\if{html}{\out{<a id="method-Generator-generative_requirements_satisfied"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-generative_requirements_satisfied}{}}}
 \subsection{Method \code{generative_requirements_satisfied()}}{
 Returns a boolean to indicate that all the file, function and/or distribution template settings that are required for attribute generation are present.
 \subsection{Usage}{
@@ -407,8 +407,8 @@ Boolean to indicate that the required settings for attribute generation are pres
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Generator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Generator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

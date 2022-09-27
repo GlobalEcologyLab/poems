@@ -52,13 +52,13 @@ attributes that need to be maintained when cloning.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{GenerativeTemplate$new()}}
-\item \href{#method-clone}{\code{GenerativeTemplate$clone()}}
+\item \href{#method-GenerativeTemplate-new}{\code{GenerativeTemplate$new()}}
+\item \href{#method-GenerativeTemplate-clone}{\code{GenerativeTemplate$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-GenerativeTemplate-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GenerativeTemplate-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method initializes the generator templates.
 \subsection{Usage}{
@@ -67,8 +67,8 @@ Initialization method initializes the generator templates.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GenerativeTemplate-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GenerativeTemplate-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

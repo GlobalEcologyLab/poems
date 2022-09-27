@@ -79,31 +79,31 @@ env_corr$calculate_distance_matrix() # km
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SpatialCorrelation$new()}}
-\item \href{#method-calculate_distance_matrix}{\code{SpatialCorrelation$calculate_distance_matrix()}}
-\item \href{#method-calculate_correlations}{\code{SpatialCorrelation$calculate_correlations()}}
-\item \href{#method-calculate_cholesky_decomposition}{\code{SpatialCorrelation$calculate_cholesky_decomposition()}}
-\item \href{#method-calculate_compact_decomposition}{\code{SpatialCorrelation$calculate_compact_decomposition()}}
-\item \href{#method-get_compact_decomposition}{\code{SpatialCorrelation$get_compact_decomposition()}}
-\item \href{#method-generate_correlated_normal_deviates}{\code{SpatialCorrelation$generate_correlated_normal_deviates()}}
-\item \href{#method-clone}{\code{SpatialCorrelation$clone()}}
+\item \href{#method-SpatialCorrelation-new}{\code{SpatialCorrelation$new()}}
+\item \href{#method-SpatialCorrelation-calculate_distance_matrix}{\code{SpatialCorrelation$calculate_distance_matrix()}}
+\item \href{#method-SpatialCorrelation-calculate_correlations}{\code{SpatialCorrelation$calculate_correlations()}}
+\item \href{#method-SpatialCorrelation-calculate_cholesky_decomposition}{\code{SpatialCorrelation$calculate_cholesky_decomposition()}}
+\item \href{#method-SpatialCorrelation-calculate_compact_decomposition}{\code{SpatialCorrelation$calculate_compact_decomposition()}}
+\item \href{#method-SpatialCorrelation-get_compact_decomposition}{\code{SpatialCorrelation$get_compact_decomposition()}}
+\item \href{#method-SpatialCorrelation-generate_correlated_normal_deviates}{\code{SpatialCorrelation$generate_correlated_normal_deviates()}}
+\item \href{#method-SpatialCorrelation-clone}{\code{SpatialCorrelation$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute">}\href{../../poems/html/GenericModel.html#method-get_attribute}{\code{poems::GenericModel$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases">}\href{../../poems/html/GenericModel.html#method-get_attribute_aliases}{\code{poems::GenericModel$get_attribute_aliases()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names">}\href{../../poems/html/GenericModel.html#method-get_attribute_names}{\code{poems::GenericModel$get_attribute_names()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes">}\href{../../poems/html/GenericModel.html#method-get_attributes}{\code{poems::GenericModel$get_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes">}\href{../../poems/html/GenericModel.html#method-set_attributes}{\code{poems::GenericModel$set_attributes()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="SpatialModel" data-id="new_clone">}\href{../../poems/html/SpatialModel.html#method-new_clone}{\code{poems::SpatialModel$new_clone()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attributes'><code>poems::GenericModel$get_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="SpatialModel" data-id="new_clone"><a href='../../poems/html/SpatialModel.html#method-SpatialModel-new_clone'><code>poems::SpatialModel$new_clone()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets given attributes individually and/or from a list.
 \subsection{Usage}{
@@ -123,8 +123,8 @@ Initialization method sets given attributes individually and/or from a list.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_distance_matrix"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_distance_matrix}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-calculate_distance_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-calculate_distance_matrix}{}}}
 \subsection{Method \code{calculate_distance_matrix()}}{
 Returns a matrix with the calculated distance (in meters by default) between each pair of region cells.
 \subsection{Usage}{
@@ -143,8 +143,8 @@ Matrix with distances between region cells.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_correlations"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_correlations}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-calculate_correlations"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-calculate_correlations}{}}}
 \subsection{Method \code{calculate_correlations()}}{
 Calculates the correlation matrix by applying the distance-based correlation function.
 \subsection{Usage}{
@@ -171,8 +171,8 @@ Calculates the correlation matrix by applying the distance-based correlation fun
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_cholesky_decomposition"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_cholesky_decomposition}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-calculate_cholesky_decomposition"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-calculate_cholesky_decomposition}{}}}
 \subsection{Method \code{calculate_cholesky_decomposition()}}{
 Calculates the transposed Cholesky decomposition of the correlation matrix (via \code{\link[base:chol]{chol}}).
 \subsection{Usage}{
@@ -199,8 +199,8 @@ Calculates the transposed Cholesky decomposition of the correlation matrix (via 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate_compact_decomposition"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate_compact_decomposition}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-calculate_compact_decomposition"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-calculate_compact_decomposition}{}}}
 \subsection{Method \code{calculate_compact_decomposition()}}{
 Compacts the transposed Cholesky decomposition of the correlation matrix into the minimal number of rows, which are mapped to the original matrix.
 \subsection{Usage}{
@@ -218,8 +218,8 @@ Compacts the transposed Cholesky decomposition of the correlation matrix into th
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_compact_decomposition"></a>}}
-\if{latex}{\out{\hypertarget{method-get_compact_decomposition}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-get_compact_decomposition"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-get_compact_decomposition}{}}}
 \subsection{Method \code{get_compact_decomposition()}}{
 Returns a compact transposed Cholesky decomposition of the correlation matrix and a corresponding map of region cell indices in a list with names: matrix, map.
 \subsection{Usage}{
@@ -240,8 +240,8 @@ List containing a compact Cholesky decomposition matrix and a corresponding map 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate_correlated_normal_deviates"></a>}}
-\if{latex}{\out{\hypertarget{method-generate_correlated_normal_deviates}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-generate_correlated_normal_deviates"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-generate_correlated_normal_deviates}{}}}
 \subsection{Method \code{generate_correlated_normal_deviates()}}{
 Generates correlated normal deviates using the spatial correlation, utilizing the optional random seed and optional temporal correlation across time steps.
 \subsection{Usage}{
@@ -268,8 +268,8 @@ Array (non-temporal) or matrix (temporal) of correlated normal deviates.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SpatialCorrelation-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SpatialCorrelation-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

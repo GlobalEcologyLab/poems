@@ -104,26 +104,26 @@ dir(tempdir(), "*.txt") # plus simulation log
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SimulationManager$new()}}
-\item \href{#method-run}{\code{SimulationManager$run()}}
-\item \href{#method-set_model_sample}{\code{SimulationManager$set_model_sample()}}
-\item \href{#method-log_simulation}{\code{SimulationManager$log_simulation()}}
-\item \href{#method-clone}{\code{SimulationManager$clone()}}
+\item \href{#method-SimulationManager-new}{\code{SimulationManager$new()}}
+\item \href{#method-SimulationManager-run}{\code{SimulationManager$run()}}
+\item \href{#method-SimulationManager-set_model_sample}{\code{SimulationManager$set_model_sample()}}
+\item \href{#method-SimulationManager-log_simulation}{\code{SimulationManager$log_simulation()}}
+\item \href{#method-SimulationManager-clone}{\code{SimulationManager$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone">}\href{../../poems/html/GenericClass.html#method-new_clone}{\code{poems::GenericClass$new_clone()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_attribute">}\href{../../poems/html/GenericManager.html#method-get_attribute}{\code{poems::GenericManager$get_attribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_message_sample">}\href{../../poems/html/GenericManager.html#method-get_message_sample}{\code{poems::GenericManager$get_message_sample()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_results_filename">}\href{../../poems/html/GenericManager.html#method-get_results_filename}{\code{poems::GenericManager$get_results_filename()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_attribute"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_attribute'><code>poems::GenericManager$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_message_sample"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_message_sample'><code>poems::GenericManager$get_message_sample()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_results_filename"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_results_filename'><code>poems::GenericManager$get_results_filename()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SimulationManager-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationManager-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method sets any included attributes (\emph{sample_data}, \emph{model_template}, \emph{generators}, \emph{model_simulator}, \emph{parallel_cores}, \emph{results_dir}, \emph{results_filename_attributes}) and attaches other attributes individually listed.
 \subsection{Usage}{
@@ -141,8 +141,8 @@ Initialization method sets any included attributes (\emph{sample_data}, \emph{mo
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-SimulationManager-run"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationManager-run}{}}}
 \subsection{Method \code{run()}}{
 Runs the multiple population simulations (via the set function), stores the results, and creates/writes a simulation log.
 \subsection{Usage}{
@@ -161,8 +161,8 @@ Simulator log as a list.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_model_sample"></a>}}
-\if{latex}{\out{\hypertarget{method-set_model_sample}{}}}
+\if{html}{\out{<a id="method-SimulationManager-set_model_sample"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationManager-set_model_sample}{}}}
 \subsection{Method \code{set_model_sample()}}{
 Sets the model sample attributes via the sample data frame and the generators.
 \subsection{Usage}{
@@ -180,8 +180,8 @@ Sets the model sample attributes via the sample data frame and the generators.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-log_simulation"></a>}}
-\if{latex}{\out{\hypertarget{method-log_simulation}{}}}
+\if{html}{\out{<a id="method-SimulationManager-log_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationManager-log_simulation}{}}}
 \subsection{Method \code{log_simulation()}}{
 Summarizes the simulation log generated within the run method and writes it to a text file in the results directory.
 \subsection{Usage}{
@@ -197,8 +197,8 @@ Summarizes the simulation log generated within the run method and writes it to a
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulationManager-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationManager-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

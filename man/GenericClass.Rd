@@ -37,14 +37,14 @@ object3$attached
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{GenericClass$new()}}
-\item \href{#method-new_clone}{\code{GenericClass$new_clone()}}
-\item \href{#method-clone}{\code{GenericClass$clone()}}
+\item \href{#method-GenericClass-new}{\code{GenericClass$new()}}
+\item \href{#method-GenericClass-new_clone}{\code{GenericClass$new_clone()}}
+\item \href{#method-GenericClass-clone}{\code{GenericClass$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-GenericClass-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericClass-new}{}}}
 \subsection{Method \code{new()}}{
 Initialization method saves an object generator for new cloning.
 \subsection{Usage}{
@@ -62,8 +62,8 @@ Initialization method saves an object generator for new cloning.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new_clone"></a>}}
-\if{latex}{\out{\hypertarget{method-new_clone}{}}}
+\if{html}{\out{<a id="method-GenericClass-new_clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericClass-new_clone}{}}}
 \subsection{Method \code{new_clone()}}{
 Creates a new (re-initialized) object of the current (inherited) object class with optionally passed parameters.
 \subsection{Usage}{
@@ -82,8 +82,8 @@ New object of the current (inherited) class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GenericClass-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GenericClass-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
