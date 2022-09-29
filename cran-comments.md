@@ -7,7 +7,9 @@ This is a resubmission. In this version I have:
   validation problems.
 * Updated version number to 1.0.4.
 * Placed \dontrun{} around examples that ran over the recommended time on the 
-  win-builder checking servers (albeit OK locally).
+  win-builder checking servers (albeit OK locally). I suspect the win-builder
+  servers are not performing well, as they produce inconsistent timing results
+  at different times (submissions).
 * Otherwise no other code changes.
 
 ## Test environments
