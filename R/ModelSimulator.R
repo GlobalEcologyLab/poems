@@ -16,7 +16,7 @@
 #' }
 #' # Model simulator
 #' simulator1 <- ModelSimulator$new(simulation_model = model1,
-#'                                  simulation_function = "test_simulator")
+#'                                  simulation_function = test_simulator)
 #' simulator1$run()
 #' model1$set_attributes(a = 1:10, b = 15)
 #' model1$get_attributes(model1$required_attributes)

@@ -5,9 +5,9 @@ This is a resubmission. In this version I have:
 * Changed RoxygenNote: 7.2.1 in DESCRIPTION for devtools::check() and
   regenerated man/*.Rd to solve new (non-local) NOTES referring to HTML
   validation problems.
-* Updated version number to 1.0.3.
-* Placed a \dontrun{} around an already trivial, yet computationally heavy,
-  examples that ran over the recommended time.
+* Updated version number to 1.0.4.
+* Placed \dontrun{} around examples that ran over the recommended time on the 
+  win-builder checking servers (albeit OK locally).
 * Otherwise no other code changes.
 
 ## Test environments
@@ -18,7 +18,7 @@ There were no ERRORs or WARNINGs.
 
 There was 1 NOTE (on win-builder only):
 
-* checking CRAN incoming feasibility ... [26s] NOTE
+* checking CRAN incoming feasibility ... NOTE
   Maintainer: 'Sean Haythorne <sean.haythorne@unimelb.edu.au>'
 
   New submission

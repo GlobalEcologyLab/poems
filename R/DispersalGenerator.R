@@ -17,6 +17,7 @@
 #' \emph{dispersal_data} will be a temporal list of changing dispersal rates.
 #'
 #' @examples
+#' \dontrun{
 #' # U Island example region
 #' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 #'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -35,6 +36,7 @@
 #' dispersal_gen$calculate_distance_data() # pre-calculate
 #' dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
 #'                                            dispersal_b = 700))
+#' }
 #'
 #' @importFrom R6 R6Class
 #' @include Generator.R
