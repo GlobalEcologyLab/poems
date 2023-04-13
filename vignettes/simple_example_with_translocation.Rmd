@@ -1,0 +1,579 @@
+---
+title: "Simple workflow example for a population model"
+author: "Global ChEC Lab"
+date: "`r Sys.Date()`"
+output: rmarkdown::pdf_document
+geometry: margin=2cm
+vignette: >
+  %\VignetteIndexEntry{Simple Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette we present a simple example of the *poems* workflow using a fictitious
+population model. The purpose of this example is to demonstrate how the components of
+the package are used to build an ensemble of viable models that best match known or 
+desired patterns. Although the package is designed to facilitate building complex 
+models and running multitudes of sample simulations, the scale and complexity of this 
+demonstration model is deliberately minimal so as to easily examine the outputs at every 
+stage of the workflow.
+
+## Setup
+
+We begin by loading the *poems* package and setting our output directory.
+
+```{r setup}
+library(poems)
+library(raster)
+OUTPUT_DIR <- tempdir()
+```
+
+## Workflow
+
+The *poems* workflow, which implements a pattern-oriented modeling (POM) approach 
+(Grimm et al., 2005), is achieved via a framework of interoperable components:
+
+\begin{center}
+  \includegraphics[width=6.5in]{workflow.pdf}
+\end{center}
+
+The workflow is summarized by the following six steps:
+
+1. Build the population model for the study region.
+1. Build generators for dynamically generating model parameters.
+1. Sample model and generator parameters for each simulation.
+1. Build a simulation manager to run each simulation.
+1. Build a results manager to generate summary results (metrics).
+1. Build a validator to select a model ensemble.
+
+### Step 1: Build the population model for the study region
+Create a model template using the *PopulationModel* class. If the model is spatially
+explicit, then define the study region via the *Region* class. All fixed model inputs,
+such as environmental correlations, as well as any user-defined functions for processes
+such as harvesting, should be set at this stage.
+
+We could create these components in any order and set model parameters separately, but 
+let's setup our study region, generate environmental correlations, and define a harvest
+function prior to initializing the template model with all the fixed parameters.
+
+##### Study region
+First, we'll define our study region (denoted U Island) with some longitude-latitude
+coordinates.
+
+```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+# Demonstration example region (U Island)
+coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
+                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
+template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
+
+# expand U Island to have an outer ring
+template_raster <- extend(template_raster, y = c(1, 1), value = 1)
+template_raster[!is.na(template_raster)] <- seq_len(sum(!is.na(template_raster[])))
+
+region <- Region$new(template_raster = template_raster)
+raster::plot(region$region_raster, main = "Example region (cell indices)",
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             colNA = "blue", 
+             addfun = function() {
+               text(region$region_raster, labels = region$region_indices)
+             })
+```
+
+##### Environmental correlation
+Next, we'll define a distance-based spatial correlation for applying environmental 
+stochasticity within our model. The generated correlation data is compacted for 
+computational efficiency (with large-scale models).
+
+```{r, message = FALSE}
+# Distance-based environmental correlation (via a compacted Cholesky decomposition)
+env_corr <- SpatialCorrelation$new(region = region, amplitude = 0.4, breadth = 500)
+correlation <- env_corr$get_compact_decomposition(decimals = 2)
+correlation # examine
+```
+
+##### Harvest function
+Let's now define a simple harvest function, which is optionally list-nested with a 
+harvest rate parameter. We'll also define an alias to the harvest rate so we can sample 
+this parameter later.
+
+```{r, message = FALSE}
+# User-defined harvest function (list-nested) and alias
+harvest <- list(rate = NA, # sample later
+                function(params) round(params$stage_abundance*(1 - params$rate)))
+harvest_rate_alias <- list(harvest_rate = "harvest$rate")
+```
+
+#### Translocation function
+Let's define a simple translocation function to introduce new populations of individuals at specified locations and times.
+
+```{r message=FALSE}
+# which region cells correspond to pops 5, 29, 42
+idx <- which(region$region_indices %in% c(5, 29, 42))
+intro_cells <- c(idx)
+intro_times <- c(2, 4, 7)
+
+cbind(intro_cells, intro_times)
+
+# function for introducing new pops
+translocation <- list(
+  
+  # Function parameters (passed to function in params list)
+  intro_cells = intro_cells, # cells where pops are introduced
+  intro_timesteps = intro_times, # timesteps when introduced
+  trans_n = 50, # introduction abundances. If not provided to model == 50
+  region_indices = region$region_indices,
+  
+  # Function definition
+  translocation_function = function(params) {
+    # Unpack parameters (used at every time step)
+    intro_cells <- params$intro_cells
+    intro_timesteps <- params$intro_timesteps
+    simulator <- params$simulator
+    stages <- params$stages
+    populations <- params$populations
+    abundances <- params$abundance
+    region_indices <- params$region_indices
+    tm <- params$tm
+    K <- params$carrying_capacity
+    sa <- params$stage_abundance
+    occ <- params$occupied_indices
+    trans_n <- params$trans_n
+    # if introduction at timestep, introduce pops
+    if (tm %in% intro_timesteps) {
+      # take stage abundance at timestep
+      new_sa <- array(sa, c(stages, populations))
+      # identifies location of introduction
+      trans_loc <- which(region_indices == intro_cells[which(intro_timesteps == tm)])
+      # add n individuals regardless of K
+      new_sa[trans_loc] <-  new_sa[trans_loc] + trans_n
+      return(new_sa)
+    } else {
+      # return pops as they are
+      new_sa <- array(sa, c(stages, populations))
+      return(new_sa)
+    }
+  }
+)
+translocation_aliases <- list(intro_cells = "translocation$intro_cells",
+                              intro_times = "translocation$intro_timesteps",
+                              trans_n = "translocation$trans_n",
+                              region_indices = "translocation$region_indices")
+```
+
+
+##### Template model
+Finally, we can build our template model with these and other fixed parameters.
+```{r, message = FALSE}
+# Population (simulation) model template for fixed parameters
+stage_matrix <- matrix(c(0,   2.5, # Leslie/Lefkovitch matrix
+                         0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE,
+                       dimnames = list(c("juv", "adult"), c("juv", "adult")))
+stage_matrix # examine
+
+model_template <- PopulationModel$new(region = region,
+                                      time_steps = 10, # years
+                                      populations = region$region_cells, # 31. 7 on U Island
+                                      stage_matrix = 1, # single-stage
+                                      # stage_matrix = stage_matrix,
+                                      demographic_stochasticity = TRUE,
+                                      standard_deviation = 0.05,
+                                      correlation = correlation,
+                                      density_dependence = "logistic",
+                                      harvest = harvest,
+                                      results_selection = c("abundance", "harvested"),
+                                      attribute_aliases = harvest_rate_alias)
+```
+
+### Step 2: Build generators for dynamically generating model parameters
+Some model parameters are single values, whilst others are represented as arrays and
+other multi-value data structures. Usually, we don't wish to sample each individual 
+value within these multi-value parameters (in step 3), but to generate them dynamically
+via one or more intermediate sampled parameters. Here we build generators for model 
+initial abundance, carrying capacity, and dispersal.
+
+##### Habitat suitability
+Firstly, our initial abundance and carrying capacity generator utilizes an example
+(mock) habitat suitability for our defined study region. 
+
+```{r, message = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+# Example habitat suitability
+example_hs_raster <- region$region_raster
+example_hs_raster[region$region_indices] <- {set.seed(54);rbeta(length(region$region_indices),
+                                                  shape1 = 3, shape2 = 2)}
+example_hs_raster <- raster::stack(replicate(model_template$time_steps, example_hs_raster),
+                                   quick = TRUE)
+raster::plot(example_hs_raster[[1:3]],
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             zlim = c(0, 1),
+             colNA = "blue",
+             addfun = function() {
+               text(region$region_raster, labels = region$region_indices)
+             })
+```
+
+So we don't have populations on the ring around U Island, we explicitly force these cells to have NA values at the first time step. After the first time step, the values are set back to their original values. As we have no suitable values on the ring in the first time step, and there is no way for populations to disperse to the ring, the only way for populations to get there is to be "translocated" there by our `translocation` function. We could also set these to `NA` inside the carrying capacity generator below if we wanted.
+
+```{r message=FALSE}
+# set cells on the ring around U Island to NA for the first time step
+vals <- example_hs_raster[[1]][c(17, 19, 24, 26, 31:33)]
+example_hs_raster[[1]] <- NA
+example_hs_raster[[1]][c(17, 19, 24, 26, 31:33)] <- vals
+raster::plot(example_hs_raster[[1:3]],
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             zlim = c(0, 1),
+             colNA = "blue",
+             addfun = function() {
+               text(region$region_raster, labels = region$region_indices)
+             })
+```
+
+##### Initial abundance and carrying capacity generator
+The generator utilizes generic template functionality for user-defined custom
+functions. It uses sampled input parameters (initial total abundance and maximum cell
+density), along with habitat suitability, to generate the desired output model 
+parameters (initial abundance and carrying capacity) via these user-defined functions. 
+Generators can also be configured to read values from files or generate values via 
+probabilistic distributions. 
+
+
+```{r, message = FALSE}
+# Initial abundance and carrying capacity generated via example habitat suitability
+capacity_gen <- Generator$new(description = "Capacity generator",
+                              example_hs = example_hs_raster[region$region_indices], # template attached as matrix
+                              inputs = c("initial_n", "density_max"),
+                              outputs = c("initial_abundance", "carrying_capacity"))
+capacity_gen$add_generative_requirements(list(initial_abundance = "function",
+                                              carrying_capacity = "function"))
+capacity_gen$add_function_template("initial_abundance",
+                                   function_def = function(params) {
+                                     # generate initial abundances using
+                                     # only cells on U Island
+                                     init_prob <- params$example_hs[, 1]
+                                     idx <- which(is.na(init_prob))
+                                     init_prob[is.na(init_prob)] <- 0
+                                     distr_a <- stats::rmultinom(1, size = params$initial_n,
+                                                      prob = init_prob)[, 1]
+                                     distr_a[idx] <- 0
+                                     return(distr_a)
+                                     },
+                                   call_params = c("initial_n", "example_hs"))
+capacity_gen$add_function_template("carrying_capacity",
+                                   function_def = function(params) {
+                                     distr_k <- params$density_max*params$example_hs
+                                     distr_k[is.na(distr_k[, 1]), 1] <- 0
+                                     return(round(distr_k))
+                                   },
+                                   call_params = c("density_max", "example_hs"))
+test_capacity <- capacity_gen$generate(input_values = list(initial_n = 500, density_max = 100)) # test
+
+# plot initial abundance
+plot(region$raster_from_values(test_capacity$initial_abundance),
+     main = "Initial Abundances")
+
+# plot first 3 carrying capacity
+plot(region$raster_from_values(test_capacity$carrying_capacity[, 1:3]),
+     addfun = function() {
+       text(region$region_raster, labels = region$region_indices)
+       })
+
+```
+
+##### Dispersal generator
+Our dispersal generator uses default functionality for generating dispersal rates 
+between cells. Its sampled inputs parameterize the distance-based dispersal function
+(proportion dispersing and breadth of dispersal). The generator can be configured with 
+a dispersal friction helper class object, which calculates equivalent dispersal 
+distances for frictional landscapes and coastlines. Here it is used to ensure dispersal 
+is not performed directly across the "water" in our example U-shaped island. The 
+generated dispersal data is calculated via pre-calculated distance data and compacted
+for computational efficiency (with large-scale models).
+
+```{r, message = FALSE}
+# Distance-based dispersal generator
+dispersal_gen <- DispersalGenerator$new(region = region,
+                                        dispersal_max_distance = 3000, # in m
+                                        dispersal_friction = DispersalFriction$new(),
+                                        inputs = c("dispersal_p", "dispersal_b"),
+                                        decimals = 5)
+dispersal_gen$calculate_distance_data() # pre-calculate
+test_dispersal <- dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
+                                                             dispersal_b = 700))
+head(test_dispersal$dispersal_data[[1]])
+```
+
+Note that there is no dispersal rate between cells 1 and 2 as there is "water" between 
+those cells, and consequently dispersal between those cells must travel around the 
+U-shaped island, which can't be achieved in one simulation time-step since the "round" 
+distance between those cells is greater than 3000 m. This is the same process that stops
+dispersal to the ring we have created around U Island.
+
+### Step 3: Run a single replicate of the template model
+We can now run a single simulation to check that our model works correctly.
+
+
+First we will run the template model for a single replicate without the `translocation` function
+```{r, message = FALSE}
+model_no_trans <- model_template$clone()
+
+# for the single model we need to provide intitial values for 
+# initial abundance, carrying capacity, and dispersal
+## set.seed for reproducibility
+{set.seed(343)
+  test_capacity_gen <- capacity_gen$generate(input_values = list(initial_n = 350, 
+                                                                 density_max = 100))
+  test_dispersal <- dispersal_gen$generate(input_values = list(dispersal_p = 0.67,
+                                                               dispersal_b = 760))
+}
+
+plot(region$raster_from_values(test_capacity_gen$initial_abundance))
+plot(region$raster_from_values(test_capacity_gen$carrying_capacity[, 1:3]))
+
+model_no_trans$set_sample_attributes(
+  initial_abundance = test_capacity_gen$initial_abundance,
+  carrying_capacity = test_capacity_gen$carrying_capacity,
+  dispersal = test_dispersal,
+  growth_rate_max = 0.4,
+  harvest_rate = 0.3)
+
+model_no_trans$is_complete()
+results <- population_simulator(model_no_trans) # run poems simulator
+```
+
+Now that the simulation has run, we can plot some of the outputs to test that it's
+working as expected.
+
+```{r, message = FALSE}
+# plot of total abundance and harvest
+plot(x = 1:10, y = results$all$abundance,
+     xaxt = "n", yaxt = "n",
+     ylim = range(pretty(c(0, max(results$all$abundance)))),
+     type = "l", xlab = "Time", ylab = "Total")
+lines(x = 1:10, y = results$all$harvested,
+      col = "firebrick")
+axis(1, at = 1:10)
+axis(2, at = pretty(c(0, max(results$all$abundance))))
+legend("bottomleft", c("Total Abundance", "Total Harvest"),
+       lty = 1, col = c("black", "firebrick"),
+       bty = "n")
+
+# Maps of total abundance
+total_abund <- region$raster_from_values(results$abundance[, seq(1, 10, 2)])
+plot_max <- max(values(total_abund), na.rm = TRUE)
+raster::plot(total_abund,
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             zlim = c(0, plot_max),
+             col = hcl.colors(100, "Batlow"),
+             colNA = "grey75")
+
+```
+```{r, message = FALSE}
+model_trans <- model_template$clone()
+
+plot(region$raster_from_values(test_capacity_gen$initial_abundance))
+plot(region$raster_from_values(test_capacity_gen$carrying_capacity[, 1:3]))
+
+model_trans$set_sample_attributes(
+  initial_abundance = test_capacity_gen$initial_abundance,
+  carrying_capacity = test_capacity_gen$carrying_capacity,
+  dispersal = test_dispersal,
+  translocation = translocation,
+  trans_n = 10000,
+  growth_rate_max = 0.4,
+  harvest_rate = 0.3)
+
+model_trans$is_complete()
+results_trans <- population_simulator(model_trans) # run poems simulator
+```
+
+Now that the simulation has run, we can plot some of the outputs to test that it's
+working as expected.
+
+```{r, message = FALSE}
+# plot of total abundance and harvest
+plot(x = 1:10, y = results_trans$all$abundance,
+     xaxt = "n", yaxt = "n",
+     ylim = range(pretty(c(0, max(results_trans$all$abundance)))),
+     type = "l", xlab = "Time", ylab = "Total")
+lines(x = 1:10, y = results_trans$all$harvested,
+      col = "firebrick")
+axis(1, at = 1:10)
+axis(2, at = pretty(c(0, max(results_trans$all$abundance))))
+abline(v = intro_times, lty = 2, col = "black")
+legend("topright", c("Total Abundance", "Total Harvest"),
+       lty = 1, col = c("black", "firebrick"),
+       bty = "n")
+
+# Maps of total abundance
+total_abund_trans <- region$raster_from_values(results_trans$abundance)
+plot_max <- max(values(total_abund_trans), na.rm = TRUE)
+raster::plot(total_abund_trans,
+             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+             zlim = c(0, plot_max),
+             col = hcl.colors(100, "Batlow"),
+             colNA = "grey75")
+
+```
+
+
+### Step 4: Sample model and generator parameters for each simulation
+In order to explore the model parameter space to find the best models, we generate
+Latin hypercube samples of model and generator parameters to be simulated, using the
+*LatinHypercubeSampler* class. This class has functionality for generating sample
+parameters via Uniform, Normal, Lognormal, Beta, and Triangular distributions.
+For our example we only generate 12 samples. We encourage the user to generate hundreds,
+or thousands, of samples.
+
+We also need to include a parameter for the number of translocated individuals.
+
+In our simple `translocation` function, all cells have the same number of individuals released at
+their respective time steps. It would be a relatively simple matter to alter the function to read from
+a matrix that contained `Time Step | Cell | Number Individuals`, to allow site specific 
+abundances to be translocated/introduced.
+
+```{r, message = FALSE}
+# Generate sampled values for variable model parameters via LHS
+lhs_gen <- LatinHypercubeSampler$new()
+lhs_gen$set_uniform_parameter("growth_rate_max", lower = 0.4, upper = 0.6, decimals = 2)
+lhs_gen$set_uniform_parameter("harvest_rate", lower = 0.05, upper = 0.15, decimals = 2)
+lhs_gen$set_uniform_parameter("initial_n", lower = 400, upper = 600, decimals = 0)
+lhs_gen$set_uniform_parameter("density_max", lower = 80, upper = 120, decimals = 0)
+lhs_gen$set_uniform_parameter("dispersal_p", lower = 0.2, upper = 0.5, decimals = 2)
+lhs_gen$set_uniform_parameter("dispersal_b", lower = 400, upper = 1000, decimals = 0)
+lhs_gen$set_uniform_parameter("trans_n", lower = 10, upper = 100, decimals = 0)
+sample_data <- lhs_gen$generate_samples(number = 12, random_seed = 123)
+sample_data # examine
+```
+
+### Step 5: Build a simulation manager to run each simulation
+We now wish to run a simulation for each set (or row) of sampled parameters. The
+*SimulationManager* class manages the generation of parameters (via the generators),
+the running the model simulations, and writing simulation results to disk. It also
+maintains a log of each simulation's success and any errors or warnings encountered.
+
+```{r, message = FALSE}
+# Create a simulation manager and run the sampled model simulations
+sim_manager <- SimulationManager$new(sample_data = sample_data,
+                                     model_template = model_template,
+                                     generators = list(capacity_gen, dispersal_gen),
+                                     parallel_cores = 2,
+                                     results_dir = OUTPUT_DIR)
+run_output <- sim_manager$run()
+run_output$summary
+dir(OUTPUT_DIR, "*.RData") # includes 12 result files 
+dir(OUTPUT_DIR, "*.txt") # plus simulation log
+```
+
+Note that the output directory contains a R-data result files for each sample simulation
+and a simulation log file.
+
+### Step 5: Build a results manager to generate summary results (metrics)
+We now wish to collate summary results for each of our simulations via the 
+*ResultsManager* class. This manager loads the results from each sample simulation into
+an intermediate *PopulationResults* class object, which dynamically generates further 
+results. We need to define functions for calculating summary metrics, as well as any 
+matrices (one row of values per simulation) that we may be interested in examining. Each
+metric (or matrix) is associated with a user-defined function that utilizes results object 
+attributes, or alternatively direct access to an attribute may be defined via a string.
+Once generated, the result metrics (a data frame) and/or matrices (a list) can be 
+accessed via the manager. We may utilize the collated results in a variety of ways. 
+However, with the objective of selecting the best models, we wish to compare (or 
+validate) these result metrics to (with) known or desired target patterns (in step 6).
+
+```{r, message = FALSE}
+results_manager <- ResultsManager$new(simulation_manager = sim_manager,
+                                      simulation_results = PopulationResults$new(),
+                                      summary_metrics = c("trend_n", "total_h"),
+                                      summary_matrices = c("n", "h"),
+                                      summary_functions = list(
+                                        trend_n = function(results) {
+                                          round(results$all$abundance_trend, 2)
+                                        },
+                                        total_h = function(results) {
+                                          sum(results$harvested)
+                                        },
+                                        n = "all$abundance", # string
+                                        h = "all$harvested"),
+                                      parallel_cores = 2)
+gen_output <- results_manager$generate()
+gen_output$summary
+dir(OUTPUT_DIR, "*.txt") # plus generation log
+results_manager$summary_metric_data
+results_manager$summary_matrix_list
+```
+
+### Step 6: Build a validator to select a model ensemble
+We now select and analyze our 'best' models via a *Validator* class object, which by
+default utilizes an approximate Bayesian computation (ABC) approach (Beaumont, Zhang, 
+& Balding, 2002) provided by the *abc* library (Csillery et al., 2015). The validator
+can be configured appropriately for a problem domain (see the *abc* documentation). 
+Here we use the default configuration to select the best 3 models, along with a weight
+value, which is indicative of the congruence between each model's summary metrics and 
+the corresponding target patterns. Also provided (with the default settings) is a 
+diagnostic output (PDF) file, containing statistical information for analyzing the 
+contribution of model parameters in the selection/validation process (see the *abc* 
+documentation). For our simple demonstration the metrics and corresponding targets are 
+relatively trivial, having the aim of producing stable population abundances with high 
+harvest. However, the package facilitates the use more complex spatio-temporal metrics 
+and targets (demonstrated in more advanced vignettes).
+
+```{r, message = FALSE}
+# Create a validator for selecting the 'best' example models
+validator <- Validator$new(simulation_parameters = sample_data,
+                           simulation_summary_metrics =
+                             results_manager$summary_metric_data[-1],
+                           observed_metric_targets = c(trend_n = 0, total_h = 600),
+                           output_dir = OUTPUT_DIR)
+suppressWarnings(validator$run(tolerance = 0.25, output_diagnostics = TRUE))
+dir(OUTPUT_DIR, "*.pdf") # plus validation diagnostics (see abc library documentation)
+validator$selected_simulations # top 3 models (stable abundance and high harvest)
+```
+
+We encourage the user to examine the generated diagnostics (PDF) output file, and to
+become acquainted with the analysis that this information facilitates (see the *abc* 
+documentation). As our simple example only uses two metrics/targets, we can visualize
+the congruence of the selected models with the targets via a simple plot.
+
+```{r, message = FALSE, fig.align = "center", fig.width = 6, fig.height = 5}
+# Plot the simulation, targets, and selected metrics
+graphics::plot(x = results_manager$summary_metric_data$total_h,
+               y = results_manager$summary_metric_data$trend_n,
+               main = "Example model validation",
+               xlab = "Total harvested", ylab = "Abundance trend")
+graphics::points(x = 600, y = 0, col = "red", pch = 4)
+selected_indices <- validator$selected_simulations$index
+graphics::points(x = results_manager$summary_metric_data$total_h[selected_indices],
+                 y = results_manager$summary_metric_data$trend_n[selected_indices],
+                 col = "blue", pch = 3)
+graphics::legend("bottomleft", legend = c("Summary metrics", "Targets", "Selected"),
+                 col = c(1, "red", "blue"), pch = c(1, 4, 3), cex = 0.8)
+```
+
+## Summary
+This demonstration has provided an overview of the *poems* workflow and modules via a
+simple population model example. We hope it has given you the foundation to progress to 
+our more advanced Tasmanian *Thylacine* vignette, and towards utilizing the package for 
+your own modeling projects.
+
+Thank you :-)
+
+## References
+Beaumont, M. A., Zhang, W., & Balding, D. J. (2002). 'Approximate Bayesian computation
+in population genetics'. *Genetics*, vol. 162, no. 4, pp, 2025–2035.
+
+Csillery, K., Lemaire L., Francois O., & Blum M. (2015). 'abc: Tools for Approximate 
+Bayesian Computation (ABC)'. *R package version 2.1*. Retrieved from 
+<https://CRAN.R-project.org/package=abc>
+
+Grimm, V., Revilla, E., Berger, U., Jeltsch, F., Mooij, W. M., Railsback, S. F.,
+Thulke, H. H., Weiner, J., Wiegand, T., DeAngelis, D. L., (2005). 'Pattern-Oriented
+Modeling of Agent-Based Complex Systems: Lessons from Ecology'. *Science*
+vol. 310, no. 5750, pp. 987–991.
+

@@ -60,11 +60,11 @@ model1$region$raster_from_values(model1$get_attribute("a_values"))
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attributes'><code>poems::GenericModel$get_attributes()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attributes'><code>poems::GenericModel$get_attributes()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></li>
 </ul>
 </details>
 }}

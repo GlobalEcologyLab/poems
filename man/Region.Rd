@@ -69,7 +69,7 @@ value_brick[region$region_indices]
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></li>
 </ul>
 </details>
 }}
