@@ -1,11 +1,11 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling System
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: c(
     person("Sean", "Haythorne", email = "sean.haythorne@unimelb.edu.au", role = c("aut", "cre")),
     person("Damien", "Fordham", email = "damien.fordham@adelaide.edu.au", role = "aut"),
-    person("Stuart", "Brown", email = "s.brown@adelaide.edu.au", role = "aut"),
+    person("Stuart", "Brown", email = "stuart.brown@sa.gov.au>", role = "aut", comment = c(ORCID = "0000-0002-0669-1418")),
     person("Jessie", "Buettel", email = "jessie.buettel@utas.edu.au", role = "aut"),
     person("Barry", "Brook", email = "barry.brook@utas.edu.au", role = "aut"))
 Description: The poems package provides a framework of interoperable R6 classes 
@@ -31,9 +31,10 @@ Description: The poems package provides a framework of interoperable R6 classes
 Depends: R (>= 3.6.0)
 License: GPL-3
 URL: https://github.com/GlobalEcologyLab/poems
+BugReports: https://github.com/GlobalEcologyLab/poems/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
     abc (>= 2.1),
     doParallel (>= 1.0.16),
@@ -77,7 +78,10 @@ Collate:
     'population_transitions.R'
     'population_simulator.R'
 Suggests: 
-    testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    sf,
+    scales,
+    stringi,
+    testthat
 VignetteBuilder: knitr
