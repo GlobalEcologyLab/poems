@@ -59,7 +59,7 @@ lhs_gen$generate_samples(number = 10, random_seed = 123)
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
 </ul>
 </details>
 }}

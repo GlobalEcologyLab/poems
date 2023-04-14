@@ -63,12 +63,6 @@ model2$attribute_aliases
 \item \href{#method-GenericModel-clone}{\code{GenericModel$clone()}}
 }
 }
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
-<ul>
-</ul>
-</details>
-}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GenericModel-new"></a>}}
 \if{latex}{\out{\hypertarget{method-GenericModel-new}{}}}

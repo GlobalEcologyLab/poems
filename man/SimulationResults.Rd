@@ -95,8 +95,8 @@ results_clone$get_attribute("all$abundance")
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
 </ul>
 </details>
 }}

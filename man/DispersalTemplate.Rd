@@ -77,7 +77,7 @@ generation), rounding decimals, occupancy mask, and other
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenerativeTemplate" data-id="initialize"><a href='../../poems/html/GenerativeTemplate.html#method-GenerativeTemplate-initialize'><code>poems::GenerativeTemplate$initialize()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenerativeTemplate" data-id="initialize"><a href='../../poems/html/GenerativeTemplate.html#method-GenerativeTemplate-initialize'><code>poems::GenerativeTemplate$initialize()</code></a></span></li>
 </ul>
 </details>
 }}

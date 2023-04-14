@@ -138,20 +138,20 @@ dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_distribution_template"><a href='../../poems/html/Generator.html#method-Generator-add_distribution_template'><code>poems::Generator$add_distribution_template()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_file_template"><a href='../../poems/html/Generator.html#method-Generator-add_file_template'><code>poems::Generator$add_file_template()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_function_template"><a href='../../poems/html/Generator.html#method-Generator-add_function_template'><code>poems::Generator$add_function_template()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_generative_requirements"><a href='../../poems/html/Generator.html#method-Generator-add_generative_requirements'><code>poems::Generator$add_generative_requirements()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="generate"><a href='../../poems/html/Generator.html#method-Generator-generate'><code>poems::Generator$generate()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="get_attributes"><a href='../../poems/html/Generator.html#method-Generator-get_attributes'><code>poems::Generator$get_attributes()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="new_clone"><a href='../../poems/html/Generator.html#method-Generator-new_clone'><code>poems::Generator$new_clone()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="read_file"><a href='../../poems/html/Generator.html#method-Generator-read_file'><code>poems::Generator$read_file()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="run_function"><a href='../../poems/html/Generator.html#method-Generator-run_function'><code>poems::Generator$run_function()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="sample_distribution"><a href='../../poems/html/Generator.html#method-Generator-sample_distribution'><code>poems::Generator$sample_distribution()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute'><code>poems::GenericModel$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_aliases"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_aliases'><code>poems::GenericModel$get_attribute_aliases()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="get_attribute_names"><a href='../../poems/html/GenericModel.html#method-GenericModel-get_attribute_names'><code>poems::GenericModel$get_attribute_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericModel" data-id="set_attributes"><a href='../../poems/html/GenericModel.html#method-GenericModel-set_attributes'><code>poems::GenericModel$set_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_distribution_template"><a href='../../poems/html/Generator.html#method-Generator-add_distribution_template'><code>poems::Generator$add_distribution_template()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_file_template"><a href='../../poems/html/Generator.html#method-Generator-add_file_template'><code>poems::Generator$add_file_template()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_function_template"><a href='../../poems/html/Generator.html#method-Generator-add_function_template'><code>poems::Generator$add_function_template()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="add_generative_requirements"><a href='../../poems/html/Generator.html#method-Generator-add_generative_requirements'><code>poems::Generator$add_generative_requirements()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="generate"><a href='../../poems/html/Generator.html#method-Generator-generate'><code>poems::Generator$generate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="get_attributes"><a href='../../poems/html/Generator.html#method-Generator-get_attributes'><code>poems::Generator$get_attributes()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="new_clone"><a href='../../poems/html/Generator.html#method-Generator-new_clone'><code>poems::Generator$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="read_file"><a href='../../poems/html/Generator.html#method-Generator-read_file'><code>poems::Generator$read_file()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="run_function"><a href='../../poems/html/Generator.html#method-Generator-run_function'><code>poems::Generator$run_function()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="Generator" data-id="sample_distribution"><a href='../../poems/html/Generator.html#method-Generator-sample_distribution'><code>poems::Generator$sample_distribution()</code></a></span></li>
 </ul>
 </details>
 }}

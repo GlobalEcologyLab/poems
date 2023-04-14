@@ -118,10 +118,10 @@ dir(tempdir(), "*.txt") # plus simulation log
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_attribute"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_attribute'><code>poems::GenericManager$get_attribute()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_message_sample"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_message_sample'><code>poems::GenericManager$get_message_sample()</code></a></li>
-<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_results_filename"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_results_filename'><code>poems::GenericManager$get_results_filename()</code></a></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href='../../poems/html/GenericClass.html#method-GenericClass-new_clone'><code>poems::GenericClass$new_clone()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_attribute"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_attribute'><code>poems::GenericManager$get_attribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_message_sample"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_message_sample'><code>poems::GenericManager$get_message_sample()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="poems" data-topic="GenericManager" data-id="get_results_filename"><a href='../../poems/html/GenericManager.html#method-GenericManager-get_results_filename'><code>poems::GenericManager$get_results_filename()</code></a></span></li>
 </ul>
 </details>
 }}
