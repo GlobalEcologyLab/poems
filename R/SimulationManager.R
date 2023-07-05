@@ -67,6 +67,8 @@
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%
 #' @importFrom R6 R6Class
+#' @importFrom doParallel registerDoParallel
+#' @importFrom doParallel stopImplicitCluster
 #' @include GenericManager.R
 #' @include SimulationModel.R
 #' @include ModelSimulator.R

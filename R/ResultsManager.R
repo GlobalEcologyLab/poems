@@ -53,6 +53,8 @@
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%
 #' @importFrom R6 R6Class
+#' @importFrom doParallel registerDoParallel
+#' @importFrom doParallel stopImplicitCluster
 #' @include GenericManager.R
 #' @export ResultsManager
 
@@ -142,7 +144,7 @@ ResultsManager <- R6Class("ResultsManager",
       }
 
       # Generate summary metrics in parallel
-      doParallel::registerDoParallel(cores = self$parallel_cores)
+      registerDoParallel(cores = self$parallel_cores)
       self <- self # pass object to parallel
       generation_log <- foreach(i = 1:nrow(self$sample_data),
                                 .packages = c("raster"),
@@ -215,7 +217,7 @@ ResultsManager <- R6Class("ResultsManager",
         return(self$calculate_summaries(simulation_results, i))
 
       }
-      doParallel::stopImplicitCluster()
+      stopImplicitCluster()
 
       # Merge summary metric data and matrix list
       self$summary_metric_data <- data.frame(index = 1:nrow(self$sample_data),

@@ -15,7 +15,7 @@
 #'     \item{\code{time_steps}}{Number of simulation time steps.}
 #'     \item{\code{years_per_step}}{Number of years per time step.}
 #'     \item{\code{populations}}{Number of populations.}
-#'     \item{\code{stages}}{Number of lifecycle stages.}
+#'     \item{\code{stages}}{Number of life cycle stages.}
 #'     \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
 #'     \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
 #'     \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}

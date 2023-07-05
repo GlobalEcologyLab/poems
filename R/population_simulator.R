@@ -21,7 +21,7 @@
 #'     \item{\code{years_per_step}}{Number of years per time step (default is 1).}
 #'     \item{\code{populations}}{Number of populations.}
 #'     \item{\code{coordinates}}{Data frame (or matrix) of X-Y population coordinates.}
-#'     \item{\code{stages}}{Number of lifecycle stages.}
+#'     \item{\code{stages}}{Number of life cycle stages.}
 #'     \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns).}
 #'     \item{\code{stage_matrix}}{Matrix of transition (fecundity & survival) rates between stages at each time step (Leslie/Lefkovitch matrix).}
 #'     \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}

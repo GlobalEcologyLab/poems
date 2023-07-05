@@ -20,6 +20,8 @@
 #' lhs_gen$generate_samples(number = 10, random_seed = 123)
 #'
 #' @importFrom R6 R6Class
+#' @importFrom metRology qtri
+#' @importFrom lhs randomLHS
 #' @include GenericClass.R
 #' @export LatinHypercubeSampler
 
@@ -184,7 +186,7 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
       if (!is.null(self$parameter_names) && !is.null(self$parameter_distributions) && all(self$parameter_names %in% names(self$parameter_distributions))) {
 
         # Generate uniform 0-1 LHS
-        sample_data <- as.data.frame(lhs::randomLHS(number, length(self$parameter_names)))
+        sample_data <- as.data.frame(randomLHS(number, length(self$parameter_names)))
         names(sample_data) <- self$parameter_names
 
         # Apply distributions for each parameter
@@ -201,7 +203,7 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
           } else if (distribution$type == "beta") {
             sample_data[[param]] <- stats::qbeta(sample_data[[param]], shape1 = distribution$alpha, shape2 = distribution$beta)
           } else if (distribution$type == "triangular") {
-            sample_data[[param]] <- metRology::qtri(sample_data[[param]], min = distribution$lower, max = distribution$upper, mode = distribution$mode)
+            sample_data[[param]] <- qtri(sample_data[[param]], min = distribution$lower, max = distribution$upper, mode = distribution$mode)
           }
           if (!is.null(distribution$decimals)) {
             sample_data[[param]] <- round(sample_data[[param]], distribution$decimals)

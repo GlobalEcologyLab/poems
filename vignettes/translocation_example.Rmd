@@ -430,7 +430,7 @@ plot(test_rmax, colNA = "grey75",
 
 ### Dispersal generator
 
-This genertor controls dispersal across our region based on mean
+This generator controls dispersal across our region based on mean
 dispersal distance and proportion of dispersers.
 
 ```{r}
