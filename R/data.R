@@ -14,6 +14,23 @@
 #' @source TBA
 "tasmania_raster"
 
+#' Tasmania land-use modifier raster
+#'
+#' A \emph{raster} dataset (11 timesteps) defining the intensity land-use cover for each
+#' grid-cell in the Tasmnia study region. NB. This dataset is projected and will not natively overlay
+#' the other \emph{raster} datasets contained in \emph{poems}.
+#'
+#' @format A \emph{raster::RasterBrick} object:
+#' \describe{
+#'   \item{dimensions}{36 rows, 34 columns, 11 layers}
+#'   \item{resolution}{10km by 10km grid cells}
+#'   \item{extent}{-211571.8, 128428.2, -182583.2, 177416.8  (xmin, xmax, ymin, ymax)}
+#'   \item{CRS}{+proj=laea +lat_0=-42.2 +lon_0=147 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs}
+#'   \item{values}{region defined by 1224 cells with values between 0-1. Values of 1 indicate extensive land use modification)}
+#' }
+#' @source TBA
+"tasmania_modifier"
+
 #' Thylacine vignette Tasmania IBRA data
 #'
 #' A dataset describing the nine Interim Bioregionalisation of Australia (IBRA)

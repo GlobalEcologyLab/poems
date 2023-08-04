@@ -1,3 +1,10 @@
+# 1.0.5
+
+## enhancements
+
+- added vignette for translocation/introduction of new populations
+
+
 # version 1.0.2
 
 ## bug fixes
@@ -10,7 +17,6 @@
 - added method references in description 
 
 ## new
-
 
 # version 1.0.1
 

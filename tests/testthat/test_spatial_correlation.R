@@ -92,7 +92,7 @@ test_that("calculate Cholesky decomposition", {
   expect_equal(spatial_correlation$t_decomposition_matrix, chol(correlation_matrix))
   spatial_correlation$correlation_matrix[1, 1] <- -100
   expect_error(spatial_correlation$calculate_cholesky_decomposition(),
-               "Cholesky decomposition could not be calculated because the leading minor of order 1 is not positive definite")
+               "Cholesky decomposition could not be calculated because the leading minor of order 1 is not positive")
 })
 
 test_that("calculate compact decomposition", {
