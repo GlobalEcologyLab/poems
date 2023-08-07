@@ -22,6 +22,7 @@
 #'     \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold}.}
 #'     \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.}
 #'     \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa.}
+#'     \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or visa-versa.}
 #'     \item{\code{r}}{Simulation replicate.}
 #'     \item{\code{tm}}{Simulation time step.}
 #'     \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
@@ -35,6 +36,7 @@
 #' @param dispersal_source_n_k Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} or visa-versa.
 #' @param dispersal_target_k Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.
 #' @param dispersal_target_n Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa.
+#' @param dispersal_target_n_k Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or visa-versa.
 #' @param simulator \code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.
 #' @return Dispersal function: \code{function(r, tm, carrying_capacity, stage_abundance, occupied_indices)}, where:
 #'   \describe{
@@ -58,6 +60,7 @@ population_dispersal <- function(replicates,
                                  dispersal_source_n_k,
                                  dispersal_target_k,
                                  dispersal_target_n,
+                                 dispersal_target_n_k = NULL,
                                  simulator) {
 
   if (is.null(dispersal)) { # no dispersal
@@ -85,7 +88,8 @@ population_dispersal <- function(replicates,
                        populations = populations, stages = stages, demographic_stochasticity = demographic_stochasticity,
                        density_stages = density_stages, dispersal_stages = dispersal_stages,
                        dispersal_source_n_k = dispersal_source_n_k, dispersal_target_k = dispersal_target_k,
-                       dispersal_target_n = dispersal_target_n, simulator = simulator),
+                       dispersal_target_n = dispersal_target_n, dispersal_target_n_k = dispersal_target_n_k,
+                       simulator = simulator),
                   additional_attributes)
 
       ## Create a nested function for applying user-defined dispersal of stage abundance ##
@@ -181,10 +185,12 @@ population_dispersal <- function(replicates,
   dispersal_depends_on_source_pop_n_k <- (is.list(dispersal_source_n_k) && (is.numeric(dispersal_source_n_k$cutoff) ||
                                                                               is.numeric(dispersal_source_n_k$threshold)))
 
-  # Does dispersal depend on target population carrying capacity K or abundance N?
+  # Does dispersal depend on target population carrying capacity K, abundance N, or N/K?
   dispersal_depends_on_target_pop_k <- is.numeric(dispersal_target_k)
   dispersal_depends_on_target_pop_n <- (is.list(dispersal_target_n) && (is.numeric(dispersal_target_n$threshold) ||
                                                                           is.numeric(dispersal_target_n$cutoff)))
+  dispersal_depends_on_target_pop_n_k <- (is.list(dispersal_target_n_k) && (is.numeric(dispersal_target_n_k$threshold) ||
+                                                                              is.numeric(dispersal_target_n_k$cutoff)))
 
   # Setup density dependence dispersal parameters
   if (dispersal_depends_on_source_pop_n_k) {
@@ -201,13 +207,19 @@ population_dispersal <- function(replicates,
       warning("Dispersal density dependence for source N/K threshold must be greater than cutoff => not used", call. = FALSE)
     }
   }
-  if (dispersal_depends_on_target_pop_k || dispersal_depends_on_target_pop_n) {
+  if (dispersal_depends_on_target_pop_k || dispersal_depends_on_target_pop_n || dispersal_depends_on_target_pop_n_k) {
 
     if (dispersal_depends_on_target_pop_n) {
 
       # Convert NULL to zero in target N threshold or cutoff
       if (is.null(dispersal_target_n$threshold)) dispersal_target_n$threshold <- 0
       if (is.null(dispersal_target_n$cutoff)) dispersal_target_n$cutoff <- 0
+    }
+    if (dispersal_depends_on_target_pop_n_k) {
+
+      # Convert NULL to zero in target N/K threshold or cutoff
+      if (is.null(dispersal_target_n_k$threshold)) dispersal_target_n_k$threshold <- 0
+      if (is.null(dispersal_target_n_k$cutoff)) dispersal_target_n_k$cutoff <- 0
     }
 
     # Create a map of compact array indices for mapping dispersers (emigrants) to target populations
@@ -242,7 +254,7 @@ population_dispersal <- function(replicates,
     occupied_dispersals <- dispersal_compact_matrix_tm[, occupied_indices]
 
     # Calculate density abundance
-    if (dispersal_depends_on_source_pop_n_k || dispersal_depends_on_target_pop_n) {
+    if (dispersal_depends_on_source_pop_n_k || dispersal_depends_on_target_pop_n || dispersal_depends_on_target_pop_n_k) {
       density_abundance <- .colSums(stage_abundance*as.numeric(density_stages), m = length(density_stages), n = populations)
     }
 
@@ -273,8 +285,8 @@ population_dispersal <- function(replicates,
     # Select occupied dispersal non-zero indices
     occupied_dispersal_indices <- which(as.logical(occupied_dispersals)) # > 0
 
-    # Modify dispersal rates when dispersal depends on target population K or N
-    if (dispersal_depends_on_target_pop_k || dispersal_depends_on_target_pop_n) {
+    # Modify dispersal rates when dispersal depends on target population K, N, or N/K
+    if (dispersal_depends_on_target_pop_k || dispersal_depends_on_target_pop_n || dispersal_depends_on_target_pop_n_k) {
 
       # Density dependent multipliers
       dd_multipliers <- array(1, populations)
@@ -307,6 +319,29 @@ population_dispersal <- function(replicates,
         }
       }
 
+      # Calculate the target N/K multipliers
+      if (dispersal_depends_on_target_pop_n_k) {
+        dd_multipliers[which(carrying_capacity <= 0)] <- 0
+        abundance_on_capacity <- density_abundance/carrying_capacity
+        if (all(dispersal_target_n_k$threshold < dispersal_target_n_k$cutoff)) { # overcrowded cell avoidance \
+          dd_multipliers[which(abundance_on_capacity >= dispersal_target_n_k$cutoff)] <- 0
+          modify_pop_indices <- which(abundance_on_capacity > dispersal_target_n_k$threshold & dd_multipliers > 0)
+          dd_multipliers[modify_pop_indices] <- ((array(dispersal_target_n_k$cutoff, populations)[modify_pop_indices] -
+                                                    abundance_on_capacity[modify_pop_indices])/
+                                                   array(dispersal_target_n_k$cutoff - dispersal_target_n_k$threshold,
+                                                         populations)[modify_pop_indices]*
+                                                   dd_multipliers[modify_pop_indices])
+        } else if (all(dispersal_target_n_k$threshold > dispersal_target_n_k$cutoff)) { # seek company /
+          dd_multipliers[which(abundance_on_capacity <= dispersal_target_n_k$cutoff)] <- 0
+          modify_pop_indices <- which(abundance_on_capacity < dispersal_target_n_k$threshold & dd_multipliers > 0)
+          dd_multipliers[modify_pop_indices] <- ((abundance_on_capacity[modify_pop_indices] -
+                                                    array(dispersal_target_n_k$cutoff, populations)[modify_pop_indices])/
+                                                   array(dispersal_target_n_k$threshold - dispersal_target_n_k$cutoff,
+                                                         populations)[modify_pop_indices]*
+                                                   dd_multipliers[modify_pop_indices])
+        }
+      }
+
       # Select multipliers via target populations for non-zero occupied dispersals
       selected_dd_multipliers <- dd_multipliers[dispersal_target_pop_map[, occupied_indices][occupied_dispersal_indices]]
 
@@ -318,7 +353,7 @@ population_dispersal <- function(replicates,
         occupied_dispersal_indices <- which(as.logical(occupied_dispersals)) # > 0
       }
 
-    } # dispersal depends on target pop N or K?
+    } # dispersal depends on target pop N, K or N/K?
 
     # Perform dispersal for each participating stage
     for (stage in which(dispersal_stages > 0)) {
@@ -370,8 +405,13 @@ population_dispersal <- function(replicates,
 
     }
 
-    # Perform additional dispersal for overcrowded cells (only to cells with room) # for dispersal_stages ####
-    if (dispersal_depends_on_target_pop_n && all(dispersal_target_n$threshold < dispersal_target_n$cutoff)) {
+    # Perform additional dispersal for overcrowded cells (only to cells with room)
+    if ((dispersal_depends_on_target_pop_n && all(dispersal_target_n$threshold < dispersal_target_n$cutoff)) ||
+        (dispersal_depends_on_target_pop_n_k && all(dispersal_target_n_k$threshold < dispersal_target_n_k$cutoff))) {
+
+      # Flags for dependencies
+      depends_on_target_pop_n <- (dispersal_depends_on_target_pop_n && all(dispersal_target_n$threshold < dispersal_target_n$cutoff))
+      depends_on_target_pop_n_k <- (dispersal_depends_on_target_pop_n_k && all(dispersal_target_n_k$threshold < dispersal_target_n_k$cutoff))
 
       # Get all updated dispersal rates
       dispersals <- dispersal_compact_matrix_tm
@@ -380,7 +420,14 @@ population_dispersal <- function(replicates,
       # Identify overcrowded cells based on stages affected by density
       density_abundance <- .colSums(stage_abundance*as.numeric(density_stages), m = length(density_stages), n = populations)
       stage_indices <- which(density_stages > 0 & dispersal_stages > 0)
-      excessive_indices <- which(density_abundance > dispersal_target_n$cutoff)
+      excessive_indices <- c()
+      if (depends_on_target_pop_n) {
+        excessive_indices <- which(density_abundance > dispersal_target_n$cutoff)
+      }
+      if (depends_on_target_pop_n_k) {
+        excessive_indices <- unique(c(excessive_indices,
+                                      which(density_abundance/carrying_capacity > dispersal_target_n_k$cutoff)))
+      }
 
       # Disperse excess from each overcrowded cell (in random order)
       for (excessive_index in excessive_indices[sample(length(excessive_indices))]) {
@@ -388,14 +435,27 @@ population_dispersal <- function(replicates,
         # Determine dispersal targets and rates with enough room for excess from overcrowded cell
         dispersal_indices <- which(dispersals[, excessive_index] > 0)
         target_indices <- dispersal_target_pop_map[, excessive_index][dispersal_indices]
-        indices_with_room <- which(density_abundance[target_indices] < dispersal_target_n$cutoff)
+        if (depends_on_target_pop_n && depends_on_target_pop_n_k) {
+          indices_with_room <- which((density_abundance < dispersal_target_n$cutoff &
+                                        (density_abundance + 1)/carrying_capacity <= dispersal_target_n_k$cutoff)[target_indices])
+        } else if (depends_on_target_pop_n) {
+          indices_with_room <- which((density_abundance < dispersal_target_n$cutoff)[target_indices])
+        } else if (depends_on_target_pop_n_k) {
+          indices_with_room <- which(((density_abundance + 1)/carrying_capacity <= dispersal_target_n_k$cutoff)[target_indices])
+        }
         dispersal_indices <- dispersal_indices[indices_with_room]
         target_indices <- target_indices[indices_with_room]
 
         # Disperse excess one at a time sampled via the cell stage abundance distribution
         rep_stage_indices <- rep(stage_indices, times = stage_abundance[stage_indices, excessive_index])
-        for (stage_i in rep_stage_indices[sample(1:length(rep_stage_indices), size = (density_abundance[excessive_index] -
-                                                                                      dispersal_target_n$cutoff))]) {
+        abundance_excess <- 0
+        if (depends_on_target_pop_n) {
+          abundance_excess <- density_abundance[excessive_index] - dispersal_target_n$cutoff
+        }
+        if (depends_on_target_pop_n_k) {
+          abundance_excess <- max(abundance_excess, density_abundance[excessive_index] - floor(dispersal_target_n_k$cutoff*carrying_capacity[excessive_index]))
+        }
+        for (stage_i in rep_stage_indices[sample(1:length(rep_stage_indices), size = abundance_excess)]) {
           if (length(target_indices)) {
 
             # Sample target cell
@@ -408,7 +468,8 @@ population_dispersal <- function(replicates,
 
             # Update target density abundance and potential targets if it becomes full
             density_abundance[target_i] <- density_abundance[target_i] + 1
-            if (density_abundance[target_i] >= dispersal_target_n$cutoff) { # remove from potential targets
+            if ((depends_on_target_pop_n && density_abundance[target_i] >= dispersal_target_n$cutoff) ||
+                (depends_on_target_pop_n_k && density_abundance[target_i]/carrying_capacity[target_i] >= dispersal_target_n$cutoff)) { # remove from potential targets
               full_index <- which(target_indices == target_i)
               target_indices <- target_indices[-full_index]
               dispersal_indices <- dispersal_indices[-full_index]
