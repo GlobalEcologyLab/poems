@@ -413,7 +413,7 @@ Generator <- R6Class("Generator",
             sample <- c(max(sample$mid - sample$window/2, 0), min(sample$mid + sample$window/2, 1))
           } else {
             self$error_messages <- sprintf("The distribution sample for %s utilizes missing parameter(s): %s", param,
-                                           unlist(self$distribution_templates[[param]][["sample"]][which(!sample_names %in% names(sample))]))
+                                           paste(unlist(self$distribution_templates[[param]][["sample"]][which(!sample_names %in% names(sample))]), collapse = ", "))
             return(NULL)
           }
         } else if (!is.null(sample)) { # single or c(lower, upper) bounds
