@@ -123,6 +123,8 @@ nested_model$harvest$rate
 
 \item{\code{dispersal_target_n}}{Simulator-dependent attribute (default is list with \emph{threshold} and \emph{cutoff}) of attributes for describing/parameterizing dispersal dependent on target population abundance (see \code{\link{population_simulator}}).}
 
+\item{\code{dispersal_target_n_k}}{Simulator-dependent attribute (default is list with \emph{threshold} and \emph{cutoff}) of attributes for describing/parameterizing dispersal dependent on target population abundance/capacity (see \code{\link{population_simulator}}).}
+
 \item{\code{abundance_threshold}}{Abundance threshold (that needs to be exceeded) for each population to persist.}
 
 \item{\code{simulation_order}}{A vector of simulation process names in configured order of execution (default is "transition", "translocation", "harvest", "mortality", "dispersal", "results").}

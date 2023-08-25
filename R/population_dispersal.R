@@ -469,7 +469,7 @@ population_dispersal <- function(replicates,
             # Update target density abundance and potential targets if it becomes full
             density_abundance[target_i] <- density_abundance[target_i] + 1
             if ((depends_on_target_pop_n && density_abundance[target_i] >= dispersal_target_n$cutoff) ||
-                (depends_on_target_pop_n_k && density_abundance[target_i]/carrying_capacity[target_i] >= dispersal_target_n$cutoff)) { # remove from potential targets
+                (depends_on_target_pop_n_k && density_abundance[target_i]/carrying_capacity[target_i] >= dispersal_target_n_k$cutoff)) { # remove from potential targets
               full_index <- which(target_indices == target_i)
               target_indices <- target_indices[-full_index]
               dispersal_indices <- dispersal_indices[-full_index]
