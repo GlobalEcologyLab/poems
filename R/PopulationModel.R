@@ -458,7 +458,7 @@ PopulationModel <- R6Class("PopulationModel",
       }
     },
 
-    #' @field stages Number of lifecycle stages.
+    #' @field stages Number of life cycle stages.
     stages = function(value) { # accessor for stage matrix dimension
       if (missing(value)) {
         if (is.matrix(self$stage_matrix)) {

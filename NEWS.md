@@ -1,3 +1,7 @@
+# 1.0.6
+
+- Patched some errors and notes that came up in the tests for the generator object and the spatial correlation object
+
 # 1.0.5
 
 ## enhancements

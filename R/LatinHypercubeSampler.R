@@ -3,7 +3,7 @@
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class that generates Latin hypercube samples (using
 #' \code{\link[lhs:randomLHS]{randomLHS}}) for parameters drawn from configured
-#' distributions: \code{\link[stats:Uniform]{uniform}},
+#' distributions: \code{\link[stats:Uniform]{uniform}}, \code{\link[stats:Poisson]{Poisson}},
 #' \code{\link[stats:Normal]{normal}}, \code{\link[stats:Lognormal]{lognormal}},
 #' \code{\link[stats:Beta]{beta}} or \code{\link[metRology:qtri]{triangular}}.
 #' It generates a data frame of sample values.
@@ -12,6 +12,7 @@
 #' lhs_gen <- LatinHypercubeSampler$new(parameter_names = c("size", "age", "km", "price"))
 #' lhs_gen$set_class_parameter("size", c("small", "medium", "large"))
 #' lhs_gen$set_uniform_parameter("age", lower = 18, upper = 70, decimals = 0)
+#' lhs_gen$set_poisson_parameter("offspring", lambda = 2)
 #' lhs_gen$set_normal_parameter("km", mean = 50000, sd = 20000, decimals = 0)
 #' lhs_gen$set_lognormal_parameter("price", mean = 30000, sd = 10000, decimals = 0)
 #' lhs_gen$set_beta_parameter("tread", mean = 0.7, sd = 0.1, decimals = 2)
@@ -20,6 +21,8 @@
 #' lhs_gen$generate_samples(number = 10, random_seed = 123)
 #'
 #' @importFrom R6 R6Class
+#' @importFrom metRology qtri
+#' @importFrom lhs randomLHS
 #' @include GenericClass.R
 #' @export LatinHypercubeSampler
 
@@ -96,6 +99,20 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
       self$parameter_distributions[[parameter_name]] <- list(type = "normal", mean = mean, sd = sd, decimals = decimals)
+    },
+
+    #' @description
+    #' Sets a parameter to be sampled from a \code{\link[stats:Poisson]{Poisson}} distribution with lambda parameter. Produces integers.
+    #' @param parameter_name Character string name of sample parameter.
+    #' @param lambda Lambda parameter for the Poisson distribution. Must be positive (default = 1).
+    set_poisson_parameter = function(parameter_name, lambda = 1) {
+      if (lambda < 0) {
+        stop("Poisson distribution lambda parameter must be non-negative", call. = FALSE)
+      }
+      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+        self$parameter_names <- c(self$parameter_names, parameter_name)
+      }
+      self$parameter_distributions[[parameter_name]] <- list(type = "poisson", lambda = lambda)
     },
 
     #' @description
@@ -184,7 +201,7 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
       if (!is.null(self$parameter_names) && !is.null(self$parameter_distributions) && all(self$parameter_names %in% names(self$parameter_distributions))) {
 
         # Generate uniform 0-1 LHS
-        sample_data <- as.data.frame(lhs::randomLHS(number, length(self$parameter_names)))
+        sample_data <- as.data.frame(randomLHS(number, length(self$parameter_names)))
         names(sample_data) <- self$parameter_names
 
         # Apply distributions for each parameter
@@ -201,7 +218,9 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
           } else if (distribution$type == "beta") {
             sample_data[[param]] <- stats::qbeta(sample_data[[param]], shape1 = distribution$alpha, shape2 = distribution$beta)
           } else if (distribution$type == "triangular") {
-            sample_data[[param]] <- metRology::qtri(sample_data[[param]], min = distribution$lower, max = distribution$upper, mode = distribution$mode)
+            sample_data[[param]] <- qtri(sample_data[[param]], min = distribution$lower, max = distribution$upper, mode = distribution$mode)
+          } else if (distribution$type == "poisson") {
+            sample_data[[param]] <- qpois(sample_data[[param]], lambda = distribution$lambda)
           }
           if (!is.null(distribution$decimals)) {
             sample_data[[param]] <- round(sample_data[[param]], distribution$decimals)

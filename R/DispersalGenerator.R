@@ -39,6 +39,9 @@
 #' }
 #'
 #' @importFrom R6 R6Class
+#' @importFrom geosphere distm
+#' @importFrom geosphere distGeo
+#' @import raster
 #' @include Generator.R
 #' @include DispersalTemplate.R
 #' @export DispersalGenerator
@@ -187,7 +190,7 @@ DispersalGenerator <- R6Class("DispersalGenerator",
         }
         if (!self$region$use_raster || (is.logical(use_longlat) && use_longlat) ||
             length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
-          return(geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/self$distance_scale)
+          return(distm(coordinates, coordinates, fun = distGeo)/self$distance_scale)
         } else { # assume coordinates in meters
           if (is.na(raster::crs(self$region$region_raster))) {
             warning("No coordinate reference system (CRS) specified: assuming coordinates are in meters", call. = FALSE)

@@ -22,7 +22,7 @@ tasmania_modifier
 }
 \description{
 A \emph{raster} dataset (11 timesteps) defining the intensity land-use cover for each
-grid-cell in the Tasmnia study region. NB. This dataset is projected and will not natively overlay
+grid-cell in the Tasmania study region. NB. This dataset is projected and will not natively overlay
 the other \emph{raster} datasets contained in \emph{poems}.
 }
 \keyword{datasets}

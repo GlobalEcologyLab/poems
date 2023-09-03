@@ -81,7 +81,7 @@ nested_model$harvest$rate
 
 \item{\code{populations}}{Number of population cells.}
 
-\item{\code{stages}}{Number of lifecycle stages.}
+\item{\code{stages}}{Number of life cycle stages.}
 
 \item{\code{initial_abundance}}{Array (matrix) or raster (stack) of initial abundance values at each population cell (for each age/stage).}
 

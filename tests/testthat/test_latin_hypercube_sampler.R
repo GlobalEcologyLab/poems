@@ -37,6 +37,14 @@ test_that("initialization and parameter setting", {
   expect_equal(lhs_generator$parameter_distributions,
                list(param_beta = list(type = "beta", alpha = 0.5*(0.5*(1 - 0.5)/(0.5*0.999)^2 - 1),
                                       beta = (1 - 0.5)*(0.5*(1 - 0.5)/(0.5*0.999)^2 - 1), decimals = NULL)))
+  # Poission distribution
+  lhs_generator <- LatinHypercubeSampler$new()
+  expect_error(lhs_generator$set_poisson_parameter("param_pois", lambda = -1),
+               "Poisson distribution lambda parameter must be non-negative")
+  lhs_generator$set_poisson_parameter("param_pois", lambda = 2)
+  expect_equal(lhs_generator$parameter_distributions,
+               list(param_pois = list(type = "poisson", lambda = 2)))
+
   # Triangular distribution
   lhs_generator <- LatinHypercubeSampler$new()
   expect_error(lhs_generator$set_triangular_parameter("param_triang", lower = 2, upper = 0),

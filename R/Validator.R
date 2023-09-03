@@ -27,6 +27,7 @@
 #' validator$selected_simulations # top 5 models
 #'
 #' @importFrom R6 R6Class
+#' @importFrom abc abc
 #' @include GenericModel.R
 #' @export Validator
 
@@ -63,7 +64,7 @@ Validator <- R6Class("Validator",
       if (is.null(self$validation_call_function)) {
         self$validation_call_function <- function(observed_metric_targets = NULL, simulation_parameters = NULL,
                                                   simulation_summary_metrics = NULL, tolerance = NULL, method = NULL, ...) {
-          abc::abc(
+          abc(
             target = observed_metric_targets,
             param = simulation_parameters,
             sumstat = simulation_summary_metrics,
@@ -149,7 +150,7 @@ Validator <- R6Class("Validator",
       # Generate diagnostics
       if (output_diagnostics) {
         if (!is.null(self$output_dir)) {
-          if (length(grep("abc::abc", deparse(self$validation_call_function), fixed = TRUE)) > 0) {
+          if (length(grep("abc", deparse(self$validation_call_function), fixed = TRUE)) > 0) {
             if (method %in% c("loclinear", "neuralnet", "ridge")) {
               self$generate_diagnostics()
             } else {
@@ -269,7 +270,7 @@ Validator <- R6Class("Validator",
         stop(sprintf("Diagnostics generation requires the %s first", missing_messages), call. = FALSE)
       }
 
-      if (length(grep("abc::abc", deparse(self$validation_call_function), fixed = TRUE)) > 0) {
+      if (length(grep("abc", deparse(self$validation_call_function), fixed = TRUE)) > 0) {
         # Diagnostics plot can only be generated when ABC method is "loclinear", "ridge" or "neuralnet"
         if (!(self$validator_return_object$method %in% c("loclinear", "neuralnet", "ridge"))) {
           stop("Validation diagnostics can only be generated when ABC methods neuralnet, ridge, or loclinear were utilized", call. = FALSE)

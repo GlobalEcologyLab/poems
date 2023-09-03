@@ -60,6 +60,7 @@
 #'                                           density_max = 100))
 #'
 #' @importFrom R6 R6Class
+#' @importFrom metRology qtri
 #' @include SpatialModel.R
 #' @include GenerativeTemplate.R
 #' @export Generator
@@ -429,7 +430,7 @@ Generator <- R6Class("Generator",
           sample <- suppressWarnings(as.numeric(sample))
           if (any(is.na(sample))) {
             self$error_messages <- sprintf("The distribution sample for %s utilizes missing parameter(s): %s", param,
-                                           paste(self$distribution_templates[[param]][["sample"]][which(is.na(sample))], collapse = ", "))
+                                           paste(self$distribution_templates[[param]][["sample"]][which(is.na(sample))]))
             return(NULL)
           }
         }
@@ -584,7 +585,7 @@ Generator <- R6Class("Generator",
                    generated_samples <- generated_samples*generated_values
                    distr_param_values <- lapply(distr_param_values, function(x) x*generated_values)
                    # Generate finite values (eliminates NAs which cause qtri errors)
-                   finite_values <- metRology::qtri(generated_samples[finite_indices],
+                   finite_values <- qtri(generated_samples[finite_indices],
                                                     min = distr_param_values$lower[finite_indices],
                                                     max = distr_param_values$upper[finite_indices],
                                                     mode = distr_param_values$mode[finite_indices])
