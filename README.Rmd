@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 [![CRAN_status](https://www.r-pkg.org/badges/version/poems)](https://CRAN.R-project.org/package=poems)
 [![Download_count](https://cranlogs.r-pkg.org/badges/grand-total/poems)](https://CRAN.R-project.org/package=poems)
 [![Paper_doi](https://img.shields.io/badge/doi-10.1111/2041--210X.13720-orange.svg)](https://doi.org/10.1111/2041-210X.13720)
+[![Codecov test coverage](https://codecov.io/gh/GlobalEcologyLab/poems/branch/main/graph/badge.svg)](https://app.codecov.io/gh/GlobalEcologyLab/poems?branch=main)
+[![R-CMD-check](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The poems package provides a framework of interoperable *R6* (Chang, 2020) classes
