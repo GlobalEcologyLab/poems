@@ -1,3 +1,8 @@
+# 1.1.0
+
+- Added density dependent dispersal, via density dependence in the source population and the target population
+- Added Poisson distributions as a possible parameter distribution to the Latin hypercube sampler
+
 # 1.0.6
 
 - Patched some errors and notes that came up in the tests for the generator object and the spatial correlation object

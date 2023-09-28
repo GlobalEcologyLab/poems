@@ -58,7 +58,7 @@
 #'     that were found to best match the targets. Diagnostic outputs may also be
 #'     produced (depending on the call function and its configuration).
 #'   \item The selected models may then be utilized for further studies, such as
-#'     alternative model scenarios or counter-factuals. This can be achieved by
+#'     alternative model scenarios or counterfactuals. This can be achieved by
 #'     utilizing the selected subset of parameter samples to form inputs for further
 #'     model simulations (by repeating the steps above).
 #' }
