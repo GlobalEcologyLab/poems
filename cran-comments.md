@@ -1,7 +1,7 @@
 ## Test environments
 * win-builder (R-devel)
-* macbuilder M1mac (R-release)
-* local OS X (13.5) install, Intel chip, R 4.3.1
+* macOS 13.3.1, M1 chip, R 4.3.1 (via macbuilder)
+* local macOS (13.5) install, Intel chip, R 4.3.1
 * Ubuntu Linux 20.04.1, R 4.3.1 (via R-hub)
 
 ## R CMD check results
