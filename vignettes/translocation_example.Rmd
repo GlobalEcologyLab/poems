@@ -486,7 +486,7 @@ disp_test <- lapply(1:nrow(disp_mat), function(i) {
   lines(x = seq(5, 150, 5),
         y = apply(as.data.frame(disp_test), 1, mean), col = "firebrick")
   }
-
+dev.off()
 ```
 
 Now that we're happy the curve follows the right form, we can generate

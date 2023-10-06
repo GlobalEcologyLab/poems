@@ -10,7 +10,6 @@
 #' and completeness of model parameters.
 #'
 #' @examples
-#' \dontrun{
 #' # U Island example region
 #' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 #'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -44,7 +43,6 @@
 #' nested_model$is_consistent()
 #' nested_model$is_complete()
 #' nested_model$harvest$rate
-#' }
 #'
 #' @importFrom R6 R6Class
 #' @include SimulationModel.R

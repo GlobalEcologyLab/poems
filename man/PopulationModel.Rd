@@ -13,7 +13,6 @@ parameters. Also provided are extensions to the methods for checking the consist
 and completeness of model parameters.
 }
 \examples{
-\dontrun{
 # U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -47,7 +46,6 @@ nested_model$carrying_capacity <- array(70:1, c(7, 10))
 nested_model$is_consistent()
 nested_model$is_complete()
 nested_model$harvest$rate
-}
 
 }
 \section{Super classes}{

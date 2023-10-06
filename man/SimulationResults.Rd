@@ -9,7 +9,6 @@ spatially-explicit simulation results, as well as optional re-generated
 \code{\link{Generator}} outputs.
 }
 \examples{
-\dontrun{
 # U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -39,7 +38,6 @@ results_clone$get_attribute("abundance")
 results_clone$get_attribute("abundance")[region$region_indices]
 results_clone$all$get_attribute("abundance")
 results_clone$get_attribute("all$abundance")
-}
 
 }
 \section{Super classes}{

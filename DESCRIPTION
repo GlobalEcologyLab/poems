@@ -9,7 +9,7 @@ Authors@R: c(
     person("Jessie", "Buettel", email = "jessie.buettel@utas.edu.au", role = "aut"),
     person("Barry", "Brook", email = "barry.brook@utas.edu.au", role = "aut"),
     person("July", "Pilowsky", email = "pilowskyj@caryinstitute.org", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6376-2585")))
-Description: The poems package provides a framework of interoperable R6 classes 
+Description: A framework of interoperable R6 classes 
     (Chang, 2020, <https://CRAN.R-project.org/package=R6>) for building ensembles 
     of viable models via the pattern-oriented modeling (POM) approach (Grimm et al.,
     2005, <doi:10.1126/science.1116681>). The package includes classes for 

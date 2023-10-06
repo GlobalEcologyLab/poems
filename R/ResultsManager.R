@@ -6,7 +6,6 @@
 #' values via generators.
 #'
 #' @examples
-#' \dontrun{
 #' # U Island example region
 #' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 #'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -48,7 +47,6 @@
 #' dir(tempdir(), "*.txt") # plus generation log
 #' results_manager$summary_metric_data
 #' results_manager$summary_matrix_list
-#' }
 #'
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%

@@ -9,7 +9,6 @@ defined via a list of longitude/latitude cell coordinates (WGS84), or a
 \emph{RasterLayer} object (see \code{\link[raster:raster-package]{raster}}).
 }
 \examples{
-\dontrun{
 # U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -27,7 +26,6 @@ raster::plot(value_brick, main = "Example value layers",
              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
              colNA = "blue")
 value_brick[region$region_indices]
-}
 
 }
 \section{Super class}{
