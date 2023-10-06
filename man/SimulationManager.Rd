@@ -8,6 +8,7 @@
 simulations and saving results.
 }
 \examples{
+\dontrun{
 # U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -64,6 +65,7 @@ for (i in 1:3) {
   print(readRDS(file.path(tempdir(), file_name)))
 }
 dir(tempdir(), "*.txt") # plus simulation log
+}
 
 }
 \section{Super classes}{
