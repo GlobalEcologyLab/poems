@@ -236,17 +236,17 @@ Generator <- R6Class("Generator",
     #' @param param Name of model attribute to be read from a file.
     #' @param path_template Template string for the file path with \emph{\%s} placeholders (see \code{\link{sprintf}}) for simulation sample parameters.
     #' @param path_params Array of the names of the simulation sample parameters to be substituted (in order) into the path template.
-    #' @param file_type File type raster \emph{"GRD"} (default), \emph{"RData/RDS"} or \emph{"CSV"} to be read.
+    #' @param file_type File type raster \emph{"GRD"} (default), \emph{"TIF"}, \emph{"RData/RDS"} or \emph{"CSV"} to be read.
     add_file_template = function(param, path_template, path_params = c(), file_type = "GRD") {
       if (is.character(param) && is.character(path_template)) {
         if (length(path_params) == (length(strsplit(paste0("#", path_template,"#"), "%s")[[1]]) - 1)) {
           self$file_templates[[param]] <- list()
           self$file_templates[[param]]$path_template <- path_template
           self$file_templates[[param]]$path_params <- c(path_params)
-          if (toupper(file_type) == "GRD" || toupper(file_type) == "RDS" || toupper(file_type) == "CSV") {
+          if (toupper(file_type) == "GRD" || toupper(file_type) == "RDS" || toupper(file_type) == "CSV" || toupper(file_type) == "TIF") {
             self$file_templates[[param]]$file_type <- toupper(file_type)
           } else {
-            stop("The file type should be GRD (raster), RDS or CSV", call. = FALSE)
+            stop("The file type should be GRD (raster), TIF (raster), RDS, or CSV", call. = FALSE)
           }
         } else {
           stop("Ensure the path template contains a corresponding %s for each path parameter", call. = FALSE)
@@ -884,6 +884,8 @@ Generator <- R6Class("Generator",
           } else if (length(grep(".RDATA", toupper(value), fixed = TRUE)) || length(grep(".RDS", toupper(value), fixed = TRUE))) {
             value <- readRDS(file = value)
           } else if (length(grep(".GRD", toupper(value), fixed = TRUE))) {
+            value <- raster::brick(value)
+          } else if (length(grep(".TIF", toupper(value), fixed = TRUE))) {
             value <- raster::brick(value)
           } else {
             value <- utils::read.table(file = value)
