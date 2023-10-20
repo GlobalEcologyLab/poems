@@ -47,7 +47,8 @@ Imports:
     metRology (>= 0.9.28.1),
     R6 (>= 2.5.0),
     raster (>= 3.6),
-    trend (>= 1.1.4)
+    trend (>= 1.1.4),
+    truncnorm (>= 1.0)
 Collate: 
     'GenericClass.R'
     'Region.R'

@@ -5,7 +5,8 @@
 #' \code{\link[lhs:randomLHS]{randomLHS}}) for parameters drawn from configured
 #' distributions: \code{\link[stats:Uniform]{uniform}}, \code{\link[stats:Poisson]{Poisson}},
 #' \code{\link[stats:Normal]{normal}}, \code{\link[stats:Lognormal]{lognormal}},
-#' \code{\link[stats:Beta]{beta}} or \code{\link[metRology:qtri]{triangular}}.
+#' \code{\link[stats:Beta]{beta}}, \code{\link[truncnorm:qtruncnorm]{truncated normal}} or
+#' \code{\link[metRology:qtri]{triangular}}.
 #' It generates a data frame of sample values.
 #'
 #' @examples
@@ -14,6 +15,7 @@
 #' lhs_gen$set_uniform_parameter("age", lower = 18, upper = 70, decimals = 0)
 #' lhs_gen$set_poisson_parameter("offspring", lambda = 2)
 #' lhs_gen$set_normal_parameter("km", mean = 50000, sd = 20000, decimals = 0)
+#' lhs_gen$set_truncnorm_parameter("kg", mean = 75, sd = 20, lower = 0, upper = Inf, decimals = 2)
 #' lhs_gen$set_lognormal_parameter("price", mean = 30000, sd = 10000, decimals = 0)
 #' lhs_gen$set_beta_parameter("tread", mean = 0.7, sd = 0.1, decimals = 2)
 #' lhs_gen$set_triangular_parameter("rating", lower = 0, upper = 10, mode = 5,
@@ -21,6 +23,7 @@
 #' lhs_gen$generate_samples(number = 10, random_seed = 123)
 #'
 #' @importFrom R6 R6Class
+#' @importFrom truncnorm qtruncnorm
 #' @importFrom metRology qtri
 #' @importFrom lhs randomLHS
 #' @include GenericClass.R
@@ -169,6 +172,24 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     },
 
     #' @description
+    #' Sets a parameter to be sampled from a \code{\link[truncnorm:qtruncnorm]{truncated normal}} distribution with mean, standard deviation, and lower and upper bounds, optionally rounded to a specified number of decimal places.
+    #' @param parameter_name Character string name of sample parameter.
+    #' @param mean Mean parameter of the truncated normal distribution (default = 0).
+    #' @param sd Standard deviation of the truncated normal distribution (default = 1).
+    #' @param lower Lower bound of the truncated normal distribution (default = -Inf, meaning no lower bound).
+    #' @param upper Upper bound of the truncated normal distribution (default = Inf, meaning no upper bound).
+    #' @param decimals Optional number of decimals that generated samples are rounded to.
+    set_truncnorm_parameter = function(parameter_name, mean = 0, sd = 1, lower = -Inf, upper = Inf, decimals = NULL) {
+      if (lower > upper || mean < lower || mean > upper) {
+        stop("Truncated normal distribution parameters must comply with: lower <= mean <= upper", call. = FALSE)
+      }
+      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+        self$parameter_names <- c(self$parameter_names, parameter_name)
+      }
+      self$parameter_distributions[[parameter_name]] <- list(type = "truncated normal", mean = mean, sd = sd, lower = lower, upper = upper, decimals = decimals)
+    },
+
+    #' @description
     #' Sets a parameter to be sampled from a \code{\link[metRology:qtri]{triangular}} distribution with lower and upper bounds and mode (peak), optionally rounded to a specified number of decimal places.
     #' @param parameter_name Character string name of sample parameter.
     #' @param lower Lower bound of the triangular distribution (default = 0).
@@ -221,6 +242,8 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
             sample_data[[param]] <- qtri(sample_data[[param]], min = distribution$lower, max = distribution$upper, mode = distribution$mode)
           } else if (distribution$type == "poisson") {
             sample_data[[param]] <- qpois(sample_data[[param]], lambda = distribution$lambda)
+          } else if (distribution$type == "truncated normal") {
+            sample_data[[param]] <- qtruncnorm(sample_data[[param]], a = distribution$lower, b = distribution$upper, mean = distribution$mean, sd = distribution$sd)
           }
           if (!is.null(distribution$decimals)) {
             sample_data[[param]] <- round(sample_data[[param]], distribution$decimals)

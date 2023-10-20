@@ -254,7 +254,7 @@ Adds a file template for reading raster/RData(RDS)/CSV files for a given model a
 
 \item{\code{path_params}}{Array of the names of the simulation sample parameters to be substituted (in order) into the path template.}
 
-\item{\code{file_type}}{File type raster \emph{"GRD"} (default), \emph{"RData/RDS"} or \emph{"CSV"} to be read.}
+\item{\code{file_type}}{File type raster \emph{"GRD"} (default), \emph{"TIF"}, \emph{"RData/RDS"} or \emph{"CSV"} to be read.}
 }
 \if{html}{\out{</div>}}
 }

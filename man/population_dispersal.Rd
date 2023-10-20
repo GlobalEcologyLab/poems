@@ -13,9 +13,9 @@ population_dispersal(
   density_stages,
   dispersal,
   dispersal_stages,
-  dispersal_source_n_k,
-  dispersal_target_k,
-  dispersal_target_n,
+  dispersal_source_n_k = NULL,
+  dispersal_target_k = NULL,
+  dispersal_target_n = NULL,
   dispersal_target_n_k = NULL,
   simulator
 )
@@ -45,8 +45,8 @@ population_dispersal(
   \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}
   \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold}.}
   \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.}
-  \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa.}
-  \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or visa-versa.}
+  \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or vice versa.}
+  \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or vice versa.}
   \item{\code{r}}{Simulation replicate.}
   \item{\code{tm}}{Simulation time step.}
   \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
@@ -59,13 +59,13 @@ returns the post-dispersal abundance matrix}
 
 \item{dispersal_stages}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).}
 
-\item{dispersal_source_n_k}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} or visa-versa.}
+\item{dispersal_source_n_k}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} or vice versa.}
 
 \item{dispersal_target_k}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.}
 
 \item{dispersal_target_n}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa.}
 
-\item{dispersal_target_n_k}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or visa-versa.}
+\item{dispersal_target_n_k}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or vice versa.}
 
 \item{simulator}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
 }

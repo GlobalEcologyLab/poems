@@ -8,7 +8,8 @@
 \code{\link[lhs:randomLHS]{randomLHS}}) for parameters drawn from configured
 distributions: \code{\link[stats:Uniform]{uniform}}, \code{\link[stats:Poisson]{Poisson}},
 \code{\link[stats:Normal]{normal}}, \code{\link[stats:Lognormal]{lognormal}},
-\code{\link[stats:Beta]{beta}} or \code{\link[metRology:qtri]{triangular}}.
+\code{\link[stats:Beta]{beta}}, \code{\link[truncnorm:qtruncnorm]{truncated normal}} or
+\code{\link[metRology:qtri]{triangular}}.
 It generates a data frame of sample values.
 }
 \examples{
@@ -17,6 +18,7 @@ lhs_gen$set_class_parameter("size", c("small", "medium", "large"))
 lhs_gen$set_uniform_parameter("age", lower = 18, upper = 70, decimals = 0)
 lhs_gen$set_poisson_parameter("offspring", lambda = 2)
 lhs_gen$set_normal_parameter("km", mean = 50000, sd = 20000, decimals = 0)
+lhs_gen$set_truncnorm_parameter("kg", mean = 75, sd = 20, lower = 0, upper = Inf, decimals = 2)
 lhs_gen$set_lognormal_parameter("price", mean = 30000, sd = 10000, decimals = 0)
 lhs_gen$set_beta_parameter("tread", mean = 0.7, sd = 0.1, decimals = 2)
 lhs_gen$set_triangular_parameter("rating", lower = 0, upper = 10, mode = 5,
@@ -53,6 +55,7 @@ lhs_gen$generate_samples(number = 10, random_seed = 123)
 \item \href{#method-LatinHypercubeSampler-set_poisson_parameter}{\code{LatinHypercubeSampler$set_poisson_parameter()}}
 \item \href{#method-LatinHypercubeSampler-set_lognormal_parameter}{\code{LatinHypercubeSampler$set_lognormal_parameter()}}
 \item \href{#method-LatinHypercubeSampler-set_beta_parameter}{\code{LatinHypercubeSampler$set_beta_parameter()}}
+\item \href{#method-LatinHypercubeSampler-set_truncnorm_parameter}{\code{LatinHypercubeSampler$set_truncnorm_parameter()}}
 \item \href{#method-LatinHypercubeSampler-set_triangular_parameter}{\code{LatinHypercubeSampler$set_triangular_parameter()}}
 \item \href{#method-LatinHypercubeSampler-generate_samples}{\code{LatinHypercubeSampler$generate_samples()}}
 \item \href{#method-LatinHypercubeSampler-clone}{\code{LatinHypercubeSampler$clone()}}
@@ -242,6 +245,40 @@ Sets a parameter to be sampled from a \code{\link[stats:Beta]{beta}} distributio
 \item{\code{sd}}{Optional (overriding) standard deviation parameter for the beta distribution (default = NULL).}
 
 \item{\code{decimals}}{Optional number of decimals applied to generated samples.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LatinHypercubeSampler-set_truncnorm_parameter"></a>}}
+\if{latex}{\out{\hypertarget{method-LatinHypercubeSampler-set_truncnorm_parameter}{}}}
+\subsection{Method \code{set_truncnorm_parameter()}}{
+Sets a parameter to be sampled from a \code{\link[truncnorm:qtruncnorm]{truncated normal}} distribution with mean, standard deviation, and lower and upper bounds, optionally rounded to a specified number of decimal places.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LatinHypercubeSampler$set_truncnorm_parameter(
+  parameter_name,
+  mean = 0,
+  sd = 1,
+  lower = -Inf,
+  upper = Inf,
+  decimals = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parameter_name}}{Character string name of sample parameter.}
+
+\item{\code{mean}}{Mean parameter of the truncated normal distribution (default = 0).}
+
+\item{\code{sd}}{Standard deviation of the truncated normal distribution (default = 1).}
+
+\item{\code{lower}}{Lower bound of the truncated normal distribution (default = -Inf, meaning no lower bound).}
+
+\item{\code{upper}}{Upper bound of the truncated normal distribution (default = Inf, meaning no upper bound).}
+
+\item{\code{decimals}}{Optional number of decimals that generated samples are rounded to.}
 }
 \if{html}{\out{</div>}}
 }
