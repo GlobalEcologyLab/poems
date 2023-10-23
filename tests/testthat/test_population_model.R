@@ -79,10 +79,11 @@ test_that("consistency and completeness", {
     )
   expect_null(population_model$inconsistent_attributes())
   expect_equal(population_model$inconsistent_attributes(include_nas = TRUE)$not_available,
-               c("random_seed", "fecundity_max", "dispersal_target_n_k", "simulation_order",
-               "results_selection", "initial_abundance", "standard_deviation", "correlation", "carrying_capacity",
+               c("random_seed", "fecundity_max", "simulation_order",
+               "results_selection", "initial_abundance", "standard_deviation",
+               "correlation", "carrying_capacity",
                "density_dependence", "growth_rate_max", "translocation", "harvest",
-               "mortality", "dispersal", "dispersal_source_n_k", "dispersal_target_k",
+               "mortality", "dispersal", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n_k",
                "dispersal_target_n", "abundance_threshold"))
   expect_true(population_model$is_consistent())
   expect_equal(
