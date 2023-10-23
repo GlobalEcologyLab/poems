@@ -1,7 +1,7 @@
 #' Runs a stage-based demographic population model simulation.
 #'
 #' Simulates a stage-based demographic population model and returns simulation results
-#' across multiple replicate runs. Processes ran at each simulation time-step include:
+#' across multiple replicate runs. Processes run at each simulation time-step include:
 #' \enumerate{
 #'   \item Density dependence calculations (ceiling, logistic, or user-defined)
 #'   \item Environmental stochasticity calculations
@@ -17,19 +17,19 @@
 #'   \describe{
 #'     \item{\code{random_seed}}{Number to seed the random number generation for stochasticity.}
 #'     \item{\code{replicates}}{Number of replicate simulation runs (default is 1).}
-#'     \item{\code{time_steps}}{Number of simulation time steps.}
+#'     \item{\code{time_steps}}{Number of simulation time steps. Required input.}
 #'     \item{\code{years_per_step}}{Number of years per time step (default is 1).}
-#'     \item{\code{populations}}{Number of populations.}
+#'     \item{\code{populations}}{Number of populations. Required input.}
 #'     \item{\code{coordinates}}{Data frame (or matrix) of X-Y population coordinates.}
 #'     \item{\code{stages}}{Number of life cycle stages.}
-#'     \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns).}
-#'     \item{\code{stage_matrix}}{Matrix of transition (fecundity & survival) rates between stages at each time step (Leslie/Lefkovitch matrix).}
+#'     \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns). Required input.}
+#'     \item{\code{stage_matrix}}{Matrix of transition (fecundity & survival) rates between stages at each time step (Leslie/Lefkovitch matrix). Required input.}
 #'     \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
 #'     \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
 #'     \item{\code{demographic_stochasticity}}{Boolean for choosing demographic stochasticity for transition, dispersal, harvest and/or other processes (default is TRUE).}
 #'     \item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasticity to transition rates.}
 #'     \item{\code{correlation}}{List containing either an environmental correlation matrix (correlation_matrix), a pre-calculated transposed (Cholesky) decomposition matrix (t_decomposition_matrix), or a compact transposed (Cholesky) decomposition matrix (t_decomposition_compact_matrix) and a corresponding map of population indices (t_decomposition_compact_map), as per \code{\link{SpatialCorrelation}} class attributes.}
-#'     \item{\code{carrying_capacity}}{Array (matrix) of carrying capacity values at each population cell (\emph{populations} rows by \emph{time_steps} columns when across time).}
+#'     \item{\code{carrying_capacity}}{Array (matrix) of carrying capacity values at each population cell (\emph{populations} rows by \emph{time_steps} columns when across time). Required input.}
 #'     \item{\code{density_dependence}}{Density dependence can be "ceiling" (default), "logistic" (Ricker), or a user-defined function (optionally nested in a list with additional attributes) for adjusting transition rates: \code{function(params)}, where \emph{params} is a list passed to the function containing:
 #'       \describe{
 #'         \item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}

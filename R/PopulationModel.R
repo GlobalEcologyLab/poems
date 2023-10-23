@@ -117,7 +117,7 @@ PopulationModel <- R6Class("PopulationModel",
                                                    "carrying_capacity", "density_dependence", "growth_rate_max",
                                                    "density_affects", "density_stages", "translocation", "harvest",
                                                    "mortality", "dispersal", "dispersal_stages", "dispersal_source_n_k",
-                                                   "dispersal_target_k", "dispersal_target_n", "dispersal_target_n",
+                                                   "dispersal_target_k", "dispersal_target_n", "dispersal_target_n_k",
                                                    "abundance_threshold", "result_stages"))]
         consistent_list <- super$list_consistency(params[which(!params %in% local_params)])
         for (param in local_params) {
