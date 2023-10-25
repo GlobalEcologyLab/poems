@@ -22,7 +22,11 @@
 #'     \item{\code{populations}}{Number of populations. Required input.}
 #'     \item{\code{coordinates}}{Data frame (or matrix) of X-Y population coordinates.}
 #'     \item{\code{stages}}{Number of life cycle stages.}
-#'     \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns). Required input.}
+#'  \item{\code{region}}{A \code{\link[Region]{Region}} object
+#'  defining the study region.}
+#'     \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns). If there is only one stage and a region object is attached, then initial
+#'  abundance may be provided in the form of a raster with the same specs as
+#'  the region raster. A vector can be provided that will be forced to a matrix. Required input.}
 #'     \item{\code{stage_matrix}}{Matrix of transition (fecundity & survival) rates between stages at each time step (Leslie/Lefkovitch matrix). Required input.}
 #'     \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
 #'     \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
@@ -95,8 +99,8 @@
 #'     \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).}
 #'     \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} (aliases: \emph{dispersal_n_k_cutoff} & \emph{dispersal_n_k_threshold}).}
 #'     \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold} (alias: \emph{dispersal_k_threshold}).}
-#'     \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa (aliases: \emph{dispersal_n_threshold} & \emph{dispersal_n_cutoff}).}
-#'     \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or visa-versa.}
+#'     \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or vice versa (aliases: \emph{dispersal_n_threshold} & \emph{dispersal_n_cutoff}).}
+#'     \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or vica versa.}
 #'     \item{\code{abundance_threshold}}{Abundance threshold (that needs to be exceeded) for each population to persist.}
 #'     \item{\code{simulation_order}}{A vector of simulation process names in configured order of execution (default is "transition", "translocation", "harvest" (plus harvested results), "mortality", "dispersal", "results" (except harvested).}
 #'     \item{\code{additional transformation functions}}{Additional user-defined abundance transformation functions (optionally nested in lists with additional attributes) are utilised when listed in \emph{simulation_order} (function as per translocation).}

@@ -83,8 +83,8 @@ test_that("consistency and completeness", {
                "results_selection", "initial_abundance", "standard_deviation",
                "correlation", "carrying_capacity",
                "density_dependence", "growth_rate_max", "translocation", "harvest",
-               "mortality", "dispersal", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n_k",
-               "dispersal_target_n", "abundance_threshold"))
+               "mortality", "dispersal", "dispersal_source_n_k", "dispersal_target_k",
+               "dispersal_target_n", "dispersal_target_n_k", "abundance_threshold"))
   expect_true(population_model$is_consistent())
   expect_equal(
     population_model$incomplete_attributes(),
