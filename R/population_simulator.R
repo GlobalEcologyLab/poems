@@ -22,7 +22,7 @@
 #'     \item{\code{populations}}{Number of populations. Required input.}
 #'     \item{\code{coordinates}}{Data frame (or matrix) of X-Y population coordinates.}
 #'     \item{\code{stages}}{Number of life cycle stages.}
-#'  \item{\code{region}}{A \code{\link[Region]{Region}} object
+#'  \item{\code{region}}{A \code{\link{Region}} object
 #'  defining the study region.}
 #'     \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns). If there is only one stage and a region object is attached, then initial
 #'  abundance may be provided in the form of a raster with the same specs as

@@ -1,3 +1,0 @@
-linters: all_linters(
-    line_length_linter = NULL
-  )

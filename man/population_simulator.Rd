@@ -8,95 +8,99 @@ population_simulator(inputs)
 }
 \arguments{
 \item{inputs}{Nested list/object with named elements:
-\describe{
-  \item{\code{random_seed}}{Number to seed the random number generation for stochasticity.}
-  \item{\code{replicates}}{Number of replicate simulation runs (default is 1).}
-  \item{\code{time_steps}}{Number of simulation time steps. Required input.}
-  \item{\code{years_per_step}}{Number of years per time step (default is 1).}
-  \item{\code{populations}}{Number of populations. Required input.}
-  \item{\code{coordinates}}{Data frame (or matrix) of X-Y population coordinates.}
-  \item{\code{stages}}{Number of life cycle stages.}
-  \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns). Required input.}
-  \item{\code{stage_matrix}}{Matrix of transition (fecundity & survival) rates between stages at each time step (Leslie/Lefkovitch matrix). Required input.}
-  \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
-  \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
-  \item{\code{demographic_stochasticity}}{Boolean for choosing demographic stochasticity for transition, dispersal, harvest and/or other processes (default is TRUE).}
-  \item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasticity to transition rates.}
-  \item{\code{correlation}}{List containing either an environmental correlation matrix (correlation_matrix), a pre-calculated transposed (Cholesky) decomposition matrix (t_decomposition_matrix), or a compact transposed (Cholesky) decomposition matrix (t_decomposition_compact_matrix) and a corresponding map of population indices (t_decomposition_compact_map), as per \code{\link{SpatialCorrelation}} class attributes.}
-  \item{\code{carrying_capacity}}{Array (matrix) of carrying capacity values at each population cell (\emph{populations} rows by \emph{time_steps} columns when across time). Required input.}
-  \item{\code{density_dependence}}{Density dependence can be "ceiling" (default), "logistic" (Ricker), or a user-defined function (optionally nested in a list with additional attributes) for adjusting transition rates: \code{function(params)}, where \emph{params} is a list passed to the function containing:
-    \describe{
-      \item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}
-      \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
-      \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
-      \item{\code{carrying_capacity}}{Array of carrying capacity values for each population.}
-      \item{\code{stage_abundance}}{Matrix of abundances for each stage (rows) and population (columns).}
-      \item{\code{population_abundance}}{Array of summed population abundances for all stages.}
-      \item{\code{density_abundance}}{Array of summed population abundances for stages affected by density.}
-      \item{\code{growth_rate_max}}{Maximum growth rate value or array for populations.}
-      \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-      \item{\code{calculate_multipliers}}{Function (\code{function(growth_rates)}) for finding multipliers (when stages > 1) to apply to affected transitions that result in target growth rates (dominant eigenvalues).}
-      \item{\code{apply_multipliers}}{Function (\code{function(transition_array, multipliers}) for applying multipliers (when stages > 1) to the affected transition rates within a transition array (returns multiplied array).}
-      \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
-      \item{\code{optional attributes}}{Additional numeric attributes when density dependence is optionally nested in a list.}
-    }
-    returns a transformed transition 3D array
-  }
-  \item{\code{growth_rate_max}}{Maximum growth rate (utilized by density dependence processes).}
-  \item{\code{density_affects}}{Matrix of booleans or numeric (0-1) indicating the transition vital rates affected by density (default is all).}
-  \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density (default is all).}
-  \item{\code{density_precision}}{Numeric precision of the calculated multipliers (used when stages > 1) applied to affected transition rates (default is 3 decimal places).}
-  \item{\code{translocation}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying translocation or spatio-temporal management (to abundances): \code{function(params)}, where \emph{params} is a list passed to the function containing:
-    \describe{
-      \item{\code{replicates}}{Number of replicate simulation runs.}
-      \item{\code{time_steps}}{Number of simulation time steps.}
-      \item{\code{years_per_step}}{Number of years per time step.}
-      \item{\code{populations}}{Number of populations.}
-      \item{\code{stages}}{Number of lifecycle stages.}
-      \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
-      \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
-      \item{\code{r}}{Simulation replicate.}
-      \item{\code{tm}}{Simulation time step.}
-      \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
-      \item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
-      \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-      \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
-      \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
-    }
-    returns a transformed stage abundance matrix (or a list with stage abundance and carrying capacity)
-  }
-  \item{\code{harvest}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying harvesting (to abundances): \code{function(params)} as per translocation.}
-  \item{\code{mortality}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying mortality (to abundances): \code{function(params)} as per translocation.}
-  \item{\code{dispersal}}{Either a matrix of dispersal rates between populations (source columns to target rows) or a list of data frames of non-zero dispersal rates and indices for constructing a compact dispersal matrix, and optional changing rates over time (as per class \code{\link{DispersalGenerator}} \emph{dispersal_data} attribute). Alternatively a user-defined function (optionally nested in a list with additional attributes) may be used: \code{function(params)}, where \emph{params} is a list passed to the function containing:
-    \describe{
-      \item{\code{replicates}}{Number of replicate simulation runs.}
-      \item{\code{time_steps}}{Number of simulation time steps.}
-      \item{\code{years_per_step}}{Number of years per time step.}
-      \item{\code{populations}}{Number of populations.}
-      \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
-      \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
-      \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}
-      \item{\code{r}}{Simulation replicate.}
-      \item{\code{tm}}{Simulation time step.}
-      \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
-      \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
-      \item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
-      \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
-      \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
-    }
-    returns the post-dispersal abundance matrix
-  }
-  \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).}
-  \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} (aliases: \emph{dispersal_n_k_cutoff} & \emph{dispersal_n_k_threshold}).}
-  \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold} (alias: \emph{dispersal_k_threshold}).}
-  \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or visa-versa (aliases: \emph{dispersal_n_threshold} & \emph{dispersal_n_cutoff}).}
-  \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or visa-versa.}
-  \item{\code{abundance_threshold}}{Abundance threshold (that needs to be exceeded) for each population to persist.}
-  \item{\code{simulation_order}}{A vector of simulation process names in configured order of execution (default is "transition", "translocation", "harvest" (plus harvested results), "mortality", "dispersal", "results" (except harvested).}
-  \item{\code{additional transformation functions}}{Additional user-defined abundance transformation functions (optionally nested in lists with additional attributes) are utilised when listed in \emph{simulation_order} (function as per translocation).}
-  \item{\code{results_selection}}{List of results selection from: "abundance" (default), "ema", "extirpation", "extinction_location", "harvested", "occupancy"; "summarize" (default) or "replicate".}
-  \item{\code{result_stages}}{Array of booleans or numeric (0, 1, 2, ...) for each stage to indicate which stages are included/combined (each unique digit > 0; optionally named) in the results (default is 1 for all stages).}
-}}
+ \describe{
+   \item{\code{random_seed}}{Number to seed the random number generation for stochasticity.}
+   \item{\code{replicates}}{Number of replicate simulation runs (default is 1).}
+   \item{\code{time_steps}}{Number of simulation time steps. Required input.}
+   \item{\code{years_per_step}}{Number of years per time step (default is 1).}
+   \item{\code{populations}}{Number of populations. Required input.}
+   \item{\code{coordinates}}{Data frame (or matrix) of X-Y population coordinates.}
+   \item{\code{stages}}{Number of life cycle stages.}
+\item{\code{region}}{A \code{\link{Region}} object
+defining the study region.}
+   \item{\code{initial_abundance}}{Array (or matrix) of initial abundances (at each stage in rows) for each population (in columns). If there is only one stage and a region object is attached, then initial
+abundance may be provided in the form of a raster with the same specs as
+the region raster. A vector can be provided that will be forced to a matrix. Required input.}
+   \item{\code{stage_matrix}}{Matrix of transition (fecundity & survival) rates between stages at each time step (Leslie/Lefkovitch matrix). Required input.}
+   \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
+   \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
+   \item{\code{demographic_stochasticity}}{Boolean for choosing demographic stochasticity for transition, dispersal, harvest and/or other processes (default is TRUE).}
+   \item{\code{standard_deviation}}{Standard deviation matrix (or single value) for applying environmental stochasticity to transition rates.}
+   \item{\code{correlation}}{List containing either an environmental correlation matrix (correlation_matrix), a pre-calculated transposed (Cholesky) decomposition matrix (t_decomposition_matrix), or a compact transposed (Cholesky) decomposition matrix (t_decomposition_compact_matrix) and a corresponding map of population indices (t_decomposition_compact_map), as per \code{\link{SpatialCorrelation}} class attributes.}
+   \item{\code{carrying_capacity}}{Array (matrix) of carrying capacity values at each population cell (\emph{populations} rows by \emph{time_steps} columns when across time). Required input.}
+   \item{\code{density_dependence}}{Density dependence can be "ceiling" (default), "logistic" (Ricker), or a user-defined function (optionally nested in a list with additional attributes) for adjusting transition rates: \code{function(params)}, where \emph{params} is a list passed to the function containing:
+     \describe{
+       \item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}
+       \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
+       \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
+       \item{\code{carrying_capacity}}{Array of carrying capacity values for each population.}
+       \item{\code{stage_abundance}}{Matrix of abundances for each stage (rows) and population (columns).}
+       \item{\code{population_abundance}}{Array of summed population abundances for all stages.}
+       \item{\code{density_abundance}}{Array of summed population abundances for stages affected by density.}
+       \item{\code{growth_rate_max}}{Maximum growth rate value or array for populations.}
+       \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
+       \item{\code{calculate_multipliers}}{Function (\code{function(growth_rates)}) for finding multipliers (when stages > 1) to apply to affected transitions that result in target growth rates (dominant eigenvalues).}
+       \item{\code{apply_multipliers}}{Function (\code{function(transition_array, multipliers}) for applying multipliers (when stages > 1) to the affected transition rates within a transition array (returns multiplied array).}
+       \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
+       \item{\code{optional attributes}}{Additional numeric attributes when density dependence is optionally nested in a list.}
+     }
+     returns a transformed transition 3D array
+   }
+   \item{\code{growth_rate_max}}{Maximum growth rate (utilized by density dependence processes).}
+   \item{\code{density_affects}}{Matrix of booleans or numeric (0-1) indicating the transition vital rates affected by density (default is all).}
+   \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density (default is all).}
+   \item{\code{density_precision}}{Numeric precision of the calculated multipliers (used when stages > 1) applied to affected transition rates (default is 3 decimal places).}
+   \item{\code{translocation}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying translocation or spatio-temporal management (to abundances): \code{function(params)}, where \emph{params} is a list passed to the function containing:
+     \describe{
+       \item{\code{replicates}}{Number of replicate simulation runs.}
+       \item{\code{time_steps}}{Number of simulation time steps.}
+       \item{\code{years_per_step}}{Number of years per time step.}
+       \item{\code{populations}}{Number of populations.}
+       \item{\code{stages}}{Number of lifecycle stages.}
+       \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
+       \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
+       \item{\code{r}}{Simulation replicate.}
+       \item{\code{tm}}{Simulation time step.}
+       \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
+       \item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
+       \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
+       \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
+       \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
+     }
+     returns a transformed stage abundance matrix (or a list with stage abundance and carrying capacity)
+   }
+   \item{\code{harvest}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying harvesting (to abundances): \code{function(params)} as per translocation.}
+   \item{\code{mortality}}{An optional user-defined function (optionally nested in a list with additional attributes) for applying mortality (to abundances): \code{function(params)} as per translocation.}
+   \item{\code{dispersal}}{Either a matrix of dispersal rates between populations (source columns to target rows) or a list of data frames of non-zero dispersal rates and indices for constructing a compact dispersal matrix, and optional changing rates over time (as per class \code{\link{DispersalGenerator}} \emph{dispersal_data} attribute). Alternatively a user-defined function (optionally nested in a list with additional attributes) may be used: \code{function(params)}, where \emph{params} is a list passed to the function containing:
+     \describe{
+       \item{\code{replicates}}{Number of replicate simulation runs.}
+       \item{\code{time_steps}}{Number of simulation time steps.}
+       \item{\code{years_per_step}}{Number of years per time step.}
+       \item{\code{populations}}{Number of populations.}
+       \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
+       \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
+       \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}
+       \item{\code{r}}{Simulation replicate.}
+       \item{\code{tm}}{Simulation time step.}
+       \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
+       \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
+       \item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
+       \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
+       \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
+     }
+     returns the post-dispersal abundance matrix
+   }
+   \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).}
+   \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold} (aliases: \emph{dispersal_n_k_cutoff} & \emph{dispersal_n_k_threshold}).}
+   \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold} (alias: \emph{dispersal_k_threshold}).}
+   \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or vice versa (aliases: \emph{dispersal_n_threshold} & \emph{dispersal_n_cutoff}).}
+   \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or vica versa.}
+   \item{\code{abundance_threshold}}{Abundance threshold (that needs to be exceeded) for each population to persist.}
+   \item{\code{simulation_order}}{A vector of simulation process names in configured order of execution (default is "transition", "translocation", "harvest" (plus harvested results), "mortality", "dispersal", "results" (except harvested).}
+   \item{\code{additional transformation functions}}{Additional user-defined abundance transformation functions (optionally nested in lists with additional attributes) are utilised when listed in \emph{simulation_order} (function as per translocation).}
+   \item{\code{results_selection}}{List of results selection from: "abundance" (default), "ema", "extirpation", "extinction_location", "harvested", "occupancy"; "summarize" (default) or "replicate".}
+   \item{\code{result_stages}}{Array of booleans or numeric (0, 1, 2, ...) for each stage to indicate which stages are included/combined (each unique digit > 0; optionally named) in the results (default is 1 for all stages).}
+ }}
 }
 \value{
 Selected simulation results as a nested list summarized (mean, sd, min, max) across multiple replicates (default), or 2-3D arrays including results for each replicate:
