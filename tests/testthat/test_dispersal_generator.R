@@ -69,7 +69,7 @@ test_that("calculate distance data", {
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000
   dispersal_gen <- DispersalGenerator$new()
   # Manually calculate expected distance data (no dispersal friction)
-  distance_data <- which(distance_matrix > 0 & distance_matrix <= 400, arr.ind = TRUE)
+  distance_data <- which(distance_matrix > 1 & distance_matrix <= 400, arr.ind = TRUE)
   distance_class <- as.numeric(cut(distance_matrix[distance_data], breaks = c(1, seq(100, 400, 20))))
   distance_data <- data.frame(target_pop = distance_data[, 1], source_pop = distance_data[, 2], distance_class)
   # Error cases
@@ -283,6 +283,7 @@ test_that("calculate dispersals with dispersal friction", {
   dispersal_gen <- DispersalGenerator$new(region = region, distance_classes = seq(100, 400, 20),
                                           proportion = 0.4, breadth = 110, max_distance = 300)
   distance_matrix <- geosphere::distm(region$coordinates, region$coordinates, fun = geosphere::distGeo)/1000
+  distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   dispersal_gen$calculate_dispersals()
   expected_dispersal_data <- dispersal_gen$dispersal_data[[1]]
@@ -302,6 +303,7 @@ test_that("calculate dispersals with dispersal friction", {
 test_that("cloning and generation", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000
+  distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20))
   expect_equal(dispersal_gen$generative_requirements, list(dispersal_data = "default"))
   expect_false(dispersal_gen$generative_requirements_satisfied()[[1]])

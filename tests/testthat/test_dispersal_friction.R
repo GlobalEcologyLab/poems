@@ -77,7 +77,7 @@ test_that("distance multiplier calculation errors", {
 test_that("distance multiplier calculations", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
   distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)/1000
-  dispersal_indices <- which(distance_matrix > 0 & distance_matrix <= 350, arr.ind = TRUE)
+  dispersal_indices <- which(distance_matrix > 1 & distance_matrix <= 350, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
   conductance_matrix = array(1, c(16, 10))
   conductance_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)

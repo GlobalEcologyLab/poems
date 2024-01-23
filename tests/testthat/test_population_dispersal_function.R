@@ -531,7 +531,9 @@ test_that("density dependent dispersal", {
       distance_scale = 1000,
       distance_classes = seq(100, 400, 20)
     )
-  dispersal_gen$calculate_distance_data()
+  distance_matrix <- geosphere::distm(region$coordinates, region$coordinates, fun = geosphere::distGeo)/1000
+  distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
+  dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   dispersal_gen$calculate_dispersals(type = "matrix")
   dispersal_gen$calculate_dispersals(type = "data")
   # Target abundance N threshold < cutoff (avoids overcrowded cells)
