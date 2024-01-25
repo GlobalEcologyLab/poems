@@ -1,3 +1,7 @@
+# 1.1.1
+
+- Adjusted some tests so they will work correctly on certain Apple Silicon systems
+
 # 1.1.0
 
 - Added density dependent dispersal, via density dependence in the source population and the target population
