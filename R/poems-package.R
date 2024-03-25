@@ -1,3 +1,5 @@
+#' @keywords internal
+"_PACKAGE"
 #' poems: Pattern-oriented ensemble modeling and simulation
 #'
 #' The \emph{poems} package provides a framework of interoperable
@@ -154,6 +156,5 @@
 #'              main = "Final abundance", xlab = "Longitude (degrees)",
 #'              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
 #'
-#' @docType package
 #' @name poems
 NULL

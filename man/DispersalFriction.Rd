@@ -18,6 +18,7 @@ landscape. In this example the resultant distance multiplier would be 5, thus
 reducing the effective dispersal range.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 #' U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -43,7 +44,7 @@ cbind(dispersal_indices, distance = distances[dispersal_indices],
       multiplier = multipliers[[1]])
 
 #' Note that crossing the water is avoided.
-
+\dontshow{\}) # examplesIf}
 }
 \section{Super classes}{
 \code{\link[poems:GenericClass]{poems::GenericClass}} -> \code{\link[poems:GenericModel]{poems::GenericModel}} -> \code{\link[poems:SpatialModel]{poems::SpatialModel}} -> \code{DispersalFriction}

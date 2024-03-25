@@ -9,6 +9,7 @@ metrics and/or matrices from simulation results, as well as optionally regenerat
 values via generators.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # U Island example region
 coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -50,7 +51,7 @@ gen_output$summary
 dir(tempdir(), "*.txt") # plus generation log
 results_manager$summary_metric_data
 results_manager$summary_matrix_list
-
+\dontshow{\}) # examplesIf}
 }
 \section{Super classes}{
 \code{\link[poems:GenericClass]{poems::GenericClass}} -> \code{\link[poems:GenericManager]{poems::GenericManager}} -> \code{ResultsManager}

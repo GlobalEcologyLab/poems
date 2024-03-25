@@ -4,8 +4,7 @@
 #' \code{\link[R6:R6Class]{R6}} class to represent a manager for running multiple model
 #' simulations and saving results.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # U Island example region
 #' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
 #'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
@@ -62,7 +61,6 @@
 #'   print(readRDS(file.path(tempdir(), file_name)))
 #' }
 #' dir(tempdir(), "*.txt") # plus simulation log
-#' }
 #'
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%

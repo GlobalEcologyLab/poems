@@ -14,7 +14,8 @@ Previously, `poems` was archived due to some tests failing on certain Apple Sili
 
 ## Other notes
 
-The example for the `SimulationManager` object is in a `dontrun{}` wrapper because it takes ~13 seconds to run. I have experimented with the example and there is no way to cut it down to <5 secs and still show the full functionality of the object as a simulation manager.
+Several examples are given the `@examplesIf` tag from `roxygen2` because they run
+for too long. They have all been tested locally and run without error.
 
 The words marked as misspelled in the 1 NOTE are:
   Conover (18:33)
