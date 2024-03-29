@@ -5,13 +5,12 @@
 
 <!-- badges: start -->
 
-[![CRAN_status](https://www.r-pkg.org/badges/version/poems)](https://CRAN.R-project.org/package=poems)
-[![Download_count](https://cranlogs.r-pkg.org/badges/grand-total/poems)](https://CRAN.R-project.org/package=poems)
 [![Paper_doi](https://img.shields.io/badge/doi-10.1111/2041--210X.13720-orange.svg)](https://doi.org/10.1111/2041-210X.13720)
 [![Codecov test
 coverage](https://codecov.io/gh/GlobalEcologyLab/poems/branch/main/graph/badge.svg)](https://app.codecov.io/gh/GlobalEcologyLab/poems?branch=main)
 [![Last
 commit](https://img.shields.io/github/last-commit/GlobalEcologyLab/poems.svg)](https://github.com/GlobalEcologyLab/poems/commits/main)
+[![R-CMD-check](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The poems package provides a framework of interoperable *R6* (Chang,
@@ -102,47 +101,47 @@ results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1]  948 1071 1216 1328 1375
+#> [1] 1036 1095 1205 1295 1363
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 552 639 722 796 803
+#> [1] 622 665 711 765 826
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 396 432 494 532 572
+#> [1] 414 430 494 530 537
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   50   81  142  191  214
-#> [2,]   94  148  155  191  186
-#> [3,]  138  158  153  167  179
-#> [4,]  146  145  187  207  198
-#> [5,]  157  176  187  180  205
-#> [6,]  184  183  210  198  196
-#> [7,]  179  180  182  194  197
+#> [1,]   51   86  123  177  191
+#> [2,]  105   99  142  166  192
+#> [3,]  114  148  173  165  185
+#> [4,]  172  199  192  184  151
+#> [5,]  196  181  177  180  221
+#> [6,]  192  177  190  219  234
+#> [7,]  206  205  208  204  189
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   36   45   91  110  132
-#> [2,]   48   95   83  120   97
-#> [3,]   79  100   86   91  118
-#> [4,]   83   83  101  132  103
-#> [5,]   91  102  119  108  125
-#> [6,]  107  105  129  123  109
-#> [7,]  108  109  113  112  119
+#> [1,]   30   54   76   98  123
+#> [2,]   72   58   92   91  124
+#> [3,]   74   87  104   99  109
+#> [4,]   92  126  102  118   96
+#> [5,]  119  114  101  109  130
+#> [6,]  122  103  111  135  135
+#> [7,]  113  123  125  115  109
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   14   36   51   81   82
-#> [2,]   46   53   72   71   89
-#> [3,]   59   58   67   76   61
-#> [4,]   63   62   86   75   95
-#> [5,]   66   74   68   72   80
-#> [6,]   77   78   81   75   87
-#> [7,]   71   71   69   82   78
+#> [1,]   21   32   47   79   68
+#> [2,]   33   41   50   75   68
+#> [3,]   40   61   69   66   76
+#> [4,]   80   73   90   66   55
+#> [5,]   77   67   76   71   91
+#> [6,]   70   74   79   84   99
+#> [7,]   93   82   83   89   80
 raster::plot(region$raster_from_values(results$abundance[,5]),
              main = "Final abundance", xlab = "Longitude (degrees)", 
              ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
