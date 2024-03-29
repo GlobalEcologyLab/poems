@@ -11,6 +11,9 @@ coverage](https://codecov.io/gh/GlobalEcologyLab/poems/branch/main/graph/badge.s
 [![Last
 commit](https://img.shields.io/github/last-commit/GlobalEcologyLab/poems.svg)](https://github.com/GlobalEcologyLab/poems/commits/main)
 [![R-CMD-check](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 The poems package provides a framework of interoperable *R6* (Chang,
@@ -45,18 +48,11 @@ base classes.
 
 ## Installation
 
-You can install the released version of poems from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("poems")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+You can install poems from [GitHub](https://github.com/) using:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("GlobalEcologyLab/poems")
+remotes::install_github("GlobalEcologyLab/poems")
 ```
 
 ## Example
@@ -68,15 +64,18 @@ explicit demographic population model using *poems*:
 library(poems)
 
 # Demonstration example region (U Island) and initial abundance
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
 initial_abundance <- seq(0, 300, 50)
-raster::plot(region$raster_from_values(initial_abundance), 
-             main = "Initial abundance", xlab = "Longitude (degrees)", 
-             ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
+raster::plot(region$raster_from_values(initial_abundance),
+  main = "Initial abundance", xlab = "Longitude (degrees)",
+  ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue"
+)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" style="display: block; margin: auto;" />
@@ -89,68 +88,82 @@ pop_model <- PopulationModel$new(
   time_steps = 5,
   populations = 7,
   initial_abundance = initial_abundance,
-  stage_matrix = matrix(c(0, 2.5, # Leslie/Lefkovitch matrix
-                          0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE),
+  stage_matrix = matrix(c(
+    0, 2.5, # Leslie/Lefkovitch matrix
+    0.8, 0.5
+  ), nrow = 2, ncol = 2, byrow = TRUE),
   carrying_capacity = rep(200, 7),
   density_dependence = "logistic",
-  dispersal = (!diag(nrow = 7, ncol = 7))*0.05,
-  result_stages = c(1, 2))
+  dispersal = (!diag(nrow = 7, ncol = 7)) * 0.05,
+  result_stages = c(1, 2)
+)
 
 # Run single simulation
 results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1] 1072 1145 1194 1294 1299
+#> [1] 1041 1157 1269 1306 1421
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 646 718 693 794 742
+#> [1] 624 686 767 767 865
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 426 427 501 500 557
+#> [1] 417 471 502 539 556
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   45   95  109  151  164
-#> [2,]  102  141  169  192  184
-#> [3,]  141  190  185  212  209
-#> [4,]  155  148  175  153  177
-#> [5,]  186  169  165  200  193
-#> [6,]  227  206  194  199  191
-#> [7,]  216  196  197  187  181
+#> [1,]   64  147  153  189  184
+#> [2,]   99  135  166  173  190
+#> [3,]  152  171  188  164  208
+#> [4,]  170  183  202  216  225
+#> [5,]  172  170  179  202  193
+#> [6,]  182  169  195  172  206
+#> [7,]  202  182  186  190  215
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   28   62   62   92   99
-#> [2,]   55   96   95  123  103
-#> [3,]   77  110  118  134  124
-#> [4,]  104   79  117   96   95
-#> [5,]  114  107   80  117  106
-#> [6,]  140  136  110  125  103
-#> [7,]  128  128  111  107  112
+#> [1,]   31   96   90  121  106
+#> [2,]   66   77  113  101  118
+#> [3,]   91  102  119   87  126
+#> [4,]  109  109  118  124  149
+#> [5,]   91  102  109  111  117
+#> [6,]  110   96  117  108  122
+#> [7,]  126  104  101  115  127
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   17   33   47   59   65
-#> [2,]   47   45   74   69   81
-#> [3,]   64   80   67   78   85
-#> [4,]   51   69   58   57   82
-#> [5,]   72   62   85   83   87
-#> [6,]   87   70   84   74   88
-#> [7,]   88   68   86   80   69
-raster::plot(region$raster_from_values(results$abundance[,5]),
-             main = "Final abundance", xlab = "Longitude (degrees)", 
-             ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
+#> [1,]   33   51   63   68   78
+#> [2,]   33   58   53   72   72
+#> [3,]   61   69   69   77   82
+#> [4,]   61   74   84   92   76
+#> [5,]   81   68   70   91   76
+#> [6,]   72   73   78   64   84
+#> [7,]   76   78   85   75   88
+raster::plot(region$raster_from_values(results$abundance[, 5]),
+  main = "Final abundance", xlab = "Longitude (degrees)",
+  ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue"
+)
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" style="display: block; margin: auto;" />
 
 Further examples utilizing the POM workflow and more advanced features
 of *poems* can be found in the accompanying vignettes.
+
+## Citation
+
+You may cite poems in publications using our software paper in *Methods
+in Ecology and Evolution*:
+
+Fordham, D. A., Haythorne, S., Brown, S. C., Buettel, J. C., & Brook, B.
+W. (2021). poems: R package for simulating species’ range dynamics using
+pattern‐oriented validation. *Methods in Ecology and Evolution*,
+*12*(12), 2364-2371.
 
 ## References
 

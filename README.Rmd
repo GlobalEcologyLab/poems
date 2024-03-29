@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/GlobalEcologyLab/poems/branch/main/graph/badge.svg)](https://app.codecov.io/gh/GlobalEcologyLab/poems?branch=main)
 [![Last commit](https://img.shields.io/github/last-commit/GlobalEcologyLab/poems.svg)](https://github.com/GlobalEcologyLab/poems/commits/main)
 [![R-CMD-check](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 The poems package provides a framework of interoperable *R6* (Chang, 2020) classes
@@ -48,17 +49,11 @@ model simulators by utilizing its extendable (inheritable) base classes.
 
 ## Installation
 
-You can install the released version of poems from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("poems")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+You can install poems from [GitHub](https://github.com/) using:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("GlobalEcologyLab/poems")
+remotes::install_github("GlobalEcologyLab/poems")
 ```
 ## Example
 
@@ -109,6 +104,12 @@ raster::plot(region$raster_from_values(results$abundance[, 5]),
 
 Further examples utilizing the POM workflow and more advanced features of *poems*
 can be found in the accompanying vignettes.
+
+## Citation
+
+You may cite poems in publications using our software paper in *Methods in Ecology and Evolution*:
+
+Fordham, D. A., Haythorne, S., Brown, S. C., Buettel, J. C., & Brook, B. W. (2021). poems: R package for simulating species' range dynamics using pattern‐oriented validation. *Methods in Ecology and Evolution*, *12*(12), 2364-2371.
 
 ## References
 
