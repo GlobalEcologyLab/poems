@@ -7,3 +7,4 @@
 ^CRAN-SUBMISSION$
 ^codecov\.yml$
 ^\.github$
+^codemeta\.json$

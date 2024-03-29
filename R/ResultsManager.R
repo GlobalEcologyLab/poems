@@ -7,14 +7,18 @@
 #'
 #' @examplesIf interactive()
 #' # U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 #' region <- Region$new(template_raster = template_raster)
-#' raster::plot(region$region_raster, main = "Example region (indices)",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-#'              colNA = "blue")
+#' raster::plot(region$region_raster,
+#'   main = "Example region (indices)",
+#'   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'   colNA = "blue"
+#' )
 #' # Results manager
 #' results_manager <- ResultsManager$new(
 #'   sample_data = data.frame(index = 1:3),
@@ -29,15 +33,19 @@
 #'       sum(results$harvested)
 #'     },
 #'     n = "all$abundance", # string
-#'     h = "all$harvested"),
+#'     h = "all$harvested"
+#'   ),
 #'   parallel_cores = 2,
-#'   results_dir = tempdir())
+#'   results_dir = tempdir()
+#' )
 #' # Write example result files
 #' results <- list()
 #' for (i in 1:3) {
-#'   results[[i]] <- list(abundance = t(apply(matrix(11:17), 1,
-#'                                            function(n) round(n*exp(-(0:9)/i)))))
-#'   results[[i]]$harvested <- round(results[[i]]$abundance*i/7)
+#'   results[[i]] <- list(abundance = t(apply(
+#'     matrix(11:17), 1,
+#'     function(n) round(n * exp(-(0:9) / i))
+#'   )))
+#'   results[[i]]$harvested <- round(results[[i]]$abundance * i / 7)
 #'   file_name <- paste0(results_manager$get_results_filename(i), ".RData")
 #'   saveRDS(results[[i]], file.path(tempdir(), file_name))
 #' }
@@ -103,7 +111,6 @@ ResultsManager <- R6Class("ResultsManager",
     #' @param results_dir Results directory path (must be present if not already set within manager class object).
     #' @return Generation log as a list.
     generate = function(results_dir = NULL) {
-
       # Check for error messages
       if (!is.null(self$error_messages)) {
         error_messages <- self$error_messages
@@ -112,11 +119,13 @@ ResultsManager <- R6Class("ResultsManager",
       }
 
       # Ensure sample data, simulation results, and summary metrics and/or matrices, and functions are present
-      missing_parameters <- names(which(unlist(list(sample_data = is.null(self$sample_data),
-                                                    simulation_results = is.null(self$simulation_results),
-                                                    summary_metrics = is.null(self$summary_metrics) && is.null(self$summary_matrices),
-                                                    summary_matrices = is.null(self$summary_matrices) && is.null(self$summary_metrics),
-                                                    summary_functions = is.null(self$summary_functions)))))
+      missing_parameters <- names(which(unlist(list(
+        sample_data = is.null(self$sample_data),
+        simulation_results = is.null(self$simulation_results),
+        summary_metrics = is.null(self$summary_metrics) && is.null(self$summary_matrices),
+        summary_matrices = is.null(self$summary_matrices) && is.null(self$summary_metrics),
+        summary_functions = is.null(self$summary_functions)
+      ))))
       if (length(missing_parameters)) {
         stop(paste("Summary metrics generation requires parameters to be set first:", paste(missing_parameters, collapse = ", ")), call. = FALSE)
       }
@@ -144,10 +153,11 @@ ResultsManager <- R6Class("ResultsManager",
       # Generate summary metrics in parallel
       registerDoParallel(cores = self$parallel_cores)
       self <- self # pass object to parallel
-      generation_log <- foreach(i = 1:nrow(self$sample_data),
-                                .packages = c("raster"),
-                                .errorhandling = c("pass")) %dopar% {
-
+      generation_log <- foreach(
+        i = 1:nrow(self$sample_data),
+        .packages = c("raster"),
+        .errorhandling = c("pass")
+      ) %dopar% {
         # Initialize the summary metric data for the sample to NAs
         if (length(self$summary_metrics)) {
           summary_metric_data <- data.frame(index = i, array(NA, c(1, length(self$summary_metrics))))
@@ -170,20 +180,25 @@ ResultsManager <- R6Class("ResultsManager",
         if (file.exists(results_file)) {
           suppressWarnings(try(
             results <- readRDS(file = results_file),
-            silent = TRUE))
+            silent = TRUE
+          ))
           if (is.null(results)) {
-            return(list(successful = FALSE,
-                        message = self$get_message_sample("Could not read result file for %s", i),
-                        errors = "Result file reading error",
-                        summary_metric_data = summary_metric_data,
-                        summary_matrix_list = summary_matrix_list))
+            return(list(
+              successful = FALSE,
+              message = self$get_message_sample("Could not read result file for %s", i),
+              errors = "Result file reading error",
+              summary_metric_data = summary_metric_data,
+              summary_matrix_list = summary_matrix_list
+            ))
           }
         } else {
-          return(list(successful = FALSE,
-                      message = self$get_message_sample("Could not find result file for %s", i),
-                      errors = "Result file not found",
-                      summary_metric_data = summary_metric_data,
-                      summary_matrix_list = summary_matrix_list))
+          return(list(
+            successful = FALSE,
+            message = self$get_message_sample("Could not find result file for %s", i),
+            errors = "Result file not found",
+            summary_metric_data = summary_metric_data,
+            summary_matrix_list = summary_matrix_list
+          ))
         }
 
         # Clone and populate the simulation results and copy any additional attached attributes
@@ -197,12 +212,14 @@ ResultsManager <- R6Class("ResultsManager",
         sample_list <- as.list(self$sample_data[i, ])
         if (!is.null(self$generators)) {
           for (j in 1:length(self$generators)) {
-            tryCatch({
-              simulation_results$set_attributes(params = self$generators[[j]]$generate(input_values = sample_list[self$generators[[j]]$inputs]))
-            },
-            error = function(e){
-              stop(paste("produced when generating", self$generators[[j]]$description, ":", as.character(e)), call. = FALSE)
-            })
+            tryCatch(
+              {
+                simulation_results$set_attributes(params = self$generators[[j]]$generate(input_values = sample_list[self$generators[[j]]$inputs]))
+              },
+              error = function(e) {
+                stop(paste("produced when generating", self$generators[[j]]$description, ":", as.character(e)), call. = FALSE)
+              }
+            )
           }
         }
 
@@ -213,13 +230,14 @@ ResultsManager <- R6Class("ResultsManager",
 
         # Apply the summary functions to the results (model)
         return(self$calculate_summaries(simulation_results, i))
-
       }
       stopImplicitCluster()
 
       # Merge summary metric data and matrix list
-      self$summary_metric_data <- data.frame(index = 1:nrow(self$sample_data),
-                                             array(NA, c(nrow(self$sample_data), length(self$summary_metrics))))
+      self$summary_metric_data <- data.frame(
+        index = 1:nrow(self$sample_data),
+        array(NA, c(nrow(self$sample_data), length(self$summary_metrics)))
+      )
       names(self$summary_metric_data)[-1] <- self$summary_metrics
       if (!is.null(self$summary_matrices)) {
         summary_matrix_columns <- as.list(array(1, c(1, length(self$summary_matrices))))
@@ -228,7 +246,7 @@ ResultsManager <- R6Class("ResultsManager",
       for (i in 1:nrow(self$sample_data)) {
         # Merge summary metric data
         if (!is.null(generation_log[[i]]$summary_metric_data) && generation_log[[i]]$summary_metric_data$index == i) {
-          self$summary_metric_data[i,] <- generation_log[[i]]$summary_metric_data
+          self$summary_metric_data[i, ] <- generation_log[[i]]$summary_metric_data
         }
         # Determine matrix (max) dimensions
         for (matrix_name in self$summary_matrices) {
@@ -266,38 +284,46 @@ ResultsManager <- R6Class("ResultsManager",
     #' Calculates and attaches intermediate values to the sample result model (via the result attachment functions).
     #' @param simulation_results The sample simulation results, an object of a class inherited from \code{\link{SimulationResults}}, to which the intermediate results are attached.
     calculate_result_attachments = function(simulation_results) {
-
       # Calculate each result attachment
       for (attachment in names(self$result_attachment_functions)) {
-
         # Assign attachment function and initilize attachment value
         attachment_function <- self$result_attachment_functions[[attachment]]
         attachment_value <- NULL
 
         # Apply the function
-        tryCatch({
-          suppressWarnings(
-            withCallingHandlers({
-              if (is.character(attachment_function)) {
-                attachment_function <- eval(parse(text = attachment_function))
-              }
-              if (length(grep("Primitive", deparse(attachment_function), fixed = TRUE))) { # use default
-                attachment_value <- attachment_function(simulation_results$default)
-              } else { # apply function to results
-                attachment_value <- attachment_function(simulation_results)
-              }
-            }, warning = function(w) {
-              simulation_results$warning_messages <- c(simulation_results$warning_messages,
-                                                  paste(sprintf("Warning encountered attaching %s to results.", attachment),
-                                                        gsub("simpleWarning", "Warning",
-                                                             gsub("\n", "", as.character(w), fixed = TRUE),
-                                                             fixed = TRUE)))
-            })
-          )
-        },
-        error = function(e){
-          simulation_results$error_messages <- paste(sprintf("Error encountered attaching %s to results.", attachment), as.character(e))
-        })
+        tryCatch(
+          {
+            suppressWarnings(
+              withCallingHandlers(
+                {
+                  if (is.character(attachment_function)) {
+                    attachment_function <- eval(parse(text = attachment_function))
+                  }
+                  if (length(grep("Primitive", deparse(attachment_function), fixed = TRUE))) { # use default
+                    attachment_value <- attachment_function(simulation_results$default)
+                  } else { # apply function to results
+                    attachment_value <- attachment_function(simulation_results)
+                  }
+                },
+                warning = function(w) {
+                  simulation_results$warning_messages <- c(
+                    simulation_results$warning_messages,
+                    paste(
+                      sprintf("Warning encountered attaching %s to results.", attachment),
+                      gsub("simpleWarning", "Warning",
+                        gsub("\n", "", as.character(w), fixed = TRUE),
+                        fixed = TRUE
+                      )
+                    )
+                  )
+                }
+              )
+            )
+          },
+          error = function(e) {
+            simulation_results$error_messages <- paste(sprintf("Error encountered attaching %s to results.", attachment), as.character(e))
+          }
+        )
 
         # Attach the returned function value to the simulation results
         if (!is.null(attachment_value)) {
@@ -312,7 +338,6 @@ ResultsManager <- R6Class("ResultsManager",
     #' @param sample_index Index of sample from data frame.
     #' @return Generation log entry as a (nested) list, including generated summary metric data and (optionally) matrices.
     calculate_summaries = function(simulation_results, sample_index) {
-
       # Initialize the summary metric data for the sample to NAs
       if (length(self$summary_metrics)) {
         summary_metric_data <- data.frame(index = sample_index, array(NA, c(1, length(self$summary_metrics))))
@@ -342,29 +367,39 @@ ResultsManager <- R6Class("ResultsManager",
           } else if (is.character(function_value) && function_value %in% simulation_results$get_attribute_names(all = TRUE)) { # results attribute
             data_value <- eval(parse(text = paste0("simulation_results$", function_value)))
           } else { # apply a function
-            tryCatch({
-              suppressWarnings(
-                withCallingHandlers({
-                  if (is.character(function_value)) {
-                    function_value <- eval(parse(text = function_value))
-                  }
-                  if (length(grep("Primitive", deparse(function_value), fixed = TRUE))) { # use default
-                    data_value <- function_value(simulation_results$default)
-                  } else { # apply function to results
-                    data_value <- function_value(simulation_results)
-                  }
-                }, warning = function(w) {
-                  simulation_results$warning_messages <- c(simulation_results$warning_messages,
-                                                      paste(sprintf("Warning encountered setting %s %s.", type, name),
-                                                            gsub("simpleWarning", "Warning",
-                                                                 gsub("\n", "", as.character(w), fixed = TRUE),
-                                                                 fixed = TRUE)))
-                })
-              )
-            },
-            error = function(e){
-              simulation_results$error_messages <- paste(sprintf("Error encountered setting %s %s.", type, name), as.character(e))
-            })
+            tryCatch(
+              {
+                suppressWarnings(
+                  withCallingHandlers(
+                    {
+                      if (is.character(function_value)) {
+                        function_value <- eval(parse(text = function_value))
+                      }
+                      if (length(grep("Primitive", deparse(function_value), fixed = TRUE))) { # use default
+                        data_value <- function_value(simulation_results$default)
+                      } else { # apply function to results
+                        data_value <- function_value(simulation_results)
+                      }
+                    },
+                    warning = function(w) {
+                      simulation_results$warning_messages <- c(
+                        simulation_results$warning_messages,
+                        paste(
+                          sprintf("Warning encountered setting %s %s.", type, name),
+                          gsub("simpleWarning", "Warning",
+                            gsub("\n", "", as.character(w), fixed = TRUE),
+                            fixed = TRUE
+                          )
+                        )
+                      )
+                    }
+                  )
+                )
+              },
+              error = function(e) {
+                simulation_results$error_messages <- paste(sprintf("Error encountered setting %s %s.", type, name), as.character(e))
+              }
+            )
           }
           if (length(data_value)) {
             if (type == "metric") {
@@ -417,37 +452,44 @@ ResultsManager <- R6Class("ResultsManager",
         }
       }
       # Add a summary and failure & warning indices to the log
-      generation_log <- list(summary = sprintf("%s of %s summary metrics/matrices generated from sample results successfully",
-                                               length(which(successful_array)), length(generation_log)),
-                             failed_indices = which(!successful_array),
-                             warning_indices = warning_indices,
-                             full_log = generation_log)
+      generation_log <- list(
+        summary = sprintf(
+          "%s of %s summary metrics/matrices generated from sample results successfully",
+          length(which(successful_array)), length(generation_log)
+        ),
+        failed_indices = which(!successful_array),
+        warning_indices = warning_indices,
+        full_log = generation_log
+      )
       if (length(warning_indices)) {
         generation_log$summary <- paste(generation_log$summary, "with warnings")
       }
       # Write a log file
       log_file <- file.path(self$results_dir, "generation_log.txt")
-      suppressWarnings(try({
-        file_con <- file(log_file, 'w')
-        writeLines(c(generation_log$summary), con = file_con)
-        if (length(generation_log$failed_indices)) {
-          writeLines(c("", paste(length(generation_log$failed_indices), "failed generations/errors:")), con = file_con)
-          for (i in generation_log$failed_indices) {
-            writeLines(c("", paste("Sample", i, ":"), generation_log$full_log[[i]]$message), con = file_con)
-            if (!is.null(generation_log$full_log[[i]]$errors)) {
-              writeLines(generation_log$full_log[[i]]$errors, con = file_con)
+      suppressWarnings(try(
+        {
+          file_con <- file(log_file, "w")
+          writeLines(c(generation_log$summary), con = file_con)
+          if (length(generation_log$failed_indices)) {
+            writeLines(c("", paste(length(generation_log$failed_indices), "failed generations/errors:")), con = file_con)
+            for (i in generation_log$failed_indices) {
+              writeLines(c("", paste("Sample", i, ":"), generation_log$full_log[[i]]$message), con = file_con)
+              if (!is.null(generation_log$full_log[[i]]$errors)) {
+                writeLines(generation_log$full_log[[i]]$errors, con = file_con)
+              }
             }
           }
-        }
-        if (length(warning_indices)) {
-          writeLines(c("", paste(length(warning_indices), "warnings:")), con = file_con)
-          for (i in warning_indices) {
-            writeLines(c("", paste("Sample", i, ":"), generation_log$full_log[[i]]$message), con = file_con)
-            writeLines(generation_log$full_log[[i]]$warnings, con = file_con)
+          if (length(warning_indices)) {
+            writeLines(c("", paste(length(warning_indices), "warnings:")), con = file_con)
+            for (i in warning_indices) {
+              writeLines(c("", paste("Sample", i, ":"), generation_log$full_log[[i]]$message), con = file_con)
+              writeLines(generation_log$full_log[[i]]$warnings, con = file_con)
+            }
           }
-        }
-        close(file_con)
-      }, silent = TRUE))
+          close(file_con)
+        },
+        silent = TRUE
+      ))
       return(generation_log)
     },
 
@@ -455,7 +497,6 @@ ResultsManager <- R6Class("ResultsManager",
     #' Calculates the weighted averages for each of the summary matrices (providing the sample data has a \emph{weight} column).
     #' @param na_replacements List of values or functions (form: \code{modified_matrix <- function(matrix)}) for dealing with NA values in each summary matrix (default NULL will ignore NAs).
     calculate_summary_weighted_averages = function(na_replacements = NULL) {
-
       # Ensure summary matrix list is present and sample data has a weight column
       if (is.null(self$summary_matrix_list)) {
         stop("No summary matrices have been generated", call. = FALSE)
@@ -485,16 +526,15 @@ ResultsManager <- R6Class("ResultsManager",
       }
 
       # Normalize weights
-      normalized_weights <- self$sample_data$weight/sum(self$sample_data$weight)
+      normalized_weights <- self$sample_data$weight / sum(self$sample_data$weight)
 
       # Calculate the weighted averages
       for (param in names(summary_matrix_list)) {
-        self$summary_matrix_weighted_averages[[param]] <- .colSums(summary_matrix_list[[param]]*array(normalized_weights, dim(summary_matrix_list[[param]])),
-                                                                   m = length(normalized_weights), n = ncol(summary_matrix_list[[param]]), na.rm = TRUE)
+        self$summary_matrix_weighted_averages[[param]] <- .colSums(summary_matrix_list[[param]] * array(normalized_weights, dim(summary_matrix_list[[param]])),
+          m = length(normalized_weights), n = ncol(summary_matrix_list[[param]]), na.rm = TRUE
+        )
       }
-
     }
-
   ), # end public
 
   private = list(
@@ -502,10 +542,12 @@ ResultsManager <- R6Class("ResultsManager",
     ## Attributes ##
 
     # Manager attributes #
-    .manager_attributes = c("sample_data", "simulation_results", "generators", "result_attachment_functions",
-                            "summary_metrics", "summary_matrices", "summary_functions", "summary_metric_data",
-                            "summary_matrix_list", "summary_matrix_weighted_averages", "parallel_cores",
-                            "results_dir", "results_ext", "results_filename_attributes"),
+    .manager_attributes = c(
+      "sample_data", "simulation_results", "generators", "result_attachment_functions",
+      "summary_metrics", "summary_matrices", "summary_functions", "summary_metric_data",
+      "summary_matrix_list", "summary_matrix_weighted_averages", "parallel_cores",
+      "results_dir", "results_ext", "results_filename_attributes"
+    ),
     # .sample_data                   [inherited]
     .simulation_results = NULL,
     # .generators             [inherited]
@@ -524,7 +566,6 @@ ResultsManager <- R6Class("ResultsManager",
     # Errors and warnings #
     # .error_messages                [inherited]
     # .warning_messages              [inherited]
-
   ), # end private
 
   # Active binding accessors for private manager attributes (above) #
@@ -575,12 +616,14 @@ ResultsManager <- R6Class("ResultsManager",
         for (attachment in names(value)) {
           attachment_value <- value[[attachment]]
           if (is.character(attachment_value) && file.exists(attachment_value) && length(grep(".R", toupper(attachment_value), fixed = TRUE))) {
-            tryCatch({
-              attachment_function <- source(attachment_value)$value # direct assignment from a file
-            },
-            error = function(e){
-              stop(paste("Error loading function from file", attachment_value, ":", as.character(e)), call. = FALSE)
-            })
+            tryCatch(
+              {
+                attachment_function <- source(attachment_value)$value # direct assignment from a file
+              },
+              error = function(e) {
+                stop(paste("Error loading function from file", attachment_value, ":", as.character(e)), call. = FALSE)
+              }
+            )
             if (is.function(attachment_function)) {
               attachment_functions[[attachment]] <- attachment_function
             } else {
@@ -588,8 +631,8 @@ ResultsManager <- R6Class("ResultsManager",
             }
           } else { # numeric, character or direct assignment
             if (is.function(attachment_value) ||
-                (is.character(attachment_value) &&
-                 tryCatch(is.function(eval(parse(text = attachment_value))), error = function(e) FALSE))) {
+              (is.character(attachment_value) &&
+                tryCatch(is.function(eval(parse(text = attachment_value))), error = function(e) FALSE))) {
               if (is.function(attachment_value) && length(grep("Primitive", deparse(attachment_value), fixed = TRUE))) {
                 attachment_value <- strsplit(deparse(attachment_value), "\"")[[1]][2] # convert primitives to string
               }
@@ -637,12 +680,14 @@ ResultsManager <- R6Class("ResultsManager",
           if (is.character(metric_value) && !is.null(self$simulation_results) && metric_value %in% self$simulation_results$get_attribute_names(all = TRUE)) {
             metric_functions[[metric]] <- metric_value # direct simulation results attribute
           } else if (is.character(metric_value) && file.exists(metric_value) && length(grep(".R", toupper(metric_value), fixed = TRUE))) {
-            tryCatch({
-              metric_function <- source(metric_value)$value # direct assignment from a file
-            },
-            error = function(e){
-              stop(paste("Error loading function from file", metric_value, ":", as.character(e)), call. = FALSE)
-            })
+            tryCatch(
+              {
+                metric_function <- source(metric_value)$value # direct assignment from a file
+              },
+              error = function(e) {
+                stop(paste("Error loading function from file", metric_value, ":", as.character(e)), call. = FALSE)
+              }
+            )
             if (is.function(metric_function)) {
               metric_functions[[metric]] <- metric_function
             } else {
@@ -650,8 +695,8 @@ ResultsManager <- R6Class("ResultsManager",
             }
           } else { # numeric, character or direct assignment
             if (is.numeric(metric_value) || is.function(metric_value) ||
-                (is.character(metric_value) &&
-                 tryCatch(is.function(eval(parse(text = metric_value))), error = function(e) FALSE))) {
+              (is.character(metric_value) &&
+                tryCatch(is.function(eval(parse(text = metric_value))), error = function(e) FALSE))) {
               if (is.function(metric_value) && length(grep("Primitive", deparse(metric_value), fixed = TRUE))) {
                 metric_value <- strsplit(deparse(metric_value), "\"")[[1]][2] # convert primitives to string
               }
@@ -747,6 +792,5 @@ ResultsManager <- R6Class("ResultsManager",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )

@@ -11,33 +11,43 @@
 #'
 #' @examples
 #' # U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 #' region <- Region$new(template_raster = template_raster)
 #' # Harvest function
-#' harvest <- list(rate = NA, # set later
-#'                 function(params) round(params$stage_abundance*(1 - params$rate)))
+#' harvest <- list(
+#'   rate = NA, # set later
+#'   function(params) round(params$stage_abundance * (1 - params$rate))
+#' )
 #' harvest_rate_alias <- list(harvest_rate = "harvest$rate")
 #' # Template model
-#' stage_matrix <- matrix(c(0,   2.5, # Leslie/Lefkovitch matrix
-#'                          0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE)
-#' template_model <- PopulationModel$new(region = region,
-#'                                       time_steps = 10, # years
-#'                                       populations = region$region_cells, # 7
-#'                                       stage_matrix = stage_matrix,
-#'                                       harvest = harvest,
-#'                                       results_selection = c("abundance", "harvested"),
-#'                                       attribute_aliases = harvest_rate_alias)
+#' stage_matrix <- matrix(c(
+#'   0, 2.5, # Leslie/Lefkovitch matrix
+#'   0.8, 0.5
+#' ), nrow = 2, ncol = 2, byrow = TRUE)
+#' template_model <- PopulationModel$new(
+#'   region = region,
+#'   time_steps = 10, # years
+#'   populations = region$region_cells, # 7
+#'   stage_matrix = stage_matrix,
+#'   harvest = harvest,
+#'   results_selection = c("abundance", "harvested"),
+#'   attribute_aliases = harvest_rate_alias
+#' )
 #' template_model$model_attributes
 #' template_model$required_attributes
 #' # Nested model
 #' nested_model <- PopulationModel$new(template_model = template_model)
 #' nested_model$incomplete_attributes()
-#' nested_model$set_sample_attributes(initial_abundance = rep(10, 7),
-#'                                    carrying_capacity = array(70:1, c(10, 7)),
-#'                                    harvest_rate = 0.3)
+#' nested_model$set_sample_attributes(
+#'   initial_abundance = rep(10, 7),
+#'   carrying_capacity = array(70:1, c(10, 7)),
+#'   harvest_rate = 0.3
+#' )
 #' nested_model$inconsistent_attributes()
 #' nested_model$carrying_capacity <- array(70:1, c(7, 10))
 #' nested_model$is_consistent()
@@ -86,19 +96,25 @@ PopulationModel <- R6Class("PopulationModel",
         attribute_aliases <- c(attribute_aliases, list(dispersal_data = "dispersal"))
       }
       if (!"dispersal_source_n_k" %in% names(c(list(...), list(...)$params))) { # set default aliases for source n/k
-        attribute_aliases <- c(attribute_aliases, list(dispersal_n_k_cutoff = "dispersal_source_n_k$cutoff",
-                                                       dispersal_n_k_threshold = "dispersal_source_n_k$threshold"))
+        attribute_aliases <- c(attribute_aliases, list(
+          dispersal_n_k_cutoff = "dispersal_source_n_k$cutoff",
+          dispersal_n_k_threshold = "dispersal_source_n_k$threshold"
+        ))
       }
       if (!"dispersal_target_k" %in% names(c(list(...), list(...)$params))) { # set default alias for target k
         attribute_aliases <- c(attribute_aliases, list(dispersal_k_threshold = "dispersal_target_k"))
       }
       if (!"dispersal_target_n" %in% names(c(list(...), list(...)$params))) { # set default aliases for target n
-        attribute_aliases <- c(attribute_aliases, list(dispersal_n_threshold = "dispersal_target_n$threshold",
-                                                       dispersal_n_cutoff = "dispersal_target_n$cutoff"))
+        attribute_aliases <- c(attribute_aliases, list(
+          dispersal_n_threshold = "dispersal_target_n$threshold",
+          dispersal_n_cutoff = "dispersal_target_n$cutoff"
+        ))
       }
       if (!"dispersal_target_n_k" %in% names(c(list(...), list(...)$params))) { # set default aliases for target n/k
-        attribute_aliases <- c(attribute_aliases, list(dispersal_target_n_k_threshold = "dispersal_target_n_k$threshold",
-                                                       dispersal_target_n_k_cutoff = "dispersal_target_n_k$cutoff"))
+        attribute_aliases <- c(attribute_aliases, list(
+          dispersal_target_n_k_threshold = "dispersal_target_n_k$threshold",
+          dispersal_target_n_k_cutoff = "dispersal_target_n_k$cutoff"
+        ))
       }
       super$initialize(attribute_aliases = attribute_aliases, ...)
     },
@@ -112,13 +128,15 @@ PopulationModel <- R6Class("PopulationModel",
         super$list_consistency()
       } else { # listed attributes
         params <- c(params)
-        local_params <- params[which(params %in% c("populations", "initial_abundance", "stage_matrix", "fecundity_mask",
-                                                   "demographic_stochasticity", "standard_deviation", "correlation",
-                                                   "carrying_capacity", "density_dependence", "growth_rate_max",
-                                                   "density_affects", "density_stages", "translocation", "harvest",
-                                                   "mortality", "dispersal", "dispersal_stages", "dispersal_source_n_k",
-                                                   "dispersal_target_k", "dispersal_target_n", "dispersal_target_n_k",
-                                                   "abundance_threshold", "result_stages"))]
+        local_params <- params[which(params %in% c(
+          "populations", "initial_abundance", "stage_matrix", "fecundity_mask",
+          "demographic_stochasticity", "standard_deviation", "correlation",
+          "carrying_capacity", "density_dependence", "growth_rate_max",
+          "density_affects", "density_stages", "translocation", "harvest",
+          "mortality", "dispersal", "dispersal_stages", "dispersal_source_n_k",
+          "dispersal_target_k", "dispersal_target_n", "dispersal_target_n_k",
+          "abundance_threshold", "result_stages"
+        ))]
         consistent_list <- super$list_consistency(params[which(!params %in% local_params)])
         for (param in local_params) {
           param_value <- self$get_attribute(param)
@@ -127,157 +145,158 @@ PopulationModel <- R6Class("PopulationModel",
           } else {
             consistent_list[[param]] <-
               switch(param,
-                     populations = (is.numeric(param_value) && param_value > 0) &&
-                       if (!is.null(self$region) && is.numeric(self$region$region_cells)) {
-                         (param_value == self$region$region_cells)
-                       } else TRUE,
-                     initial_abundance =
-                       if (is.numeric(self$populations) && is.numeric(self$stages)) {
-                         if (any(class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-                           if (!is.null(self$region) && self$region$use_raster && !is.null(self$region$region_raster)) {
-                             (self$region$raster_is_consistent(param_value) &&
-                                self$region$region_cells == self$populations &&
-                                raster::nlayers(param_value) %in% c(1, self$stages))
-                           } else {
-                             NA
-                           }
-                         } else { # assume matrix or array
-                           (is.numeric(param_value) &&
-                              nrow(as.matrix(param_value)) == self$populations &&
-                              ncol(as.matrix(param_value)) %in% c(1, self$stages))
-                         }
-                       } else {
-                         NA
-                       },
-                     stage_matrix = , # or
-                     fecundity_mask = , # or
-                     density_affects =
-                       if (is.numeric(param_value) && is.numeric(self$stages)) {
-                         all(dim(as.matrix(param_value)) == self$stages)
-                       } else {
-                         NA
-                       },
-                     density_stages = , # or
-                     dispersal_stages =
-                       if (is.numeric(param_value) && is.numeric(self$stages)) {
-                         (length(param_value) == self$stages && all(+param_value >= 0) && all(+param_value <= 1))
-                       } else {
-                         NA
-                       },
-                     result_stages =
-                       if (is.numeric(param_value) && is.numeric(self$stages)) {
-                         (length(param_value) == self$stages)
-                       } else {
-                         NA
-                       },
-                     demographic_stochasticity = is.logical(param_value),
-                     standard_deviation =
-                       if (length(param_value) == 1) {
-                         TRUE
-                       } else {
-                         if (is.numeric(param_value) && is.numeric(self$stages)) {
-                           all(dim(as.matrix(param_value)) == self$stages)
-                         } else {
-                           NA
-                         }
-                       },
-                     correlation = NA,
-                     carrying_capacity =
-                       if (is.numeric(self$populations) && is.numeric(self$time_steps)) {
-                         if (any(class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-                           if (!is.null(self$region) && self$region$use_raster && !is.null(self$region$region_raster)) {
-                             (self$region$raster_is_consistent(param_value) &&
-                                self$region$region_cells == self$populations &&
-                                raster::nlayers(param_value) %in% c(1, self$time_steps))
-                           } else {
-                             NA
-                           }
-                         } else { # assume matrix or array
-                           (is.numeric(param_value) &&
-                              nrow(as.matrix(param_value)) == self$populations &&
-                              ncol(as.matrix(param_value)) %in% c(1, self$time_steps))
-                         }
-                       } else {
-                         NA
-                       },
-                     density_dependence = NA,
-                     growth_rate_max = , # or
-                     dispersal_source_n_k =
-                       if (is.list(param_value) && all(c("cutoff", "threshold") %in% names(param_value))) {
-                         consistent <- list(cutoff = NA, threshold = NA)
-                         for (name in c("cutoff", "threshold")) {
-                           if (length(param_value[[name]]) == 1) {
-                             consistent[[name]] <- TRUE
-                           } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
-                             consistent[[name]] <- (is.numeric(param_value[[name]]) &&
-                                                      length(param_value[[name]]) == self$populations)
-                           }
-                         }
-                         all(unlist(consistent))
-                       } else {
-                         NA
-                       },
-                     dispersal_target_k =
-                       if (length(param_value) == 1) {
-                         TRUE
-                       } else {
-                         if (is.numeric(self$populations)) {
-                           (is.numeric(param_value) && length(param_value) == self$populations)
-                         } else {
-                           NA
-                         }
-                       },
-                     dispersal_target_n =
-                       if (is.list(param_value) && all(c("threshold", "cutoff") %in% names(param_value))) {
-                         consistent <- list(threshold = NA, cutoff = NA)
-                         for (name in c("threshold", "cutoff")) {
-                           if (length(param_value[[name]]) == 1) {
-                             consistent[[name]] <- TRUE
-                           } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
-                             consistent[[name]] <- (is.numeric(param_value[[name]]) &&
-                                                      length(param_value[[name]]) == self$populations)
-                           }
-                         }
-                         all(unlist(consistent))
-                       } else {
-                         NA
-                       },
-                     dispersal_target_n_k =
-                       if (is.list(param_value) && all(c("threshold", "cutoff") %in% names(param_value))) {
-                         consistent <- list(threshold = NA, cutoff = NA)
-                         for (name in c("threshold", "cutoff")) {
-                           if (length(param_value[[name]]) == 1) {
-                             consistent[[name]] <- TRUE
-                           } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
-                             consistent[[name]] <- (is.numeric(param_value[[name]]) &&
-                                                      length(param_value[[name]]) == self$populations)
-                           }
-                         }
-                         all(unlist(consistent))
-                       } else {
-                         NA
-                       },
-                     translocation = NA,
-                     harvest = NA,
-                     mortality = NA,
-                     dispersal = NA,
-                     abundance_threshold =
-                       if (length(param_value) == 1) {
-                         TRUE
-                       } else {
-                         if (is.numeric(self$populations)) {
-                           (is.numeric(param_value) && length(param_value) == self$populations)
-                         } else {
-                           NA
-                         }
-                       }
+                populations = (is.numeric(param_value) && param_value > 0) &&
+                  if (!is.null(self$region) && is.numeric(self$region$region_cells)) {
+                    (param_value == self$region$region_cells)
+                  } else {
+                    TRUE
+                  },
+                initial_abundance =
+                  if (is.numeric(self$populations) && is.numeric(self$stages)) {
+                    if (any(class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+                      if (!is.null(self$region) && self$region$use_raster && !is.null(self$region$region_raster)) {
+                        (self$region$raster_is_consistent(param_value) &&
+                          self$region$region_cells == self$populations &&
+                          raster::nlayers(param_value) %in% c(1, self$stages))
+                      } else {
+                        NA
+                      }
+                    } else { # assume matrix or array
+                      (is.numeric(param_value) &&
+                        nrow(as.matrix(param_value)) == self$populations &&
+                        ncol(as.matrix(param_value)) %in% c(1, self$stages))
+                    }
+                  } else {
+                    NA
+                  },
+                stage_matrix = , # or
+                fecundity_mask = , # or
+                density_affects =
+                  if (is.numeric(param_value) && is.numeric(self$stages)) {
+                    all(dim(as.matrix(param_value)) == self$stages)
+                  } else {
+                    NA
+                  },
+                density_stages = , # or
+                dispersal_stages =
+                  if (is.numeric(param_value) && is.numeric(self$stages)) {
+                    (length(param_value) == self$stages && all(+param_value >= 0) && all(+param_value <= 1))
+                  } else {
+                    NA
+                  },
+                result_stages =
+                  if (is.numeric(param_value) && is.numeric(self$stages)) {
+                    (length(param_value) == self$stages)
+                  } else {
+                    NA
+                  },
+                demographic_stochasticity = is.logical(param_value),
+                standard_deviation =
+                  if (length(param_value) == 1) {
+                    TRUE
+                  } else {
+                    if (is.numeric(param_value) && is.numeric(self$stages)) {
+                      all(dim(as.matrix(param_value)) == self$stages)
+                    } else {
+                      NA
+                    }
+                  },
+                correlation = NA,
+                carrying_capacity =
+                  if (is.numeric(self$populations) && is.numeric(self$time_steps)) {
+                    if (any(class(param_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+                      if (!is.null(self$region) && self$region$use_raster && !is.null(self$region$region_raster)) {
+                        (self$region$raster_is_consistent(param_value) &&
+                          self$region$region_cells == self$populations &&
+                          raster::nlayers(param_value) %in% c(1, self$time_steps))
+                      } else {
+                        NA
+                      }
+                    } else { # assume matrix or array
+                      (is.numeric(param_value) &&
+                        nrow(as.matrix(param_value)) == self$populations &&
+                        ncol(as.matrix(param_value)) %in% c(1, self$time_steps))
+                    }
+                  } else {
+                    NA
+                  },
+                density_dependence = NA,
+                growth_rate_max = , # or
+                dispersal_source_n_k =
+                  if (is.list(param_value) && all(c("cutoff", "threshold") %in% names(param_value))) {
+                    consistent <- list(cutoff = NA, threshold = NA)
+                    for (name in c("cutoff", "threshold")) {
+                      if (length(param_value[[name]]) == 1) {
+                        consistent[[name]] <- TRUE
+                      } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
+                        consistent[[name]] <- (is.numeric(param_value[[name]]) &&
+                          length(param_value[[name]]) == self$populations)
+                      }
+                    }
+                    all(unlist(consistent))
+                  } else {
+                    NA
+                  },
+                dispersal_target_k =
+                  if (length(param_value) == 1) {
+                    TRUE
+                  } else {
+                    if (is.numeric(self$populations)) {
+                      (is.numeric(param_value) && length(param_value) == self$populations)
+                    } else {
+                      NA
+                    }
+                  },
+                dispersal_target_n =
+                  if (is.list(param_value) && all(c("threshold", "cutoff") %in% names(param_value))) {
+                    consistent <- list(threshold = NA, cutoff = NA)
+                    for (name in c("threshold", "cutoff")) {
+                      if (length(param_value[[name]]) == 1) {
+                        consistent[[name]] <- TRUE
+                      } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
+                        consistent[[name]] <- (is.numeric(param_value[[name]]) &&
+                          length(param_value[[name]]) == self$populations)
+                      }
+                    }
+                    all(unlist(consistent))
+                  } else {
+                    NA
+                  },
+                dispersal_target_n_k =
+                  if (is.list(param_value) && all(c("threshold", "cutoff") %in% names(param_value))) {
+                    consistent <- list(threshold = NA, cutoff = NA)
+                    for (name in c("threshold", "cutoff")) {
+                      if (length(param_value[[name]]) == 1) {
+                        consistent[[name]] <- TRUE
+                      } else if (length(param_value[[name]]) > 1 && is.numeric(self$populations)) {
+                        consistent[[name]] <- (is.numeric(param_value[[name]]) &&
+                          length(param_value[[name]]) == self$populations)
+                      }
+                    }
+                    all(unlist(consistent))
+                  } else {
+                    NA
+                  },
+                translocation = NA,
+                harvest = NA,
+                mortality = NA,
+                dispersal = NA,
+                abundance_threshold =
+                  if (length(param_value) == 1) {
+                    TRUE
+                  } else {
+                    if (is.numeric(self$populations)) {
+                      (is.numeric(param_value) && length(param_value) == self$populations)
+                    } else {
+                      NA
+                    }
+                  }
               )
           }
         }
         return(consistent_list)
       }
     }
-
   ), # end public
 
   private = list(
@@ -288,14 +307,16 @@ PopulationModel <- R6Class("PopulationModel",
     .simulation_function = "population_simulator",
 
     # Model attributes #
-    .model_attributes = c("region", "coordinates", "random_seed", "replicates", "time_steps", "years_per_step",
-                          "populations", "stages", "initial_abundance", "stage_matrix", "fecundity_mask",
-                          "fecundity_max", "demographic_stochasticity", "standard_deviation", "correlation",
-                          "carrying_capacity", "density_dependence", "growth_rate_max", "density_affects",
-                          "density_stages", "translocation", "harvest", "mortality", "dispersal",
-                          "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k",
-                          "dispersal_target_n", "dispersal_target_n_k", "abundance_threshold",
-                          "simulation_order", "results_selection", "result_stages"),
+    .model_attributes = c(
+      "region", "coordinates", "random_seed", "replicates", "time_steps", "years_per_step",
+      "populations", "stages", "initial_abundance", "stage_matrix", "fecundity_mask",
+      "fecundity_max", "demographic_stochasticity", "standard_deviation", "correlation",
+      "carrying_capacity", "density_dependence", "growth_rate_max", "density_affects",
+      "density_stages", "translocation", "harvest", "mortality", "dispersal",
+      "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k",
+      "dispersal_target_n", "dispersal_target_n_k", "abundance_threshold",
+      "simulation_order", "results_selection", "result_stages"
+    ),
     # .region             [inherited]
     # .random_seed        [inherited]
     # .replicates         [inherited]
@@ -312,7 +333,7 @@ PopulationModel <- R6Class("PopulationModel",
     .carrying_capacity = NULL,
     .density_dependence = NULL,
     .growth_rate_max = NULL,
-    .density_affects = "all",          # default for poems simulator
+    .density_affects = "all", # default for poems simulator
     .density_stages = NULL,
     .translocation = NULL,
     .harvest = NULL,
@@ -329,14 +350,16 @@ PopulationModel <- R6Class("PopulationModel",
     .result_stages = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "coordinates", "random_seed", "replicates", "time_steps", "years_per_step",
-                           "populations", "stages", "initial_abundance", "stage_matrix", "fecundity_mask",
-                           "fecundity_max", "demographic_stochasticity", "standard_deviation", "correlation",
-                           "carrying_capacity", "density_dependence", "growth_rate_max", "density_affects",
-                           "density_stages", "translocation", "harvest", "mortality", "dispersal",
-                           "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n",
-                           "dispersal_target_n_k", "abundance_threshold", "simulation_order", "results_selection",
-                           "result_stages"),
+    .active_attributes = c(
+      "region", "coordinates", "random_seed", "replicates", "time_steps", "years_per_step",
+      "populations", "stages", "initial_abundance", "stage_matrix", "fecundity_mask",
+      "fecundity_max", "demographic_stochasticity", "standard_deviation", "correlation",
+      "carrying_capacity", "density_dependence", "growth_rate_max", "density_affects",
+      "density_stages", "translocation", "harvest", "mortality", "dispersal",
+      "dispersal_stages", "dispersal_source_n_k", "dispersal_target_k", "dispersal_target_n",
+      "dispersal_target_n_k", "abundance_threshold", "simulation_order", "results_selection",
+      "result_stages"
+    ),
 
     # Dynamic attributes #
     # .attribute_aliases  [inherited]
@@ -349,7 +372,6 @@ PopulationModel <- R6Class("PopulationModel",
     # Errors and warnings #
     # .error_messages     [inherited]
     # .warning_messages   [inherited]
-
   ), # end private
 
   # Active binding accessors for private model attributes (above) #
@@ -660,7 +682,7 @@ PopulationModel <- R6Class("PopulationModel",
           if (value == "fecundity" && is.numeric(self$fecundity_mask)) {
             value <- self$fecundity_mask
           } else if (value == "survival" && is.numeric(self$stage_matrix) && is.numeric(self$fecundity_mask)) {
-            value <- +(self$stage_matrix > 0)*(1 - self$fecundity_mask)
+            value <- +(self$stage_matrix > 0) * (1 - self$fecundity_mask)
           } else if (value == "all" && is.numeric(self$stage_matrix)) {
             value <- +(self$stage_matrix > 0)
           }
@@ -974,6 +996,5 @@ PopulationModel <- R6Class("PopulationModel",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )

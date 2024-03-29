@@ -53,7 +53,6 @@ population_density <- function(populations,
                                density_stages,
                                density_precision,
                                simulator) {
-
   # Extract stages from stage matrix dimensions
   stages <- nrow(stage_matrix)
 
@@ -71,29 +70,30 @@ population_density <- function(populations,
   }
 
   if (is.character(density_dependence) && density_dependence == "ceiling") {
-
     ## Create a nested function for applying ceiling density dependence to stage abundances ##
     ceiling_function <- function(carrying_capacity, stage_abundance) {
-
       # Compare density affected population abundances to capacities
-      density_abundance <- .colSums(stage_abundance[density_stage_indices,], m = density_stages, n = populations)
+      density_abundance <- .colSums(stage_abundance[density_stage_indices, ], m = density_stages, n = populations)
       above_capacity_indices <- which(density_abundance > carrying_capacity)
       if (length(above_capacity_indices)) {
-
         # Limit stage abundances via affected capacity/abundance ratio
         limited_stage_abundance <- stage_abundance
         limited_stage_abundance[density_stage_indices, above_capacity_indices] <-
-          (stage_abundance[density_stage_indices, above_capacity_indices]*
-             rep(carrying_capacity[above_capacity_indices]/density_abundance[above_capacity_indices], each = density_stages))
+          (stage_abundance[density_stage_indices, above_capacity_indices] *
+            rep(carrying_capacity[above_capacity_indices] / density_abundance[above_capacity_indices], each = density_stages))
         stage_abundance[density_stage_indices, above_capacity_indices] <- round(limited_stage_abundance[density_stage_indices, above_capacity_indices])
 
         # Ensure the ceiling values are used (correct differences resulting from rounding)
         ceiling_corrections <- (carrying_capacity[above_capacity_indices] -
-                                  .colSums(stage_abundance[density_stage_indices, above_capacity_indices], m = density_stages,
-                                           n = length(above_capacity_indices)))
+          .colSums(stage_abundance[density_stage_indices, above_capacity_indices],
+            m = density_stages,
+            n = length(above_capacity_indices)
+          ))
         for (i in which(ceiling_corrections != 0)) {
-          sample_indices <- sample(1:density_stages, size = abs(ceiling_corrections[i]), replace = TRUE,
-                                   prob = limited_stage_abundance[density_stage_indices, above_capacity_indices[i]])
+          sample_indices <- sample(1:density_stages,
+            size = abs(ceiling_corrections[i]), replace = TRUE,
+            prob = limited_stage_abundance[density_stage_indices, above_capacity_indices[i]]
+          )
           for (sample_index in sample_indices) {
             stage_abundance[density_stage_indices[sample_index], above_capacity_indices[i]] <-
               stage_abundance[density_stage_indices[sample_index], above_capacity_indices[i]] + ifelse(ceiling_corrections[i] > 0, 1, -1)
@@ -105,7 +105,6 @@ population_density <- function(populations,
     }
 
     return(ceiling_function)
-
   } else { # transition altering function
 
     # Set density parameter defaults when NULL
@@ -117,23 +116,24 @@ population_density <- function(populations,
     }
 
     if (stages > 1) {
-
       # Construct a lookup table for transition multipliers and their corresponding growth rates (dominant eigenvalues)
-      maximum_multiplier <- 1/max(.colSums((1 - fecundity_mask)*stage_matrix*density_affects, m = stages, n = stages))
+      maximum_multiplier <- 1 / max(.colSums((1 - fecundity_mask) * stage_matrix * density_affects, m = stages, n = stages))
       if (!is.finite(maximum_multiplier)) { # limit via fecundities if possible
         if (is.numeric(fecundity_max)) {
-          fecundities <- fecundity_mask*stage_matrix*density_affects
-          maximum_multiplier <- fecundity_max/min(fecundities[which(fecundities > 0)])
+          fecundities <- fecundity_mask * stage_matrix * density_affects
+          maximum_multiplier <- fecundity_max / min(fecundities[which(fecundities > 0)])
         } else {
           stop("Could not build density lookup table without maximum fecundity", call. = FALSE)
         }
       }
-      multiplier_lookup <- data.frame(growth_rate = NA,
-                                      multiplier = (1:trunc(maximum_multiplier*10^density_precision))/10^density_precision)
+      multiplier_lookup <- data.frame(
+        growth_rate = NA,
+        multiplier = (1:trunc(maximum_multiplier * 10^density_precision)) / 10^density_precision
+      )
       for (i in 1:length(multiplier_lookup$multiplier)) {
-        new_stage_matrix <- multiplier_lookup$multiplier[i]*density_affects*stage_matrix + (1 - density_affects)*stage_matrix
+        new_stage_matrix <- multiplier_lookup$multiplier[i] * density_affects * stage_matrix + (1 - density_affects) * stage_matrix
         if (is.numeric(fecundity_max)) { # limit fecundities
-          new_stage_matrix[which(fecundity_mask*new_stage_matrix > fecundity_max)] <- fecundity_max
+          new_stage_matrix[which(fecundity_mask * new_stage_matrix > fecundity_max)] <- fecundity_max
         }
         multiplier_lookup$growth_rate[i] <- log(Re((eigen(new_stage_matrix, only.values = TRUE)$values)[1]))
       }
@@ -151,14 +151,14 @@ population_density <- function(populations,
 
       # Function for applying transition multipliers to the affected elements of a 3D transition array
       apply_multipliers <- function(transition_array, multipliers) {
-        selected_populations <- length(transition_array)/(stages^2)
+        selected_populations <- length(transition_array) / (stages^2)
         transition_array <- array(transition_array, c(stages, stages, selected_populations))
-        multiplier_array <- array(rep(multipliers, each = stages*stages), c(stages, stages, selected_populations))
+        multiplier_array <- array(rep(multipliers, each = stages * stages), c(stages, stages, selected_populations))
         density_affects_array <- array(density_affects, c(stages, stages, selected_populations))
-        transition_array <- multiplier_array*density_affects_array*transition_array + (1 - density_affects_array)*transition_array
+        transition_array <- multiplier_array * density_affects_array * transition_array + (1 - density_affects_array) * transition_array
         if (is.numeric(fecundity_max)) { # limit fecundities
           fecundity_mask_array <- array(fecundity_mask, c(stages, stages, selected_populations))
-          transition_array[which(fecundity_mask_array*transition_array > fecundity_max)] <- fecundity_max
+          transition_array[which(fecundity_mask_array * transition_array > fecundity_max)] <- fecundity_max
         }
         return(transition_array)
       }
@@ -166,10 +166,8 @@ population_density <- function(populations,
 
     # Logistic (Ricker)
     if (is.character(density_dependence) && density_dependence == "logistic") {
-
       ## Create a nested function for applying logistic (Ricker) dependence to stage abundances ##
       logistic_function <- function(transition_array, carrying_capacity, stage_abundance, occupied_indices) {
-
         # Eliminate zero capacity transitions and update occupied indices
         occupied_zero_indices <- which(carrying_capacity[occupied_indices] <= 0)
         transition_array[, , occupied_indices[occupied_zero_indices]] <- 0
@@ -188,15 +186,19 @@ population_density <- function(populations,
         }
 
         # Calculate logistic (Ricker) growth rate
-        growth_rate <- occupied_growth_rate_max*(1 - density_abundance/carrying_capacity)
+        growth_rate <- occupied_growth_rate_max * (1 - density_abundance / carrying_capacity)
 
         # Calculate and apply multipliers that result in transition matrix dominant eigenvalues corresponding to growth rate
         if (stages > 1) { # use lookup table
-          transition_array[, , occupied_indices] <- apply_multipliers(array(transition_array[, , occupied_indices],
-                                                                            c(stages, stages, occupied_populations)),
-                                                                      calculate_multipliers(growth_rate))
+          transition_array[, , occupied_indices] <- apply_multipliers(
+            array(
+              transition_array[, , occupied_indices],
+              c(stages, stages, occupied_populations)
+            ),
+            calculate_multipliers(growth_rate)
+          )
         } else { # calculate (single transition rate equals dominant eigenvalue)
-          transition_array[, , occupied_indices]  <- exp(growth_rate)
+          transition_array[, , occupied_indices] <- exp(growth_rate)
         }
 
         return(transition_array)
@@ -220,7 +222,6 @@ population_density <- function(populations,
 
       ## Create a nested function for applying user-defined density dependence to transition rates ##
       user_defined_function <- function(transition_array, carrying_capacity, stage_abundance, occupied_indices) {
-
         # Add/calculate attributes and functions to be made available to the user-defined function
         params$transition_array <- transition_array
         params$fecundity_mask <- fecundity_mask
@@ -228,7 +229,7 @@ population_density <- function(populations,
         params$carrying_capacity <- carrying_capacity
         params$stage_abundance <- stage_abundance
         params$population_abundance <- .colSums(stage_abundance, m = stages, n = populations)
-        params$density_abundance <- .colSums(stage_abundance[density_stage_indices,], m = density_stages, n = populations)
+        params$density_abundance <- .colSums(stage_abundance[density_stage_indices, ], m = density_stages, n = populations)
         params$occupied_indices <- occupied_indices
         params$growth_rate_max <- growth_rate_max
         if (stages > 1) {
@@ -237,12 +238,14 @@ population_density <- function(populations,
         }
 
         # Run user-defined function
-        tryCatch({
-          transition_array[] <- density_dependence(params)
-        },
-        error = function(e){
-          stop(paste("Error produced within user-defined density dependence function:", as.character(e)), call. = FALSE)
-        })
+        tryCatch(
+          {
+            transition_array[] <- density_dependence(params)
+          },
+          error = function(e) {
+            stop(paste("Error produced within user-defined density dependence function:", as.character(e)), call. = FALSE)
+          }
+        )
 
         # Warn if any negative or non-finite
         if (any(!is.finite(transition_array))) {
@@ -257,6 +260,5 @@ population_density <- function(populations,
 
       return(user_defined_function)
     }
-
   }
 }

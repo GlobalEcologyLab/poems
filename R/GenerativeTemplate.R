@@ -28,7 +28,6 @@ GenerativeTemplate <- R6Class("GenerativeTemplate",
       self$function_templates <- list()
       self$distribution_templates <- list()
     }
-
   ), # end public
 
   private = list(
@@ -47,7 +46,6 @@ GenerativeTemplate <- R6Class("GenerativeTemplate",
     .generate_rasters = NULL,
     .decimals = NULL,
     .occupancy_mask = NULL
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -169,6 +167,5 @@ GenerativeTemplate <- R6Class("GenerativeTemplate",
         private$.occupancy_mask <- value
       }
     }
-
   ) # end active
 )

@@ -9,10 +9,14 @@ test_that("initialization and parameter setting", {
   generic_manager$sample_data <- as.matrix(data.frame(a = 1:4, b = 5:8))
   expect_is(generic_manager$sample_data, "data.frame")
   expect_silent(generic_manager$sample_data <- NULL)
-  expect_error(generic_manager$generators <- "dummy",
-               "Generators must be a list of Generator or inherited class objects")
-  expect_error(generic_manager$generators <- list(gen1 = "dummy", gen2 = 1:5),
-               "Generators must be a list of Generator or inherited class objects")
+  expect_error(
+    generic_manager$generators <- "dummy",
+    "Generators must be a list of Generator or inherited class objects"
+  )
+  expect_error(
+    generic_manager$generators <- list(gen1 = "dummy", gen2 = 1:5),
+    "Generators must be a list of Generator or inherited class objects"
+  )
   generic_manager$generators <- list(gen1 = Generator$new(), gen2 = Generator$new())
   expect_named(generic_manager$generators, c("gen1", "gen2"))
   expect_is(generic_manager$generators$gen1, "Generator")

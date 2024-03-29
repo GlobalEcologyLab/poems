@@ -7,21 +7,27 @@
 #'
 #' @examples
 #' # U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 #' region <- Region$new(template_raster = template_raster)
-#' raster::plot(region$region_raster, main = "Example region (cell indices)",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-#'              colNA = "blue")
+#' raster::plot(region$region_raster,
+#'   main = "Example region (cell indices)",
+#'   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'   colNA = "blue"
+#' )
 #' region$region_cells
 #' region$coordinates
 #' # Generate value layers
 #' value_brick <- region$raster_from_values(array(8:28, c(7, 3)))
-#' raster::plot(value_brick, main = "Example value layers",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-#'              colNA = "blue")
+#' raster::plot(value_brick,
+#'   main = "Example value layers",
+#'   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'   colNA = "blue"
+#' )
 #' value_brick[region$region_indices]
 #'
 #' @importFrom R6 R6Class
@@ -88,7 +94,7 @@ Region <- R6Class("Region",
         if (any(class(check_raster) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
           region_non_finites <- which(!is.finite(region_raster[]))
           return(raster::compareRaster(check_raster, region_raster, stopiffalse = FALSE) &&
-                   (all(!is.finite(check_raster[region_non_finites])) || !self$strict_consistency))
+            (all(!is.finite(check_raster[region_non_finites])) || !self$strict_consistency))
         } else {
           return(FALSE)
         }
@@ -118,18 +124,15 @@ Region <- R6Class("Region",
       names(value_raster) <- colnames(value_matrix)
       return(value_raster)
     }
-
   ), # end public
 
   private = list(
 
     ## Attributes ##
-
     .coordinates = NULL,
     .region_raster = NULL,
     .use_raster = NULL,
     .strict_consistency = TRUE
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -179,7 +182,8 @@ Region <- R6Class("Region",
           # suppressWarnings(raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
           #                                        crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")) # warnings?
           raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
-                                crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+            crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+          )
         } else {
           private$.region_raster
         }
@@ -259,6 +263,5 @@ Region <- R6Class("Region",
         stop("Cannot set dynamically calculated region cell indices", call. = FALSE)
       }
     }
-
   ) # end active
 )

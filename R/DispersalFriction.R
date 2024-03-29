@@ -16,28 +16,36 @@
 #'
 #' @examplesIf interactive()
 #' #' U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster #' full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA #' make U Island
 #' region <- Region$new(template_raster = template_raster)
-#' raster::plot(region$region_raster, main = "Example region (indices)",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-#'              colNA = "blue")
+#' raster::plot(region$region_raster,
+#'   main = "Example region (indices)",
+#'   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'   colNA = "blue"
+#' )
 #'
 #' #' Dispersal distances
 #' dispersal_gen <- DispersalGenerator$new(region = region)
 #' dispersal_gen$set_attributes(params = list(p = 0.5, b = 700, r = 3000))
 #' distances <- round(dispersal_gen$calculate_distance_matrix()) #' in m
 #' dispersal_gen$calculate_distance_data()
-#' dispersal_indices <- as.matrix(dispersal_gen$distance_data$base[,1:2])
+#' dispersal_indices <- as.matrix(dispersal_gen$distance_data$base[, 1:2])
 #'
 #' #' Distance multipliers with friction in cell 4
-#' dispersal_friction <- DispersalFriction$new(region = region,
-#'                                             conductance = c(1, 1, 1, 0.5, 1, 1, 1))
+#' dispersal_friction <- DispersalFriction$new(
+#'   region = region,
+#'   conductance = c(1, 1, 1, 0.5, 1, 1, 1)
+#' )
 #' multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
-#' cbind(dispersal_indices, distance = distances[dispersal_indices],
-#'       multiplier = multipliers[[1]])
+#' cbind(dispersal_indices,
+#'   distance = distances[dispersal_indices],
+#'   multiplier = multipliers[[1]]
+#' )
 #'
 #' #' Note that crossing the water is avoided.
 #'
@@ -81,7 +89,6 @@ DispersalFriction <- R6Class("DispersalFriction",
     #' @param ... Parameters passed via a \emph{params} list or individually.
     #' @return Temporal list of dispersal distance multiplier arrays with values for each in-range migration.
     calculate_distance_multipliers = function(dispersal_indices, ...) {
-
       # Set attributes
       if (length(list(...))) {
         self$set_attributes(...)
@@ -94,79 +101,81 @@ DispersalFriction <- R6Class("DispersalFriction",
 
       # Ensure dispersal indices are correctly set and are consistent with coordinates
       if (is.null(dispersal_indices) || !all(is.integer(dispersal_indices)) || !all(dispersal_indices >= 1) ||
-          !is.matrix(dispersal_indices) || ncol(dispersal_indices) != 2 ||
-          nrow(dispersal_indices) > self$region$region_cells^2 ||
-          max(dispersal_indices) > self$region$region_cells) {
+        !is.matrix(dispersal_indices) || ncol(dispersal_indices) != 2 ||
+        nrow(dispersal_indices) > self$region$region_cells^2 ||
+        max(dispersal_indices) > self$region$region_cells) {
         stop("Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration", call. = FALSE)
       }
 
-      tryCatch({
-
-        # Obtain a region that uses a raster
-        if (self$region$use_raster) {
-          raster_region <- self$region
-        } else {
-          raster_region <- Region$new(coordinates = self$region$coordinates, use_raster = TRUE)
-        }
-
-        if (is.null(self$conductance)) { # set as 1 for all non-NA cells
-          self$conductance <- raster_region$region_raster*0 + 1
-        }
-
-        suppressWarnings({
-          # Calculate raster, transition matrix, then least cost distances for no friction
-          no_friction_rast <- raster_region$region_raster
-          no_friction_rast[] <- 1 # include NAs # [raster_region$region_indices] <- 1
-          no_friction_transitions <- transition(no_friction_rast, transitionFunction = mean, directions = self$transition_directions)
-          no_friction_transitions <- geoCorrection(no_friction_transitions, type = "c", scl = TRUE, multpl = FALSE)
-          no_friction_costs <- as.matrix(costDistance(no_friction_transitions, as.matrix(self$coordinates)))
-          no_friction_costs <- no_friction_costs[dispersal_indices]
-          no_friction_transitions <- NULL # release from memory
-        })
-
-        # Calculate the (within range) distance multipliers for each time step in parallel
-        registerDoParallel(cores = self$parallel_cores)
-        self <- self # Ensure that this object consistently becomes available within each parallel thread
-        distance_multipliers <- foreach(i = 1:ncol(as.matrix(self$conductance[])),
-                                        .packages = c("raster"),
-                                        .errorhandling = c("stop")) %dopar% {
-          suppressWarnings({
-            # Calculate raster, transition matrix, then least cost distances for friction for time step
-            if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-              conductance_rast <- raster::subset(self$conductance, i)
-            } else { # assume friction matrix
-              conductance_rast <- raster_region$region_raster
-              conductance_rast[raster_region$region_indices] <- self$conductance[, i]
-            }
-            conductance_transitions <- transition(conductance_rast, transitionFunction = mean, directions = self$transition_directions)
-            conductance_transitions <- geoCorrection(conductance_transitions, type = "c", scl = TRUE, multpl = FALSE)
-            conductance_costs <- as.matrix(costDistance(conductance_transitions, as.matrix(self$coordinates)))
-            conductance_costs <- conductance_costs[dispersal_indices]
-            conductance_transitions <- NULL # release from memory
-          })
-          if (!is.null(self$write_to_dir)) {
-            file_path <- file.path(self$write_to_dir, sprintf("multipliers_%s.RData", i))
-            saveRDS(conductance_costs/no_friction_costs, file = file_path)
-            file_path # return to parallel rbind
+      tryCatch(
+        {
+          # Obtain a region that uses a raster
+          if (self$region$use_raster) {
+            raster_region <- self$region
           } else {
-            conductance_costs/no_friction_costs # return to parallel rbind
+            raster_region <- Region$new(coordinates = self$region$coordinates, use_raster = TRUE)
           }
-        }
 
-      },
-      error = function(e){
-        self$error_messages <- gsub("\n", "", as.character(e), fixed = TRUE)
-      })
+          if (is.null(self$conductance)) { # set as 1 for all non-NA cells
+            self$conductance <- raster_region$region_raster * 0 + 1
+          }
+
+          suppressWarnings({
+            # Calculate raster, transition matrix, then least cost distances for no friction
+            no_friction_rast <- raster_region$region_raster
+            no_friction_rast[] <- 1 # include NAs # [raster_region$region_indices] <- 1
+            no_friction_transitions <- transition(no_friction_rast, transitionFunction = mean, directions = self$transition_directions)
+            no_friction_transitions <- geoCorrection(no_friction_transitions, type = "c", scl = TRUE, multpl = FALSE)
+            no_friction_costs <- as.matrix(costDistance(no_friction_transitions, as.matrix(self$coordinates)))
+            no_friction_costs <- no_friction_costs[dispersal_indices]
+            no_friction_transitions <- NULL # release from memory
+          })
+
+          # Calculate the (within range) distance multipliers for each time step in parallel
+          registerDoParallel(cores = self$parallel_cores)
+          self <- self # Ensure that this object consistently becomes available within each parallel thread
+          distance_multipliers <- foreach(
+            i = 1:ncol(as.matrix(self$conductance[])),
+            .packages = c("raster"),
+            .errorhandling = c("stop")
+          ) %dopar% {
+            suppressWarnings({
+              # Calculate raster, transition matrix, then least cost distances for friction for time step
+              if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+                conductance_rast <- raster::subset(self$conductance, i)
+              } else { # assume friction matrix
+                conductance_rast <- raster_region$region_raster
+                conductance_rast[raster_region$region_indices] <- self$conductance[, i]
+              }
+              conductance_transitions <- transition(conductance_rast, transitionFunction = mean, directions = self$transition_directions)
+              conductance_transitions <- geoCorrection(conductance_transitions, type = "c", scl = TRUE, multpl = FALSE)
+              conductance_costs <- as.matrix(costDistance(conductance_transitions, as.matrix(self$coordinates)))
+              conductance_costs <- conductance_costs[dispersal_indices]
+              conductance_transitions <- NULL # release from memory
+            })
+            if (!is.null(self$write_to_dir)) {
+              file_path <- file.path(self$write_to_dir, sprintf("multipliers_%s.RData", i))
+              saveRDS(conductance_costs / no_friction_costs, file = file_path)
+              file_path # return to parallel rbind
+            } else {
+              conductance_costs / no_friction_costs # return to parallel rbind
+            }
+          }
+        },
+        error = function(e) {
+          self$error_messages <- gsub("\n", "", as.character(e), fixed = TRUE)
+        }
+      )
       stopImplicitCluster()
 
       if (!is.null(self$error_messages)) {
-        error_messages <- self$error_messages; self$error_messages <- NULL
+        error_messages <- self$error_messages
+        self$error_messages <- NULL
         stop(paste(c("Encountered in calculating distance multipliers:", error_messages), collapse = "\n"), call. = FALSE)
       } else {
         return(distance_multipliers)
       }
     }
-
   ), # end public
 
   private = list(
@@ -190,7 +199,6 @@ DispersalFriction <- R6Class("DispersalFriction",
     # Errors and warnings #
     # .error_messages    [inherited]
     # .warning_messages  [inherited]
-
   ), # end private
 
   # Active binding accessors for private attributes (above)
@@ -218,7 +226,7 @@ DispersalFriction <- R6Class("DispersalFriction",
           }
           if (!is.null(self$conductance)) {
             if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-              value$use_raster = TRUE
+              value$use_raster <- TRUE
               if (!value$raster_is_consistent(self$conductance)) {
                 stop("Region must be consistent with the conductance raster", call. = FALSE)
               }
@@ -349,6 +357,5 @@ DispersalFriction <- R6Class("DispersalFriction",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )

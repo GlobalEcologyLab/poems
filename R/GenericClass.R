@@ -60,13 +60,10 @@ GenericClass <- R6Class("GenericClass",
     new_clone = function(...) {
       return(self$object_generator$new(object_generator = self$object_generator, ...))
     }
-
   ), # end public
 
   private = list(
 
     ## Attributes ##
-
   ) # end private
-
 )

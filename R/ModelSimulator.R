@@ -6,17 +6,21 @@
 #'
 #' @examples
 #' # Simulation model
-#' model1 <- SimulationModel$new(time_steps = 10,
-#'                               model_attributes = c("time_steps", "a", "b"),
-#'                               params = list(a = 1:7))
+#' model1 <- SimulationModel$new(
+#'   time_steps = 10,
+#'   model_attributes = c("time_steps", "a", "b"),
+#'   params = list(a = 1:7)
+#' )
 #' model1$required_attributes <- model1$model_attributes
 #' # Simulation function
 #' test_simulator <- function(model) {
 #'   sum(unlist(model$get_attributes(model$required_attributes)))
 #' }
 #' # Model simulator
-#' simulator1 <- ModelSimulator$new(simulation_model = model1,
-#'                                  simulation_function = test_simulator)
+#' simulator1 <- ModelSimulator$new(
+#'   simulation_model = model1,
+#'   simulation_function = test_simulator
+#' )
 #' simulator1$run()
 #' model1$set_attributes(a = 1:10, b = 15)
 #' model1$get_attributes(model1$required_attributes)
@@ -73,7 +77,7 @@ ModelSimulator <- R6Class("ModelSimulator",
     #' @return Selected parameter/attribute value.
     get_attribute = function(param) {
       if (param %in% private$.simulator_attributes) {
-        return(eval(parse(text=sprintf("self$%s", param))))
+        return(eval(parse(text = sprintf("self$%s", param))))
       } else if (param %in% names(self$attached)) {
         return(self$attached[[param]])
       } else {
@@ -95,32 +99,44 @@ ModelSimulator <- R6Class("ModelSimulator",
       }
       if (self$simulation_model$is_complete()) {
         run_status <- NULL
-        run_status <- tryCatch({
-          suppressWarnings(
-            withCallingHandlers({
-              if (is.function(self$simulation_function)) {
-                self$results <- self$simulation_function(self$simulation_model)
-              } else { # assume character name
-                self$results <- eval(parse(text = as.character(self$simulation_function)))(self$simulation_model)
-              }
-            }, warning = function(w) {
-              self$attached$warnings <- c(self$attached$warnings,
-                                          gsub("simpleWarning", "Warning",
-                                               gsub("\n", "", as.character(w), fixed = TRUE),
-                                               fixed = TRUE))
-            })
-          )
-          if (!is.null(self$attached$warnings)) {
-            list(successful = TRUE, message = "Model %s simulation ran successfully with warnings",
-                 warnings = self$attached$warnings)
-          } else {
-            list(successful = TRUE, message = "Model %s simulation ran successfully")
+        run_status <- tryCatch(
+          {
+            suppressWarnings(
+              withCallingHandlers(
+                {
+                  if (is.function(self$simulation_function)) {
+                    self$results <- self$simulation_function(self$simulation_model)
+                  } else { # assume character name
+                    self$results <- eval(parse(text = as.character(self$simulation_function)))(self$simulation_model)
+                  }
+                },
+                warning = function(w) {
+                  self$attached$warnings <- c(
+                    self$attached$warnings,
+                    gsub("simpleWarning", "Warning",
+                      gsub("\n", "", as.character(w), fixed = TRUE),
+                      fixed = TRUE
+                    )
+                  )
+                }
+              )
+            )
+            if (!is.null(self$attached$warnings)) {
+              list(
+                successful = TRUE, message = "Model %s simulation ran successfully with warnings",
+                warnings = self$attached$warnings
+              )
+            } else {
+              list(successful = TRUE, message = "Model %s simulation ran successfully")
+            }
+          },
+          error = function(e) {
+            list(
+              successful = FALSE, message = "Model %s simulation ran unsuccessfully with errors",
+              errors = c(as.character(e))
+            )
           }
-        },
-        error = function(e){
-          list(successful = FALSE, message = "Model %s simulation ran unsuccessfully with errors",
-               errors = c(as.character(e)))
-        })
+        )
         if (is.null(run_status)) {
           run_status <- list(successful = FALSE, message = "Model %s simulation had unknown failure without errors")
         }
@@ -146,7 +162,6 @@ ModelSimulator <- R6Class("ModelSimulator",
     .simulation_function = NULL,
     .sample_id = NULL,
     .results = NULL
-
   ), # end private
 
   # Active binding accessors for private simulator attributes (above) #
@@ -171,12 +186,14 @@ ModelSimulator <- R6Class("ModelSimulator",
         private$.simulation_function
       } else {
         if (is.character(value) && file.exists(value) && length(grep(".R", toupper(value), fixed = TRUE))) {
-          tryCatch({
-            simulation_function <- source(value)$value # direct assignment from a file
-          },
-          error = function(e){
-            stop(paste("Error loading function from file", value, ":", as.character(e)), call. = FALSE)
-          })
+          tryCatch(
+            {
+              simulation_function <- source(value)$value # direct assignment from a file
+            },
+            error = function(e) {
+              stop(paste("Error loading function from file", value, ":", as.character(e)), call. = FALSE)
+            }
+          )
           if (is.function(simulation_function)) {
             private$.simulation_function <- simulation_function
           } else {
@@ -184,8 +201,8 @@ ModelSimulator <- R6Class("ModelSimulator",
           }
         } else { # character or direct assignment
           if (is.null(value) || is.function(value) ||
-              (is.character(value) &&
-               tryCatch(is.function(eval(parse(text = value))), error = function(e) FALSE))) {
+            (is.character(value) &&
+              tryCatch(is.function(eval(parse(text = value))), error = function(e) FALSE))) {
             if (is.character(value)) {
               value <- eval(parse(text = value))
             }
@@ -214,6 +231,5 @@ ModelSimulator <- R6Class("ModelSimulator",
         private$.results <- value
       }
     }
-
   ) # end active
 )

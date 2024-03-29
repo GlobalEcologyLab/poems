@@ -69,15 +69,18 @@ demographic population model using *poems*:
 library(poems)
 
 # Demonstration example region (U Island) and initial abundance
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
 initial_abundance <- seq(0, 300, 50)
-raster::plot(region$raster_from_values(initial_abundance), 
-             main = "Initial abundance", xlab = "Longitude (degrees)", 
-             ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
+raster::plot(region$raster_from_values(initial_abundance),
+  main = "Initial abundance", xlab = "Longitude (degrees)",
+  ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue"
+)
 
 # Set population model
 pop_model <- PopulationModel$new(
@@ -85,19 +88,23 @@ pop_model <- PopulationModel$new(
   time_steps = 5,
   populations = 7,
   initial_abundance = initial_abundance,
-  stage_matrix = matrix(c(0, 2.5, # Leslie/Lefkovitch matrix
-                          0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE),
+  stage_matrix = matrix(c(
+    0, 2.5, # Leslie/Lefkovitch matrix
+    0.8, 0.5
+  ), nrow = 2, ncol = 2, byrow = TRUE),
   carrying_capacity = rep(200, 7),
   density_dependence = "logistic",
-  dispersal = (!diag(nrow = 7, ncol = 7))*0.05,
-  result_stages = c(1, 2))
+  dispersal = (!diag(nrow = 7, ncol = 7)) * 0.05,
+  result_stages = c(1, 2)
+)
 
 # Run single simulation
 results <- population_simulator(pop_model)
 results # examine
-raster::plot(region$raster_from_values(results$abundance[,5]),
-             main = "Final abundance", xlab = "Longitude (degrees)", 
-             ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue")
+raster::plot(region$raster_from_values(results$abundance[, 5]),
+  main = "Final abundance", xlab = "Longitude (degrees)",
+  ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue"
+)
 ```
 
 Further examples utilizing the POM workflow and more advanced features of *poems*

@@ -36,9 +36,9 @@ GenericManager <- R6Class("GenericManager",
       params$object_generator <- NULL
       for (param in names(params)) {
         if (param %in% private$.manager_attributes) {
-          eval(parse(text=sprintf("self$%s <- params$%s", param, param)))
+          eval(parse(text = sprintf("self$%s <- params$%s", param, param)))
         } else { # attach
-          eval(parse(text=sprintf("self$attached$%s <- params$%s", param, param)))
+          eval(parse(text = sprintf("self$attached$%s <- params$%s", param, param)))
         }
       }
       if (!is.null(self$error_messages)) {
@@ -55,7 +55,7 @@ GenericManager <- R6Class("GenericManager",
     #' @return Selected attribute value.
     get_attribute = function(param) {
       if (param %in% private$.manager_attributes) {
-        return(eval(parse(text=sprintf("self$%s", param))))
+        return(eval(parse(text = sprintf("self$%s", param))))
       } else if (param %in% names(self$attached)) {
         return(self$attached[[param]])
       } else {
@@ -74,8 +74,10 @@ GenericManager <- R6Class("GenericManager",
         sample_attributes <- self$results_filename_attributes[which(self$results_filename_attributes %in% names(self$sample_data))]
         if (length(sample_attributes)) {
           for (i in 1:length(sample_attributes)) {
-            sample_vector <- c(sample_vector, gsub("_", " ", sample_attributes[i], fixed = TRUE),
-                               as.character(self$sample_data[sample_index, sample_attributes[i]]))
+            sample_vector <- c(
+              sample_vector, gsub("_", " ", sample_attributes[i], fixed = TRUE),
+              as.character(self$sample_data[sample_index, sample_attributes[i]])
+            )
           }
         }
       }
@@ -110,33 +112,34 @@ GenericManager <- R6Class("GenericManager",
         if (length(self$results_filename_attributes) == length(which(pre_postfix_present))) { # insert sample index
           filename_vector <- c(filename_vector, as.character(sample_index))
         }
-        filename_vector <- c(filename_vector, postfix); paste(filename_vector, collapse = "_")
+        filename_vector <- c(filename_vector, postfix)
+        paste(filename_vector, collapse = "_")
         return(paste(filename_vector, collapse = "_"))
       } else {
         return(sprintf("sample_%s_results", sample_index))
       }
     }
-
   ), # end public
 
   private = list(
 
-  ## Attributes ##
+    ## Attributes ##
 
-  # Manager attributes #
-  .manager_attributes = c("sample_data", "generators", "parallel_cores", "results_dir", "results_ext",
-                          "results_filename_attributes"),
-  .sample_data = NULL,
-  .generators = NULL,
-  .parallel_cores = 1,
-  .results_dir = NULL,
-  .results_ext = ".RData",
-  .results_filename_attributes = NULL,
+    # Manager attributes #
+    .manager_attributes = c(
+      "sample_data", "generators", "parallel_cores", "results_dir", "results_ext",
+      "results_filename_attributes"
+    ),
+    .sample_data = NULL,
+    .generators = NULL,
+    .parallel_cores = 1,
+    .results_dir = NULL,
+    .results_ext = ".RData",
+    .results_filename_attributes = NULL,
 
-  # Errors and warnings #
-  .error_messages = NULL,
-  .warning_messages = NULL
-
+    # Errors and warnings #
+    .error_messages = NULL,
+    .warning_messages = NULL
   ), # end private
 
   # Active binding accessors for private manager attributes (above) #
@@ -163,7 +166,7 @@ GenericManager <- R6Class("GenericManager",
         private$.generators
       } else {
         if (!is.null(value) && (!is.list(value) ||
-                                !all(unlist(lapply(value, function(value) "Generator" %in% class(value)))))){
+          !all(unlist(lapply(value, function(value) "Generator" %in% class(value)))))) {
           stop("Generators must be a list of Generator or inherited class objects", call. = FALSE)
         } else {
           private$.generators <- value
@@ -232,6 +235,5 @@ GenericManager <- R6Class("GenericManager",
         }
       }
     }
-
   ) # end active
 )

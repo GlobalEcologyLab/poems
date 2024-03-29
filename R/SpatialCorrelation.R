@@ -12,8 +12,10 @@
 #'
 #' @examples
 #' # U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 #' region <- Region$new(template_raster = template_raster)
@@ -65,9 +67,13 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     #' @param ... Parameters passed via a \emph{params} list or individually.
     initialize = function(compact_only = TRUE, attribute_aliases = NULL, ...) {
       self$compact_only <- compact_only
-      attribute_aliases <- c(attribute_aliases, # Append default aliases
-                             list(amplitude = "correlation_amplitude", correlation_a = "correlation_amplitude", a = "correlation_amplitude",
-                                  breadth = "correlation_breadth", correlation_b = "correlation_breadth", b = "correlation_breadth"))
+      attribute_aliases <- c(
+        attribute_aliases, # Append default aliases
+        list(
+          amplitude = "correlation_amplitude", correlation_a = "correlation_amplitude", a = "correlation_amplitude",
+          breadth = "correlation_breadth", correlation_b = "correlation_breadth", b = "correlation_breadth"
+        )
+      )
       super$initialize(attribute_aliases = attribute_aliases, ...)
     },
 
@@ -84,13 +90,13 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
           stop("Distance matrix calculation requires the region to be defined with coordinates or a raster first", call. = FALSE)
         }
         if (!self$region$use_raster || (is.logical(use_longlat) && use_longlat) ||
-            length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
-          return(distm(coordinates, coordinates, fun = distGeo)/self$distance_scale)
+          length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
+          return(distm(coordinates, coordinates, fun = distGeo) / self$distance_scale)
         } else { # assume coordinates in meters
           if (is.na(raster::crs(self$region$region_raster))) {
             warning("No coordinate reference system (CRS) specified: assuming coordinates are in meters", call. = FALSE)
           }
-          return(as.matrix(stats::dist(coordinates))/self$distance_scale)
+          return(as.matrix(stats::dist(coordinates)) / self$distance_scale)
         }
       } else {
         stop("Distance matrix calculation requires region to be set first", call. = FALSE)
@@ -104,7 +110,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     #' @param threshold Optional threshold (minimum value) for correlation values (default 0.0000001).
     #' @param ... Parameters passed via a \emph{params} list or individually.
     calculate_correlations = function(distance_matrix = NULL, decimals = NULL, threshold = 0.0000001, ...) {
-
       # Set attributes
       self$correlation_matrix <- NULL
       if (length(list(...))) {
@@ -129,7 +134,7 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
       }
 
       # Calculate correlation values between each region cell based on a*exp(-distance/b)
-      self$correlation_matrix <- self$correlation_amplitude*exp(-1*distance_matrix/self$correlation_breadth)
+      self$correlation_matrix <- self$correlation_amplitude * exp(-1 * distance_matrix / self$correlation_breadth)
       diag(self$correlation_matrix) <- 1
 
       # Rounding?
@@ -138,7 +143,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
       } else if (is.numeric(threshold)) {
         self$correlation_matrix[which(self$correlation_matrix < threshold)] <- 0
       }
-
     },
 
     #' @description
@@ -148,7 +152,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     #' @param threshold Optional threshold (minimum value) for correlation values (default 0.0000001).
     #' @param ... Parameters passed via a \emph{params} list or individually.
     calculate_cholesky_decomposition = function(distance_matrix = NULL, decimals = NULL, threshold = 0.0000001, ...) {
-
       # Set attributes
       self$t_decomposition_matrix <- NULL
       if (length(list(...)) && !is.null(self$correlation_matrix)) {
@@ -163,7 +166,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
       # Attempt to calculate the transposed Cholesky decomposition matrix
       self$t_decomposition_matrix <- tryCatch(chol(self$correlation_matrix), error = function(e) e)
       if (is.matrix(self$t_decomposition_matrix)) {
-
         if (self$compact_only) { # clear the correlation matrix
           self$correlation_matrix <- NULL
         }
@@ -174,7 +176,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         } else if (is.numeric(threshold)) {
           self$t_decomposition_matrix[which(self$t_decomposition_matrix < threshold)] <- 0
         }
-
       } else { # assume error caught
 
         error_message <- "for unknown reasons"
@@ -185,7 +186,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
 
         stop(paste("Cholesky decomposition could not be calculated", error_message), call. = FALSE)
       }
-
     },
 
     #' @description
@@ -193,7 +193,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     #' @param distance_matrix Optional pre-calculated matrix with distances between region cells.
     #' @param ... Parameters passed via a \emph{params} list or individually.
     calculate_compact_decomposition = function(distance_matrix = NULL, ...) {
-
       # Set attributes
       self$t_decomposition_compact_matrix <- NULL
       self$t_decomposition_compact_map <- NULL
@@ -214,7 +213,7 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         self$t_decomposition_matrix <- NULL
       }
       names(t_decomposition_data) <- c("row", "col", "value")
-      t_decomposition_data <- t_decomposition_data[order(t_decomposition_data$col, t_decomposition_data$row),]
+      t_decomposition_data <- t_decomposition_data[order(t_decomposition_data$col, t_decomposition_data$row), ]
 
       # Create a compact transposed decomposition matrix
       if (!is.null(self$region)) {
@@ -223,14 +222,13 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
       t_decomposition_nonzero_rows <- tabulate(t_decomposition_data$col, nbins = region_cells)
       t_decomposition_compact_rows <- max(t_decomposition_nonzero_rows)
       self$t_decomposition_compact_matrix <- array(1:t_decomposition_compact_rows, c(t_decomposition_compact_rows, region_cells))
-      self$t_decomposition_compact_matrix <- self$t_decomposition_compact_matrix*(self$t_decomposition_compact_matrix <= matrix(t_decomposition_nonzero_rows, nrow = t_decomposition_compact_rows, ncol = region_cells, byrow = TRUE))
+      self$t_decomposition_compact_matrix <- self$t_decomposition_compact_matrix * (self$t_decomposition_compact_matrix <= matrix(t_decomposition_nonzero_rows, nrow = t_decomposition_compact_rows, ncol = region_cells, byrow = TRUE))
       t_decomposition_compact_indices <- which(self$t_decomposition_compact_matrix != 0)
       self$t_decomposition_compact_matrix[t_decomposition_compact_indices] <- t_decomposition_data$value
 
       # Create a map to the original region grid rows
       self$t_decomposition_compact_map <- array(NA, c(t_decomposition_compact_rows, region_cells))
       self$t_decomposition_compact_map[t_decomposition_compact_indices] <- t_decomposition_data$row
-
     },
 
     #' @description
@@ -239,7 +237,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     #' @param ... Parameters passed via a \emph{params} list or individually.
     #' @return List containing a compact Cholesky decomposition matrix and a corresponding map of region cell indices (for the compacted rows).
     get_compact_decomposition = function(distance_matrix = NULL, ...) {
-
       # Calculate compact decomposition when required
       if (!is.null(distance_matrix) || is.null(self$t_decomposition_compact_matrix) || is.null(self$t_decomposition_compact_map)) {
         self$calculate_compact_decomposition(distance_matrix = distance_matrix, ...)
@@ -249,7 +246,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
 
       # Pack the decomposition compact matrix and map into a list
       return(list(matrix = self$t_decomposition_compact_matrix, map = self$t_decomposition_compact_map))
-
     },
 
     #' @description
@@ -259,7 +255,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     #' @param time_steps Optional number of time steps for temporal correlation (default = 1 or none).
     #' @return Array (non-temporal) or matrix (temporal) of correlated normal deviates.
     generate_correlated_normal_deviates = function(random_seed = NULL, temporal_correlation = 1, time_steps = 1) {
-
       # Ensure compact correlation decomposition is calculated
       if (is.null(self$t_decomposition_compact_matrix) || is.null(self$t_decomposition_compact_map)) {
         return("The compact correlation decomposition needs to be calculated before correlated normal deviates can be generated")
@@ -277,14 +272,14 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
       # Generate temporal deviates
       if (time_steps > 1) {
         if (temporal_correlation < 1) {
-          deviates <- array(stats::rnorm(region_cells*time_steps), c(region_cells, time_steps))
+          deviates <- array(stats::rnorm(region_cells * time_steps), c(region_cells, time_steps))
           # Calculate a Cholesky decomposition for temporal correlation between sequential time-steps
           if (temporal_correlation > 0) {
             time_step_correlation <- array(temporal_correlation, c(2, 2))
             diag(time_step_correlation) <- 1
-            time_step_decomposition <- chol(time_step_correlation)[,2]
+            time_step_decomposition <- chol(time_step_correlation)[, 2]
             for (i in 2:time_steps) {
-              deviates[,i] <- time_step_decomposition[1]*deviates[,i-1] + time_step_decomposition[2]*deviates[,i]
+              deviates[, i] <- time_step_decomposition[1] * deviates[, i - 1] + time_step_decomposition[2] * deviates[, i]
             }
           }
         } else { # temporal correlation = 1 : duplicate deviates across time
@@ -293,19 +288,19 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
 
         # Apply spatial correlation to the temporal deviates
         for (i in 1:time_steps) {
-          deviates[,i] <- .colSums(self$t_decomposition_compact_matrix*deviates[self$t_decomposition_compact_map, i],
-                                   m = compact_rows, n = region_cells, na.rm=TRUE)
+          deviates[, i] <- .colSums(self$t_decomposition_compact_matrix * deviates[self$t_decomposition_compact_map, i],
+            m = compact_rows, n = region_cells, na.rm = TRUE
+          )
         }
 
         return(deviates)
-
       } else { # Generate spatially correlated only
 
-        return(.colSums(self$t_decomposition_compact_matrix*stats::rnorm(region_cells)[self$t_decomposition_compact_map],
-                        m = compact_rows, n = region_cells, na.rm=TRUE))
+        return(.colSums(self$t_decomposition_compact_matrix * stats::rnorm(region_cells)[self$t_decomposition_compact_map],
+          m = compact_rows, n = region_cells, na.rm = TRUE
+        ))
       }
     }
-
   ), # end public
 
   private = list(
@@ -313,9 +308,11 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("region", "distance_scale", "correlation_amplitude", "correlation_breadth", "correlation_matrix",
-                          "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
-                          "t_decomposition_compact_map"),
+    .model_attributes = c(
+      "region", "distance_scale", "correlation_amplitude", "correlation_breadth", "correlation_matrix",
+      "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
+      "t_decomposition_compact_map"
+    ),
     # .region            [inherited]
     .distance_scale = 1,
     .correlation_amplitude = NULL,
@@ -327,9 +324,11 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     .t_decomposition_compact_map = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "distance_scale", "coordinates", "correlation_amplitude", "correlation_breadth",
-                           "correlation_matrix", "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
-                           "t_decomposition_compact_map")
+    .active_attributes = c(
+      "region", "distance_scale", "coordinates", "correlation_amplitude", "correlation_breadth",
+      "correlation_matrix", "t_decomposition_matrix", "compact_only", "t_decomposition_compact_matrix",
+      "t_decomposition_compact_map"
+    )
 
     # Dynamic attributes #
     # .attribute_aliases [inherited]
@@ -337,7 +336,6 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
     # Errors and warnings #
     # .error_messages    [inherited]
     # .warning_messages  [inherited]
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -360,7 +358,7 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         private$.region
       } else {
         if (!is.null(self$correlation_matrix) || !is.null(self$t_decomposition_matrix) ||
-            !is.null(self$t_decomposition_compact_matrix) || !is.null(self$t_decomposition_compact_map)) {
+          !is.null(self$t_decomposition_compact_matrix) || !is.null(self$t_decomposition_compact_map)) {
           stop("Calculated correlations/decompositions are already associated with the existing region", call. = FALSE)
         } else {
           if ("Region" %in% class(value)) {
@@ -399,7 +397,7 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         private$.correlation_amplitude
       } else {
         if (!is.null(self$correlation_matrix) || !is.null(self$t_decomposition_matrix) ||
-            !is.null(self$t_decomposition_compact_matrix) || !is.null(self$t_decomposition_compact_map)) {
+          !is.null(self$t_decomposition_compact_matrix) || !is.null(self$t_decomposition_compact_map)) {
           stop("Calculated correlations/decompositions are already associated with the existing correlation parameters", call. = FALSE)
         } else if (!is.null(value) && is.numeric(value) && (value > 1 || value < 0)) {
           stop("Correlation function parameter amplitude must be between 0 and 1 inclusively", call. = FALSE)
@@ -417,7 +415,7 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         private$.correlation_breadth
       } else {
         if (!is.null(self$correlation_matrix) || !is.null(self$t_decomposition_matrix) ||
-            !is.null(self$t_decomposition_compact_matrix) || !is.null(self$t_decomposition_compact_map)) {
+          !is.null(self$t_decomposition_compact_matrix) || !is.null(self$t_decomposition_compact_map)) {
           stop("Calculated correlations/decompositions are already associated with the existing correlation parameters", call. = FALSE)
         } else if (!is.null(value) && is.numeric(value) && value <= 0) {
           stop("Correlation function parameter breadth must be positive/non-zero", call. = FALSE)
@@ -504,6 +502,5 @@ SpatialCorrelation <- R6Class("SpatialCorrelation",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )

@@ -6,52 +6,68 @@
 #'
 #' @examplesIf interactive()
 #' # U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 #' region <- Region$new(template_raster = template_raster)
-#' raster::plot(region$region_raster, main = "Example region (indices)",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-#'              colNA = "blue")
+#' raster::plot(region$region_raster,
+#'   main = "Example region (indices)",
+#'   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'   colNA = "blue"
+#' )
 #' # Example population model template
-#' model_template <- PopulationModel$new(region = region,
-#'                                       time_steps = 10, # years
-#'                                       populations = region$region_cells, # 7
-#'                                       stage_matrix = 1)
+#' model_template <- PopulationModel$new(
+#'   region = region,
+#'   time_steps = 10, # years
+#'   populations = region$region_cells, # 7
+#'   stage_matrix = 1
+#' )
 #' # Example generators for initial abundance and carrying capacity
 #' hs_matrix <- c(0.5, 0.3, 0.7, 0.9, 0.6, 0.7, 0.8)
-#' initial_gen <- Generator$new(description = "initial abundance",
-#'                              region = region,
-#'                              hs_matrix = hs_matrix, # template attached
-#'                              inputs = c("initial_n"),
-#'                              outputs = c("initial_abundance"))
+#' initial_gen <- Generator$new(
+#'   description = "initial abundance",
+#'   region = region,
+#'   hs_matrix = hs_matrix, # template attached
+#'   inputs = c("initial_n"),
+#'   outputs = c("initial_abundance")
+#' )
 #' initial_gen$add_generative_requirements(list(initial_abundance = "function"))
 #' initial_gen$add_function_template("initial_abundance",
-#'                                   function_def = function(params) {
-#'                                     stats::rmultinom(1, size = params$initial_n,
-#'                                                      prob = params$hs_matrix)[, 1]
-#'                                   },
-#'                                   call_params = c("initial_n", "hs_matrix"))
-#' capacity_gen <- Generator$new(description = "carrying capacity",
-#'                               region = region,
-#'                               hs_matrix = hs_matrix, # template attached
-#'                               inputs = c("density_max"),
-#'                               outputs = c("carrying_capacity"))
+#'   function_def = function(params) {
+#'     stats::rmultinom(1,
+#'       size = params$initial_n,
+#'       prob = params$hs_matrix
+#'     )[, 1]
+#'   },
+#'   call_params = c("initial_n", "hs_matrix")
+#' )
+#' capacity_gen <- Generator$new(
+#'   description = "carrying capacity",
+#'   region = region,
+#'   hs_matrix = hs_matrix, # template attached
+#'   inputs = c("density_max"),
+#'   outputs = c("carrying_capacity")
+#' )
 #' capacity_gen$add_generative_requirements(list(carrying_capacity = "function"))
 #' capacity_gen$add_function_template("carrying_capacity",
-#'                                    function_def = function(params) {
-#'                                      round(params$density_max*params$hs_matrix)
-#'                                    },
-#'                                    call_params = c("density_max", "hs_matrix"))
+#'   function_def = function(params) {
+#'     round(params$density_max * params$hs_matrix)
+#'   },
+#'   call_params = c("density_max", "hs_matrix")
+#' )
 #' # Sample input parameters
 #' sample_data <- data.frame(initial_n = c(40, 60, 80), density_max = c(15, 20, 25))
 #' # Simulation manager
-#' sim_manager <- SimulationManager$new(sample_data = sample_data,
-#'                                      model_template = model_template,
-#'                                      generators = list(initial_gen, capacity_gen),
-#'                                      parallel_cores = 2,
-#'                                      results_dir = tempdir())
+#' sim_manager <- SimulationManager$new(
+#'   sample_data = sample_data,
+#'   model_template = model_template,
+#'   generators = list(initial_gen, capacity_gen),
+#'   parallel_cores = 2,
+#'   results_dir = tempdir()
+#' )
 #' run_output <- sim_manager$run()
 #' run_output$summary
 #' dir(tempdir(), "*.RData") # includes 3 result files
@@ -98,7 +114,7 @@ SimulationManager <- R6Class("SimulationManager",
     #' @param model_template A SimulationModel (or inherited class) object with parameters common to all simulations.
     #' @param ... Parameters listed individually.
     initialize = function(model_template = NULL, ...) {
-      self$model_template = model_template
+      self$model_template <- model_template
       if (!("model_simulator" %in% names(list(...)))) {
         if (!is.null(model_template)) {
           self$model_simulator <- ModelSimulator$new(simulation_function = model_template$simulation_function)
@@ -116,7 +132,6 @@ SimulationManager <- R6Class("SimulationManager",
     #' @param results_dir Results directory path (must be present if not already set within manager class object).
     #' @return Simulator log as a list.
     run = function(results_dir = NULL) {
-
       # Check for error messages
       if (!is.null(self$error_messages)) {
         error_messages <- self$error_messages
@@ -192,10 +207,11 @@ SimulationManager <- R6Class("SimulationManager",
 
       # Run sample simulations in parallel
       doParallel::registerDoParallel(cores = self$parallel_cores)
-      simulation_log <- foreach(i = 1:nrow(self$sample_data),
-                                .packages = c("raster"),
-                                .errorhandling = c("pass")) %dopar% {
-
+      simulation_log <- foreach(
+        i = 1:nrow(self$sample_data),
+        .packages = c("raster"),
+        .errorhandling = c("pass")
+      ) %dopar% {
         # Clone the model
         model <- self$nested_model$clone()
 
@@ -217,7 +233,8 @@ SimulationManager <- R6Class("SimulationManager",
           results_file <- file.path(self$results_dir, paste0(self$get_results_filename(i), self$results_ext))
           suppressWarnings(try(
             saveRDS(simulator$results, file = results_file),
-            silent = TRUE))
+            silent = TRUE
+          ))
           if (file.exists(results_file)) {
             simulator_run_status$message <- paste0(simulator_run_status$message, " and the results were saved")
           } else {
@@ -249,12 +266,14 @@ SimulationManager <- R6Class("SimulationManager",
       if (!is.null(self$generators)) {
         for (i in 1:length(self$generators)) {
           if (!is.null(self$nested_model$attached$sample_generative_names[[i]])) {
-            tryCatch({
-              model$set_sample_attributes(params = self$generators[[i]]$generate(input_values = sample_list[self$generators[[i]]$inputs]))
-            },
-            error = function(e){
-              stop(paste("produced when generating", self$generators[[i]]$description, ":", as.character(e)), call. = FALSE)
-            })
+            tryCatch(
+              {
+                model$set_sample_attributes(params = self$generators[[i]]$generate(input_values = sample_list[self$generators[[i]]$inputs]))
+              },
+              error = function(e) {
+                stop(paste("produced when generating", self$generators[[i]]$description, ":", as.character(e)), call. = FALSE)
+              }
+            )
           }
         }
       }
@@ -277,63 +296,70 @@ SimulationManager <- R6Class("SimulationManager",
         }
       }
       # Add a summary and failure & warning indices to the log
-      simulation_log <- list(summary = sprintf("%s of %s sample models ran and saved results successfully",
-                                               length(which(successful_array)), length(simulation_log)),
-                             failed_indices = which(!successful_array),
-                             warning_indices = warning_indices,
-                             full_log = simulation_log)
+      simulation_log <- list(
+        summary = sprintf(
+          "%s of %s sample models ran and saved results successfully",
+          length(which(successful_array)), length(simulation_log)
+        ),
+        failed_indices = which(!successful_array),
+        warning_indices = warning_indices,
+        full_log = simulation_log
+      )
       if (length(warning_indices)) {
         simulation_log$summary <- paste(simulation_log$summary, "with warnings")
       }
       # Write a log file
       log_file <- file.path(self$results_dir, "simulation_log.txt")
-      suppressWarnings(try({
-        file_con <- file(log_file, 'w')
-        writeLines(c(simulation_log$summary), con = file_con)
-        if (length(simulation_log$failed_indices)) {
-          writeLines(c("", paste(length(simulation_log$failed_indices), "failed runs/errors:")), con = file_con)
-          for (i in simulation_log$failed_indices) {
-            writeLines(c("", paste("Sample", i, ":"), simulation_log$full_log[[i]]$message), con = file_con)
-            if (!is.null(simulation_log$full_log[[i]]$errors)) {
-              writeLines(simulation_log$full_log[[i]]$errors, con = file_con)
+      suppressWarnings(try(
+        {
+          file_con <- file(log_file, "w")
+          writeLines(c(simulation_log$summary), con = file_con)
+          if (length(simulation_log$failed_indices)) {
+            writeLines(c("", paste(length(simulation_log$failed_indices), "failed runs/errors:")), con = file_con)
+            for (i in simulation_log$failed_indices) {
+              writeLines(c("", paste("Sample", i, ":"), simulation_log$full_log[[i]]$message), con = file_con)
+              if (!is.null(simulation_log$full_log[[i]]$errors)) {
+                writeLines(simulation_log$full_log[[i]]$errors, con = file_con)
+              }
             }
           }
-        }
-        if (length(warning_indices)) {
-          writeLines(c("", paste(length(warning_indices), "warnings:")), con = file_con)
-          for (i in warning_indices) {
-            writeLines(c("", paste("Sample", i, ":"), simulation_log$full_log[[i]]$message), con = file_con)
-            writeLines(simulation_log$full_log[[i]]$warnings, con = file_con)
+          if (length(warning_indices)) {
+            writeLines(c("", paste(length(warning_indices), "warnings:")), con = file_con)
+            for (i in warning_indices) {
+              writeLines(c("", paste("Sample", i, ":"), simulation_log$full_log[[i]]$message), con = file_con)
+              writeLines(simulation_log$full_log[[i]]$warnings, con = file_con)
+            }
           }
-        }
-        close(file_con)
-      }, silent = TRUE))
+          close(file_con)
+        },
+        silent = TRUE
+      ))
       return(simulation_log)
     }
-
   ), # end public
 
   private = list(
 
-  ## Attributes ##
+    ## Attributes ##
 
-  # Manager attributes #
-  .manager_attributes = c("sample_data", "model_template", "nested_model", "generators", "model_simulator",
-                          "parallel_cores", "results_dir", "results_ext", "results_filename_attributes"),
-  # .sample_data                   [inherited]
-  .model_template = NULL,
-  .nested_model = NULL,
-  # .generators             [inherited]
-  .model_simulator = NULL
-  # .parallel_cores                [inherited]
-  # .results_dir                   [inherited]
-  # .results_ext                   [inherited]
-  # .results_filename_attributes   [inherited]
+    # Manager attributes #
+    .manager_attributes = c(
+      "sample_data", "model_template", "nested_model", "generators", "model_simulator",
+      "parallel_cores", "results_dir", "results_ext", "results_filename_attributes"
+    ),
+    # .sample_data                   [inherited]
+    .model_template = NULL,
+    .nested_model = NULL,
+    # .generators             [inherited]
+    .model_simulator = NULL
+    # .parallel_cores                [inherited]
+    # .results_dir                   [inherited]
+    # .results_ext                   [inherited]
+    # .results_filename_attributes   [inherited]
 
-  # Errors and warnings #
-  # .error_messages                [inherited]
-  # .warning_messages              [inherited]
-
+    # Errors and warnings #
+    # .error_messages                [inherited]
+    # .warning_messages              [inherited]
   ), # end private
 
   # Active binding accessors for private manager attributes (above) #
@@ -452,6 +478,5 @@ SimulationManager <- R6Class("SimulationManager",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )

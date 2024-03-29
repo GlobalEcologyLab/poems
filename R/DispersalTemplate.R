@@ -25,7 +25,6 @@ DispersalTemplate <- R6Class("DispersalTemplate",
 
     # Inherited methods (from GenerativeTemplate) #
     # initialize()
-
   ), # end public
 
   private = list(
@@ -52,7 +51,6 @@ DispersalTemplate <- R6Class("DispersalTemplate",
     .dispersal_proportion = NULL,
     .dispersal_breadth = NULL,
     .dispersal_max_distance = NULL
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -247,6 +245,5 @@ DispersalTemplate <- R6Class("DispersalTemplate",
         private$.dispersal_max_distance <- value
       }
     }
-
   ) # end active
 )

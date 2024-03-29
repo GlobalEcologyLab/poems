@@ -7,41 +7,49 @@
 #'
 #' @examples
 #' # U Island example region
-#' coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-#'                           y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+#' coordinates <- data.frame(
+#'   x = rep(seq(177.01, 177.05, 0.01), 5),
+#'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+#' )
 #' template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 #' region <- Region$new(template_raster = template_raster)
-#' raster::plot(region$region_raster, main = "Example region (indices)",
-#'              xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-#'              colNA = "blue")
+#' raster::plot(region$region_raster,
+#'   main = "Example region (indices)",
+#'   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+#'   colNA = "blue"
+#' )
 #' # Sample results occupancy (ignore cell 2 in last 5 time steps)
 #' occupancy_raster <- region$raster_from_values(array(1, c(7, 13)))
 #' occupancy_raster[region$region_indices][2, 9:13] <- 0
 #' occupancy_raster[region$region_indices]
 #' # Population simulation example results
-#' example_results <- list(abundance = t(apply(matrix(11:17), 1, function(n)  {
-#'   c(rep(n, 3), round(n*exp(-(0:9)/2)))}
-#' )))
-#' example_results$harvested <- round(example_results$abundance*0.3)
+#' example_results <- list(abundance = t(apply(matrix(11:17), 1, function(n) {
+#'   c(rep(n, 3), round(n * exp(-(0:9) / 2)))
+#' })))
+#' example_results$harvested <- round(example_results$abundance * 0.3)
 #' example_results
 #' # Population results object
-#' pop_results <- PopulationResults$new(region = region,
-#'                                      time_steps = 13,
-#'                                      burn_in_steps = 3,
-#'                                      occupancy_mask = occupancy_raster,
-#'                                      trend_interval = 1:5)
+#' pop_results <- PopulationResults$new(
+#'   region = region,
+#'   time_steps = 13,
+#'   burn_in_steps = 3,
+#'   occupancy_mask = occupancy_raster,
+#'   trend_interval = 1:5
+#' )
 #' pop_results$get_attribute_names(all = TRUE)
 #' # Clone (for each population simulation results)
 #' results_clone <- pop_results$new_clone(results = example_results)
 #' results_clone$all$get_attribute("abundance")
-#' results_clone$get_attributes(c("abundance", "all$abundance",
-#'                                "abundance_trend", "all$abundance_trend",
-#'                                "all$ema", # only defined for all
-#'                                "extirpation", "all$extirpation",
-#'                                "all$extinction_location", # only defined for all
-#'                                "harvested", "all$harvested",
-#'                                "occupancy", "all$occupancy"))
+#' results_clone$get_attributes(c(
+#'   "abundance", "all$abundance",
+#'   "abundance_trend", "all$abundance_trend",
+#'   "all$ema", # only defined for all
+#'   "extirpation", "all$extirpation",
+#'   "all$extinction_location", # only defined for all
+#'   "harvested", "all$harvested",
+#'   "occupancy", "all$occupancy"
+#' ))
 #'
 #' @importFrom R6 R6Class
 #' @importFrom trend sens.slope
@@ -73,7 +81,6 @@ PopulationResults <- R6Class("PopulationResults",
     # Overwritten/overridden methods #
 
     # New methods (see active attributes) #
-
   ), # end public
 
   private = list(
@@ -81,9 +88,11 @@ PopulationResults <- R6Class("PopulationResults",
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("region", "coordinates", "time_steps", "burn_in_steps", "occupancy_mask", "trend_interval",
-                          "abundance", "abundance_stages", "abundance_trend", "ema", "extirpation",
-                          "extinction_location", "harvested", "harvested_stages", "occupancy"),
+    .model_attributes = c(
+      "region", "coordinates", "time_steps", "burn_in_steps", "occupancy_mask", "trend_interval",
+      "abundance", "abundance_stages", "abundance_trend", "ema", "extirpation",
+      "extinction_location", "harvested", "harvested_stages", "occupancy"
+    ),
     # .region              [inherited]
     # .time_steps          [inherited]
     # .burn_in_steps       [inherited]
@@ -100,9 +109,11 @@ PopulationResults <- R6Class("PopulationResults",
     .occupancy = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "coordinates", "time_steps", "burn_in_steps", "occupancy_mask", "trend_interval",
-                           "abundance", "abundance_stages", "abundance_trend", "ema", "extirpation",
-                           "extinction_location", "harvested", "harvested_stages", "occupancy")
+    .active_attributes = c(
+      "region", "coordinates", "time_steps", "burn_in_steps", "occupancy_mask", "trend_interval",
+      "abundance", "abundance_stages", "abundance_trend", "ema", "extirpation",
+      "extinction_location", "harvested", "harvested_stages", "occupancy"
+    )
 
     # Model reference attributes #
     # .all                 [inherited]
@@ -115,7 +126,6 @@ PopulationResults <- R6Class("PopulationResults",
     # Errors and warnings #
     # .error_messages      [inherited]
     # .warning_messages    [inherited]
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -179,7 +189,7 @@ PopulationResults <- R6Class("PopulationResults",
         }
       } else {
         if (!is.null(value) && !is.null(self$region) && self$region$use_raster &&
-            !any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+          !any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
           value <- region$raster_from_values(value)
         }
         super$occupancy_mask <- value
@@ -212,12 +222,16 @@ PopulationResults <- R6Class("PopulationResults",
                 abundance_array <- self$parent$abundance
                 array_dim <- dim(abundance_array)[c(2, 3)]
               }
-              array(.colSums(abundance_array, m = dim(abundance_array)[1], n = prod(dim(abundance_array)[2:3]),
-                             na.rm = TRUE), array_dim) # returned
+              array(.colSums(abundance_array,
+                m = dim(abundance_array)[1], n = prod(dim(abundance_array)[2:3]),
+                na.rm = TRUE
+              ), array_dim) # returned
             } else if (is.list(self$parent$abundance) && "mean" %in% names(self$parent$abundance) && is.array(self$parent$abundance$mean)) { # summary list
               # note min, max, sd not resolvable
-              list(mean = as.array(.colSums(self$parent$abundance[["mean"]], m = dim(self$parent$abundance[["mean"]])[1],
-                                            n = dim(self$parent$abundance[["mean"]])[2], na.rm = TRUE))) # returned
+              list(mean = as.array(.colSums(self$parent$abundance[["mean"]],
+                m = dim(self$parent$abundance[["mean"]])[1],
+                n = dim(self$parent$abundance[["mean"]])[2], na.rm = TRUE
+              ))) # returned
             }
           } else if (!is.null(private$.abundance) && is.numeric(self$burn_in_steps)) { # apply burn-in
             if (is.list(private$.abundance) && "mean" %in% names(private$.abundance)) { # summary list
@@ -248,7 +262,7 @@ PopulationResults <- R6Class("PopulationResults",
               duration_indices <- 1:dim(private$.abundance)[2]
             }
             if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored abundance
-              private$.abundance <- private$.abundance*array(self$occupancy_mask, dim(private$.abundance))
+              private$.abundance <- private$.abundance * array(self$occupancy_mask, dim(private$.abundance))
             }
             if (length(dim(private$.abundance)) == 3) {
               array(private$.abundance[, duration_indices, ], array_dim) # returned
@@ -266,7 +280,7 @@ PopulationResults <- R6Class("PopulationResults",
             abundance_list <- list()
             for (param in names(private$.abundance)) {
               if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored abundance summary
-                private$.abundance[[param]] <- private$.abundance[[param]]*array(self$occupancy_mask, dim(private$.abundance$mean))
+                private$.abundance[[param]] <- private$.abundance[[param]] * array(self$occupancy_mask, dim(private$.abundance$mean))
               }
               abundance_list[[param]] <- array(private$.abundance[[param]][, duration_indices], array_dim)
             }
@@ -296,15 +310,18 @@ PopulationResults <- R6Class("PopulationResults",
                     abundance_array <- self$parent$abundance_stages[[i]]
                     array_dim <- dim(abundance_array)[c(2, 3)]
                   }
-                  abundance_stages_list[[i]] <- array(.colSums(abundance_array, m = dim(abundance_array)[1],
-                                                               n = prod(dim(abundance_array)[2:3]), na.rm = TRUE), array_dim)
+                  abundance_stages_list[[i]] <- array(.colSums(abundance_array,
+                    m = dim(abundance_array)[1],
+                    n = prod(dim(abundance_array)[2:3]), na.rm = TRUE
+                  ), array_dim)
                 } else if (is.list(self$parent$abundance_stages[[i]]) && "mean" %in% names(self$parent$abundance_stages[[i]]) &&
-                           is.array(self$parent$abundance_stages[[i]]$mean)) { # summary list
+                  is.array(self$parent$abundance_stages[[i]]$mean)) { # summary list
                   # note min, max, sd not resolvable
                   abundance_stages_list[[i]] <- list(mean = as.array(.colSums(self$parent$abundance_stages[[i]][["mean"]],
-                                                                              m = dim(self$parent$abundance_stages[[i]][["mean"]])[1],
-                                                                              n = dim(self$parent$abundance_stages[[i]][["mean"]])[2],
-                                                                              na.rm = TRUE)))
+                    m = dim(self$parent$abundance_stages[[i]][["mean"]])[1],
+                    n = dim(self$parent$abundance_stages[[i]][["mean"]])[2],
+                    na.rm = TRUE
+                  )))
                 }
               }
               abundance_stages_list # returned
@@ -346,7 +363,7 @@ PopulationResults <- R6Class("PopulationResults",
                   duration_indices <- 1:dim(private$.abundance_stages[[i]])[2]
                 }
                 if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored abundance
-                  private$.abundance_stages[[i]] <- private$.abundance_stages[[i]]*array(self$occupancy_mask, dim(private$.abundance))
+                  private$.abundance_stages[[i]] <- private$.abundance_stages[[i]] * array(self$occupancy_mask, dim(private$.abundance))
                 }
                 if (length(dim(private$.abundance_stages[[i]])) == 3) {
                   abundance_stages_list[[i]] <- array(private$.abundance_stages[[i]][, duration_indices, ], array_dim)
@@ -364,7 +381,7 @@ PopulationResults <- R6Class("PopulationResults",
                 abundance_stages_list[[i]] <- list()
                 for (param in names(private$.abundance_stages[[i]])) {
                   if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored abundance summary
-                    private$.abundance_stages[[i]][[param]] <- private$.abundance_stages[[i]][[param]]*array(self$occupancy_mask, dim(private$.abundance_stages[[i]]$mean))
+                    private$.abundance_stages[[i]][[param]] <- private$.abundance_stages[[i]][[param]] * array(self$occupancy_mask, dim(private$.abundance_stages[[i]]$mean))
                   }
                   abundance_stages_list[[i]][[param]] <- array(private$.abundance_stages[[i]][[param]][, duration_indices], array_dim)
                 }
@@ -404,7 +421,7 @@ PopulationResults <- R6Class("PopulationResults",
                 if (is.numeric(self$trend_interval) && min(self$trend_interval) >= 1 && max(self$trend_interval) <= ncol(as.matrix(abundance))) {
                   private$.abundance_trend[i] <- as.numeric(sens.slope(as.matrix(abundance)[i, self$trend_interval])$estimates)
                 } else {
-                  private$.abundance_trend[i] <- as.numeric(sens.slope(as.matrix(abundance)[i,])$estimates)
+                  private$.abundance_trend[i] <- as.numeric(sens.slope(as.matrix(abundance)[i, ])$estimates)
                 }
               }
             }
@@ -420,7 +437,8 @@ PopulationResults <- R6Class("PopulationResults",
     ema = function(value) {
       if (missing(value)) {
         if (!is.null(self$parent) && (is.null(private$.ema) || !is.null(self$parent$occupancy_mask))) { # Calculate via abundance
-          burn_in_steps <- self$burn_in_steps; self$burn_in_steps <- NULL # allow access to abundance including burn-in
+          burn_in_steps <- self$burn_in_steps
+          self$burn_in_steps <- NULL # allow access to abundance including burn-in
           abundance <- self$abundance
           if (is.list(abundance) && "mean" %in% names(abundance)) {
             abundance <- abundance$mean
@@ -501,9 +519,9 @@ PopulationResults <- R6Class("PopulationResults",
               }
               extirpation_list # returned
             } else { # replicate array
-                extirpation <- private$.extirpation - self$burn_in_steps
-                extirpation[which(extirpation < 0)] <- 0
-                extirpation # returned
+              extirpation <- private$.extirpation - self$burn_in_steps
+              extirpation[which(extirpation < 0)] <- 0
+              extirpation # returned
             }
           } else {
             private$.extirpation # returned
@@ -518,7 +536,7 @@ PopulationResults <- R6Class("PopulationResults",
     extinction_location = function(value) {
       if (missing(value)) {
         if (!is.null(self$parent) && (is.null(private$.extinction_location) || !is.null(self$parent$occupancy_mask)) &&
-            !is.null(self$parent$coordinates) && is.numeric(self$extirpation) && !is.null(self$parent$abundance)) {
+          !is.null(self$parent$coordinates) && is.numeric(self$extirpation) && !is.null(self$parent$abundance)) {
           abundance <- self$parent$abundance
           if (is.list(abundance) && "mean" %in% names(abundance)) { # use summary mean
             abundance <- abundance$mean
@@ -536,14 +554,14 @@ PopulationResults <- R6Class("PopulationResults",
               last_pop_indices <- which(as.logical(abundance[, self$extirpation[i] - 1, i]))
               if (length(last_pop_indices) > 1) {
                 abundance_weights <- matrix(rep(abundance[last_pop_indices, self$extirpation[i] - 1, i], 2), ncol = 2)
-                extinction_location[i,] <- (.colSums(self$parent$coordinates[last_pop_indices,]*abundance_weights, m = length(last_pop_indices), n = 2)/
-                                              .colSums(abundance_weights, m = length(last_pop_indices), n = 2))
+                extinction_location[i, ] <- (.colSums(self$parent$coordinates[last_pop_indices, ] * abundance_weights, m = length(last_pop_indices), n = 2) /
+                  .colSums(abundance_weights, m = length(last_pop_indices), n = 2))
               } else {
-                extinction_location[i,] <- as.numeric(self$parent$coordinates[last_pop_indices,])
+                extinction_location[i, ] <- as.numeric(self$parent$coordinates[last_pop_indices, ])
               }
             }
           }
-          private$.extinction_location <- extinction_location[1:dim(abundance)[3],]
+          private$.extinction_location <- extinction_location[1:dim(abundance)[3], ]
         }
         private$.extinction_location # returned
       } else {
@@ -564,12 +582,16 @@ PopulationResults <- R6Class("PopulationResults",
                 harvested_array <- self$parent$harvested
                 array_dim <- dim(harvested_array)[c(2, 3)]
               }
-              array(.colSums(harvested_array, m = dim(harvested_array)[1], n = prod(dim(harvested_array)[2:3]),
-                             na.rm = TRUE), array_dim) # returned
+              array(.colSums(harvested_array,
+                m = dim(harvested_array)[1], n = prod(dim(harvested_array)[2:3]),
+                na.rm = TRUE
+              ), array_dim) # returned
             } else if (is.list(self$parent$harvested) && "mean" %in% names(self$parent$harvested) && is.array(self$parent$harvested$mean)) { # summary list
               # note min, max, sd not resolvable
-              list(mean = as.array(.colSums(self$parent$harvested[["mean"]], m = dim(self$parent$harvested[["mean"]])[1],
-                                            n = dim(self$parent$harvested[["mean"]])[2], na.rm = TRUE))) # returned
+              list(mean = as.array(.colSums(self$parent$harvested[["mean"]],
+                m = dim(self$parent$harvested[["mean"]])[1],
+                n = dim(self$parent$harvested[["mean"]])[2], na.rm = TRUE
+              ))) # returned
             }
           } else if (!is.null(private$.harvested) && is.numeric(self$burn_in_steps)) { # apply burn-in
             if (is.list(private$.harvested) && "mean" %in% names(private$.harvested)) { # summary list
@@ -600,7 +622,7 @@ PopulationResults <- R6Class("PopulationResults",
               duration_indices <- 1:dim(private$.harvested)[2]
             }
             if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored harvested
-              private$.harvested <- private$.harvested*array(self$occupancy_mask, dim(private$.harvested))
+              private$.harvested <- private$.harvested * array(self$occupancy_mask, dim(private$.harvested))
             }
             if (length(dim(private$.harvested)) == 3) {
               array(private$.harvested[, duration_indices, ], array_dim) # returned
@@ -618,7 +640,7 @@ PopulationResults <- R6Class("PopulationResults",
             harvested_list <- list()
             for (param in names(private$.harvested)) {
               if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored harvested summary
-                private$.harvested[[param]] <- private$.harvested[[param]]*array(self$occupancy_mask, dim(private$.harvested$mean))
+                private$.harvested[[param]] <- private$.harvested[[param]] * array(self$occupancy_mask, dim(private$.harvested$mean))
               }
               harvested_list[[param]] <- array(private$.harvested[[param]][, duration_indices], array_dim)
             }
@@ -648,15 +670,18 @@ PopulationResults <- R6Class("PopulationResults",
                     harvested_array <- self$parent$harvested_stages[[i]]
                     array_dim <- dim(harvested_array)[c(2, 3)]
                   }
-                  harvested_stages_list[[i]] <- array(.colSums(harvested_array, m = dim(harvested_array)[1],
-                                                               n = prod(dim(harvested_array)[2:3]), na.rm = TRUE), array_dim)
+                  harvested_stages_list[[i]] <- array(.colSums(harvested_array,
+                    m = dim(harvested_array)[1],
+                    n = prod(dim(harvested_array)[2:3]), na.rm = TRUE
+                  ), array_dim)
                 } else if (is.list(self$parent$harvested_stages[[i]]) && "mean" %in% names(self$parent$harvested_stages[[i]]) &&
-                           is.array(self$parent$harvested_stages[[i]]$mean)) { # summary list
+                  is.array(self$parent$harvested_stages[[i]]$mean)) { # summary list
                   # note min, max, sd not resolvable
                   harvested_stages_list[[i]] <- list(mean = as.array(.colSums(self$parent$harvested_stages[[i]][["mean"]],
-                                                                              m = dim(self$parent$harvested_stages[[i]][["mean"]])[1],
-                                                                              n = dim(self$parent$harvested_stages[[i]][["mean"]])[2],
-                                                                              na.rm = TRUE)))
+                    m = dim(self$parent$harvested_stages[[i]][["mean"]])[1],
+                    n = dim(self$parent$harvested_stages[[i]][["mean"]])[2],
+                    na.rm = TRUE
+                  )))
                 }
               }
               harvested_stages_list # returned
@@ -698,7 +723,7 @@ PopulationResults <- R6Class("PopulationResults",
                   duration_indices <- 1:dim(private$.harvested_stages[[i]])[2]
                 }
                 if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored harvested
-                  private$.harvested_stages[[i]] <- private$.harvested_stages[[i]]*array(self$occupancy_mask, dim(private$.harvested))
+                  private$.harvested_stages[[i]] <- private$.harvested_stages[[i]] * array(self$occupancy_mask, dim(private$.harvested))
                 }
                 if (length(dim(private$.harvested_stages[[i]])) == 3) {
                   harvested_stages_list[[i]] <- array(private$.harvested_stages[[i]][, duration_indices, ], array_dim)
@@ -716,7 +741,7 @@ PopulationResults <- R6Class("PopulationResults",
                 harvested_stages_list[[i]] <- list()
                 for (param in names(private$.harvested_stages[[i]])) {
                   if (!is.null(self$occupancy_mask)) { # apply occupancy mask to stored harvested summary
-                    private$.harvested_stages[[i]][[param]] <- private$.harvested_stages[[i]][[param]]*array(self$occupancy_mask, dim(private$.harvested_stages[[i]]$mean))
+                    private$.harvested_stages[[i]][[param]] <- private$.harvested_stages[[i]][[param]] * array(self$occupancy_mask, dim(private$.harvested_stages[[i]]$mean))
                   }
                   harvested_stages_list[[i]][[param]] <- array(private$.harvested_stages[[i]][[param]][, duration_indices], array_dim)
                 }
@@ -747,8 +772,10 @@ PopulationResults <- R6Class("PopulationResults",
             } else {
               array_dim <- dim(abundance)[c(2, 3)]
             }
-            array(.colSums(as.logical(abundance), m = dim(abundance)[1], n = prod(dim(abundance)[2:3]),
-                           na.rm = TRUE), array_dim) # returned
+            array(.colSums(as.logical(abundance),
+              m = dim(abundance)[1], n = prod(dim(abundance)[2:3]),
+              na.rm = TRUE
+            ), array_dim) # returned
           } else if (!is.null(self$abundance)) { # individual populations
             abundance <- self$abundance
             if (is.list(abundance) && "mean" %in% names(abundance)) { # use summary mean
@@ -766,7 +793,7 @@ PopulationResults <- R6Class("PopulationResults",
               occupancy_list # returned
             } else { # replicate array
               occupancy_matrix <- as.matrix(private$.occupancy)
-              occupancy_matrix[(self$burn_in_steps + 1):nrow(occupancy_matrix),] # returned
+              occupancy_matrix[(self$burn_in_steps + 1):nrow(occupancy_matrix), ] # returned
             }
           } else {
             private$.occupancy # returned
@@ -836,6 +863,5 @@ PopulationResults <- R6Class("PopulationResults",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )

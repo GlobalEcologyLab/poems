@@ -17,6 +17,5 @@ SimulatorReference <- R6Class("SimulatorReference",
 
     #' @field results A list of dynamically accessed simulator results (name-value pairs).
     results = list()
-
   ), # end public
 )

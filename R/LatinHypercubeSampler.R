@@ -18,8 +18,10 @@
 #' lhs_gen$set_truncnorm_parameter("kg", mean = 75, sd = 20, lower = 0, upper = Inf, decimals = 2)
 #' lhs_gen$set_lognormal_parameter("price", mean = 30000, sd = 10000, decimals = 0)
 #' lhs_gen$set_beta_parameter("tread", mean = 0.7, sd = 0.1, decimals = 2)
-#' lhs_gen$set_triangular_parameter("rating", lower = 0, upper = 10, mode = 5,
-#'                                  decimals = 1)
+#' lhs_gen$set_triangular_parameter("rating",
+#'   lower = 0, upper = 10, mode = 5,
+#'   decimals = 1
+#' )
 #' lhs_gen$generate_samples(number = 10, random_seed = 123)
 #'
 #' @importFrom R6 R6Class
@@ -132,8 +134,8 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
       }
       if (!is.null(mean) && !is.null(sd)) { # override/transform
         if (mean > 0 && sd > 0) {
-          meanlog <- log(mean^2/sqrt(mean^2 + sd^2))
-          sdlog <- sqrt(log(1 + sd^2/mean^2))
+          meanlog <- log(mean^2 / sqrt(mean^2 + sd^2))
+          sdlog <- sqrt(log(1 + sd^2 / mean^2))
         } else {
           stop("Lognormal distribution regular (overriding) mean and standard deviation parameters must be greater than zero", call. = FALSE)
         }
@@ -158,9 +160,9 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
       }
       if (!is.null(mean) && !is.null(sd)) { # override/transform
         if (mean > 0 && sd > 0 && mean < 1 && sd < 1) {
-          sd <- pmin(sd, sqrt(mean*(1 - mean))*0.999) # Limit sd to < sqrt(mean*(1 - mean))
-          alpha <- mean*(mean*(1 - mean)/sd^2 - 1)
-          beta <- (1 - mean)*(mean*(1 - mean)/sd^2 - 1)
+          sd <- pmin(sd, sqrt(mean * (1 - mean)) * 0.999) # Limit sd to < sqrt(mean*(1 - mean))
+          alpha <- mean * (mean * (1 - mean) / sd^2 - 1)
+          beta <- (1 - mean) * (mean * (1 - mean) / sd^2 - 1)
         } else {
           stop("Beta distribution (overriding) mean and standard deviation parameters must be between zero and one (exclusively)", call. = FALSE)
         }
@@ -196,7 +198,7 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param upper Upper bound of the triangular distribution (default = 1).
     #' @param mode Mode (or peak) of the triangular distribution (default = (lower + upper)/2).
     #' @param decimals Optional number of decimals applied to generated samples.
-    set_triangular_parameter = function(parameter_name, lower = 0, upper = 1, mode = (lower + upper)/2, decimals = NULL) {
+    set_triangular_parameter = function(parameter_name, lower = 0, upper = 1, mode = (lower + upper) / 2, decimals = NULL) {
       if (lower > upper || mode < lower || mode > upper) {
         stop("Triangular distribution parameters must comply with: lower <= mode <= upper", call. = FALSE)
       }
@@ -212,7 +214,6 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param random_seed Optional seed for the random generation of samples.
     #' @return A data frame of generated sample values.
     generate_samples = function(number = 10, random_seed = NULL) {
-
       # Set random seed when present
       if (!is.null(random_seed)) {
         set.seed(random_seed)
@@ -220,7 +221,6 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
 
       # Ensure distributions are set for all parameters
       if (!is.null(self$parameter_names) && !is.null(self$parameter_distributions) && all(self$parameter_names %in% names(self$parameter_distributions))) {
-
         # Generate uniform 0-1 LHS
         sample_data <- as.data.frame(randomLHS(number, length(self$parameter_names)))
         names(sample_data) <- self$parameter_names
@@ -229,9 +229,9 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
         for (param in self$parameter_names) {
           distribution <- self$parameter_distributions[[param]]
           if (distribution$type == "class") {
-            sample_data[[param]] <- distribution$classes[as.numeric(cut(sample_data[[param]], breaks = c(0, (1:length(distribution$classes)/length(distribution$classes)))))]
+            sample_data[[param]] <- distribution$classes[as.numeric(cut(sample_data[[param]], breaks = c(0, (1:length(distribution$classes) / length(distribution$classes)))))]
           } else if (distribution$type == "uniform") {
-            sample_data[[param]] <- distribution$lower + sample_data[[param]]*(distribution$upper - distribution$lower)
+            sample_data[[param]] <- distribution$lower + sample_data[[param]] * (distribution$upper - distribution$lower)
           } else if (distribution$type == "normal") {
             sample_data[[param]] <- stats::qnorm(sample_data[[param]], mean = distribution$mean, sd = distribution$sd)
           } else if (distribution$type == "lognormal") {
@@ -251,7 +251,6 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
         }
 
         return(sample_data)
-
       } else {
         parameters_not_set <- self$parameter_names[which(!(self$parameter_names %in% names(self$parameter_distributions)))]
         if (length(parameters_not_set)) {
@@ -260,9 +259,7 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
           stop("Parameter distributions need to be set before generating samples.", call. = FALSE)
         }
       }
-
     }
-
   ), # end public
 
   private = list(
@@ -272,7 +269,6 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     # Sample generation attributes #
     .parameter_names = c(),
     .parameter_distributions = NULL
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -295,7 +291,5 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
         private$.parameter_distributions <- value
       }
     }
-
   ) # end active
-
 )

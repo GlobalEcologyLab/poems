@@ -1,10 +1,11 @@
 context("Generic Class")
 
 test_that("inheritance, attributes, and new cloning", {
-
   # Inheritance
-  TestInheritedClass <- R6::R6Class("TestInheritedClass", inherit = GenericClass,
-                                    public = list(attr1 = NULL, attr2 = NULL))
+  TestInheritedClass <- R6::R6Class("TestInheritedClass",
+    inherit = GenericClass,
+    public = list(attr1 = NULL, attr2 = NULL)
+  )
   test_class <- TestInheritedClass$new(object_generator = TestInheritedClass) # for check only
   expect_is(test_class, "TestInheritedClass")
   expect_is(test_class, "GenericClass")
@@ -24,5 +25,4 @@ test_that("inheritance, attributes, and new cloning", {
   expect_null(test_clone$attr1)
   expect_null(test_clone$attr2)
   expect_equal(test_clone$attached, list())
-
 })

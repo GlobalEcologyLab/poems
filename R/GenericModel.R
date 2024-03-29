@@ -7,9 +7,11 @@
 #' attachment, and error and warning message attributes.
 #'
 #' @examples
-#' model1 <- GenericModel$new(model_attributes = c("a", "b", "c"),
-#'                            attribute_aliases = list(A = "a"),
-#'                            params = list(a = 1, b = 2), c = 3)
+#' model1 <- GenericModel$new(
+#'   model_attributes = c("a", "b", "c"),
+#'   attribute_aliases = list(A = "a"),
+#'   params = list(a = 1, b = 2), c = 3
+#' )
 #' # Get/set attributes
 #' model1$get_attribute_names()
 #' model1$set_attributes(d = 4)
@@ -64,8 +66,10 @@ GenericModel <- R6Class("GenericModel",
     #' @param ... Parameters passed via the inherited class constructor (defined in initialize and run via new).
     #' @return New object of the current (inherited) class.
     new_clone = function(...) {
-      return(super$new_clone(model_attributes = self$model_attributes,
-                             attribute_aliases = self$attribute_aliases, ...))
+      return(super$new_clone(
+        model_attributes = self$model_attributes,
+        attribute_aliases = self$attribute_aliases, ...
+      ))
     },
 
     # New methods #
@@ -96,15 +100,15 @@ GenericModel <- R6Class("GenericModel",
         attribute_root <- unlist(strsplit(attribute, "$", fixed = TRUE))[1]
         attribute_root <- unlist(strsplit(attribute_root, "[", fixed = TRUE))[1]
         if (attribute_root %in% names(self) || attribute_root %in% private$.active_attributes) {
-          eval(parse(text=sprintf("attribute_list$%s <- self$%s", param, attribute)))
+          eval(parse(text = sprintf("attribute_list$%s <- self$%s", param, attribute)))
         } else if (attribute_root %in% names(private)) {
-          eval(parse(text=sprintf("attribute_list$%s <- private$%s", param, attribute)))
+          eval(parse(text = sprintf("attribute_list$%s <- private$%s", param, attribute)))
         } else if (paste0(".", attribute_root) %in% names(private)) {
-          eval(parse(text=sprintf("attribute_list$%s <- private$.%s", param, attribute)))
+          eval(parse(text = sprintf("attribute_list$%s <- private$.%s", param, attribute)))
         } else if (attribute_root %in% c("model_attributes", "attribute_aliases", "error_messages", "warning_messages")) {
-          eval(parse(text=sprintf("attribute_list$%s <- self$%s", param, attribute)))
+          eval(parse(text = sprintf("attribute_list$%s <- self$%s", param, attribute)))
         } else if (attribute_root %in% names(self$attached)) {
-          eval(parse(text=sprintf("attribute_list$%s <- self$attached$%s", param, attribute)))
+          eval(parse(text = sprintf("attribute_list$%s <- self$attached$%s", param, attribute)))
         } else {
           attribute_list[[param]] <- NULL
         }
@@ -163,7 +167,6 @@ GenericModel <- R6Class("GenericModel",
         }
       }
     }
-
   ), # end public
 
   private = list(
@@ -182,7 +185,6 @@ GenericModel <- R6Class("GenericModel",
     # Errors and warnings #
     .error_messages = NULL,
     .warning_messages = NULL
-
   ), # end private
 
   # Active binding accessors for private attributes (above) #
@@ -240,6 +242,5 @@ GenericModel <- R6Class("GenericModel",
         }
       }
     }
-
   ) # end active
 )

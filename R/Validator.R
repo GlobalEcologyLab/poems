@@ -10,18 +10,24 @@
 #'
 #' @examples
 #' # Example parameter sample data
-#' sample_data <- data.frame(growth_rate_max = round(log(seq(1.11, 1.30, 0.01)), 3),
-#'                           harvest_rate = seq(0.11, 0.30, 0.01),
-#'                           initial_n = seq(105, 200, 5),
-#'                           density_max = seq(132, 170, 2))
+#' sample_data <- data.frame(
+#'   growth_rate_max = round(log(seq(1.11, 1.30, 0.01)), 3),
+#'   harvest_rate = seq(0.11, 0.30, 0.01),
+#'   initial_n = seq(105, 200, 5),
+#'   density_max = seq(132, 170, 2)
+#' )
 #' # Example simulation result summary metrics
-#' summary_metric_data <- data.frame(trend_n = seq(10, -9, -1),
-#'                                   total_h = seq(70, 355, 15))
+#' summary_metric_data <- data.frame(
+#'   trend_n = seq(10, -9, -1),
+#'   total_h = seq(70, 355, 15)
+#' )
 #' # Create a validator for selecting the 'best' example models
-#' validator <- Validator$new(simulation_parameters = sample_data,
-#'                            simulation_summary_metrics = summary_metric_data,
-#'                            observed_metric_targets = c(trend_n = 0, total_h = 250),
-#'                            output_dir = tempdir())
+#' validator <- Validator$new(
+#'   simulation_parameters = sample_data,
+#'   simulation_summary_metrics = summary_metric_data,
+#'   observed_metric_targets = c(trend_n = 0, total_h = 250),
+#'   output_dir = tempdir()
+#' )
 #' suppressWarnings(validator$run(tolerance = 0.25, output_diagnostics = TRUE))
 #' dir(tempdir(), "*.pdf") # plus validation diagnostics (see abc library documentation)
 #' validator$selected_simulations # top 5 models
@@ -68,7 +74,8 @@ Validator <- R6Class("Validator",
             target = observed_metric_targets,
             param = simulation_parameters,
             sumstat = simulation_summary_metrics,
-            tol = tolerance, method = method, ...)
+            tol = tolerance, method = method, ...
+          )
         }
       }
     },
@@ -85,7 +92,6 @@ Validator <- R6Class("Validator",
     #' @param output_diagnostics Boolean to indicate whether or not to output diagnostics (PDF file - default is FALSE).
     #' @param ... Additional validator parameters passed individually (see \code{\link[abc:abc]{abc}} documentation if using default).
     run = function(simulation_parameters = NULL, simulation_summary_metrics = NULL, observed_metric_targets = NULL, tolerance = 0.01, method = "neuralnet", output_diagnostics = FALSE, ...) {
-
       # Ensure sample model parameters, result summary metrics and observed targets are present
       if (!is.null(simulation_parameters)) {
         self$simulation_parameters <- simulation_parameters
@@ -96,9 +102,11 @@ Validator <- R6Class("Validator",
       if (!is.null(observed_metric_targets)) {
         self$observed_metric_targets <- observed_metric_targets
       }
-      missing_parameters <- names(which(unlist(list(simulation_parameters = is.null(self$simulation_parameters),
-                                                    simulation_summary_metrics = is.null(self$simulation_summary_metrics),
-                                                    observed_metric_targets = is.null(self$observed_metric_targets)))))
+      missing_parameters <- names(which(unlist(list(
+        simulation_parameters = is.null(self$simulation_parameters),
+        simulation_summary_metrics = is.null(self$simulation_summary_metrics),
+        observed_metric_targets = is.null(self$observed_metric_targets)
+      ))))
       if (length(missing_parameters)) {
         stop(paste("Validator run requires parameters to be set first:", paste(missing_parameters, collapse = ", ")), call. = FALSE)
       }
@@ -121,24 +129,31 @@ Validator <- R6Class("Validator",
       }
 
       # Run the validator function
-      run_status <- tryCatch({
-        suppressWarnings(
-          withCallingHandlers({
-            self$validator_return_object <- self$validation_call_function(
-              observed_metric_targets = self$observed_metric_targets,
-              simulation_parameters = self$simulation_parameters[self$random_indices,],
-              simulation_summary_metrics = self$simulation_summary_metrics[self$random_indices,],
-              tolerance = tolerance, method = method, ...)
-          }, warning = function(w) {
-            self$warning_messages <- gsub("simpleWarning", "Validation function generated warning",
-                                          gsub("\n", "", as.character(w), fixed = TRUE),
-                                          fixed = TRUE)
-          })
-        )
-      },
-      error = function(e){
-        list(stop = sprintf("Validation function failed. %s", as.character(e)))
-      })
+      run_status <- tryCatch(
+        {
+          suppressWarnings(
+            withCallingHandlers(
+              {
+                self$validator_return_object <- self$validation_call_function(
+                  observed_metric_targets = self$observed_metric_targets,
+                  simulation_parameters = self$simulation_parameters[self$random_indices, ],
+                  simulation_summary_metrics = self$simulation_summary_metrics[self$random_indices, ],
+                  tolerance = tolerance, method = method, ...
+                )
+              },
+              warning = function(w) {
+                self$warning_messages <- gsub("simpleWarning", "Validation function generated warning",
+                  gsub("\n", "", as.character(w), fixed = TRUE),
+                  fixed = TRUE
+                )
+              }
+            )
+          )
+        },
+        error = function(e) {
+          list(stop = sprintf("Validation function failed. %s", as.character(e)))
+        }
+      )
       if (!is.null(self$warning_messages)) {
         warning(self$warning_messages, call. = FALSE)
         self$warning_messages <- NULL
@@ -163,21 +178,18 @@ Validator <- R6Class("Validator",
           warning("The output directory needs to be set before diagnostics can be generated", call. = FALSE)
         }
       }
-
     },
 
     #' @description
     #' Attempts to resolve any non-finite simulation summary metric values (and optionally changing them to NAs) via the non finite replacements parameter (a list of values/functions for replacing non-finite values).
     #' @param use_nas Boolean to indicate whether or not to replace all non-finite values with NAs (default is TRUE).
-    resolve_nonfinite_metrics = function (use_nas = TRUE) {
-
+    resolve_nonfinite_metrics = function(use_nas = TRUE) {
       # Check for non-finite values in the simulation summary metrics
       noninfinite_indices <- which(!is.finite(as.matrix(self$simulation_summary_metrics)), arr.ind = TRUE)
       nonfinite_columns <- names(self$simulation_summary_metrics)[unique(noninfinite_indices[, 2])]
 
       # Attempt to resolve non-finite values
       if (length(nonfinite_columns)) {
-
         # Check if appropriate replacements are present
         if (is.null(self$non_finite_replacements)) {
           unresolvable_columns <- nonfinite_columns
@@ -197,26 +209,30 @@ Validator <- R6Class("Validator",
         for (column in nonfinite_columns) {
           replacement <- self$non_finite_replacements[[column]]
           if (is.character(replacement)) { # apply function as a string
-            resolved_status <- tryCatch({
-              if (length(grep("Primitive", deparse(eval(parse(text = replacement))), fixed = TRUE))) {
-                replacement_value <- eval(parse(text = replacement))(self$simulation_summary_metrics[, column], na.rm = TRUE)
-              } else {
-                replacement_value <- eval(parse(text = replacement))(self$simulation_summary_metrics[, column])
+            resolved_status <- tryCatch(
+              {
+                if (length(grep("Primitive", deparse(eval(parse(text = replacement))), fixed = TRUE))) {
+                  replacement_value <- eval(parse(text = replacement))(self$simulation_summary_metrics[, column], na.rm = TRUE)
+                } else {
+                  replacement_value <- eval(parse(text = replacement))(self$simulation_summary_metrics[, column])
+                }
+              },
+              error = function(e) {
+                list(stop = sprintf("Could not apply non-finite replacement for metric %s. %s", column, as.character(e)))
               }
-            },
-            error = function(e){
-              list(stop = sprintf("Could not apply non-finite replacement for metric %s. %s", column, as.character(e)))
-            })
+            )
             if ("stop" %in% names(resolved_status)) {
               return(resolved_status)
             }
           } else if (is.function(replacement)) { # apply function directly to column
-            resolved_status <- tryCatch({
-              replacement_value <- replacement(self$simulation_summary_metrics[, column])
-            },
-            error = function(e){
-              list(stop = sprintf("Could not apply non-finite replacement for metric %s. %s", column, as.character(e)))
-            })
+            resolved_status <- tryCatch(
+              {
+                replacement_value <- replacement(self$simulation_summary_metrics[, column])
+              },
+              error = function(e) {
+                list(stop = sprintf("Could not apply non-finite replacement for metric %s. %s", column, as.character(e)))
+              }
+            )
             if ("stop" %in% names(resolved_status)) {
               return(resolved_status)
             }
@@ -231,41 +247,40 @@ Validator <- R6Class("Validator",
     #' @description
     #' Centers and scales the model parameters, result summary metrics and observed targets.
     center_scale_inputs = function() {
-
       # Scale and center simulation parameters (if not already scaled and centered)
       if (!("simulation_parameters" %in% names(self$input_center_scale_values)) ||
-          !all(c("center", "scale") %in% names(self$input_center_scale_values$simulation_parameters))) {
+        !all(c("center", "scale") %in% names(self$input_center_scale_values$simulation_parameters))) {
         parameters <- scale(self$simulation_parameters, center = TRUE, scale = TRUE)
-        self$simulation_parameters <- parameters[,]
+        self$simulation_parameters <- parameters[, ]
         self$input_center_scale_values$simulation_parameters <- list(center = attr(parameters, "scaled:center"), scale = attr(parameters, "scaled:scale"))
       }
 
       # Scale and center simulation summary metrics and observed metric targets together (if not already scaled and centered)
       if (!all(c("simulation_summary_metrics", "observed_metric_targets") %in% names(self$input_center_scale_values)) ||
-          !all(c("center", "scale") %in% names(self$input_center_scale_values$simulation_summary_metrics)) ||
-          !all(c("center", "scale") %in% names(self$input_center_scale_values$observed_metric_targets))) {
+        !all(c("center", "scale") %in% names(self$input_center_scale_values$simulation_summary_metrics)) ||
+        !all(c("center", "scale") %in% names(self$input_center_scale_values$observed_metric_targets))) {
         metrics <- scale(rbind(self$simulation_summary_metrics, self$observed_metric_targets), center = TRUE, scale = TRUE)
-        self$simulation_summary_metrics <- metrics[-nrow(metrics),]
-        self$observed_metric_targets <- metrics[nrow(metrics),]
+        self$simulation_summary_metrics <- metrics[-nrow(metrics), ]
+        self$observed_metric_targets <- metrics[nrow(metrics), ]
         self$input_center_scale_values$simulation_summary_metrics <- list(center = attr(metrics, "scaled:center"), scale = attr(metrics, "scaled:scale"))
         self$input_center_scale_values$observed_metric_targets <- list(center = attr(metrics, "scaled:center"), scale = attr(metrics, "scaled:scale"))
       }
-
     },
 
     #' @description
     #' Generates the validation diagnostics (see \code{\link[abc:abc]{abc}} documentation if using default) as a PDF file in the output directory.
     #' @param output_dir Output directory path for the diagnostics PDF file (must be present if not already set within validator class object).
     generate_diagnostics = function(output_dir = NULL) {
-
       # Ensure the validator return object and output directory are set
       if (!is.null(output_dir)) {
         self$output_dir <- output_dir
       }
       missing_messages <- c("validation function to be run", "and the", "output directory to be set")
-      missing_messages <- paste(missing_messages[which(c(is.null(self$validator_return_object),
-                                                         is.null(self$validator_return_object) && is.null(self$output_dir),
-                                                         is.null(self$output_dir)))], collapse = " ")
+      missing_messages <- paste(missing_messages[which(c(
+        is.null(self$validator_return_object),
+        is.null(self$validator_return_object) && is.null(self$output_dir),
+        is.null(self$output_dir)
+      ))], collapse = " ")
       if (missing_messages != "") {
         stop(sprintf("Diagnostics generation requires the %s first", missing_messages), call. = FALSE)
       }
@@ -278,22 +293,28 @@ Validator <- R6Class("Validator",
       }
 
       # Plot diagnostics to PDF file
-      diag_status <- tryCatch({
-        suppressWarnings(
-          withCallingHandlers({
-            grDevices::pdf(file = file.path(self$output_dir, "validation_diagnostics.pdf"), onefile = TRUE)
-            plot(self$validator_return_object, self$simulation_parameters, subsample = nrow(self$simulation_parameters), ask = FALSE)
-            pdf_device_off <- dev.off()
-          }, warning = function(w) {
-            self$warning_messages <- gsub("simpleWarning", "Validation diagnostics generation warning",
-                                          gsub("\n", "", as.character(w), fixed = TRUE),
-                                          fixed = TRUE)
-          })
-        )
-      },
-      error = function(e){
-        list(stop = sprintf("Validation diagnostics generation failed. %s", as.character(e)))
-      })
+      diag_status <- tryCatch(
+        {
+          suppressWarnings(
+            withCallingHandlers(
+              {
+                grDevices::pdf(file = file.path(self$output_dir, "validation_diagnostics.pdf"), onefile = TRUE)
+                plot(self$validator_return_object, self$simulation_parameters, subsample = nrow(self$simulation_parameters), ask = FALSE)
+                pdf_device_off <- dev.off()
+              },
+              warning = function(w) {
+                self$warning_messages <- gsub("simpleWarning", "Validation diagnostics generation warning",
+                  gsub("\n", "", as.character(w), fixed = TRUE),
+                  fixed = TRUE
+                )
+              }
+            )
+          )
+        },
+        error = function(e) {
+          list(stop = sprintf("Validation diagnostics generation failed. %s", as.character(e)))
+        }
+      )
       if (!is.null(self$warning_messages)) {
         warning(self$warning_messages, call. = FALSE)
         self$warning_messages <- NULL
@@ -301,9 +322,7 @@ Validator <- R6Class("Validator",
       if ("stop" %in% names(diag_status)) {
         stop(diag_status$stop, call. = FALSE)
       }
-
     }
-
   ), # end public
 
   private = list(
@@ -311,10 +330,12 @@ Validator <- R6Class("Validator",
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("simulation_parameters", "simulation_summary_metrics", "observed_metric_targets",
-                          "random_seed", "random_indices", "non_finite_replacements",
-                          "input_center_scale_values", "output_dir", "validation_call_function",
-                          "validator_return_object", "selected_simulations"),
+    .model_attributes = c(
+      "simulation_parameters", "simulation_summary_metrics", "observed_metric_targets",
+      "random_seed", "random_indices", "non_finite_replacements",
+      "input_center_scale_values", "output_dir", "validation_call_function",
+      "validator_return_object", "selected_simulations"
+    ),
     .simulation_parameters = NULL,
     .simulation_summary_metrics = NULL,
     .observed_metric_targets = NULL,
@@ -328,10 +349,12 @@ Validator <- R6Class("Validator",
     .selected_simulations = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("simulation_parameters", "simulation_summary_metrics", "observed_metric_targets",
-                           "random_seed", "random_indices", "non_finite_replacements",
-                           "input_center_scale_values", "output_dir", "validation_call_function",
-                           "validator_return_object", "selected_simulations")
+    .active_attributes = c(
+      "simulation_parameters", "simulation_summary_metrics", "observed_metric_targets",
+      "random_seed", "random_indices", "non_finite_replacements",
+      "input_center_scale_values", "output_dir", "validation_call_function",
+      "validator_return_object", "selected_simulations"
+    )
 
     # Dynamic attributes #
     # .attribute_aliases [inherited]
@@ -339,7 +362,6 @@ Validator <- R6Class("Validator",
     # Errors and warnings #
     # .error_messages    [inherited]
     # .warning_messages  [inherited]
-
   ), # end private
 
   # Active binding accessors for private model attributes (above)
@@ -372,7 +394,7 @@ Validator <- R6Class("Validator",
         }
         if (!is.null(value) && (is.data.frame(value) || is.matrix(value))) {
           if (!is.null(self$simulation_summary_metrics) &&
-              nrow(self$simulation_summary_metrics) != nrow(value)) {
+            nrow(self$simulation_summary_metrics) != nrow(value)) {
             stop("The simulation parameters must be have the same number of rows as the existing simulation summary metrics", call. = FALSE)
           }
           if (!is.null(self$simulation_parameters) && "simulation_parameters" %in% names(self$input_center_scale_values)) {
@@ -471,7 +493,7 @@ Validator <- R6Class("Validator",
             center_scale_values <- list(center = attr(value, "scaled:center"), scale = attr(value, "scaled:scale"))
             # Ensure summary metrics have the same centering and scaling when present
             if ("simulation_summary_metrics" %in% self$input_center_scale_values &&
-                !all(unlist(center_scale_values) == unlist(self$input_center_scale_values$simulation_summary_metrics))) {
+              !all(unlist(center_scale_values) == unlist(self$input_center_scale_values$simulation_summary_metrics))) {
               self$input_center_scale_values$observed_metric_targets <- NULL
             } else {
               self$input_center_scale_values$observed_metric_targets <- center_scale_values
@@ -528,12 +550,14 @@ Validator <- R6Class("Validator",
         for (metric in names(value)) {
           metric_value <- value[[metric]]
           if (is.character(metric_value) && file.exists(metric_value) && length(grep(".R", toupper(metric_value), fixed = TRUE))) {
-            tryCatch({
-              replacement_function <- source(metric_value)$value # direct assignment from a file
-            },
-            error = function(e){
-              stop(paste("Error loading function from file", metric_value, ":", as.character(e)), call. = FALSE)
-            })
+            tryCatch(
+              {
+                replacement_function <- source(metric_value)$value # direct assignment from a file
+              },
+              error = function(e) {
+                stop(paste("Error loading function from file", metric_value, ":", as.character(e)), call. = FALSE)
+              }
+            )
             if (is.function(replacement_function)) {
               replacements[[metric]] <- replacement_function
             } else {
@@ -541,8 +565,8 @@ Validator <- R6Class("Validator",
             }
           } else { # numeric, character or direct assignment
             if (is.numeric(metric_value) || is.function(metric_value) ||
-                (is.character(metric_value) &&
-                 tryCatch(is.function(eval(parse(text = metric_value))), error = function(e) FALSE))) {
+              (is.character(metric_value) &&
+                tryCatch(is.function(eval(parse(text = metric_value))), error = function(e) FALSE))) {
               if (is.function(metric_value) && length(grep("Primitive", deparse(metric_value), fixed = TRUE))) {
                 metric_value <- strsplit(deparse(metric_value), "\"")[[1]][2] # convert primitives to string
               }
@@ -606,10 +630,12 @@ Validator <- R6Class("Validator",
     selected_simulations = function(value) {
       if (missing(value)) {
         if (!is.null(self$random_indices) && !is.null(self$validator_return_object) &&
-            !is.null(self$validator_return_object$weights) && !is.null(self$validator_return_object$region)) {
-          selected_simulations <- data.frame(index = self$random_indices[which(self$validator_return_object$region)],
-                                             weight = self$validator_return_object$weights)
-          selected_simulations <- selected_simulations[order(selected_simulations$index),]
+          !is.null(self$validator_return_object$weights) && !is.null(self$validator_return_object$region)) {
+          selected_simulations <- data.frame(
+            index = self$random_indices[which(self$validator_return_object$region)],
+            weight = self$validator_return_object$weights
+          )
+          selected_simulations <- selected_simulations[order(selected_simulations$index), ]
           row.names(selected_simulations) <- NULL
           selected_simulations
         } else {
@@ -650,6 +676,5 @@ Validator <- R6Class("Validator",
         super$warning_messages <- value
       }
     }
-
   ) # end active
 )
