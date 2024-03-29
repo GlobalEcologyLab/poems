@@ -1,5 +1,3 @@
-context("Simulation Manager")
-
 test_that("initialization and parameter setting", {
   # Default initialization
   sim_manager <- SimulationManager$new()
@@ -76,6 +74,7 @@ test_that("run with complete attributes", {
   expect_named(run_output, c("summary", "failed_indices", "warning_indices", "full_log"))
   expect_equal(run_output$summary, "2 of 2 sample models ran and saved results successfully")
   expect_length(run_output$failed_indices, 0)
+  expect_length(run_output$warning_indices, 0)
   expect_equal(run_output$full_log, list(list(successful = TRUE,
                                               message = "Model sample 1 simulation ran successfully and the results were saved"),
                                          list(successful = TRUE,
@@ -83,4 +82,43 @@ test_that("run with complete attributes", {
   expect_true(all(c("sample_1_results.RData", "sample_2_results.RData", "simulation_log.txt") %in% list.files(sim_manager$results_dir)))
   expect_equal(readRDS(file.path(sim_manager$results_dir, "sample_1_results.RData")), list(attr1 = 3, attr2 = 5, attr3 = 7))
   expect_equal(readRDS(file.path(sim_manager$results_dir, "sample_2_results.RData")), list(attr1 = 4, attr2 = 6, attr3 = 8))
+})
+
+test_that("run with warnings", {
+  sim_manager <- SimulationManager$new(model_template = SimulationModel$new(time_steps = 10,
+                                                                            model_attributes = c("time_steps", "attr1", "attr2")),
+                                       sample_data = data.frame(attr1 = 3:4, attr2 = 5:6),
+                                       parallel_cores = 2,
+                                       results_dir = tempdir())
+  sim_manager$model_simulator$simulation_function <- function (model) {
+    warning("Test warning")
+    l <- model$get_attributes(c("attr1", "attr2", "attr3"))
+    return(l)
+  }
+  generator <- Generator$new(generative_requirements = list(attr3 = "function"),
+                             inputs = c("attr2"), outputs = c("attr3"))
+  generator$function_templates <- list(attr3 = list(function_def = function(params) return(params$a + 2),
+                                                    call_params = c("attr2")))
+  sim_manager$generators <- list(gen3 = generator)
+  run_output <- sim_manager$run()
+  expect_named(run_output, c("summary", "failed_indices", "warning_indices", "full_log"))
+  expect_equal(run_output$summary, "2 of 2 sample models ran and saved results successfully with warnings")
+  expect_length(run_output$failed_indices, 0)
+  expect_length(run_output$warning_indices, 2)
+  expect_equal(run_output$full_log, list(list(successful = TRUE,
+                                              message = "Model sample 1 simulation ran successfully with warnings and the results were saved",
+                                              warnings = "Warning in self$simulation_function(self$simulation_model): Test warning"),
+                                         list(successful = TRUE,
+                                              message = "Model sample 2 simulation ran successfully with warnings and the results were saved",
+                                              warnings = "Warning in self$simulation_function(self$simulation_model): Test warning")))
+  expect_true(all(c("sample_1_results.RData", "sample_2_results.RData", "simulation_log.txt") %in% list.files(sim_manager$results_dir)))
+  expect_equal(readRDS(file.path(sim_manager$results_dir, "sample_1_results.RData")), list(attr1 = 3, attr2 = 5, attr3 = 7))
+  expect_equal(readRDS(file.path(sim_manager$results_dir, "sample_2_results.RData")), list(attr1 = 4, attr2 = 6, attr3 = 8))
+})
+
+test_that("getters and setters handle errors", {
+  sim_manager <- SimulationManager$new()
+  expect_error(sim_manager$model_template("foobar"))
+  expect_error(sim_manager$nested_model(c(1, 2, 3)))
+  expect_error(sim_manager$model_simulator(c(TRUE, FALSE)))
 })
