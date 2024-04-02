@@ -73,7 +73,8 @@ loaded (via *library(poems)*).
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Raster of Tasmania (note: islands removed where there was no evidence of thylacine occupancy).
-raster::plot(poems::tasmania_raster,
+data(tasmania_raster)
+raster::plot(tasmania_raster,
   main = "Tasmania raster",
   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
   colNA = "blue"

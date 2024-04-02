@@ -1,0 +1,7 @@
+url: https://globalecologylab.github.io/poems/
+template:
+  bootstrap: 5
+  bootswatch: litera
+authors:
+  July Pilowsky:
+    href: "https://pilowsky.me"

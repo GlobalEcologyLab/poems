@@ -13,7 +13,7 @@ Description: A framework of interoperable R6 classes (Chang, 2020, <https://CRAN
 Depends: R (>= 3.6.0)
 Language: en-AU
 License: GPL-3
-URL: https://github.com/GlobalEcologyLab/poems
+URL: https://github.com/GlobalEcologyLab/poems, https://globalecologylab.github.io/poems/
 BugReports: https://github.com/GlobalEcologyLab/poems/issues
 Encoding: UTF-8
 RoxygenNote: 7.3.1

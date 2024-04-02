@@ -1,14 +1,18 @@
-@article{https://doi.org/10.1111/2041-210X.13720,
-author = {Fordham, Damien A. and Haythorne, Sean and Brown, Stuart C. and Buettel, Jessie C. and Brook, Barry W.},
-title = {poems: R package for simulating species' range dynamics using pattern-oriented validation},
-journal = {Methods in Ecology and Evolution},
-volume = {12},
-number = {12},
-pages = {2364-2371},
-keywords = {distribution, extinction risk, metapopulation, pattern-oriented modelling, population dynamics, population viability analysis, range shift, spatially explicit population model},
-doi = {https://doi.org/10.1111/2041-210X.13720},
-url = {https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13720},
-eprint = {https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/2041-210X.13720},
-abstract = {Abstract Spatially explicit population models (SEPMs) can simulate spatiotemporal changes in species' range dynamics in response to variation in climatic and environmental conditions, and anthropogenic activities. When combined with pattern-oriented modelling methods, ecological processes and drivers of range shifts and extinctions can be identified, and plausible chains of causality revealed. The open-source multi-platform R package poems provides functionality for simulating and validating projections of species' range dynamics using stochastic, lattice-based population models. Built-in modules allow parameter uncertainty to propagate through to model simulations, with their effects on species' range dynamics evaluated using Approximate Bayesian Computation. These validation procedures identify models with the structural complexity and parameterisation needed to simulate the effects of past changes in climate, environment and human activities on species' range shifts and extinction risk. We illustrate the features and versatility of poems by simulating the historical decline and extinction of the Thylacine Thylacinus cynocephalus, an icon of recent extinctions in Australia. We show that poems can reveal likely ecological pathways to extinction using pattern-oriented methods, providing validated projections of the range collapse and population decline of threatened species. By providing flexible and extendable modules for building and validating SEPMs of species' range dynamics, poems allows the effects of past and future threats on species' populations to be quantified using well-parameterised, structurally realistic models, with important generative mechanisms. Since poems can directly unravel ecological processes of species responses to global change, and strengthen predictions of range shifts and extinction risk—within a flexible, R-based environment—we anticipate that poems will be of significant value to ecologists, conservation managers and biogeographers.},
-year = {2021}
-}
+citHeader("To cite poems in publications use:")
+
+bibentry(
+  key = "poemspaper",
+  bibtype = "article",
+  author = c(person("Damien", "Fordham"), person("Sean", "Haythorne"), person("Stuart", "Brown"),
+  person("Jessie", "Buettel"), person("Barry", "Brook")),
+  title = "poems: R package for simulating species' range dynamics using pattern-oriented validation",
+  journal = "Methods in Ecology and Evolution",
+  volume = "12",
+  number = "12",
+  pages = "2364-2371",
+  keywords = "distribution, extinction risk, metapopulation, pattern-oriented modelling, population dynamics, population viability analysis, range shift, spatially explicit population model",
+  doi = "10.1111/2041-210X.13720",
+  url = "https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13720",
+  abstract = "Abstract Spatially explicit population models (SEPMs) can simulate spatiotemporal changes in species' range dynamics in response to variation in climatic and environmental conditions, and anthropogenic activities. When combined with pattern-oriented modelling methods, ecological processes and drivers of range shifts and extinctions can be identified, and plausible chains of causality revealed. The open-source multi-platform R package poems provides functionality for simulating and validating projections of species' range dynamics using stochastic, lattice-based population models. Built-in modules allow parameter uncertainty to propagate through to model simulations, with their effects on species' range dynamics evaluated using Approximate Bayesian Computation. These validation procedures identify models with the structural complexity and parameterisation needed to simulate the effects of past changes in climate, environment and human activities on species' range shifts and extinction risk. We illustrate the features and versatility of poems by simulating the historical decline and extinction of the Thylacine Thylacinus cynocephalus, an icon of recent extinctions in Australia. We show that poems can reveal likely ecological pathways to extinction using pattern-oriented methods, providing validated projections of the range collapse and population decline of threatened species. By providing flexible and extendable modules for building and validating SEPMs of species' range dynamics, poems allows the effects of past and future threats on species' populations to be quantified using well-parameterised, structurally realistic models, with important generative mechanisms. Since poems can directly unravel ecological processes of species responses to global change, and strengthen predictions of range shifts and extinction risk—within a flexible, R-based environment—we anticipate that poems will be of significant value to ecologists, conservation managers and biogeographers.",
+  year = "2021"
+)
