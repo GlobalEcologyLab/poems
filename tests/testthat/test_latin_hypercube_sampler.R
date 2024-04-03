@@ -123,9 +123,11 @@ test_that("Latin hypercube sample generation", {
   lhs_generator$set_poisson_parameter("param_pois", lambda = 2)
   sample_data <- lhs_generator$generate_samples(random_seed = 1234)
   expect_is(sample_data, "data.frame")
-  expect_named(sample_data, c("param_class", "param_uniform", "param_norm", 
-                              "param_lognorm", "param_beta", "param_triang",
-                              "param_truncnorm", "param_pois"))
+  expect_named(sample_data, c(
+    "param_class", "param_uniform", "param_norm",
+    "param_lognorm", "param_beta", "param_triang",
+    "param_truncnorm", "param_pois"
+  ))
   expect_equal(nrow(sample_data), 10)
   expect_true(all(sample_data$param_class %in% c("a", "b", "c", "d", "e")))
   expect_true(all(sample_data$param_uniform >= 0 & sample_data$param_uniform <= 2))
