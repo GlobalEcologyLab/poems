@@ -299,7 +299,7 @@ values via probabilistic distributions.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">capacity_gen</span><span class="op">$</span><span class="fu">generate</span><span class="op">(</span>input_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>initial_n <span class="op">=</span> <span class="fl">500</span>, density_max <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="co"># test</span></span>
 <span><span class="co">#&gt; $initial_abundance</span></span>
-<span><span class="co">#&gt; [1] 84 88 66 84 52 55 71</span></span>
+<span><span class="co">#&gt; [1] 70 90 73 72 56 68 71</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $carrying_capacity</span></span>
 <span><span class="co">#&gt; [1]  80 100  70  90  60  70  80</span></span></code></pre></div>
@@ -457,48 +457,48 @@ to (with) known or desired target patterns (in step 6).</p>
 <span><span class="co">#&gt; [1] "generation_log.txt" "simulation_log.txt"</span></span>
 <span><span class="va">results_manager</span><span class="op">$</span><span class="va">summary_metric_data</span></span>
 <span><span class="co">#&gt;    index trend_n total_h</span></span>
-<span><span class="co">#&gt; 1      1    2.38     512</span></span>
-<span><span class="co">#&gt; 2      2   -1.50     363</span></span>
-<span><span class="co">#&gt; 3      3    7.00     477</span></span>
-<span><span class="co">#&gt; 4      4   -4.50     496</span></span>
-<span><span class="co">#&gt; 5      5   -3.12     274</span></span>
-<span><span class="co">#&gt; 6      6   -4.00     705</span></span>
-<span><span class="co">#&gt; 7      7    3.60     218</span></span>
-<span><span class="co">#&gt; 8      8   -8.29     600</span></span>
-<span><span class="co">#&gt; 9      9   -1.71     558</span></span>
-<span><span class="co">#&gt; 10    10   -7.17     394</span></span>
-<span><span class="co">#&gt; 11    11   -4.75     602</span></span>
-<span><span class="co">#&gt; 12    12   -6.17     565</span></span>
+<span><span class="co">#&gt; 1      1   -7.00     492</span></span>
+<span><span class="co">#&gt; 2      2    4.71     347</span></span>
+<span><span class="co">#&gt; 3      3   -0.83     469</span></span>
+<span><span class="co">#&gt; 4      4   -0.38     466</span></span>
+<span><span class="co">#&gt; 5      5   -4.00     282</span></span>
+<span><span class="co">#&gt; 6      6   -2.50     672</span></span>
+<span><span class="co">#&gt; 7      7   -1.40     214</span></span>
+<span><span class="co">#&gt; 8      8  -15.00     585</span></span>
+<span><span class="co">#&gt; 9      9   -6.33     543</span></span>
+<span><span class="co">#&gt; 10    10   -7.00     405</span></span>
+<span><span class="co">#&gt; 11    11   -8.33     602</span></span>
+<span><span class="co">#&gt; 12    12   -4.00     602</span></span>
 <span><span class="va">results_manager</span><span class="op">$</span><span class="va">summary_matrix_list</span></span>
 <span><span class="co">#&gt; $n</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
-<span><span class="co">#&gt;  [1,]  512  507  458  498  504  525  500  528  531   508</span></span>
-<span><span class="co">#&gt;  [2,]  466  484  522  451  487  449  467  447  454   474</span></span>
-<span><span class="co">#&gt;  [3,]  464  409  471  477  506  499  550  463  465   522</span></span>
-<span><span class="co">#&gt;  [4,]  489  384  414  377  406  368  404  384  348   406</span></span>
-<span><span class="co">#&gt;  [5,]  460  447  446  442  451  459  438  419  444   422</span></span>
-<span><span class="co">#&gt;  [6,]  435  416  463  457  455  444  418  424  417   416</span></span>
-<span><span class="co">#&gt;  [7,]  386  423  408  429  424  453  441  433  433   439</span></span>
-<span><span class="co">#&gt;  [8,]  472  430  405  416  394  375  376  371  372   382</span></span>
-<span><span class="co">#&gt;  [9,]  475  405  418  379  422  396  412  393  393   418</span></span>
-<span><span class="co">#&gt; [10,]  499  483  409  486  442  450  442  445  411   443</span></span>
-<span><span class="co">#&gt; [11,]  490  523  510  492  471  472  466  457  483   468</span></span>
-<span><span class="co">#&gt; [12,]  397  335  336  310  333  314  280  298  300   303</span></span>
+<span><span class="co">#&gt;  [1,]  543  536  554  496  492  431  466  481  499   486</span></span>
+<span><span class="co">#&gt;  [2,]  462  442  450  470  445  439  467  495  492   486</span></span>
+<span><span class="co">#&gt;  [3,]  478  472  450  480  463  444  460  467  464   474</span></span>
+<span><span class="co">#&gt;  [4,]  421  394  362  368  338  342  354  388  391   391</span></span>
+<span><span class="co">#&gt;  [5,]  457  480  445  424  422  433  472  476  421   414</span></span>
+<span><span class="co">#&gt;  [6,]  476  441  390  401  381  411  408  391  431   416</span></span>
+<span><span class="co">#&gt;  [7,]  397  412  446  427  410  432  399  413  398   403</span></span>
+<span><span class="co">#&gt;  [8,]  496  447  398  442  368  353  353  336  367   334</span></span>
+<span><span class="co">#&gt;  [9,]  449  408  400  430  418  418  411  348  368   391</span></span>
+<span><span class="co">#&gt; [10,]  541  520  470  453  456  412  438  455  468   477</span></span>
+<span><span class="co">#&gt; [11,]  512  524  511  494  462  452  476  437  454   470</span></span>
+<span><span class="co">#&gt; [12,]  389  385  346  319  312  293  310  341  361   341</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $h</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
-<span><span class="co">#&gt;  [1,]   51   52   47   50   53   52   51   52   52    52</span></span>
-<span><span class="co">#&gt;  [2,]   35   38   41   36   39   35   35   34   35    35</span></span>
-<span><span class="co">#&gt;  [3,]   45   41   47   47   48   51   53   46   47    52</span></span>
-<span><span class="co">#&gt;  [4,]   61   47   52   48   50   45   50   48   44    51</span></span>
-<span><span class="co">#&gt;  [5,]   29   25   28   27   28   28   28   26   27    28</span></span>
-<span><span class="co">#&gt;  [6,]   69   69   75   73   72   72   69   70   70    66</span></span>
-<span><span class="co">#&gt;  [7,]   19   21   22   22   23   24   21   21   23    22</span></span>
-<span><span class="co">#&gt;  [8,]   70   65   61   64   59   57   57   56   55    56</span></span>
-<span><span class="co">#&gt;  [9,]   65   54   57   50   58   56   57   54   53    54</span></span>
-<span><span class="co">#&gt; [10,]   43   43   34   44   39   38   39   37   37    40</span></span>
-<span><span class="co">#&gt; [11,]   62   65   64   61   60   59   58   56   58    59</span></span>
-<span><span class="co">#&gt; [12,]   69   58   58   53   57   57   50   54   54    55</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1,]   53   55   55   48   50   42   44   48   49    48</span></span>
+<span><span class="co">#&gt;  [2,]   35   33   34   36   33   34   34   37   35    36</span></span>
+<span><span class="co">#&gt;  [3,]   48   47   46   47   46   46   47   49   47    46</span></span>
+<span><span class="co">#&gt;  [4,]   52   48   45   47   42   43   45   48   48    48</span></span>
+<span><span class="co">#&gt;  [5,]   29   33   30   26   26   27   29   30   27    25</span></span>
+<span><span class="co">#&gt;  [6,]   79   71   61   66   63   65   66   62   71    68</span></span>
+<span><span class="co">#&gt;  [7,]   20   22   23   22   20   22   20   25   19    21</span></span>
+<span><span class="co">#&gt;  [8,]   75   67   60   65   55   54   53   51   55    50</span></span>
+<span><span class="co">#&gt;  [9,]   60   55   54   58   56   55   53   47   50    55</span></span>
+<span><span class="co">#&gt; [10,]   46   44   41   40   40   36   37   41   39    41</span></span>
+<span><span class="co">#&gt; [11,]   63   64   63   62   57   57   60   56   59    61</span></span>
+<span><span class="co">#&gt; [12,]   71   68   60   55   57   52   57   59   63    60</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-6-build-a-validator-to-select-a-model-ensemble">Step 6: Build a validator to select a model ensemble<a class="anchor" aria-label="anchor" href="#step-6-build-a-validator-to-select-a-model-ensemble"></a>
@@ -535,10 +535,10 @@ advanced vignettes).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="va">OUTPUT_DIR</span>, <span class="st">"*.pdf"</span><span class="op">)</span> <span class="co"># plus validation diagnostics (see abc library documentation)</span></span>
 <span><span class="co">#&gt; [1] "validation_diagnostics.pdf"</span></span>
 <span><span class="va">validator</span><span class="op">$</span><span class="va">selected_simulations</span> <span class="co"># top 3 models (stable abundance and high harvest)</span></span>
-<span><span class="co">#&gt;   index    weight</span></span>
-<span><span class="co">#&gt; 1     1 0.5465644</span></span>
-<span><span class="co">#&gt; 2     6 0.0000000</span></span>
-<span><span class="co">#&gt; 3     9 0.8237373</span></span></code></pre></div>
+<span><span class="co">#&gt;   index      weight</span></span>
+<span><span class="co">#&gt; 1     3 0.001237578</span></span>
+<span><span class="co">#&gt; 2     4 0.000000000</span></span>
+<span><span class="co">#&gt; 3     6 0.226283766</span></span></code></pre></div>
 <p>We encourage the user to examine the generated diagnostics (PDF)
 output file, and to become acquainted with the analysis that this
 information facilitates (see the <em>abc</em> documentation). As our
