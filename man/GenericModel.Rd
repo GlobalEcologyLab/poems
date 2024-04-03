@@ -10,9 +10,11 @@ models, including model attribute get and set methods that resolve attribute sco
 attachment, and error and warning message attributes.
 }
 \examples{
-model1 <- GenericModel$new(model_attributes = c("a", "b", "c"),
-                           attribute_aliases = list(A = "a"),
-                           params = list(a = 1, b = 2), c = 3)
+model1 <- GenericModel$new(
+  model_attributes = c("a", "b", "c"),
+  attribute_aliases = list(A = "a"),
+  params = list(a = 1, b = 2), c = 3
+)
 # Get/set attributes
 model1$get_attribute_names()
 model1$set_attributes(d = 4)

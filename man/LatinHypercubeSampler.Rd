@@ -21,8 +21,10 @@ lhs_gen$set_normal_parameter("km", mean = 50000, sd = 20000, decimals = 0)
 lhs_gen$set_truncnorm_parameter("kg", mean = 75, sd = 20, lower = 0, upper = Inf, decimals = 2)
 lhs_gen$set_lognormal_parameter("price", mean = 30000, sd = 10000, decimals = 0)
 lhs_gen$set_beta_parameter("tread", mean = 0.7, sd = 0.1, decimals = 2)
-lhs_gen$set_triangular_parameter("rating", lower = 0, upper = 10, mode = 5,
-                                 decimals = 1)
+lhs_gen$set_triangular_parameter("rating",
+  lower = 0, upper = 10, mode = 5,
+  decimals = 1
+)
 lhs_gen$generate_samples(number = 10, random_seed = 123)
 
 }

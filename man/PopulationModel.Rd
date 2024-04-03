@@ -14,33 +14,43 @@ and completeness of model parameters.
 }
 \examples{
 # U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
 # Harvest function
-harvest <- list(rate = NA, # set later
-                function(params) round(params$stage_abundance*(1 - params$rate)))
+harvest <- list(
+  rate = NA, # set later
+  function(params) round(params$stage_abundance * (1 - params$rate))
+)
 harvest_rate_alias <- list(harvest_rate = "harvest$rate")
 # Template model
-stage_matrix <- matrix(c(0,   2.5, # Leslie/Lefkovitch matrix
-                         0.8, 0.5), nrow = 2, ncol = 2, byrow = TRUE)
-template_model <- PopulationModel$new(region = region,
-                                      time_steps = 10, # years
-                                      populations = region$region_cells, # 7
-                                      stage_matrix = stage_matrix,
-                                      harvest = harvest,
-                                      results_selection = c("abundance", "harvested"),
-                                      attribute_aliases = harvest_rate_alias)
+stage_matrix <- matrix(c(
+  0, 2.5, # Leslie/Lefkovitch matrix
+  0.8, 0.5
+), nrow = 2, ncol = 2, byrow = TRUE)
+template_model <- PopulationModel$new(
+  region = region,
+  time_steps = 10, # years
+  populations = region$region_cells, # 7
+  stage_matrix = stage_matrix,
+  harvest = harvest,
+  results_selection = c("abundance", "harvested"),
+  attribute_aliases = harvest_rate_alias
+)
 template_model$model_attributes
 template_model$required_attributes
 # Nested model
 nested_model <- PopulationModel$new(template_model = template_model)
 nested_model$incomplete_attributes()
-nested_model$set_sample_attributes(initial_abundance = rep(10, 7),
-                                   carrying_capacity = array(70:1, c(10, 7)),
-                                   harvest_rate = 0.3)
+nested_model$set_sample_attributes(
+  initial_abundance = rep(10, 7),
+  carrying_capacity = array(70:1, c(10, 7)),
+  harvest_rate = 0.3
+)
 nested_model$inconsistent_attributes()
 nested_model$carrying_capacity <- array(70:1, c(7, 10))
 nested_model$is_consistent()

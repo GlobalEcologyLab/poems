@@ -20,28 +20,36 @@ reducing the effective dispersal range.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 #' U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster #' full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA #' make U Island
 region <- Region$new(template_raster = template_raster)
-raster::plot(region$region_raster, main = "Example region (indices)",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
+raster::plot(region$region_raster,
+  main = "Example region (indices)",
+  xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+  colNA = "blue"
+)
 
 #' Dispersal distances
 dispersal_gen <- DispersalGenerator$new(region = region)
 dispersal_gen$set_attributes(params = list(p = 0.5, b = 700, r = 3000))
 distances <- round(dispersal_gen$calculate_distance_matrix()) #' in m
 dispersal_gen$calculate_distance_data()
-dispersal_indices <- as.matrix(dispersal_gen$distance_data$base[,1:2])
+dispersal_indices <- as.matrix(dispersal_gen$distance_data$base[, 1:2])
 
 #' Distance multipliers with friction in cell 4
-dispersal_friction <- DispersalFriction$new(region = region,
-                                            conductance = c(1, 1, 1, 0.5, 1, 1, 1))
+dispersal_friction <- DispersalFriction$new(
+  region = region,
+  conductance = c(1, 1, 1, 0.5, 1, 1, 1)
+)
 multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
-cbind(dispersal_indices, distance = distances[dispersal_indices],
-      multiplier = multipliers[[1]])
+cbind(dispersal_indices,
+  distance = distances[dispersal_indices],
+  multiplier = multipliers[[1]]
+)
 
 #' Note that crossing the water is avoided.
 \dontshow{\}) # examplesIf}

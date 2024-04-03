@@ -9,17 +9,21 @@ simulation function, storing results, and generating success/error statuses.
 }
 \examples{
 # Simulation model
-model1 <- SimulationModel$new(time_steps = 10,
-                              model_attributes = c("time_steps", "a", "b"),
-                              params = list(a = 1:7))
+model1 <- SimulationModel$new(
+  time_steps = 10,
+  model_attributes = c("time_steps", "a", "b"),
+  params = list(a = 1:7)
+)
 model1$required_attributes <- model1$model_attributes
 # Simulation function
 test_simulator <- function(model) {
   sum(unlist(model$get_attributes(model$required_attributes)))
 }
 # Model simulator
-simulator1 <- ModelSimulator$new(simulation_model = model1,
-                                 simulation_function = test_simulator)
+simulator1 <- ModelSimulator$new(
+  simulation_model = model1,
+  simulation_function = test_simulator
+)
 simulator1$run()
 model1$set_attributes(a = 1:10, b = 15)
 model1$get_attributes(model1$required_attributes)

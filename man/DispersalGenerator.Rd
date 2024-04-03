@@ -21,23 +21,31 @@ landscape. When this landscape includes temporal changes, the generated
 }
 \examples{
 # U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
-raster::plot(region$region_raster, main = "Example region (indices)",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
+raster::plot(region$region_raster,
+  main = "Example region (indices)",
+  xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+  colNA = "blue"
+)
 
 # Distance-based dispersal generator
-dispersal_gen <- DispersalGenerator$new(region = region,
-                                        dispersal_max_distance = 3000, # in m
-                                        inputs = c("dispersal_p", "dispersal_b"),
-                                        decimals = 5)
+dispersal_gen <- DispersalGenerator$new(
+  region = region,
+  dispersal_max_distance = 3000, # in m
+  inputs = c("dispersal_p", "dispersal_b"),
+  decimals = 5
+)
 dispersal_gen$calculate_distance_data() # pre-calculate
-dispersal_gen$generate(input_values = list(dispersal_p = 0.5,
-                                           dispersal_b = 700))
+dispersal_gen$generate(input_values = list(
+  dispersal_p = 0.5,
+  dispersal_b = 700
+))
 
 }
 \section{Super classes}{

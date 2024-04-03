@@ -10,28 +10,37 @@ spatially-explicit simulation results, as well as optional re-generated
 }
 \examples{
 # U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
-raster::plot(region$region_raster, main = "Example region (indices)",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
+raster::plot(region$region_raster,
+  main = "Example region (indices)",
+  xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+  colNA = "blue"
+)
 # Sample results occupancy (ignore cell 2 in last 3 time steps)
 occupancy_raster <- region$raster_from_values(array(1, c(7, 13)))
 occupancy_raster[region$region_indices][2, 11:13] <- 0
 occupancy_raster[region$region_indices]
 # Simulation example results
 example_results <- list(abundance = region$raster_from_values(
-  t(apply(matrix(11:17), 1,
-          function(n) c(rep(n, 3), round(n*exp(-(0:9)/log(n))))))))
+  t(apply(
+    matrix(11:17), 1,
+    function(n) c(rep(n, 3), round(n * exp(-(0:9) / log(n))))
+  ))
+))
 example_results$abundance[region$region_indices]
 # Simulation results object
-sim_results <- SimulationResults$new(region = region,
-                                     time_steps = 13,
-                                     burn_in_steps = 3,
-                                     occupancy_mask = occupancy_raster)
+sim_results <- SimulationResults$new(
+  region = region,
+  time_steps = 13,
+  burn_in_steps = 3,
+  occupancy_mask = occupancy_raster
+)
 # Clone (for each simulation results)
 results_clone <- sim_results$new_clone(results = example_results)
 results_clone$get_attribute("abundance")

@@ -10,21 +10,27 @@ defined via a list of longitude/latitude cell coordinates (WGS84), or a
 }
 \examples{
 # U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
-raster::plot(region$region_raster, main = "Example region (cell indices)",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
+raster::plot(region$region_raster,
+  main = "Example region (cell indices)",
+  xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+  colNA = "blue"
+)
 region$region_cells
 region$coordinates
 # Generate value layers
 value_brick <- region$raster_from_values(array(8:28, c(7, 3)))
-raster::plot(value_brick, main = "Example value layers",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
+raster::plot(value_brick,
+  main = "Example value layers",
+  xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+  colNA = "blue"
+)
 value_brick[region$region_indices]
 
 }

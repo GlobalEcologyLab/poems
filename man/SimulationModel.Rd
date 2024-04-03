@@ -13,19 +13,27 @@ completeness of model parameters.
 }
 \examples{
 # U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
 # Model template
-template_model <- SimulationModel$new(simulation_function = "test_simulator",
-                                      region = region, time_steps = 10)
-template_model$model_attributes <- c(template_model$model_attributes,
-                                     "a", "b", "c", "d")
+template_model <- SimulationModel$new(
+  simulation_function = "test_simulator",
+  region = region, time_steps = 10
+)
+template_model$model_attributes <- c(
+  template_model$model_attributes,
+  "a", "b", "c", "d"
+)
 template_model$model_attributes
-template_model$required_attributes <- c(template_model$required_attributes[1:2],
-                                        "a", "b", "c", "d")
+template_model$required_attributes <- c(
+  template_model$required_attributes[1:2],
+  "a", "b", "c", "d"
+)
 template_model$required_attributes
 template_model$get_attributes(template_model$required_attributes)
 template_model$simulation_function

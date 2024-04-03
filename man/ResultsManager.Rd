@@ -11,14 +11,18 @@ values via generators.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # U Island example region
-coordinates <- data.frame(x = rep(seq(177.01, 177.05, 0.01), 5),
-                          y = rep(seq(-18.01, -18.05, -0.01), each = 5))
+coordinates <- data.frame(
+  x = rep(seq(177.01, 177.05, 0.01), 5),
+  y = rep(seq(-18.01, -18.05, -0.01), each = 5)
+)
 template_raster <- Region$new(coordinates = coordinates)$region_raster # full extent
 template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA # make U Island
 region <- Region$new(template_raster = template_raster)
-raster::plot(region$region_raster, main = "Example region (indices)",
-             xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
-             colNA = "blue")
+raster::plot(region$region_raster,
+  main = "Example region (indices)",
+  xlab = "Longitude (degrees)", ylab = "Latitude (degrees)",
+  colNA = "blue"
+)
 # Results manager
 results_manager <- ResultsManager$new(
   sample_data = data.frame(index = 1:3),
@@ -33,15 +37,19 @@ results_manager <- ResultsManager$new(
       sum(results$harvested)
     },
     n = "all$abundance", # string
-    h = "all$harvested"),
+    h = "all$harvested"
+  ),
   parallel_cores = 2,
-  results_dir = tempdir())
+  results_dir = tempdir()
+)
 # Write example result files
 results <- list()
 for (i in 1:3) {
-  results[[i]] <- list(abundance = t(apply(matrix(11:17), 1,
-                                           function(n) round(n*exp(-(0:9)/i)))))
-  results[[i]]$harvested <- round(results[[i]]$abundance*i/7)
+  results[[i]] <- list(abundance = t(apply(
+    matrix(11:17), 1,
+    function(n) round(n * exp(-(0:9) / i))
+  )))
+  results[[i]]$harvested <- round(results[[i]]$abundance * i / 7)
   file_name <- paste0(results_manager$get_results_filename(i), ".RData")
   saveRDS(results[[i]], file.path(tempdir(), file_name))
 }
