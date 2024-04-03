@@ -54,7 +54,9 @@
 #' @importFrom R6 R6Class
 #' @importFrom doParallel stopImplicitCluster
 #' @importFrom doParallel registerDoParallel
-#' @import gdistance
+#' @importFrom gdistance transition
+#' @importFrom gdistance geoCorrection
+#' @importFrom gdistance costDistance
 #' @include Region.R
 #' @include SpatialModel.R
 #' @export DispersalFriction
@@ -136,7 +138,7 @@ DispersalFriction <- R6Class("DispersalFriction",
           self <- self # Ensure that this object consistently becomes available within each parallel thread
           distance_multipliers <- foreach(
             i = 1:ncol(as.matrix(self$conductance[])),
-            .packages = c("raster"),
+            .packages = c("raster", "gdistance"),
             .errorhandling = c("stop")
           ) %dopar% {
             suppressWarnings({
