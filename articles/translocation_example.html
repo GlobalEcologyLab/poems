@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">poems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -636,6 +636,24 @@ dispersal distance and proportion of dispersers.</p>
 <span>  decimals <span class="op">=</span> <span class="fl">4</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">dispersal_gen</span><span class="op">$</span><span class="fu">calculate_distance_data</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: igraph</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'igraph'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:raster':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     union</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     decompose, spectrum</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     union</span></span>
+<span><span class="co">#&gt; Loading required package: Matrix</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'gdistance'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:igraph':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     normalize</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dispersal_gen</span><span class="op">$</span><span class="va">distance_data</span><span class="op">$</span><span class="va">base</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     target_pop source_pop compact_row distance_class</span></span>
 <span><span class="co">#&gt; X2           2          1           1              2</span></span>
@@ -1122,7 +1140,7 @@ simulation’s success and any errors or warnings encountered.</p>
 <span>  <span class="va">run_output</span> <span class="op">&lt;-</span> <span class="va">sim_manager</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   3.395   0.028   3.423</span></span>
+<span><span class="co">#&gt;   3.170   0.024   3.194</span></span>
 <span><span class="va">run_output</span><span class="op">$</span><span class="va">summary</span></span>
 <span><span class="co">#&gt; [1] "10 of 10 sample models ran and saved results successfully with warnings"</span></span></code></pre></div>
 </div>
