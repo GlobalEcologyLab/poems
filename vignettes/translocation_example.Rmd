@@ -66,7 +66,7 @@ First, we'll define our study region. For this example, we utilise a
 
 ```{r, message = FALSE, warning=FALSE, results='markup', fig.show='asis',fig.align = "center", fig.width = 4, fig.height = 4}
 # Region raster
-tasmania_raster <- poems::tasmania_raster
+data(tasmania_raster)
 tasmania_raster
 
 # Equal area projection
@@ -102,7 +102,7 @@ plot(tasmania_raster,
 
 \newpage
 
-Now we can define our `poems::Region`
+Now we can define our `poems::Region`:
 
 ```{r}
 # Tasmania study region (735 non-NA cells stored in the order shown) #
@@ -147,21 +147,21 @@ apply the HS scaling.
 
 ```{r}
 # read in the land-use modifier
-hs_mod <- poems::tasmania_modifier
+data(tasmania_modifier)
 
-plot(hs_mod,
+plot(tasmania_modifier,
   zlim = c(0, 1), colNA = "grey75",
   col = hcl.colors(100, "RdYlGn")
 )
 
 # Habitat suitability
-hs_raster <- poems::thylacine_hs_raster
-hs_raster <- projectRaster(hs_raster, region$region_raster, method = "bilinear")
+data(thylacine_hs_raster)
+hs_raster <- projectRaster(thylacine_hs_raster, region$region_raster, method = "bilinear")
 hs_raster <- stretch(hs_raster, minv = 0, maxv = 1)
 hs_raster
 
 # initial_hs needed for generator
-initial_hs <- hs_raster <- stack(replicate(n = nlayers(hs_mod), hs_raster))
+initial_hs <- hs_raster <- stack(replicate(n = nlayers(tasmania_modifier), hs_raster))
 ```
 
 \newpage
@@ -212,8 +212,8 @@ Australia).
 ```{r}
 # allow growth rates to vary by region using IBRA regions
 # Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell distribution
-ibra_raster <- poems::tasmania_ibra_raster
-ibra_raster <- projectRaster(ibra_raster, region$region_raster, method = "ngb")
+data(tasmania_ibra_raster)
+ibra_raster <- projectRaster(tasmania_ibra_raster, region$region_raster, method = "ngb")
 plot(ibra_raster,
   colNA = "grey75",
   breaks = seq(1, 9, 1),
@@ -221,12 +221,12 @@ plot(ibra_raster,
   col = hcl.colors(10, "Lajolla")
 )
 
-ibra_data <- poems::tasmania_ibra_data
-ibra_data
+data(tasmania_ibra_data)
+tasmania_ibra_data
 
 # Calculate cell indices and counts for IBRA bioregions
 ibra_indices <- lapply(
-  as.list(ibra_data$index),
+  as.list(tasmania_ibra_data$index),
   function(i) {
     which(ibra_raster[region$region_indices] == i)
   }
@@ -234,7 +234,7 @@ ibra_indices <- lapply(
 str(ibra_indices)
 
 ibra_polygons <- rasterToPolygons(ibra_raster, dissolve = TRUE, na.rm = TRUE)
-ibra_polygons@data <- merge(ibra_polygons@data, ibra_data,
+ibra_polygons@data <- merge(ibra_polygons@data, tasmania_ibra_data,
   by.x = "layer", by.y = "index"
 )
 ibra_polygons
@@ -267,7 +267,7 @@ plot(rmax_regional,
 )
 
 # set upper and lower growth rates per region
-ibra_rmax <- cbind(ibra_data,
+ibra_rmax <- cbind(tasmania_ibra_data,
   rmax_lower = round(rmax * 0.6, 2),
   rmax_mean = round(rmax, 2),
   rmax_upper = round(rmax / 0.75, 2)
@@ -582,7 +582,7 @@ capacity_gen <- Generator$new(
   generate_rasters = FALSE,
   time_steps = ncol(initial_hs),
   hs_raster = initial_hs[region$region_indices], # provide full stack of HS. Template attached
-  hs_mod = hs_mod[region$region_indices], # provide full stack of LULC modifier. Template attached
+  hs_mod = tasmania_modifier[region$region_indices], # provide full stack of LULC modifier. Template attached
   int_index = int_point,
   trans_n = translocation$trans_n, # number of animals introduced
   region_indices = region$region_indices,

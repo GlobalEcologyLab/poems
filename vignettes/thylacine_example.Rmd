@@ -66,10 +66,7 @@ function. Since our model is spatially explicit, we also need to define our stud
 ##### Tasmanian study region
 First, we'll define our study region via a *raster* of 0.1 degree grid-cells for the
 majority of Tasmania, once inhabited by the *thylacine*. This *raster* of Tasmania 
-accompanies the *poems* package, and may be loaded via its variable name. In this 
-vignette we will 'scope' data variables included in the package with *poems::* to 
-highlight where they have come from, although this is unnecessary when the package is 
-loaded (via *library(poems)*).
+accompanies the *poems* package, and may be loaded via its variable name.
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Raster of Tasmania (note: islands removed where there was no evidence of thylacine occupancy).
@@ -111,19 +108,19 @@ number of cells for each bioregion.
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell distribution
-ibra_raster <- poems::tasmania_ibra_raster
-raster::plot(ibra_raster,
+data(tasmania_ibra_raster)
+raster::plot(tasmania_ibra_raster,
   main = "Tasmania study IBRA bioregions", colNA = "blue",
   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)"
 )
-ibra_data <- poems::tasmania_ibra_data
-ibra_data # examine
+data(tasmania_ibra_data)
+tasmania_ibra_data # examine
 
 # Calculate cell indices and counts for IBRA bioregions
 ibra_indices <- lapply(
-  as.list(ibra_data$index),
+  as.list(tasmania_ibra_data$index),
   function(i) {
-    which(ibra_raster[region$region_indices] == i)
+    which(tasmania_ibra_raster[region$region_indices] == i)
   }
 )
 ibra_indices[1:2] # examine
@@ -390,8 +387,8 @@ species distribution model (SDM) for the *thylacine*. The initial habitat suitab
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 5, fig.height = 5}
 # Initial thylacine habitat suitability
-hs_raster <- poems::thylacine_hs_raster
-raster::plot(hs_raster,
+data(thylacine_hs_raster)
+raster::plot(thylacine_hs_raster,
   main = "Initial thylacine habitat suitability", colNA = "blue",
   xlab = "Longitude (degrees)", ylab = "Latitude (degrees)"
 )
@@ -417,8 +414,8 @@ along with sampled values (inputs) for initial carrying capacity, percentage dec
 capacity_gen <- Generator$new(
   description = "capacity",
   time_steps = 80, # years (1888-1967)
-  initial_hs = hs_raster[region$region_indices],
-  decline_indices = which(!ibra_raster[region$region_indices] %in% c(5, 8)),
+  initial_hs = thylacine_hs_raster[region$region_indices],
+  decline_indices = which(!tasmania_ibra_raster[region$region_indices] %in% c(5, 8)),
   inputs = c("k_init", "k_decline", "k_phi"),
   outputs = c("initial_abundance", "carrying_capacity"),
   generative_requirements = list(
@@ -729,7 +726,7 @@ targets <- list(
       c(1936, 1938), c(1935, 1935), c(1934, 1942),
       c(1934, 1934), c(1932, 1932)
     ), c(2, 9),
-    dimnames = list(c("lower", "upper"), ibra_data$abbr)
+    dimnames = list(c("lower", "upper"), tasmania_ibra_data$abbr)
   ),
   total_extinction = c(lower = 1936, upper = 1942) # CI
 )
@@ -884,8 +881,9 @@ if (DEMONSTRATION) { # Calculate RMSE for IBRA extirpation
 
 # Load full example metrics
 if (DEMONSTRATION) {
-  summary_metric_data <- poems::thylacine_example_metrics
-  dim(summary_metric_data) # dimensions
+  data(thylacine_example_metrics)
+  dim(thylacine_example_metrics) # dimensions
+  summary_metric_data <- thylacine_example_metrics
 }
 
 # Calculate the error from the CI of total extinction
@@ -980,7 +978,8 @@ a time-series and IBRA distribution of total bounty, which we will use later.
 ```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Load pre-generated example matrices
 if (DEMONSTRATION) {
-  summary_matrix_list <- poems::thylacine_example_matrices
+  data(thylacine_example_matrices)
+  summary_matrix_list <- thylacine_example_matrices
 } else { # cell extirpation and total/ibra bounty for selected samples only
   summary_matrix_list$extirpation <- summary_matrix_list$extirpation[selected_indices, ]
   summary_matrix_list$total_bounty <- summary_matrix_list$total_bounty[selected_indices, ]
@@ -1021,7 +1020,7 @@ extirpation <- cbind(
   summary_matrix_list$ibra_extirpation,
   summary_metric_data$total_extinction
 )
-colnames(extirpation) <- c(as.character(ibra_data$abbr), "Total")
+colnames(extirpation) <- c(as.character(tasmania_ibra_data$abbr), "Total")
 graphics::boxplot(extirpation[, 10:1],
   border = rep("gray", 3), horizontal = TRUE,
   outline = FALSE, range = 0, col = NULL, ylim = c(1888, 1968),
@@ -1166,8 +1165,10 @@ if (DEMONSTRATION) {
   results_manager$summary_metric_data # examine demo
 }
 if (DEMONSTRATION) { # load full example metrics and (some) matrices
-  summary_metric_data_rerun <- poems::thylacine_example_metrics_rerun
-  summary_matrix_list_rerun <- poems::thylacine_example_matrices_rerun
+  data(thylacine_example_metrics_rerun)
+  summary_metric_data_rerun <- thylacine_example_metrics_rerun
+  data(thylacine_example_matrices_rerun)
+  summary_matrix_list_rerun <- thylacine_example_matrices_rerun
 } else {
   summary_metric_data_rerun <- results_manager$summary_metric_data
   summary_matrix_list_rerun <- results_manager$summary_matrix_list
@@ -1260,7 +1261,7 @@ selected ensemble and their replicates.
 
 ```{r, message = FALSE, fig.align = "center", fig.width = 7, fig.height = 5}
 # Compare weighted ensemble model to actual historical bounty time-series
-historic_bounty <- poems::thylacine_bounty_record
+data(thylacine_bounty_record)
 selected_bounty <- summary_matrix_list$total_bounty
 weighted_bounty <- colSums(selected_bounty * selected_weights / sum(selected_weights))
 
@@ -1270,7 +1271,7 @@ plot(
   ylab = "Number of thylacines", main = "Thylacine bounty submitted",
   ylim = c(0, 200), type = "l", col = "blue", lwd = 2
 )
-lines(x = 1888:1909, y = historic_bounty$Total, lty = 1, col = "red", lwd = 2)
+lines(x = 1888:1909, y = thylacine_bounty_record$Total, lty = 1, col = "red", lwd = 2)
 legend("topright",
   legend = c("Model ensemble bounty", "Actual bounty"),
   col = c("blue", "red"), lty = c(1, 1), lwd = 2, cex = 0.8
@@ -1289,7 +1290,7 @@ selected_bounty <- cbind(
 weighted_bounty <- colSums(selected_bounty * selected_weights / sum(selected_weights))
 combined_bounty <- rbind(
   weighted_bounty,
-  actual_bounty <- colSums(historic_bounty[, c(3:11, 2)])
+  actual_bounty <- colSums(thylacine_bounty_record[, c(3:11, 2)])
 )
 combined_bounty[, 10] <- combined_bounty[, 10] / 2
 
