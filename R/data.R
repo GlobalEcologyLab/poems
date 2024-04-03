@@ -11,8 +11,9 @@
 #'   \item{CRS}{WGS84 longitude-latitude}
 #'   \item{values}{region defined by 795 cells with value of 1 (surrounded by non-region \code{NA} values)}
 #' }
-#' @source TBA
-"tasmania_raster"
+#' @source https://doi.org/10.1111/2041-210X.13720
+#' @name tasmania_raster
+NULL
 
 #' Tasmania land-use modifier raster
 #'
@@ -28,8 +29,9 @@
 #'   \item{CRS}{+proj=laea +lat_0=-42.2 +lon_0=147 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs}
 #'   \item{values}{region defined by 1224 cells with values between 0-1. Values of 1 indicate extensive land use modification)}
 #' }
-#' @source TBA
-"tasmania_modifier"
+#' @source https://doi.org/10.1111/2041-210X.13720
+#' @name tasmania_modifier
+NULL
 
 #' Thylacine vignette Tasmania IBRA data
 #'
@@ -43,8 +45,9 @@
 #'   \item{abbr}{Abbreviated name for each bioregion}
 #'   \item{name}{Full name for each bioregion}
 #' }
-#' @source TBA
-"tasmania_ibra_data"
+#' @source https://doi.org/10.1111/2041-210X.13720
+#' @name tasmania_ibra_data
+NULL
 
 #' Thylacine vignette Tasmania IBRA raster
 #'
@@ -60,8 +63,9 @@
 #'   \item{CRS}{WGS84 longitude-latitude}
 #'   \item{values}{IBRA bioregions defined by cells with values 1 to 9 (as per \code{index} in \code{\link{tasmania_ibra_data}})}
 #' }
-#' @source TBA
-"tasmania_ibra_raster"
+#' @source https://doi.org/10.1111/2041-210X.13720
+#' @name tasmania_ibra_raster
+NULL
 
 #' Thylacine vignette habitat suitability raster
 #'
@@ -76,8 +80,9 @@
 #'   \item{CRS}{WGS84 longitude-latitude}
 #'   \item{values}{Estimated habitat suitability values of 0 to 1}
 #' }
-#' @source TBA
-"thylacine_hs_raster"
+#' @source https://doi.org/10.1111/2041-210X.13720
+#' @name thylacine_hs_raster
+NULL
 
 #' Thylacine vignette bounty record
 #'
@@ -99,8 +104,9 @@
 #'   \item{TCH}{Bounty submitted in IBRA bioregion: Tasmanian Central Highlands}
 #'   \item{KIN}{Bounty submitted in IBRA bioregion: King}
 #' }
-#' @source TBA
-"thylacine_bounty_record"
+#' @source https://doi.org/10.1111/2041-210X.13720
+#' @name thylacine_bounty_record
+NULL
 
 #' Thylacine vignette demonstration example metrics
 #'
@@ -116,7 +122,8 @@
 #'   \item{total_extinction}{Total extinction date for each example simulation (\code{NA} when persistent beyond 1967)}
 #' }
 #' @source Precalculated demonstration via example simulation runs.
-"thylacine_example_metrics"
+#' @name thylacine_example_metrics
+NULL
 
 #' Thylacine vignette demonstration example matrices
 #'
@@ -134,7 +141,8 @@
 #'   \item{ibra_extirpation}{20,000 row by 9 column matrix of extirpation dates for each IBRA bioregion for each sample simulation}
 #' }
 #' @source Precalculated demonstration via example simulation runs.
-"thylacine_example_matrices"
+#' @name thylacine_example_matrices
+NULL
 
 #' Thylacine vignette demonstration example (re-run) metrics
 #'
@@ -151,7 +159,8 @@
 #'   \item{total_extinction}{Total extinction date for each example simulation (\code{NA} when persistent beyond 1967)}
 #' }
 #' @source Precalculated demonstration via example simulation re-runs.
-"thylacine_example_metrics_rerun"
+#' @name thylacine_example_metrics_rerun
+NULL
 
 #' Thylacine vignette demonstration example (re-run) matrices
 #'
@@ -166,4 +175,5 @@
 #'   \item{ibra_extirpation}{2,000 row by 9 column matrix of extirpation dates for each IBRA bioregion for each sample simulation}
 #' }
 #' @source Precalculated demonstration via example simulation re-runs.
-"thylacine_example_matrices_rerun"
+#' @name thylacine_example_matrices_rerun
+NULL
