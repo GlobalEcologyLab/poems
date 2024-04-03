@@ -32,8 +32,7 @@ Note that the examples are for a single stage matrix model.
 
 ## Setup
 
-As before, We begin by loading the necessary packages and setting a
-temporary output directory.
+As before, We begin by loading the necessary packages.
 
 ```{r setup}
 library(poems)
@@ -41,8 +40,6 @@ library(raster)
 library(sf)
 library(scales)
 library(stringi) # for randomly generating file names.
-
-OUTPUT_DIR <- tempdir()
 
 # function to round to any arbitrary value
 round_any <- function(x, accuracy, f = round) {
@@ -851,6 +848,7 @@ simulation results to disk. It also maintains a log of each simulation's
 success and any errors or warnings encountered.
 
 ```{r}
+OUTPUT_DIR <- tempdir()
 model <- model_template$clone()
 model$set_attributes(params = list(
   "standard_deviation" = NULL,

@@ -2,8 +2,7 @@
 title: "Simple workflow example for a population model"
 author: "Global ChEC Lab"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
-geometry: margin=2cm
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Simple Example}
   %\VignetteEngine{knitr::rmarkdown}
@@ -27,11 +26,10 @@ stage of the workflow.
 
 ## Setup
 
-We begin by loading the *poems* package and setting our output directory.
+We begin by loading the *poems* package.
 
 ```{r setup}
 library(poems)
-OUTPUT_DIR <- tempdir()
 ```
 
 ## Workflow
@@ -259,6 +257,7 @@ maintains a log of each simulation's success and any errors or warnings encounte
 
 ```{r, message = FALSE}
 # Create a simulation manager and run the sampled model simulations
+OUTPUT_DIR <- tempdir()
 sim_manager <- SimulationManager$new(
   sample_data = sample_data,
   model_template = model_template,

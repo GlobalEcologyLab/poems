@@ -2,8 +2,7 @@
 title: "Workflow example for the Tasmanian thylacine"
 author: "Global ChEC Lab"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
-geometry: margin=2cm
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Thylacine example}
   %\VignetteEngine{knitr::rmarkdown}
@@ -31,7 +30,7 @@ the number of *thylacines* harvested during the bounty interval. These targets a
 derived from historic bounty, capture and sighting records.
 
 ## Setup
-We begin by loading the *poems* package and setting our output directory. We will
+We begin by loading the *poems* package. We will
 set a flag for running the vignette in demonstration mode (default). When set to *TRUE*, 
 pre-run simulation results are loaded rather than waiting (potentially hours) to run 
 the full sample model set. Feel free to set this flag to *FALSE* to run your own
@@ -43,7 +42,6 @@ library(poems)
 DEMONSTRATION <- TRUE # load pre-run data rather than running simulations
 SAMPLES <- 20000
 PARALLEL_CORES <- 2
-OUTPUT_DIR <- tempdir()
 ```
 
 ## Workflow
@@ -621,6 +619,7 @@ for the first two samples. The *poems* package provides example simulation summa
 for all 20,000 samples (which is used in our model ensemble selection and validation).
 
 ```{r, message = FALSE}
+OUTPUT_DIR <- tempdir()
 # Build the simulation manager
 sim_manager <- SimulationManager$new(
   sample_data = sample_data,
