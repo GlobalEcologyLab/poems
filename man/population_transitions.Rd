@@ -37,3 +37,25 @@ Transition calculation function: \code{function(fecundity_array, survival_array,
 Modular functions for the population simulator for performing staged-based
 (Leslie/Lefkovitch matrix) transitions via 3D survival and fecundity arrays.
 }
+\examples{
+# Deterministic transition (no stochasticity)
+fecundity_matrix <- array(c(0, 0, 0, 3, 0, 0, 4, 0, 0), c(3, 3))
+survival_matrix <- array(c(0, 0.5, 0, 0, 0, 0.7, 0, 0, 0.8), c(3, 3))
+variation_array <- array(rep(seq(0.85, 1.15, 0.05), each = 9), c(3, 3, 7))
+fecundity_array <- array(fecundity_matrix, c(3, 3, 7)) * variation_array
+survival_array <- array(survival_matrix, c(3, 3, 7)) * variation_array
+stage_abundance <- matrix(c(
+  7, 13, 0, 26, 0, 39, 47,
+  2, 0, 6, 8, 0, 12, 13,
+ 0, 3, 4, 6, 0, 9, 10
+), nrow = 3, ncol = 7, byrow = TRUE)
+occupied_indices <- (1:7)[-5]
+transition_function <- population_transitions(
+  populations = 7, demographic_stochasticity = FALSE,
+  fecundity_matrix = fecundity_matrix, fecundity_max = NULL,
+  survival_matrix = survival_matrix
+)
+transition_function(fecundity_array, survival_array, stage_abundance, 
+                    occupied_indices)
+
+}

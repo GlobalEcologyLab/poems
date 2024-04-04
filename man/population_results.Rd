@@ -39,3 +39,19 @@ List of result functions:
 Modular functions for the population simulator for initializing, calculating and
 collecting simulator results.
 }
+\examples{
+coordinates <- array(c(1:4, 4:1), c(7, 2))
+initial_abundance <- matrix(c(
+  7, 13, 0, 26, 0, 39, 47,
+  2, 0, 6, 8, 0, 12, 13,
+  0, 3, 4, 6, 0, 9, 10
+), nrow = 3, ncol = 7, byrow = TRUE)
+results_selection <- c("abundance", "ema", "extirpation", 
+                        "extinction_location", "harvested", "occupancy")
+result_functions <- population_results(
+  replicates = 1, time_steps = 10, coordinates, initial_abundance,
+  results_selection = results_selection, result_stages = c(0, 1, 1)
+)
+result_functions$initialize_attributes()
+
+}

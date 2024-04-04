@@ -8,6 +8,15 @@
 generating or processing simulation results, as well as optionally generating values
 via generators.
 }
+\examples{
+generic_manager <- GenericManager$new(
+ attr1 = 22:23,
+ results_filename_attributes = c("attr1", "example")
+)
+generic_manager$get_results_filename(1)
+generic_manager$get_results_filename(2)
+
+}
 \section{Super class}{
 \code{\link[poems:GenericClass]{poems::GenericClass}} -> \code{GenericManager}
 }

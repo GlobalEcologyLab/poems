@@ -11,6 +11,19 @@ file, function and distribution templates, correlation parameters (for distribut
 generation), rounding decimals, occupancy mask, and other
 \code{\link{DispersalGenerator}} attributes that need to be maintained when cloning.
 }
+\examples{
+dispersal_template <- DispersalTemplate$new()
+dispersal_template$dispersal_breadth <- 130
+dispersal_template$dispersal_proportion <- 0.4
+coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
+dispersal_gen <- DispersalGenerator$new(
+  coordinates = coordinates, inputs = c("dispersal_r"),
+  generative_template = dispersal_template
+)
+dispersal_gen$dispersal_breadth
+dispersal_gen$dispersal_proportion
+
+}
 \section{Super class}{
 \code{\link[poems:GenerativeTemplate]{poems::GenerativeTemplate}} -> \code{DispersalTemplate}
 }

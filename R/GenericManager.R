@@ -4,6 +4,14 @@
 #' \code{\link[R6:R6Class]{R6}} class to represent a generic (abstract) manager for
 #' generating or processing simulation results, as well as optionally generating values
 #' via generators.
+#' 
+#' @examples 
+#' generic_manager <- GenericManager$new(
+#'  attr1 = 22:23,
+#'  results_filename_attributes = c("attr1", "example")
+#' )
+#' generic_manager$get_results_filename(1)
+#' generic_manager$get_results_filename(2)
 #'
 #' @importFrom R6 R6Class
 #' @include GenericClass.R

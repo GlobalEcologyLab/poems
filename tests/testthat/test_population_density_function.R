@@ -1,5 +1,3 @@
-context("Population Density Dependence (function)")
-
 test_that("setup function", {
   stage_matrix <- array(c(0, 0.5, 0, 3, 0, 0.7, 4, 0, 0.8), c(3, 3))
   fecundity_mask <- array(c(0, 0, 0, 1, 0, 0, 1, 0, 0), c(3, 3))
