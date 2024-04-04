@@ -82,6 +82,550 @@ simulations with <code>DEMONSTRATION = FALSE</code>.</p>
     <p>Precalculated demonstration via example simulation re-runs.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">thylacine_example_matrices_rerun</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">thylacine_example_matrices_rerun</span><span class="op">$</span><span class="va">bounty_slope</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    [1] -6.633333 -6.283333 -5.533333 -5.616667 -6.000000 -6.633333 -5.968254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    [8] -5.888889 -6.077778 -6.000000 -6.138889 -6.000000 -6.722222 -6.361111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [15] -6.031746 -6.622222 -6.577778 -7.472222 -7.566667 -6.285714 -3.055556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [22] -2.773810 -2.416667 -2.250000 -3.133333 -2.877778 -2.383333 -2.908333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [29] -2.450000 -2.611111 -2.300000 -1.963889 -3.027778 -2.605556 -2.544444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [36] -2.166667 -2.583333 -1.800000 -2.666667 -2.166667 -2.880159 -3.222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [43] -2.543651 -2.700000 -3.333333 -2.833333 -3.022222 -2.666667 -3.611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [50] -2.890476 -2.811111 -2.422222 -2.666667 -2.571429 -2.277778 -2.555556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [57] -2.349206 -2.666667 -2.111111 -2.277778 -4.466667 -4.361111 -4.367460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [64] -4.711905 -4.916667 -4.800000 -3.938889 -4.366667 -4.322222 -4.222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [71] -3.444444 -2.833333 -3.526190 -3.416667 -3.207143 -3.138889 -3.444444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [78] -3.255556 -2.972222 -3.325397 -4.761905 -4.777778 -4.811111 -4.865079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [85] -5.043651 -5.250000 -4.527778 -5.083333 -4.777778 -4.766667 -2.833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [92] -2.866667 -2.788889 -2.694444 -2.611111 -2.972222 -2.402778 -2.708333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [99] -2.971429 -2.763889 -2.416667 -2.369444 -2.166667 -2.616667 -2.563889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [106] -2.722222 -2.694444 -2.322222 -2.833333 -2.288889 -6.372222 -6.033333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [113] -6.280159 -6.277778 -5.294444 -5.944444 -5.638889 -5.500000 -6.285714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [120] -5.866667 -2.750000 -3.592857 -2.916667 -2.972222 -2.942857 -3.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [127] -3.126984 -2.900000 -3.416667 -2.991270 -1.383333 -1.088889 -1.133333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [134] -1.402778 -1.311111 -1.194444 -1.083333 -1.496032 -1.333333 -1.333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [141] -5.077778 -4.500000 -4.944444 -4.861111 -4.155556 -4.369048 -4.466667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [148] -4.925000 -4.944444 -4.416667 -6.344444 -6.292857 -5.750000 -5.634921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [155] -5.922222 -6.333333 -5.444444 -5.816667 -5.611111 -6.333333 -4.061111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [162] -5.222222 -4.650000 -4.805556 -4.776984 -5.044444 -4.666667 -4.700397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [169] -4.375000 -4.111111 -2.372222 -3.366667 -3.428571 -2.766667 -2.655556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [176] -2.872222 -2.638889 -3.734127 -3.166667 -2.333333 -4.491667 -3.955556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [183] -3.861111 -4.233333 -4.250000 -3.861111 -3.421429 -4.011111 -4.383333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [190] -3.972222 -4.625000 -5.388889 -5.877778 -4.833333 -5.611111 -4.750000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [197] -5.166667 -5.195238 -4.833333 -5.072222 -4.869048 -4.363492 -4.785714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [204] -3.577778 -3.438889 -4.233333 -4.450000 -3.183333 -3.844444 -2.833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [211] -4.027778 -5.083333 -4.255556 -5.000000 -4.233333 -4.466667 -4.957143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [218] -5.144444 -4.266667 -5.111111 -1.233333 -1.505556 -1.516667 -1.611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [225] -1.372222 -1.138889 -1.157143 -1.411111 -1.250000 -1.250000 -3.055556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [232] -3.250000 -3.166667 -3.066667 -3.500000 -3.088889 -3.233333 -3.194444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [239] -2.833333 -3.054762 -4.138889 -3.611111 -3.566667 -3.205556 -2.972222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [246] -3.302778 -3.266667 -3.630159 -3.305556 -3.400000 -4.388889 -4.557143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [253] -4.666667 -4.353175 -4.411111 -4.250000 -4.392063 -4.416667 -4.265079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [260] -4.650000 -7.583333 -6.944444 -7.533333 -6.758333 -6.844444 -7.011111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [267] -7.700000 -7.138889 -7.261111 -7.000000 -2.777778 -3.116667 -3.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [274] -3.166667 -3.277778 -3.521825 -3.111111 -2.833333 -3.294444 -2.871429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [281] -6.527778 -6.433333 -6.722222 -7.075000 -6.261905 -7.894444 -6.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [288] -7.133333 -7.522222 -8.000000 -2.733333 -3.416667 -3.620635 -3.430556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [295] -3.125000 -3.527778 -3.125000 -3.122222 -2.800000 -2.544444 -2.940476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [302] -3.055556 -2.944444 -2.888889 -2.822222 -2.855556 -2.911111 -3.125000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [309] -2.813889 -2.972222 -4.500000 -5.372222 -4.175000 -4.866667 -4.988889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [316] -5.111111 -4.888889 -4.833333 -4.483333 -4.277778 -3.250000 -3.177778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [323] -2.958333 -3.000000 -3.361111 -3.714286 -3.838889 -3.444444 -3.153968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [330] -3.316667 -2.605556 -2.555556 -2.733333 -2.527778 -2.488889 -2.222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [337] -2.783333 -2.833333 -2.646429 -2.455556 -4.480556 -4.500000 -4.083333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [344] -4.527778 -4.688889 -4.444444 -4.016667 -4.205556 -2.522222 -4.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [351] -6.000000 -5.436111 -5.722222 -5.222222 -5.800000 -5.666667 -6.441667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [358] -5.583333 -6.000000 -5.227778 -7.125000 -7.150000 -6.916667 -7.058333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [365] -6.375000 -7.084127 -8.227778 -6.877778 -7.688889 -7.447222 -4.080952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [372] -3.944444 -3.783333 -4.000000 -3.844444 -3.744444 -3.616667 -4.122222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [379] -3.666667 -3.722222 -5.388889 -6.038095 -5.988889 -5.811111 -5.566667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [386] -5.222222 -5.097222 -5.950000 -5.027778 -5.033333 -2.694444 -3.069444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [393] -3.416667 -3.194444 -3.019048 -3.161111 -2.827778 -2.799206 -3.066667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [400] -3.000000 -6.666667 -5.816667 -6.533333 -6.444444 -6.366667 -6.305556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [407] -5.888889 -6.250000 -6.708333 -5.677778 -3.190476 -3.000000 -2.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [414] -3.317460 -3.277778 -2.733333 -2.922222 -3.322222 -3.857143 -3.233333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [421] -2.488889 -2.577778 -2.333333 -2.555556 -2.727778 -2.750794 -2.422222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [428] -2.777778 -2.444444 -2.611111 -4.634921 -4.350000 -4.144444 -4.238889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [435] -4.166667 -4.625000 -4.541667 -4.333333 -4.416667 -3.916667 -3.972222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [442] -4.233333 -3.634921 -3.968254 -3.805556 -4.655556 -3.702381 -4.263889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [449] -3.750000 -3.805556 -4.944444 -4.928571 -5.555556 -5.377778 -5.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [456] -5.705556 -5.516667 -5.477778 -5.733333 -5.222222 -5.744444 -5.486111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [463] -5.833333 -5.519841 -5.841667 -4.994444 -5.822222 -6.277778 -5.625000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [470] -5.875000 -3.511905 -3.289683 -4.055556 -3.722222 -3.694444 -3.138889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [477] -3.440476 -3.162698 -3.627778 -3.750000 -3.072222 -2.694444 -3.208333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [484] -3.444444 -3.000000 -3.022222 -3.355556 -3.069444 -3.333333 -3.158333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [491] -5.722222 -6.338889 -6.255556 -6.611111 -6.972222 -5.833333 -6.222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [498] -6.616667 -5.583333 -6.666667 -3.555556 -2.753968 -3.866667 -3.388889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [505] -3.305556 -3.238889 -4.280952 -3.811111 -2.950000 -3.461111 -5.527778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [512] -5.694444 -4.916667 -5.111111 -4.666667 -5.055556 -5.595238 -4.952381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [519] -5.611111 -3.872222 -6.088889 -5.750000 -5.516667 -6.444444 -6.050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [526] -6.111111 -6.888889 -5.677778 -5.622222 -5.888889 -5.424603 -5.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [533] -4.622222 -5.194444 -4.388889 -5.011111 -4.416667 -6.055556 -5.095238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [540] -4.872222 -4.472222 -4.333333 -4.922222 -4.250000 -4.283333 -5.069444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [547] -4.200000 -4.690476 -4.530952 -4.727778 -2.655556 -3.266667 -3.361111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [554] -2.544444 -2.726190 -3.111111 -2.211111 -2.666667 -2.572222 -2.583333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [561] -4.250000 -4.530159 -4.333333 -5.077778 -4.444444 -4.333333 -4.413889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [568] -4.052778 -4.650000 -4.666667 -3.205556 -3.666667 -3.727778 -3.683333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [575] -3.591667 -3.555556 -2.944444 -3.727778 -3.305556 -3.861111 -5.350000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [582] -5.777778 -4.750000 -5.458333 -5.333333 -6.050000 -5.733333 -4.684127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [589] -6.023810 -4.861111 -4.293651 -3.698413 -3.700000 -4.194444 -3.827778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [596] -4.154762 -3.694444 -4.338889 -4.194444 -3.894444 -2.666667 -2.523810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [603] -1.750000 -2.272222 -2.027778 -2.031746 -2.122222 -2.250000 -2.531746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [610] -2.241667 -6.211111 -7.055556 -5.600000 -6.273810 -6.361111 -5.716667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [617] -5.309524 -6.188889 -5.980159 -6.544444 -3.077778 -3.000000 -2.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [624] -2.666667 -3.433333 -2.736111 -2.583333 -2.633333 -2.750000 -2.872222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [631] -4.044444 -3.600000 -4.394444 -3.822222 -3.861111 -3.638889 -3.544444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [638] -4.255556 -4.500000 -4.142857 -2.333333 -2.361111 -2.055556 -2.258333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [645] -2.272222 -2.277778 -2.221429 -2.169444 -2.483333 -2.111111 -2.763889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [652] -2.849206 -2.944444 -3.150000 -2.968254 -2.833333 -3.000000 -3.315079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [659] -3.194444 -3.211111 -2.672222 -2.422222 -2.425000 -2.911111 -2.456349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [666] -2.291667 -3.171429 -1.916667 -1.600000 -2.527778 -1.972222 -2.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [673] -2.194444 -1.932540 -2.250000 -2.455556 -1.888889 -2.222222 -2.333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [680] -2.300000 -5.583333 -5.866667 -5.561111 -5.575000 -5.777778 -5.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [687] -5.483333 -6.055556 -6.716667 -5.458333 -2.166667 -2.194444 -1.861111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [694] -2.361111 -2.345238 -2.166667 -2.488889 -2.372222 -2.505556 -2.277778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [701] -1.831746 -2.266667 -1.833333 -2.253968 -1.921429 -1.888889 -1.652778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [708] -2.222222 -1.922222 -2.000000 -2.838889 -3.055556 -3.027778 -3.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [715] -3.050000 -2.630556 -2.861111 -2.250000 -3.111111 -2.972222 -4.977778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [722] -5.288889 -5.494444 -5.071429 -5.875000 -5.805556 -4.750000 -5.819444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [729] -5.466667 -5.316667 -5.555556 -5.733333 -6.472222 -5.588889 -6.130159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [736] -6.777778 -5.700000 -6.551587 -6.333333 -5.488889 -8.694444 -6.694444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [743] -8.321429 -8.138889 -7.416667 -7.361111 -8.394444 -8.105556 -7.911111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [750] -6.805556 -3.583333 -3.261111 -3.819444 -4.133333 -3.750000 -3.750000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [757] -3.857143 -4.183333 -3.638889 -3.822222 -4.563889 -4.250000 -4.638889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [764] -3.791667 -3.911111 -4.722222 -4.261905 -4.433333 -4.166667 -4.377778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [771] -4.250000 -4.744444 -4.111111 -4.527778 -4.433333 -4.892857 -4.152778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [778] -4.726190 -4.976190 -4.722222 -2.744048 -2.180556 -2.519841 -2.507937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [785] -3.061111 -2.947222 -2.966667 -2.477778 -2.711111 -2.634921 -3.083333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [792] -2.333333 -2.444444 -2.622222 -2.468254 -2.905556 -3.000000 -2.627778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [799] -2.972222 -3.305556 -4.533333 -4.611111 -4.650000 -3.977778 -4.547619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [806] -4.363492 -4.472222 -4.372222 -4.333333 -4.787698 -4.347222 -4.310714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [813] -4.366667 -4.455556 -4.605556 -4.539683 -4.866667 -4.988095 -3.829365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [820] -4.300000 -3.591270 -3.055556 -3.214286 -3.433333 -3.380952 -2.583333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [827] -2.877778 -4.579365 -3.817460 -3.777778 -3.730556 -3.361111 -3.777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [834] -4.357143 -4.000000 -3.672222 -3.833333 -3.333333 -4.309524 -2.433333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [841] -3.238889 -2.963889 -2.600000 -3.283333 -3.200000 -3.477778 -3.280159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [848] -3.275000 -3.461111 -3.478968 -5.644444 -5.594444 -5.250000 -5.238889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [855] -5.611111 -4.483333 -5.277778 -6.327778 -5.722222 -5.055556 -5.694444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [862] -5.950000 -5.777778 -5.955556 -5.800000 -5.666667 -5.666667 -5.316667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [869] -5.777778 -5.922222 -4.833333 -5.166667 -3.888889 -4.438889 -4.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [876] -4.166667 -4.666667 -4.583333 -4.133333 -4.500000 -4.611111 -4.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [883] -4.694444 -5.716667 -4.450000 -4.822222 -4.316667 -5.377778 -5.033333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [890] -5.777778 -4.555556 -4.750000 -3.975000 -4.611111 -4.294444 -4.833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [897] -4.411111 -4.166667 -4.666667 -4.466667 -4.711111 -5.013889 -5.223810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [904] -5.976984 -5.766667 -5.230952 -5.142857 -5.166667 -5.750000 -4.976190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [911] -3.497222 -3.666667 -3.838095 -3.880952 -3.277778 -3.255556 -3.416667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [918] -3.788889 -3.402778 -3.750000 -3.966667 -2.805556 -3.544444 -4.490476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [925] -2.900000 -3.638889 -3.905556 -3.805556 -3.600000 -3.561111 -4.216667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [932] -3.986111 -4.494444 -4.416667 -4.472222 -4.333333 -4.650000 -4.466667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [939] -4.833333 -4.277778 -2.877778 -3.650000 -2.955556 -3.644444 -2.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [946] -2.777778 -3.177778 -2.755556 -2.750000 -2.944444 -3.680556 -3.528571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [953] -3.455556 -3.091667 -3.316667 -3.478175 -3.230159 -3.777778 -3.233333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [960] -3.483333 -4.361111 -5.894444 -5.638889 -4.777778 -5.266667 -4.588889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [967] -5.083333 -6.166667 -5.333333 -4.500000 -5.105556 -6.105556 -5.679365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [974] -5.255556 -5.394444 -6.333333 -4.650000 -5.638889 -5.511111 -5.388889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [981] -3.944444 -2.902778 -3.755556 -3.933333 -3.983333 -4.050000 -4.111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [988] -3.777778 -3.665873 -3.791667 -2.855556 -2.558333 -3.027778 -3.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [995] -3.583333 -3.111111 -3.211111 -3.055556 -2.927778 -3.550000 -4.530556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1002] -3.885714 -4.578571 -4.408333 -4.600000 -4.505556 -4.533333 -5.111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1009] -4.416667 -4.876984 -2.611111 -2.022222 -2.166667 -2.344444 -2.522222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1016] -2.380952 -2.227778 -2.766667 -2.723016 -2.861111 -4.174603 -3.122222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1023] -3.711111 -3.680556 -3.794444 -3.847222 -3.375000 -3.961111 -3.111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1030] -3.625000 -6.388889 -5.877778 -6.416667 -6.555556 -6.165476 -6.611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1037] -5.900000 -5.805556 -5.805556 -6.726984 -3.755159 -3.500000 -3.888889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1044] -3.992063 -3.857143 -3.605556 -3.377778 -4.000000 -3.966667 -3.316667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1051] -4.752381 -4.527778 -4.986111 -4.161111 -4.222222 -4.341667 -4.936508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1058] -4.733333 -4.583333 -4.750000 -2.555556 -2.166667 -2.605556 -2.916667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1065] -3.444444 -2.377778 -2.499206 -1.966667 -2.166667 -2.395238 -3.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1072] -3.716667 -3.722222 -3.134921 -3.405556 -3.277778 -3.277778 -3.716667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1079] -3.402381 -3.458333 -3.177778 -2.933333 -3.722222 -3.072222 -3.388889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1086] -3.538889 -3.250000 -3.338889 -3.166667 -3.555556 -4.833333 -5.105556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1093] -4.666667 -4.305556 -4.694444 -4.444444 -4.600000 -4.472222 -5.066667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1100] -4.236111 -3.838889 -4.166667 -4.033333 -3.866667 -3.983333 -3.111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1107] -4.472222 -4.222222 -4.416667 -4.797619 -3.033333 -3.555556 -3.375000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1114] -3.166667 -3.433333 -3.458333 -3.361111 -3.227778 -3.638889 -3.555556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1121] -3.996032 -4.533333 -4.190476 -4.066667 -3.279365 -4.694444 -4.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1128] -3.944444 -3.983333 -4.211111 -3.822222 -3.498413 -4.069444 -3.883333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1135] -3.666667 -4.116667 -3.336111 -3.977778 -3.733333 -3.666667 -2.927778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1142] -2.877778 -2.894444 -3.088889 -2.944444 -3.227778 -3.083333 -2.333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1149] -3.388889 -3.000000 -3.855556 -3.722222 -4.077778 -3.805556 -3.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1156] -3.911111 -4.311111 -4.344444 -4.000000 -4.200000 -1.833333 -1.750000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1163] -2.019841 -1.866667 -1.883333 -1.972222 -1.611111 -1.822222 -1.976190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1170] -1.690476 -3.888889 -4.277778 -3.833333 -4.250000 -3.722222 -4.222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1177] -3.638889 -3.488095 -3.991667 -3.866667 -4.750000 -5.055556 -4.916667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1184] -5.183333 -4.905556 -4.916667 -4.377778 -4.138889 -5.377778 -4.861111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1191] -2.555556 -2.420635 -2.500000 -2.488889 -2.666667 -3.205556 -2.584127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1198] -2.866667 -2.726190 -2.422222 -4.861111 -5.718254 -4.927778 -5.916667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1205] -4.605556 -5.305556 -6.700000 -4.694444 -5.571429 -6.000000 -3.788889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1212] -4.372222 -4.055556 -4.027778 -4.022222 -3.566667 -4.416667 -4.216667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1219] -4.088889 -4.222222 -3.777778 -4.083333 -4.361111 -4.294444 -3.088889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1226] -3.388889 -3.750000 -4.000000 -3.788889 -3.750000 -3.772222 -3.377778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1233] -3.333333 -3.527778 -2.733333 -3.600000 -3.088889 -3.263889 -2.777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1240] -3.027778 -3.166667 -2.711111 -3.086111 -3.016667 -2.866667 -2.788889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1247] -2.972222 -2.777778 -2.716667 -3.000000 -3.800000 -3.833333 -3.753175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1254] -3.777778 -3.361111 -4.166667 -3.377778 -3.827778 -3.888889 -3.655556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1261] -5.811111 -6.233333 -5.305556 -5.628571 -5.277778 -5.000000 -5.277778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1268] -5.875000 -5.857143 -5.250000 -2.041667 -2.794444 -3.144444 -2.527778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1275] -2.894444 -3.011111 -2.527778 -2.166667 -1.555556 -2.602778 -4.841270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1282] -4.694444 -4.416667 -4.333333 -4.769841 -4.666667 -4.388889 -4.366667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1289] -3.344444 -4.111111 -1.555556 -1.561905 -1.711111 -1.750000 -1.543651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1296] -1.888889 -1.825000 -1.755556 -1.633333 -1.333333 -4.436111 -4.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1303] -4.133333 -4.333333 -5.133333 -4.430556 -4.569444 -3.716667 -5.103175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1310] -4.094444 -2.983333 -2.622222 -2.822222 -3.472222 -3.050000 -3.011111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1317] -2.916667 -3.000000 -3.250000 -3.000000 -2.755556 -3.277778 -2.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1324] -3.376190 -3.206349 -2.633333 -2.833333 -2.873016 -3.144444 -3.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1331] -4.755556 -5.233333 -4.833333 -4.723810 -4.466667 -4.444444 -4.883333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1338] -4.700000 -4.333333 -4.777778 -4.288095 -4.222222 -4.255952 -3.889286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1345] -3.750000 -4.877778 -4.027778 -3.972222 -4.083333 -3.905556 -3.033333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1352] -3.436508 -3.138889 -3.583333 -3.444444 -3.866667 -3.500000 -3.577778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1359] -3.355556 -3.300000 -2.788889 -3.052381 -2.988889 -2.944444 -2.911111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1366] -3.055556 -3.022222 -3.472222 -3.227778 -3.400000 -2.045238 -2.555556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1373] -2.055556 -2.088889 -2.361111 -2.366667 -2.100000 -2.388889 -2.513889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1380] -2.538889 -2.333333 -3.638889 -2.915873 -3.250000 -3.888889 -4.061111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1387] -3.533333 -3.861111 -3.011905 -3.458333 -6.458333 -6.111111 -5.555556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1394] -6.530556 -6.122619 -5.880952 -6.154762 -5.375000 -6.146825 -5.341270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1401] -4.741667 -5.138889 -4.541667 -4.513889 -5.263889 -4.738095 -5.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1408] -4.633333 -5.263889 -4.527778 -4.500000 -4.566667 -4.444444 -4.158730</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1415] -4.222222 -4.555556 -4.433333 -4.644444 -4.416667 -4.208333 -7.583333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1422] -7.444444 -7.000000 -7.525397 -7.500000 -6.963492 -6.666667 -7.678571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1429] -7.583333 -7.763492 -2.776984 -2.733333 -2.669841 -2.394444 -2.680556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1436] -2.772222 -3.038889 -2.916667 -2.940476 -2.861111 -5.096825 -5.033333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1443] -4.500000 -4.539683 -4.480159 -4.261111 -4.527778 -4.444444 -4.547619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1450] -4.722222 -4.566667 -4.572222 -4.250000 -4.716667 -5.305556 -4.283333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1457] -4.861111 -3.994444 -5.383333 -4.305556 -5.458333 -5.944444 -4.833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1464] -5.305556 -5.666667 -4.694444 -6.108333 -4.905556 -5.277778 -5.597222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1471] -3.855556 -3.777778 -4.144444 -3.527778 -3.488889 -4.000000 -3.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1478] -3.577778 -3.866667 -3.000000 -6.964286 -7.180556 -6.750000 -6.511905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1485] -7.391667 -6.166667 -6.527778 -7.016667 -6.908730 -6.666667 -4.250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1492] -3.865079 -3.983333 -3.905556 -3.550000 -4.277778 -4.218254 -4.388889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1499] -4.722222 -4.300000 -6.666667 -5.666667 -6.783333 -5.833333 -5.777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1506] -6.309524 -6.105556 -6.067460 -4.794444 -7.083333 -4.622222 -5.644444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1513] -4.936508 -4.555556 -4.688889 -4.583333 -4.488889 -4.961111 -4.950000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1520] -3.416667 -6.672222 -6.944444 -6.941667 -6.496032 -6.398413 -6.611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1527] -7.277778 -6.888889 -6.777778 -6.666667 -2.984127 -3.672222 -3.201190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1534] -3.408333 -2.744444 -3.455556 -3.063492 -3.155556 -3.063492 -2.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1541] -3.388889 -2.583333 -2.333333 -3.000000 -3.472222 -2.444444 -2.611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1548] -3.166667 -3.000000 -2.416667 -3.738095 -2.933333 -4.322222 -3.722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1555] -3.750000 -3.411111 -2.916667 -3.450000 -3.027778 -3.388889 -8.280556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1562] -8.511111 -7.822222 -8.794444 -8.444444 -8.794444 -8.422222 -8.194444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1569] -9.233333 -8.294444 -3.952381 -4.688889 -3.630952 -5.055556 -4.761111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1576] -4.666667 -4.855556 -4.438889 -4.800000 -4.744444 -1.847222 -1.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1583] -2.111111 -1.858730 -1.755556 -1.833333 -1.950000 -2.166667 -2.100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1590] -1.825000 -5.083333 -4.583333 -4.027778 -5.157143 -5.388889 -4.966667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1597] -5.000000 -4.359524 -4.791667 -4.472222 -4.950000 -4.800000 -4.603175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1604] -5.495238 -3.944444 -5.527778 -4.900000 -4.900000 -5.361111 -4.709524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1611] -6.333333 -6.472222 -6.769841 -5.857143 -6.099206 -5.861111 -5.706349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1618] -6.177778 -6.205556 -6.144444 -4.111111 -4.072222 -3.583333 -3.688889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1625] -4.666667 -3.944444 -4.083333 -3.861111 -3.722222 -3.555556 -5.527778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1632] -6.083333 -5.500000 -5.838889 -6.222222 -5.972222 -6.377778 -5.533333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1639] -7.072222 -5.766667 -5.102778 -4.716667 -4.686508 -4.793651 -4.263889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1646] -4.611111 -4.858333 -4.905556 -4.327778 -5.150000 -4.844444 -4.375000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1653] -4.738889 -5.461111 -4.244444 -5.363492 -5.027778 -4.583333 -4.333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1660] -5.538095 -3.772222 -2.500000 -4.022222 -3.833333 -4.066667 -4.291667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1667] -3.746032 -4.138889 -3.761905 -3.944444 -2.916667 -2.638889 -3.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1674] -2.444444 -2.872222 -2.988889 -2.638889 -2.500000 -3.027778 -3.033333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1681] -7.672222 -7.333333 -7.972222 -7.293651 -7.238095 -7.674603 -7.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1688] -7.430556 -7.122222 -7.677778 -4.726190 -4.809524 -4.692857 -3.988095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1695] -4.694444 -5.044444 -4.000000 -4.861905 -4.861111 -4.833333 -4.094444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1702] -3.833333 -4.777778 -4.192063 -3.966667 -4.494444 -4.094444 -4.288889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1709] -4.269841 -3.650000 -3.916667 -3.861111 -3.833333 -3.872222 -3.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1716] -4.052778 -4.000000 -3.766667 -4.166667 -4.341270 -5.688095 -5.433333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1723] -5.678571 -4.888889 -5.101190 -5.005556 -5.809524 -4.430556 -5.666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1730] -4.750000 -4.484127 -4.777778 -4.932540 -4.388889 -4.567460 -5.023810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1737] -4.277778 -4.902778 -5.544444 -4.519048 -3.200000 -2.666667 -3.322222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1744] -2.855556 -2.763889 -3.000000 -2.861905 -2.305556 -2.833333 -2.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1751] -3.783333 -3.500000 -4.083333 -3.694444 -3.666667 -3.444444 -3.820635</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1758] -3.591667 -4.430556 -3.583333 -2.788889 -4.333333 -3.486111 -3.397222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1765] -2.583333 -3.406349 -4.055556 -3.333333 -3.605556 -3.550000 -5.571429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1772] -5.544444 -5.779365 -5.305556 -5.559524 -5.333333 -5.600000 -5.900794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1779] -5.710317 -5.880952 -3.876190 -3.666667 -3.930556 -4.172222 -4.376984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1786] -4.447619 -4.166667 -4.196825 -3.972222 -3.511111 -4.000000 -5.416667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1793] -4.494444 -4.438889 -4.388889 -4.444444 -4.376190 -4.750000 -4.633333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1800] -4.777778 -5.728571 -5.288889 -5.309524 -5.345238 -5.722222 -5.250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1807] -5.816667 -5.546032 -5.583333 -6.111111 -3.833333 -4.329365 -4.111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1814] -3.694444 -4.666667 -4.321429 -3.916667 -4.405556 -4.642857 -4.083333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1821] -2.166667 -2.174603 -1.833333 -2.222222 -2.000000 -1.977778 -2.150000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1828] -2.250000 -2.055556 -2.138889 -3.988889 -4.125000 -4.588889 -5.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1835] -4.888889 -5.044444 -4.609127 -4.069444 -4.666667 -4.127778 -5.002778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1842] -5.194444 -5.000000 -4.194444 -4.566667 -4.579365 -4.722222 -5.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1849] -5.261111 -5.388889 -6.904762 -7.313492 -7.757937 -7.100000 -6.670635</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1856] -7.055556 -6.175000 -7.869048 -7.634921 -6.277778 -5.305556 -6.611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1863] -5.763889 -5.500000 -5.000000 -5.583333 -6.333333 -5.444444 -5.166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1870] -5.777778 -4.061111 -3.861111 -3.766667 -3.682540 -3.547619 -4.375000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1877] -4.305556 -3.694444 -4.138889 -3.805556 -3.166667 -3.638889 -3.333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1884] -3.416667 -3.372222 -3.212698 -3.700000 -3.400000 -3.061111 -3.305556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1891] -4.480952 -4.750000 -4.519444 -4.777778 -4.666667 -5.166667 -4.805556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1898] -4.930159 -5.166667 -4.916667 -6.725397 -6.166667 -6.861111 -5.833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1905] -6.027778 -6.777778 -6.380952 -7.158730 -7.250000 -6.583333 -4.097222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1912] -3.244048 -3.544444 -4.083333 -3.620635 -3.333333 -3.355556 -3.500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1919] -3.155556 -4.305556 -1.563492 -1.600000 -1.722222 -1.533333 -1.239683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1926] -1.795238 -1.600000 -1.444444 -1.533333 -1.544444 -4.677778 -5.083333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1933] -3.958333 -4.666667 -4.500000 -4.555556 -4.144444 -4.516667 -4.338889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1940] -4.402778 -5.011111 -5.305556 -4.876984 -5.477778 -4.944444 -5.111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1947] -5.666667 -4.698413 -4.924603 -5.654762 -3.333333 -3.111111 -2.622222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1954] -3.527778 -2.777778 -3.133333 -2.876190 -2.837302 -3.216667 -2.861111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1961] -5.349206 -4.916667 -5.847222 -5.597222 -5.533333 -4.679365 -5.738889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1968] -5.416667 -4.452381 -5.500000 -3.433333 -3.488095 -3.233333 -3.555556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1975] -3.555556 -3.477778 -3.297222 -3.641667 -3.523810 -3.900000 -3.172222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1982] -3.458333 -3.402778 -3.155556 -3.266667 -2.863492 -3.261905 -3.252381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1989] -3.166667 -2.541667 -4.016667 -4.561111 -4.166667 -4.930556 -3.741667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1996] -3.916667 -3.666667 -4.444444 -4.155556 -4.444444</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">thylacine_example_matrices_rerun</span><span class="op">$</span><span class="va">ibra_extirpation</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    [1] 1926.333 1929.444 1929.667 1933.667 1926.889 1928.333 1926.222 1929.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    [9] 1927.222 1929.556 1943.889 1947.778 1941.333 1940.000 1935.889 1949.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [17] 1945.000 1940.889 1934.000 1935.667 1934.556 1936.889 1937.444 1933.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [25] 1933.000 1934.556 1934.778 1937.889 1936.333 1935.000 1938.444 1936.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [33] 1939.222 1933.667 1937.778 1934.000 1939.000 1931.000 1936.444 1940.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [41] 1932.444 1931.444 1934.000 1933.444 1934.444 1930.778 1932.000 1935.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [49] 1934.667 1936.333 1931.667 1936.778 1929.333 1930.667 1933.333 1931.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [57] 1927.556 1930.111 1931.000 1933.889 1926.222 1923.111 1921.889 1923.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [65] 1922.000 1929.556 1926.222 1924.333 1925.333 1921.444 1941.000 1936.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [73] 1935.000 1933.889 1933.778 1937.000 1938.333 1935.111 1938.222 1940.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [81] 1929.667 1934.444 1932.333 1933.111 1938.889 1931.333 1933.222 1932.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [89] 1933.667 1934.222 1934.333 1933.556 1932.222 1931.778 1934.667 1936.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [97] 1932.889 1933.778 1933.556 1935.889 1929.556 1935.222 1934.444 1930.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [105] 1928.667 1932.444 1931.667 1933.000 1931.667 1932.333 1928.667 1927.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [113] 1932.889 1923.667 1926.889 1925.667 1925.111 1930.889 1925.444 1926.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [121] 1936.222 1936.778 1931.111 1935.667 1939.667 1936.222 1939.222 1938.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [129] 1936.333 1932.000 1933.333 1936.222 1932.333 1939.778 1935.000 1932.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [137] 1930.889 1933.000 1933.222 1931.222 1927.778 1930.222 1925.556 1923.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [145] 1930.000 1928.444 1929.111 1923.333 1925.444 1925.222 1931.333 1926.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [153] 1937.222 1927.667 1931.556 1929.444 1935.889 1931.222 1932.556 1929.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [161] 1938.333 1935.778 1941.222 1938.889 1938.889 1938.222 1940.889 1940.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [169] 1931.000 1939.889 1929.667 1928.222 1928.778 1930.333 1930.778 1929.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [177] 1933.222 1929.444 1921.444 1928.889 1932.889 1937.778 1938.111 1938.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [185] 1940.444 1938.667 1934.000 1932.667 1936.000 1934.889 1940.889 1942.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [193] 1940.111 1941.889 1941.000 1937.778 1941.444 1947.556 1941.444 1939.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [201] 1928.000 1925.222 1932.333 1929.556 1932.889 1929.556 1928.778 1932.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [209] 1934.333 1932.444 1937.333 1932.778 1941.556 1931.333 1933.556 1928.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [217] 1934.333 1929.333 1934.000 1931.333 1941.444 1937.556 1937.556 1938.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [225] 1937.778 1937.667 1938.889 1937.556 1936.444 1937.333 1930.222 1933.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [233] 1931.444 1925.889 1929.444 1929.556 1931.556 1928.000 1928.778 1927.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [241] 1940.444 1935.444 1935.000 1938.778 1936.222 1939.222 1941.111 1937.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [249] 1936.000 1938.667 1931.444 1934.000 1932.222 1933.889 1933.333 1935.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [257] 1934.111 1932.667 1932.889 1931.667 1925.667 1923.444 1919.333 1923.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [265] 1927.556 1927.333 1923.111 1924.000 1923.111 1920.667 1930.444 1930.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [273] 1933.333 1927.444 1931.556 1929.222 1930.222 1934.333 1931.333 1928.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [281] 1942.222 1944.889 1955.778       NA 1936.444 1924.556 1956.333 1953.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [289] 1922.222 1956.444 1934.667 1932.111 1931.111 1931.556 1936.111 1933.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [297] 1932.889 1935.333 1934.111 1934.111 1931.556 1929.000 1931.333 1931.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [305] 1930.889 1933.889 1931.111 1928.889 1933.444 1930.889 1933.667 1934.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [313] 1935.111 1939.000 1937.889 1933.778 1933.111 1931.444 1938.111 1932.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [321] 1936.444 1934.444 1933.556 1931.889 1934.778 1929.889 1932.111 1936.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [329] 1930.556 1936.222 1931.444 1932.889 1931.333 1933.444 1930.444 1932.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [337] 1934.222 1933.889 1932.444 1931.889 1931.667 1934.333 1937.111 1936.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [345] 1938.000 1937.111 1932.222 1932.889 1939.556 1940.444 1935.333 1935.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [353] 1932.667 1934.333 1932.222 1930.000 1932.333 1934.889 1933.667 1932.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [361] 1942.444 1938.889 1942.000 1939.667 1958.889 1939.889 1943.111 1951.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [369] 1942.222 1937.222 1936.667 1933.444 1932.889 1931.000 1938.333 1928.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [377] 1935.333 1932.556 1935.556 1933.556 1930.556 1924.000 1929.778 1929.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [385] 1935.444 1927.333 1930.889 1928.667 1926.556 1928.889 1930.111 1930.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [393] 1932.889 1932.000 1938.333 1935.444 1934.556 1933.778 1928.222 1933.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [401] 1928.111 1931.778 1934.556 1939.444 1933.222 1933.222 1935.222 1937.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [409] 1930.333 1932.000 1931.444 1928.778 1931.000 1932.111 1932.889 1927.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [417] 1930.333 1927.222 1926.111 1925.667 1935.000 1933.556 1934.556 1933.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [425] 1934.556 1935.667 1935.111 1936.556 1936.111 1932.556 1931.556 1927.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [433] 1928.444 1931.667 1926.444 1930.778 1927.889 1932.889 1925.222 1929.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [441] 1937.111 1924.444 1928.778 1934.333 1931.556 1932.889 1936.222 1934.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [449] 1932.556 1934.778 1951.111 1941.000 1947.667 1948.333 1952.000 1947.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [457] 1941.889 1946.556 1940.222 1943.000 1950.444       NA 1951.667 1929.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [465] 1932.333       NA 1938.333 1929.778 1928.333       NA 1933.889 1940.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [473] 1932.778 1939.000 1927.889 1937.889 1933.222 1939.111 1933.778 1933.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [481] 1935.556 1931.889 1936.444 1933.889 1935.667 1931.778 1937.111 1931.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [489] 1934.889 1935.444 1930.222 1927.000 1928.444 1920.667 1926.000 1936.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [497] 1929.444 1923.111 1926.667 1926.111 1932.111 1935.667 1930.111 1932.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [505] 1932.444 1930.444 1934.333 1927.222 1936.667 1932.000 1954.778 1940.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [513] 1951.222 1949.667 1949.222 1952.333 1945.556 1945.667 1951.000 1943.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [521] 1931.000 1930.778 1930.333 1931.444 1929.111 1929.111 1927.111 1934.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [529] 1928.444 1928.444 1942.222 1935.333 1936.667 1949.111 1936.222 1949.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [537] 1939.667 1935.333 1942.333 1942.111 1925.222 1932.444 1926.111 1930.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [545] 1930.444 1921.889 1923.444 1926.778 1929.667 1925.111 1929.000 1924.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [553] 1930.333 1931.889 1931.778 1929.444 1932.889 1927.667 1934.444 1925.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [561] 1934.556 1934.000 1934.222 1931.778 1935.333 1932.000 1935.667 1934.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [569] 1936.778 1932.111 1921.444 1919.222 1920.444 1925.444 1919.556 1921.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [577] 1923.778 1926.000 1922.556 1921.889 1940.333 1953.667 1939.889 1947.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [585] 1941.556 1947.889 1947.222 1944.000 1948.111 1945.000 1933.222 1931.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [593] 1936.111 1930.556 1934.556 1930.778 1936.111 1933.000 1940.667 1935.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [601] 1936.111 1946.333 1939.667 1944.333 1946.556 1937.778 1939.444 1944.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [609] 1940.778 1944.889 1929.889 1925.333 1934.667 1930.000 1933.222 1925.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [617] 1935.444 1933.111 1932.556 1929.222 1943.111 1942.889 1946.778 1948.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [625] 1940.000 1933.000 1941.556 1942.111 1937.667 1941.222 1932.444 1934.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [633] 1928.778 1937.222 1925.667 1934.333 1929.222 1934.889 1933.889 1937.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [641] 1940.222 1938.000 1936.111 1934.778 1940.000 1939.333 1938.000 1938.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [649] 1939.556 1943.222 1926.333 1931.000 1928.778 1932.111 1928.111 1932.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [657] 1928.333 1931.778 1931.000 1932.444 1929.556 1930.000 1935.556 1931.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [665] 1931.222 1931.556 1928.222 1931.222 1932.333 1935.333 1933.778 1931.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [673] 1934.222 1933.111 1933.778 1933.889 1931.778 1935.889 1933.111 1932.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [681] 1935.444 1936.556 1942.889 1938.222 1937.333 1944.444 1938.111 1940.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [689] 1934.889 1942.111 1942.667 1944.000 1952.111 1943.556 1942.667 1943.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [697] 1943.556 1944.778 1943.778 1945.667 1936.444 1936.333 1939.333 1936.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [705] 1937.000 1943.222 1935.000 1932.778 1938.889 1941.556 1942.000 1934.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [713] 1934.778 1937.889 1935.000 1935.000 1931.444 1938.556 1932.222 1937.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [721] 1939.333 1935.889 1938.333 1942.111 1931.333 1933.556 1938.111 1934.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [729] 1930.556 1934.889 1933.222 1935.889 1941.333 1932.889 1927.556 1927.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [737] 1936.778 1932.889 1929.333 1930.778 1932.333 1932.000 1928.444 1936.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [745] 1931.667 1932.667 1931.444 1933.889 1934.222 1933.667 1933.333 1942.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [753] 1933.667 1937.778 1934.556 1941.556 1940.556 1933.889 1932.222 1931.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [761] 1935.333 1936.778 1934.667 1938.111 1937.556 1935.222 1936.889 1933.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [769] 1937.556 1935.333 1940.889 1936.000 1940.000 1935.333 1941.444 1935.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [777] 1933.667 1932.889 1937.667 1936.222 1931.111 1931.111 1935.889 1932.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [785] 1931.778 1932.333 1933.111 1934.111 1930.111 1929.111 1930.778 1934.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [793] 1937.111 1933.444 1936.333 1932.333 1931.444 1933.556 1935.111 1929.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [801] 1928.778 1928.778 1931.667 1931.000 1926.889 1927.111 1926.556 1927.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [809] 1927.444 1930.222 1928.556 1927.222 1930.000 1931.556 1928.111 1933.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [817] 1927.000 1926.222 1931.333 1929.778 1933.556 1937.222 1937.889 1942.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [825] 1938.556 1943.111 1933.667 1930.889 1937.778 1938.889 1931.778 1925.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [833] 1927.444 1925.222 1927.556 1931.667 1928.000 1924.889 1930.889 1933.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [841] 1929.444 1935.000 1934.556 1935.556 1934.556 1931.556 1937.222 1934.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [849] 1934.444 1934.667 1947.222 1942.444 1941.111 1936.556 1937.333 1943.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [857] 1938.556 1939.000 1939.889 1943.667 1930.333 1927.000 1924.889 1927.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [865] 1923.333 1928.000 1927.778 1928.000 1927.222 1928.333 1924.667 1934.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [873] 1936.000 1932.667 1927.889 1930.111 1929.000 1932.222 1940.111 1933.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [881] 1932.556 1942.556 1939.556 1937.778 1939.000 1938.111 1938.111 1933.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [889] 1939.889 1933.667 1947.889 1937.111 1944.667 1946.222 1935.556 1943.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [897] 1946.333 1937.889 1934.556 1953.111 1935.778 1937.667 1939.778 1935.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [905] 1934.333 1935.000 1937.333 1933.778 1937.778 1937.778 1931.444 1936.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [913] 1926.667 1927.778 1929.778 1931.222 1927.778 1928.556 1936.444 1934.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [921] 1926.889 1928.444 1934.444 1927.889 1926.111 1925.111 1932.889 1925.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [929] 1929.667 1930.000 1931.667 1934.222 1933.000 1933.556 1930.222 1931.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [937] 1929.667 1934.889 1932.556 1928.889 1949.556 1941.333 1948.111 1948.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [945] 1951.667 1943.000 1939.444 1936.667 1944.333 1942.778 1935.556 1937.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [953] 1936.667 1934.556 1931.222 1937.889 1933.889 1937.778 1937.778 1933.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [961] 1919.222 1935.000 1921.444 1930.667 1922.333 1948.222 1932.667 1933.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [969] 1942.889 1920.222 1936.000 1927.889 1932.000 1930.111 1934.444 1930.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [977] 1929.778 1930.222 1933.444 1933.889 1930.333 1926.556 1928.333 1927.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [985] 1929.556 1928.000 1927.000 1926.444 1927.111 1928.333 1941.444 1946.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [993] 1944.778 1940.333 1945.889 1937.667 1943.778 1940.222 1936.889 1942.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1001] 1936.889 1938.889 1935.111 1932.333 1935.889 1935.556 1932.889 1932.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1009] 1936.222 1934.111 1940.000 1940.222 1944.556 1939.667 1945.667 1941.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1017] 1947.556 1946.444 1944.889 1942.222 1943.000 1945.444 1943.889 1949.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1025] 1942.000 1940.000 1941.889 1939.222 1943.444 1945.444 1928.444 1928.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1033] 1934.333 1939.111 1935.444 1934.667 1936.000 1936.333 1937.444 1935.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1041] 1937.333 1936.222 1936.333 1938.444 1936.222 1938.000 1939.222 1938.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1049] 1933.000 1935.444 1938.000 1930.333 1933.444 1932.222 1932.889 1929.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1057] 1932.333 1930.444 1935.333 1929.778 1940.889 1940.222 1938.222 1940.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1065] 1938.333 1942.333 1940.556 1941.222 1945.889 1940.444 1946.222 1937.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1073] 1937.889 1941.444 1942.889 1936.333 1943.111 1941.000 1930.333 1942.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1081] 1930.556 1934.667 1930.111 1933.667 1932.444 1929.222 1933.778 1935.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1089] 1932.222 1931.889 1942.778 1947.444 1941.889 1942.667 1943.111 1952.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1097] 1940.556 1950.444 1941.778 1948.889 1924.333 1922.444 1921.222 1920.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1105] 1923.889 1920.556 1922.333 1926.667 1918.222 1921.333 1929.667 1930.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1113] 1934.556 1934.000 1935.778 1936.111 1934.000 1932.667 1932.222 1936.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1121] 1932.778 1925.000 1927.222 1930.111 1926.889 1927.000 1927.333 1930.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1129] 1929.222 1927.556 1928.333 1930.333 1929.889 1929.444 1933.889 1928.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1137] 1930.444 1929.889 1928.333 1926.333 1934.111 1940.556 1938.111 1936.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1145] 1938.778 1937.111 1938.778 1933.444 1935.222 1944.111 1928.667 1929.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1153] 1932.778 1928.667 1928.667 1930.222 1928.444 1930.889 1932.222 1930.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1161] 1938.778 1938.889 1938.444 1937.556 1934.778 1935.778 1940.889 1941.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1169] 1936.778 1933.778 1942.778 1940.667 1940.222 1938.778 1940.000 1936.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1177] 1941.000 1938.889 1938.667 1938.333 1939.778 1945.667 1945.556 1939.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1185] 1935.556 1938.889 1942.000 1947.556 1941.111 1940.222 1938.889 1937.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1193] 1942.000 1936.778 1939.333 1939.111 1933.889 1941.556 1937.889 1937.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1201] 1928.000 1923.889 1921.333 1923.667 1920.667 1927.778 1928.556 1925.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1209] 1923.556 1928.000 1956.444 1938.556 1948.000 1949.556 1951.000 1959.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1217] 1956.667 1945.000 1958.889 1943.667 1940.000 1936.333 1940.444 1934.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1225] 1941.667 1940.111 1942.556 1943.889 1937.222 1939.667 1935.556 1936.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1233] 1938.333 1935.222 1940.556 1939.333 1942.444 1938.222 1940.444 1945.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1241] 1930.667 1934.333 1934.667 1932.333 1933.778 1936.778 1930.222 1929.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1249] 1936.556 1932.556 1930.444 1926.444 1929.889 1930.000 1930.222 1928.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1257] 1931.222 1926.778 1936.222 1927.111 1920.444 1923.889 1926.111 1925.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1265] 1924.444 1923.333 1924.667 1922.444 1919.444 1923.444 1953.333 1944.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1273] 1943.556 1953.444 1945.889 1950.444 1956.556 1952.000 1950.000 1946.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1281] 1942.444 1942.889 1936.889 1936.444 1935.556 1937.444 1936.222 1932.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1289] 1938.333 1940.111 1932.667 1933.000 1934.111 1930.111 1933.000 1933.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1297] 1931.111 1932.222 1931.000 1936.333 1928.222 1933.222 1931.889 1933.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1305] 1934.556 1932.222 1930.667 1932.556 1934.222 1929.444 1931.556 1928.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1313] 1931.111 1932.000 1933.111 1932.111 1930.222 1928.778 1930.556 1932.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1321] 1944.111 1940.333 1945.111 1945.889 1940.000 1947.111 1941.667 1943.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1329] 1941.222 1940.222 1941.222 1939.444 1939.889 1929.222 1938.444 1934.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1337] 1937.222 1942.222 1938.444 1940.222 1936.333 1931.667 1933.778 1934.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1345] 1933.778 1937.556 1932.000 1938.000 1932.556 1935.333 1936.667 1930.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1353] 1931.444 1932.222 1933.222 1933.111 1934.333 1932.778 1933.444 1936.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1361] 1930.000 1930.778 1931.444 1929.889 1930.556 1928.111 1933.444 1929.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1369] 1928.222 1929.222 1932.444 1936.222 1933.333 1933.111 1930.778 1932.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1377] 1931.222 1932.222 1934.444 1933.778 1948.222 1947.222 1952.556 1942.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1385] 1943.444 1943.667 1950.222 1947.111 1953.556 1947.778 1931.222 1929.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1393] 1928.333 1927.667 1926.111 1926.444 1929.222 1930.333 1931.444 1928.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1401] 1940.667 1941.889 1943.556 1943.333 1944.556 1940.556 1945.333 1947.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1409] 1941.000 1942.667 1943.667 1938.333 1939.000 1934.444 1945.444 1934.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1417] 1932.556 1932.444 1933.667 1935.333 1933.000 1936.000 1933.333 1929.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1425] 1927.333 1934.222 1933.000 1930.000 1932.667 1930.556 1939.444 1932.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1433] 1937.667 1938.889 1939.556 1929.333 1935.222 1933.333 1932.333 1934.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1441] 1939.889 1938.222 1944.889 1938.778 1943.778 1937.778 1941.000 1937.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1449] 1938.333 1935.444 1929.889 1930.333 1930.667 1924.556 1930.667 1928.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1457] 1928.556 1928.222 1930.000 1933.778 1933.444 1931.667 1935.111 1929.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1465] 1932.333 1933.444 1928.889 1932.111 1934.778 1933.889 1931.444 1934.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1473] 1928.333 1929.778 1927.444 1931.778 1940.889 1932.667 1940.111 1937.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1481] 1938.778 1938.778 1937.778 1937.444 1934.889 1936.333 1934.444 1938.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1489] 1935.444 1932.333 1928.444 1933.222 1934.667 1928.000 1933.222 1940.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1497] 1936.000 1929.667 1928.556 1932.222 1935.778 1936.222 1928.000 1934.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1505] 1932.889 1936.111 1935.444 1938.556 1932.556 1932.000 1929.444 1924.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1513] 1930.000 1927.889 1927.778 1930.778 1930.667 1928.111 1921.444 1926.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1521] 1936.000 1931.444 1929.222 1935.889 1934.444 1932.778 1931.222 1933.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1529] 1931.333 1935.333 1935.889 1936.889 1932.889 1938.556 1937.778 1942.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1537] 1940.000 1939.556 1934.111 1936.556 1939.556 1937.000 1942.111 1942.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1545] 1939.111 1939.667 1946.222 1940.889 1936.222 1938.556 1948.333 1947.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1553] 1937.000 1954.000 1946.556 1939.333 1946.222 1941.778 1945.556 1943.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1561] 1931.556 1935.889 1931.667 1931.667 1930.333 1927.333 1929.889 1925.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1569] 1929.667 1933.333 1934.222 1936.222 1935.000 1934.111 1940.667 1940.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1577] 1942.000 1935.778 1939.778 1929.111 1939.000 1939.556 1930.000 1938.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1585] 1942.667 1936.889 1934.444 1931.444 1935.222 1935.778 1921.444 1922.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1593] 1925.556 1920.556 1921.667 1925.556 1920.333 1924.889 1923.111 1922.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1601] 1927.333 1930.444 1927.889 1924.889 1933.000 1930.778 1927.667 1936.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1609] 1929.778 1932.444 1938.444 1927.111 1930.222 1935.111 1935.222 1936.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1617] 1940.222 1928.556 1942.889 1934.889 1934.000 1931.667 1934.333 1936.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1625] 1934.444 1937.000 1934.889 1931.667 1939.556 1936.333 1942.889 1940.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1633] 1941.111 1928.667 1927.000 1932.000 1932.444 1937.556 1929.444 1930.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1641] 1937.000 1933.667 1936.889 1936.222 1940.778 1937.778 1938.778 1939.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1649] 1934.889 1934.333 1927.111 1927.111 1929.889 1925.444 1926.111 1924.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1657] 1923.000 1923.889 1929.444 1929.222 1946.889 1942.444 1937.667 1934.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1665] 1932.778 1927.778 1943.222 1944.222 1932.111 1947.111 1938.333 1938.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1673] 1943.000 1940.556 1941.111 1942.444 1944.444 1946.333 1942.222 1940.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1681] 1940.222 1938.000 1940.222 1938.444 1934.222 1935.778 1936.778 1934.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1689] 1941.444 1935.111 1936.000 1932.333 1934.889 1932.556 1939.000 1932.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1697] 1935.444 1932.222 1935.889 1934.000 1942.889 1932.333 1937.444 1934.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1705] 1936.778 1937.667 1935.000 1932.333 1932.889 1937.667 1932.667 1933.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1713] 1933.667 1933.667 1930.556 1938.111 1933.333 1928.667 1929.667 1930.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1721] 1935.889 1931.556 1930.889 1932.667 1933.889 1928.667 1936.222 1931.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1729] 1935.111 1930.556 1942.667 1934.000 1938.778 1941.444 1944.444 1936.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1737] 1940.222 1943.111 1940.556 1941.444 1928.111 1929.111 1929.333 1930.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1745] 1933.222 1928.000 1933.111 1931.889 1935.111 1930.667 1934.778 1937.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1753] 1935.333 1934.333 1935.667 1933.667 1936.667 1936.889 1937.444 1933.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1761] 1939.889 1936.889 1939.778 1944.111 1939.667 1941.778 1934.667 1940.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1769] 1933.778 1938.222 1924.556 1925.000 1926.333 1923.778 1924.444 1925.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1777] 1924.333 1922.222 1925.444 1924.111 1939.333 1937.222 1937.000 1935.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1785] 1934.000 1935.556 1932.111 1932.444 1935.000 1933.667 1950.444 1951.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1793] 1951.444 1951.222 1950.667 1948.000 1955.000 1942.667 1958.889 1950.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1801] 1929.111 1932.778 1930.889 1945.111 1935.444 1925.889 1929.556 1934.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1809] 1926.667 1942.333 1939.889 1945.778 1943.222 1944.778 1945.000 1945.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1817] 1939.333 1945.556 1946.778 1945.000 1936.222 1937.444 1934.556 1935.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1825] 1934.000 1938.444 1937.000 1934.778 1935.889 1934.889 1930.111 1935.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1833] 1927.667 1922.444 1926.556 1930.667 1925.556 1928.667 1928.556 1929.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1841] 1931.556 1927.222 1929.667 1933.444 1929.667 1932.222 1927.889 1935.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1849] 1928.556 1933.222 1928.333 1932.556 1926.111 1929.000 1926.556 1931.667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1857] 1931.556 1924.444 1920.333 1929.000 1925.000 1925.556 1934.222 1925.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1865] 1926.000 1927.333 1924.778 1928.000 1929.556 1927.333 1938.111 1930.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1873] 1939.444 1945.111 1939.444 1938.333 1942.889 1941.778 1938.444 1940.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1881] 1933.000 1934.778 1929.222 1930.000 1928.000 1932.000 1931.111 1932.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1889] 1930.000 1931.556 1940.111 1938.667 1942.222 1941.889 1937.111 1944.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1897] 1932.667 1938.556 1939.667 1934.000 1941.667 1937.444 1939.111 1951.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1905] 1943.444 1937.333 1938.444 1936.222 1939.667 1947.556 1923.778 1931.222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1913] 1928.889 1926.333 1928.111 1928.667 1930.556 1930.000 1931.000 1929.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1921] 1939.667 1940.333 1936.444 1936.667 1936.667 1937.111 1938.556 1937.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1929] 1935.667 1941.000 1937.444 1935.000 1945.778 1944.222 1943.889 1948.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1937] 1938.333 1944.889 1947.667 1945.444 1939.778 1941.556 1942.111 1933.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1945] 1939.444 1945.222 1945.778 1941.556 1944.111 1942.222 1937.000 1935.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1953] 1938.222 1938.778 1939.333 1935.556 1936.111 1937.000 1933.444 1935.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1961] 1942.889 1947.667 1932.222 1939.111 1943.444 1947.889 1941.667 1951.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1969] 1945.889 1940.556 1932.889 1929.444 1932.000 1927.667 1930.222 1930.444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1977] 1930.222 1931.444 1930.778 1929.889 1924.556 1925.000 1925.778 1927.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1985] 1926.222 1925.000 1924.333 1924.000 1925.000 1930.667 1942.778 1937.556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1993] 1940.111 1936.556 1944.778 1939.000 1948.444 1941.778 1941.778 1941.333</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

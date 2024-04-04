@@ -864,7 +864,7 @@ time is directly available from the results object.</p>
 <span>  trend_interval <span class="op">=</span> <span class="op">(</span><span class="fl">1888</span><span class="op">:</span><span class="fl">1894</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1887</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">ibra_bounty_clone</span><span class="op">$</span><span class="va">all</span><span class="op">$</span><span class="va">abundance_trend</span> <span class="co"># 1888-1894 total bounty slope</span></span>
-<span><span class="co">#&gt; [1] -4.75</span></span>
+<span><span class="co">#&gt; [1] -4</span></span>
 <span><span class="va">ibra_abundance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>  <span class="va">p_results</span><span class="op">$</span><span class="fu">get_attribute</span><span class="op">(</span><span class="st">"ibra_indices"</span><span class="op">)</span>,</span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">indices</span><span class="op">)</span> <span class="op">{</span></span>
@@ -873,9 +873,9 @@ time is directly available from the results object.</p>
 <span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ibra_abundance_clone</span> <span class="op">&lt;-</span> <span class="va">p_results</span><span class="op">$</span><span class="fu">new_clone</span><span class="op">(</span>results <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>abundance <span class="op">=</span> <span class="va">ibra_abundance</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="fl">1888</span><span class="op">:</span><span class="fl">1967</span><span class="op">)</span><span class="op">[</span><span class="va">ibra_abundance_clone</span><span class="op">$</span><span class="va">extirpation</span><span class="op">]</span> <span class="co"># IBRA extirpation</span></span>
-<span><span class="co">#&gt; [1] 1936 1941 1936 1940 1942 1940 1939 1939 1927</span></span>
+<span><span class="co">#&gt; [1] 1926 1929 1932 1939 1942 1939 1937 1943 1938</span></span>
 <span><span class="op">(</span><span class="fl">1888</span><span class="op">:</span><span class="fl">1967</span><span class="op">)</span><span class="op">[</span><span class="va">p_results</span><span class="op">$</span><span class="va">all</span><span class="op">$</span><span class="va">extirpation</span><span class="op">]</span> <span class="co"># total extinction</span></span>
-<span><span class="co">#&gt; [1] 1942</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 1943</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="generating-summary-metrics-and-matrices">Generating summary metrics and matrices<a class="anchor" aria-label="anchor" href="#generating-summary-metrics-and-matrices"></a>
@@ -1019,8 +1019,8 @@ prior to our validation and ensemble selection (in step 6).</p>
 <span><span class="va">summary_matrix_list</span> <span class="op">&lt;-</span> <span class="va">results_manager</span><span class="op">$</span><span class="va">summary_matrix_list</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">summary_metric_data</span><span class="op">)</span> <span class="co"># examine</span></span>
 <span><span class="co">#&gt;   index bounty_slope_error ibra_extirpation_error total_extinction</span></span>
-<span><span class="co">#&gt; 1     1          11.519530               29.55080               NA</span></span>
-<span><span class="co">#&gt; 2     2           9.843692               30.43025               NA</span></span>
+<span><span class="co">#&gt; 1     1           8.919496               15.80743             1954</span></span>
+<span><span class="co">#&gt; 2     2           9.935334               32.15004               NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">summary_matrix_list</span>, <span class="va">dim</span><span class="op">)</span> <span class="co"># dimensions</span></span>
 <span><span class="co">#&gt; $extirpation</span></span>
 <span><span class="co">#&gt; [1]   2 795</span></span>
@@ -1037,13 +1037,13 @@ prior to our validation and ensemble selection (in step 6).</p>
 <span><span class="co">#&gt; $ibra_extirpation</span></span>
 <span><span class="co">#&gt; [1] 2 9</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">summary_matrix_list</span><span class="op">$</span><span class="va">bounty_slope</span><span class="op">)</span> <span class="co"># examine</span></span>
-<span><span class="co">#&gt;           [,1]  [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,]  1.250000 -9.00   -2</span></span>
-<span><span class="co">#&gt; [2,] -1.333333 -2.25   -2</span></span>
+<span><span class="co">#&gt;           [,1] [,2]      [,3]</span></span>
+<span><span class="co">#&gt; [1,]  3.000000 -8.5 -7.700000</span></span>
+<span><span class="co">#&gt; [2,] -1.333333 -2.5 -1.916667</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">summary_matrix_list</span><span class="op">$</span><span class="va">ibra_extirpation</span><span class="op">)</span> <span class="co"># examine</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]</span></span>
-<span><span class="co">#&gt; [1,] 1955 1953 1959 1965   NA 1965   NA 1966 1962</span></span>
-<span><span class="co">#&gt; [2,] 1946 1943 1960 1963   NA   NA   NA   NA   NA</span></span></code></pre></div>
+<span><span class="co">#&gt; [1,] 1941 1943 1945 1946 1954 1950 1952 1954 1947</span></span>
+<span><span class="co">#&gt; [2,] 1940 1942 1967   NA   NA   NA   NA   NA   NA</span></span></code></pre></div>
 <p>Note that the summary matrix list collates the specified result for
 each simulation on a single row of each matrix. Thus the columns in the
 extirpation matrix represent the extirpation time for each population
@@ -1082,8 +1082,8 @@ for our full metrics set.</p>
 <span>  <span class="op">)</span> <span class="co"># examine</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt;      bounty_slope_error bounty_slope_error2</span></span>
-<span><span class="co">#&gt; [1,]          11.519530           11.519530</span></span>
-<span><span class="co">#&gt; [2,]           9.843692            9.843692</span></span>
+<span><span class="co">#&gt; [1,]           8.919496            8.919496</span></span>
+<span><span class="co">#&gt; [2,]           9.935334            9.935334</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="va">DEMONSTRATION</span><span class="op">)</span> <span class="op">{</span> <span class="co"># Calculate RMSE for IBRA extirpation</span></span>
 <span>  <span class="va">ibra_extirpation</span> <span class="op">&lt;-</span> <span class="va">summary_matrix_list</span><span class="op">$</span><span class="va">ibra_extirpation</span></span>
 <span>  <span class="va">ibra_extirpation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ibra_extirpation</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1968</span></span>
@@ -1099,8 +1099,8 @@ for our full metrics set.</p>
 <span>  <span class="op">)</span> <span class="co"># examine</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt;      ibra_extirpation_error ibra_extirpation_error2</span></span>
-<span><span class="co">#&gt; [1,]               29.55080                29.55080</span></span>
-<span><span class="co">#&gt; [2,]               30.43025                30.43025</span></span>
+<span><span class="co">#&gt; [1,]               15.80743                15.80743</span></span>
+<span><span class="co">#&gt; [2,]               32.15004                32.15004</span></span>
 <span></span>
 <span><span class="co"># Load full example metrics</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="va">DEMONSTRATION</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1464,8 +1464,8 @@ results managers.</p>
 <span>  <span class="va">results_manager</span><span class="op">$</span><span class="va">summary_metric_data</span> <span class="co"># examine demo</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt;   index bounty_slope_error ibra_extirpation_error total_extinction</span></span>
-<span><span class="co">#&gt; 1     1           11.33187               5.894913             1938</span></span>
-<span><span class="co">#&gt; 2     2           11.18715               5.894913             1931</span></span>
+<span><span class="co">#&gt; 1     1           11.04991               5.074446             1933</span></span>
+<span><span class="co">#&gt; 2     2           10.33444               6.461424             1928</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="va">DEMONSTRATION</span><span class="op">)</span> <span class="op">{</span> <span class="co"># load full example metrics and (some) matrices</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">thylacine_example_metrics_rerun</span><span class="op">)</span></span>
 <span>  <span class="va">summary_metric_data_rerun</span> <span class="op">&lt;-</span> <span class="va">thylacine_example_metrics_rerun</span></span>
