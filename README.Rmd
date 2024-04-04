@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# poems: Pattern-oriented ensemble modeling system (for spatially explicit populations)
+# poems: Pattern-oriented ensemble modeling system (for spatially explicit populations) <img src='man/figures/logo.svg' align="right" height="125" />
 
 <!-- badges: start -->
 [![Paper_doi](https://img.shields.io/badge/doi-10.1111/2041--210X.13720-orange.svg)](https://doi.org/10.1111/2041-210X.13720)
