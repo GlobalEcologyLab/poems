@@ -20,3 +20,11 @@ https://doi.org/10.1111/2041-210X.13720
 A \emph{raster} dataset defining the grid cells of the Tasmanian study region for the
 Thylacine example vignette.
 }
+\examples{
+data(tasmania_raster)
+tasmania_region <- Region$new(
+  template_raster = tasmania_raster
+)
+raster::plot(tasmania_region$region_raster)
+
+}

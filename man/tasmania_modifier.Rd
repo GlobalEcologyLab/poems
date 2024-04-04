@@ -21,3 +21,13 @@ A \emph{raster} dataset (11 timesteps) defining the intensity land-use cover for
 grid-cell in the Tasmania study region. NB. This dataset is projected and will not natively overlay
 the other \emph{raster} datasets contained in \emph{poems}.
 }
+\examples{
+data(tasmania_raster)
+data(tasmania_modifier)
+tasmania_region <- Region$new(
+  template_raster = tasmania_modifier[[1]]
+)
+tasmania_region$raster_is_consistent(tasmania_raster)
+raster::plot(tasmania_modifier)
+
+}

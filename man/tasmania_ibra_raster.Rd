@@ -21,3 +21,13 @@ A \emph{raster} dataset defining the grid cells of the nine Interim
 Bioregionalisation of Australia (IBRA) bioregions for the Tasmanian study region of
 the Thylacine example vignette.
 }
+\examples{
+data(tasmania_ibra_raster)
+data(tasmania_raster)
+tasmania_region <- Region$new(
+  template_raster = tasmania_raster
+)
+tasmania_region$raster_is_consistent(tasmania_ibra_raster)
+raster::plot(tasmania_ibra_raster)
+
+}

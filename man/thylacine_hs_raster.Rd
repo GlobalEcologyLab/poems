@@ -20,3 +20,8 @@ https://doi.org/10.1111/2041-210X.13720
 A \emph{raster} dataset defining estimated habitat suitability values for each grid
 cells of the Tasmanian study region of the Thylacine example vignette.
 }
+\examples{
+data(thylacine_hs_raster)
+raster::plot(thylacine_hs_raster, colNA = "blue")
+
+}

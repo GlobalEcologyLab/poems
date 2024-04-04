@@ -21,3 +21,10 @@ Thylacine example vignette in demonstration mode. The values were obtained by ru
 the vignette code for 10 replicate re-runs of the selected 'best' 200 model
 simulations with \code{DEMONSTRATION = FALSE}.
 }
+\examples{
+data(thylacine_example_metrics_rerun)
+hist(thylacine_example_metrics_rerun$bounty_slope_error)
+hist(thylacine_example_metrics_rerun$ibra_extirpation_error)
+hist(thylacine_example_metrics_rerun$total_extinction)
+
+}

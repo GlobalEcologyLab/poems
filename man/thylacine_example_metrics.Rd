@@ -20,3 +20,10 @@ A dataset containing precalculated summary metrics for use when running the Thyl
 example vignette in demonstration mode. The values were obtained by running the
 vignette code for 20,000 model simulations with \code{DEMONSTRATION = FALSE}.
 }
+\examples{
+data(thylacine_example_metrics)
+hist(thylacine_example_metrics$bounty_slope_error)
+hist(thylacine_example_metrics$ibra_extirpation_error)
+hist(thylacine_example_metrics$total_extinction)
+
+}

@@ -22,3 +22,11 @@ Thylacine example vignette in demonstration mode. The values were obtained by ru
 the vignette code for 20,000 model simulations with \code{DEMONSTRATION = FALSE}.
 Note that some matrices were only stored for the selected 'best' 200 models.
 }
+\examples{
+data(thylacine_example_matrices)
+data(tasmania_raster)
+region <- Region$new(template_raster = tasmania_raster)
+region$raster_from_values(thylacine_example_matrices$extirpation[1,]) |>
+ raster::plot(colNA = "blue")
+
+}
