@@ -100,6 +100,20 @@ and results (passed by reference).</p>
 
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">test_class</span> <span class="op">&lt;-</span> <span class="va">SimulatorReference</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">test_class</span><span class="op">$</span><span class="va">attached</span><span class="op">$</span><span class="va">attr1</span> <span class="op">&lt;-</span> <span class="st">"example1"</span></span></span>
+<span class="r-in"><span><span class="va">test_class</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">attr1</span> <span class="op">&lt;-</span> <span class="st">"example2"</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">test_class</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Classes 'SimulatorReference', 'R6' &lt;SimulatorReference&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     attached: list</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     results: list </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

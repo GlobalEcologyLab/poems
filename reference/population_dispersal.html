@@ -218,6 +218,50 @@ abundance at a specified time step via dispersal rates provided.</p>
   
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># User-defined dispersal: one-quarter of dispersing stages move one population over</span></span></span>
+<span class="r-in"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="va"><a href="SimulatorReference.html">SimulatorReference</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">example_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">params</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">params</span><span class="op">$</span><span class="va">simulator</span><span class="op">$</span><span class="va">attached</span><span class="op">$</span><span class="va">params</span> <span class="op">&lt;-</span> <span class="va">params</span> <span class="co"># attach to reference object</span></span></span>
+<span class="r-in"><span>  <span class="va">emigrants</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">params</span><span class="op">$</span><span class="va">stage_abundance</span> <span class="op">*</span> <span class="va">params</span><span class="op">$</span><span class="va">dispersal_stages</span> <span class="op">*</span> <span class="fl">0.25</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">params</span><span class="op">$</span><span class="va">stage_abundance</span> <span class="op">-</span> <span class="va">emigrants</span> <span class="op">+</span> <span class="va">emigrants</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">dispersal_function</span> <span class="op">&lt;-</span> <span class="fu">population_dispersal</span><span class="op">(</span></span></span>
+<span class="r-in"><span> replicates <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span> time_steps <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span> years_per_step <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span> populations <span class="op">=</span> <span class="fl">7</span>,</span></span>
+<span class="r-in"><span> demographic_stochasticity <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span> density_stages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> dispersal <span class="op">=</span> <span class="va">example_function</span>,</span></span>
+<span class="r-in"><span> dispersal_stages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> dispersal_source_n_k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cutoff <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>, threshold <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> dispersal_target_k <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span> dispersal_target_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>threshold <span class="op">=</span> <span class="fl">10</span>, cutoff <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> simulator <span class="op">=</span> <span class="va">simulator</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">carrying_capacity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">stage_abundance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>   <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">0</span>, <span class="fl">26</span>, <span class="fl">0</span>, <span class="fl">39</span>, <span class="fl">47</span>,</span></span>
+<span class="r-in"><span>   <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">13</span>,</span></span>
+<span class="r-in"><span>   <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">0</span>, <span class="fl">9</span>, <span class="fl">10</span></span></span>
+<span class="r-in"><span> <span class="op">)</span>,</span></span>
+<span class="r-in"><span> nrow <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span> ncol <span class="op">=</span> <span class="fl">7</span>,</span></span>
+<span class="r-in"><span> byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">occupied_indices</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">5</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">dispersal_function</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">2</span>, tm <span class="op">=</span> <span class="fl">6</span>, <span class="va">carrying_capacity</span>, <span class="va">stage_abundance</span>,</span></span>
+<span class="r-in"><span>                   <span class="va">occupied_indices</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    7   13    0   26    0   39   47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    5    0    4    8    2    9   13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    1    3    4    5    1    8   10</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
