@@ -11,3 +11,5 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^rebuild-long-running-vignette\.R$
+^.*\.Rmd\.orig$

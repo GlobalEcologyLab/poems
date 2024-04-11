@@ -1,4 +1,18 @@
-## ----include = FALSE----------------------------------------------------------
+---
+title: "Population introduction via translocation functions"
+author: "Global ChEC Lab"
+output: rmarkdown::pdf_document
+geometry: margin=2cm
+vignette: >
+  %\VignetteIndexEntry{Translocation Example}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
@@ -8,9 +22,20 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = ""
 )
+```
 
+In this vignette we present a simple example of the *poems* workflow to
+show how to use a custom `translocation` function to introduce
+populations at defined time steps. The vignette also shows how to define
+different growth rates for populations in different regions.
 
-## ----setup--------------------------------------------------------------------
+Note that the examples are for a single stage matrix model.
+
+## Setup
+
+As before, We begin by loading the necessary packages.
+
+```{r setup}
 library(poems)
 library(raster)
 library(sf)
@@ -21,9 +46,23 @@ library(stringi) # for randomly generating file names.
 round_any <- function(x, accuracy, f = round) {
   f(x / accuracy) * accuracy
 }
+```
 
+\newpage
 
-## ----message = FALSE, warning=FALSE, results='markup', fig.show='asis',fig.align = "center", fig.width = 4, fig.height = 4----
+## Step 1: Build the population model for the study region
+
+Create a model template using the *PopulationModel* class. This model is
+spatially explicit, so is defined using the *Region* class. In addition
+we make the model **temporally** explicit so we can introduce
+populations at defined time steps.
+
+### Study region
+
+First, we'll define our study region. For this example, we utilise a
+`raster::RasterLayer()` of Thylacine habitat suitability.
+
+```{r, message = FALSE, warning=FALSE, results='markup', fig.show='asis',fig.align = "center", fig.width = 4, fig.height = 4}
 # Region raster
 data(tasmania_raster)
 tasmania_raster
@@ -56,9 +95,14 @@ plot(tasmania_raster,
   legend = FALSE,
   col = "#2E8B57", colNA = "grey75"
 )
+```
 
 
-## -----------------------------------------------------------------------------
+\newpage
+
+Now we can define our `poems::Region`:
+
+```{r}
 # Tasmania study region (735 non-NA cells stored in the order shown) #
 region <- Region$new(template_raster = tasmania_raster)
 region$region_raster
@@ -86,9 +130,20 @@ plot(region$region_raster,
     points(xyFromCell(region$region_raster, int_point), col = "red", pch = 16)
   }
 )
+```
 
+### Land-use modifier
 
-## -----------------------------------------------------------------------------
+Here we read in a land-use modifier layer which we can use to make our
+region spatiotemporally explicit. This has the effect of altering the HS
+values through time which causes dynamic changes in habitat suitability,
+and thus population abundances.
+
+While we could change these values now and supply them as is to the
+simulator. In this example, we will use a *Generator* object later on to
+apply the HS scaling.
+
+```{r}
 # read in the land-use modifier
 data(tasmania_modifier)
 
@@ -105,9 +160,15 @@ hs_raster
 
 # initial_hs needed for generator
 initial_hs <- hs_raster <- stack(replicate(n = nlayers(tasmania_modifier), hs_raster))
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+While we have read in the land-use modifier, we have not applied it to
+the HS values yet. This means that our HS values are still static as
+shown by the plot below.
+
+```{r}
 # static HS for the moment
 ## capacity generator will make it temporally dynamic
 plot(hs_raster,
@@ -117,9 +178,18 @@ plot(hs_raster,
     points(xyFromCell(region$region_raster, int_point), pch = 16, cex = 0.5)
   }
 )
+```
 
+\newpage
 
-## ----message = FALSE----------------------------------------------------------
+### Environmental correlation
+
+Next, we'll define a distance-based spatial correlation for applying
+environmental stochasticity within our model. The generated correlation
+data is compacted for computational efficiency (with large-scale
+models).
+
+```{r, message = FALSE}
 # Distance-based environmental correlation (via a compacted Cholesky decomposition)
 env_corr <- SpatialCorrelation$new(
   region = region,
@@ -128,9 +198,16 @@ env_corr <- SpatialCorrelation$new(
   distance_scale = 1000
 )
 env_corr$calculate_compact_decomposition(decimals = 4)
+```
 
+### Spatially-varying growth rates
 
-## -----------------------------------------------------------------------------
+Here we use IBRA regions to define varying growth rates for different
+populations. These could be expected to occur for example in a
+wide-ranging species that occurs in varying habitats (e.g. red foxes in
+Australia).
+
+```{r}
 # allow growth rates to vary by region using IBRA regions
 # Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell distribution
 data(tasmania_ibra_raster)
@@ -194,9 +271,29 @@ ibra_rmax <- cbind(tasmania_ibra_data,
   rmax_upper = round(rmax / 0.75, 2)
 )
 ibra_rmax
+```
 
+\newpage
 
-## ----echo=TRUE----------------------------------------------------------------
+## Step 2: Setup the translocation function
+
+Here we generate a custom *Translocation* class object. This object can
+be used to translocate populations from one location to another, or as
+shown here, to introduce populations at defined locations and timesteps.
+The function could also be expanded to introduce varying number of
+animals at each site. For simplicity sake, this example releases the
+same number of animals at all locations.
+
+### Introduction sites and times
+
+Here we define the introduction sites by matching
+`region$region_indices` to our introduction locations.
+
+We also define the timesteps that the introductions should occur. These
+timesteps are sequential from 1, and are not defined by, for example,
+calendar years.
+
+```{r, echo=TRUE}
 # set up translocation locations and order
 intro_trans_ll <- sf_project(
   from = "EPSG:4326",
@@ -234,9 +331,17 @@ plot(region$region_raster,
     )
   }
 )
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+### Translocation function
+
+Here we define the custom `translocation` function. It's simply a `list`
+object, with a nested function that uses parameters from the model to
+make changes to the simulated populations.
+
+```{r}
 # User-defined translocation function (list-nested) and alias ####
 
 translocation <- list(
@@ -282,9 +387,20 @@ translocation_aliases <- list(
   trans_n = "translocation$trans_n",
   region_indices = "translocation$region_indices"
 )
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+## Step 3: Build generators for dynamically generating model parameters
+
+### Growth rate generator
+
+Now we can build a *Generator* class object that will generate random
+growth rates based on quantiles between the min and max in each IBRA
+region. This allows us to sample across the range of values within each
+region.
+
+```{r}
 # Build a Rmax generator based on sampled IBRA Rmax range quantile
 rmax_gen <- Generator$new(
   description = "Rmax",
@@ -325,9 +441,15 @@ plot(rmax_regional,
     plot(ibra_polygons, border = "black", col = NA, add = TRUE)
   }
 )
+```
 
+The map above shows the result of sampling our possible *rmax* values to
+their median values. The plot below shows that we can sample across a
+range of values using the same generator. This functionality allows us
+to pass `rmax_quantile` as a variable in a *LatinHypercubeSampler*
+class.
 
-## -----------------------------------------------------------------------------
+```{r}
 # Test multiple quantiles
 test_rmax <- lapply(seq(0, 1, 0.1), function(i) {
   region$raster_from_values(rmax_gen$generate(input_values = list(rmax_quantile = i))$growth_rate_max)
@@ -348,9 +470,16 @@ plot(test_rmax,
   },
   col = hcl.colors(100)
 )
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+### Dispersal generator
+
+This generator controls dispersal across our region based on mean
+dispersal distance and proportion of dispersers.
+
+```{r}
 # Dispersal generator ####
 # Set for veriable mean distance, max hard-coded at 150
 dispersal_gen <- DispersalGenerator$new(
@@ -367,9 +496,14 @@ dispersal_gen <- DispersalGenerator$new(
 dispersal_gen$calculate_distance_data()
 head(dispersal_gen$distance_data$base, 10)
 table(dispersal_gen$distance_data$base$distance_class)
+```
 
+Like with the `rmax_gen` defined above, we can test our dispersal
+generator over a range of values to make sure the dispersal curve looks
+appropriate. We can see in the plot below that as the proportion of
+dispersal decreases, so does the maximum dispersal distance.
 
-## -----------------------------------------------------------------------------
+```{r}
 # plot dispersal curves for mean dispersal rates
 disp_fun <- function(p, b, distance) {
   p * exp(-distance / b)
@@ -408,17 +542,38 @@ disp_test <- lapply(1:nrow(disp_mat), function(i) {
   )
 }
 dev.off()
+```
 
+Now that we're happy the curve follows the right form, we can generate
+some dispersal data to test our population model with.
 
-## -----------------------------------------------------------------------------
+```{r}
 # Generate sampled dispersals for p = 0.35, b = 40 (km)
 sample_dispersal_data <- dispersal_gen$generate(
   input_values = list(dispersal_p = 0.35, dispersal_b = 40)
 )$dispersal_data
 head(sample_dispersal_data[[1]], 10) # examine
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+### Capacity generator
+
+Here we build a carrying capacity generator. Carrying capacity is based
+on maximum density values and scaled by HS (i.e. cells with a HS of 1
+contain the highest densities).
+
+The capacity generator is set-up in such a way that it requires multiple
+parameters to work.
+
+1.`max_dens`: the maximum theoretical density of populations
+
+2.`q_thresh`: the quantile threshold used to rescale the HS values
+
+3.`trans_n`: the number of animals that are introduced. This value is
+consistent with the `translocation` function.
+
+```{r}
 capacity_gen <- Generator$new(
   description = "capacity",
   spatial_correlation = env_corr,
@@ -484,9 +639,12 @@ capacity_gen$add_function_template(
 
 # have all parameters been specified correctly
 capacity_gen$generative_requirements_satisfied()
+```
 
+Now we have defined our generator we can make some test data for the
+model
 
-## -----------------------------------------------------------------------------
+```{r}
 # Generate example initial abundance and declining carrying capacity time-series
 generated_k <- capacity_gen$generate(input_values = list(
   max_dens = 100, q_thresh = 0.90,
@@ -517,9 +675,16 @@ plot(example_k,
   },
   zlim = c(0, 100)
 )
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+## Step 4: Build a template model
+
+Using the generators we've built we can now test if our simple
+population model works as expected.
+
+```{r}
 # Template model ####
 model_template <- PopulationModel$new(
   region = region,
@@ -558,9 +723,13 @@ plot(1:11, results$all$abundance,
   type = "l",
   xlab = "timestep", ylab = "Total abundance"
 )
+```
 
+The template model runs successfully and now we can make some maps of
+the dispersal patterns of the populations from their initial
+introduction.
 
-## -----------------------------------------------------------------------------
+```{r}
 abund_ras <- region$raster_from_values(results$abundance)
 abund_ras[[c(1, 6, 11)]]
 abd_max <- round_any(max(values(abund_ras), na.rm = TRUE), 20, f = ceiling)
@@ -574,9 +743,13 @@ plot(log1p(abund_ras),
   },
   zlim = c(0, log1p(abd_max))
 )
+```
 
+To make sure our `translocation` function is working correctly, we can
+run the template model again but with the `translocation` function
+turned off.
 
-## -----------------------------------------------------------------------------
+```{r}
 model$set_attributes(
   initial_abundance = example_initial_abundance,
   carrying_capacity = example_carrying_capacity,
@@ -591,9 +764,16 @@ abund_ras_notransn <- region$raster_from_values(results_notransn$abundance)
 abund_ras_notransn[[c(1, 6, 11)]]
 diff_ras <- abund_ras - abund_ras_notransn
 diff_ras[[1:2]]
+```
 
+We can see from the `diff_ras` above that the difference between
+timesteps 2 of the two model runs is 75 individuals, which was the
+value passed through to the `translocation` function of the original
+model run.
 
-## -----------------------------------------------------------------------------
+And now we can plot the difference.
+
+```{r}
 plotmax <- round_any(max(abs(values(diff_ras)), na.rm = TRUE), 10, ceiling)
 plot(diff_ras[[c(1, 6, 11)]],
   zlim = c(-plotmax, plotmax),
@@ -604,9 +784,23 @@ plot(diff_ras[[c(1, 6, 11)]],
     plot(ibra_polygons, col = NA, add = TRUE)
   }
 )
+```
 
+\newpage
 
-## -----------------------------------------------------------------------------
+## Step 5: Run multiple simulations
+
+In order to explore the model parameter space to find the best models,
+we generate Latin hypercube samples of model and generator parameters to
+be simulated, using the *LatinHypercubeSampler* class. This class has
+functionality for generating sample parameters via Uniform, Normal,
+Lognormal, Beta, and Triangular distributions. For our example we only
+generate 10 samples. Typically however, a user would need to generate
+thousands to tens of thousands, of samples.
+
+### Define the latin-hypercube for sampling
+
+```{r}
 # Latin-hypercube sampler ####
 lhs_gen <- LatinHypercubeSampler$new()
 
@@ -646,9 +840,15 @@ head(sample_data)
 }
 sample_data <- sample_data[, c(9, 1:8)]
 sample_data
+```
 
+We we can run a simulation for each set (or row) of sampled parameters.
+The *SimulationManager* class manages the generation of parameters (via
+the generators), the running the model simulations, and writing
+simulation results to disk. It also maintains a log of each simulation's
+success and any errors or warnings encountered.
 
-## -----------------------------------------------------------------------------
+```{r}
 OUTPUT_DIR <- tempdir()
 model <- model_template$clone()
 model$set_attributes(params = list(
@@ -675,13 +875,41 @@ system.time({
   run_output <- sim_manager$run()
 })
 run_output$summary
+```
 
+## Step 6: Extract results from simulations
 
-## -----------------------------------------------------------------------------
+Now that the simulations have run, we can extract the modelled
+abundances. We now wish to collate summary results for each of our
+simulations via the *ResultsManager* class. This manager loads the
+results from each sample simulation into an intermediate
+*PopulationResults* class object, which dynamically generates further
+results. We need to define functions for calculating summary metrics, as
+well as any matrices (one row of values per simulation) that we may be
+interested in examining.
+
+We can see from above that the `run_output$summary` shows that there
+were a number of simulations that didn't complete successfully:
+
+```{r}
 run_output$summary
+```
 
+The `run_output$full_log` shows that some simulations produced NA values
+when calculating population abundances:
 
-## -----------------------------------------------------------------------------
+`"Warning: Non-finite stage abundances returned by user-defined translocation function"`
+
+These simulations had a range of parameter values that caused the
+simulation to "fall-over". These errors could be fixed by improving the
+`translocation` function, or alternatively the user could discard the
+simulations as being structurally wrong - i.e. that specific combination
+of parameters is simply unsuitable. We're going to treat them as the
+latter.
+
+### Extract results
+
+```{r}
 # Extract timeseries of abundance from each of the sims
 # Load our results (list) into a PopulationResults object
 p_results <- PopulationResults$new(results = run_output)
@@ -719,16 +947,26 @@ matplot(
   y = t(res_manager$summary_matrix_list$n), type = "b",
   lty = 1, xlab = "timestep", ylab = "total abundance"
 )
+```
 
+From the results we can see that our `translocation` function was
+working correctly, and that our `capacity_gen` was defined correctly, as
+the abundances in the first time step are the same as the `trans_n`
+values from our latin-hypercube samples.
 
-## -----------------------------------------------------------------------------
+```{r}
 identical(
   unlist(res_manager$summary_matrix_list$n[, 1]),
   unlist(sample_data$trans_n)
 )
+```
 
+Let's assume that samples 2, 3, 4, and 8 are our "best" simulations
+after some sort of validation. We have already extracted the abundances
+from these simulations, so now with a few more lines of code, we can
+generate averages of the simulations as rasters
 
-## -----------------------------------------------------------------------------
+```{r}
 best_sims <- c(2:4, 8)
 dim(res_manager$summary_matrix_list$distr_pop[best_sims, ])
 
@@ -754,4 +992,4 @@ plot(log1p(best_abund),
   },
   zlim = c(0, log1p(abd_max))
 )
-
+```
