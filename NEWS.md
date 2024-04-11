@@ -1,3 +1,14 @@
+# version 1.3.0
+
+Every update is an enhancement this time around:
+
+- Changed two of the vignettes to HTML vignettes.
+- These vignettes should now run much faster on CRAN servers.
+- Added a CONTRIBUTING.md file.
+- Added examples for all functions, classes, and data objects in the package.
+- Added a logo to the README.
+- `poems` is now documented compliant with `srr` standards G1.0 through G1.6.
+
 # version 1.2.0
 
 ## Bug fixes
