@@ -121,7 +121,7 @@ Calculates and returns spatio-temporal dispersal distance multipliers for each i
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dispersal_indices}}{Two-column matrix representing the target and source coordinate index for each in-range migration.}
+\item{\code{dispersal_indices}}{Two-column integer matrix, data.frame, or array representing the target and source coordinate index for each in-range migration.}
 
 \item{\code{...}}{Parameters passed via a \emph{params} list or individually.}
 }

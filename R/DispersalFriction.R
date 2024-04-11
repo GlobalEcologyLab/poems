@@ -87,7 +87,7 @@ DispersalFriction <- R6Class("DispersalFriction",
 
     #' @description
     #' Calculates and returns spatio-temporal dispersal distance multipliers for each in-range migration.
-    #' @param dispersal_indices Two-column matrix representing the target and source coordinate index for each in-range migration.
+    #' @param dispersal_indices Two-column integer matrix, data.frame, or array representing the target and source coordinate index for each in-range migration.
     #' @param ... Parameters passed via a \emph{params} list or individually.
     #' @return Temporal list of dispersal distance multiplier arrays with values for each in-range migration.
     calculate_distance_multipliers = function(dispersal_indices, ...) {
@@ -101,12 +101,25 @@ DispersalFriction <- R6Class("DispersalFriction",
         stop("Distance multipliers calculation requires region/coordinates to be set first", call. = FALSE)
       }
 
+      # Convert to matrix if data.frame
+      if (is.data.frame(dispersal_indices)) {
+        dispersal_indices <- as.matrix(dispersal_indices)
+      }
+
+      # Convert to matrix if array 
+      if (is.array(dispersal_indices)) {
+        dispersal_indices <- as.matrix(dispersal_indices)
+      }
+
       # Ensure dispersal indices are correctly set and are consistent with coordinates
-      if (is.null(dispersal_indices) || !all(is.integer(dispersal_indices)) || !all(dispersal_indices >= 1) ||
+      if (is.null(dispersal_indices) || !all(is.integer(dispersal_indices)) || 
+        !all(dispersal_indices >= 1) ||
         !is.matrix(dispersal_indices) || ncol(dispersal_indices) != 2 ||
         nrow(dispersal_indices) > self$region$region_cells^2 ||
         max(dispersal_indices) > self$region$region_cells) {
-        stop("Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration", call. = FALSE)
+        stop("Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or an
+        data.frame or array that can be converted to such a two-column matrix", call. = FALSE)
       }
 
       tryCatch(
