@@ -28,12 +28,12 @@ population_env_stoch(
 }
 \value{
 Environmental stochasticity calculation function: \code{function(fecundity_array, survival_array, occupied_indices)}, where:
-  \describe{
-    \item{\code{fecundity_array}}{3D array of fecundity rates (\emph{stages} rows by \emph{stages} columns by \emph{populations} deep).}
-    \item{\code{survival_array}}{3D array of survival rates (\emph{stages} rows by \emph{stages} columns by \emph{populations} deep).}
-    \item{\code{occupied_indices}}{Array of indices for those populations occupied.}
-    \item{\code{returns}}{List containing stochastically varied fecundity and survival arrays.}
-  }
+\describe{
+\item{\code{fecundity_array}}{3D array of fecundity rates (\emph{stages} rows by \emph{stages} columns by \emph{populations} deep).}
+\item{\code{survival_array}}{3D array of survival rates (\emph{stages} rows by \emph{stages} columns by \emph{populations} deep).}
+\item{\code{occupied_indices}}{Array of indices for those populations occupied.}
+\item{\code{returns}}{List containing stochastically varied fecundity and survival arrays.}
+}
 }
 \description{
 Modular functions for the population simulator for performing correlated

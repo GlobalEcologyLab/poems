@@ -87,7 +87,7 @@ ModelSimulator <- R6Class("ModelSimulator",
 
     #' @description
     #' Runs a model simulator (function), stores the results, and creates a status log entry as a list.
-    #' @return A list representing a simulation log entry with a \emph{successful} boolean and a status message template (with a \emph{\%s} placeholder for the sample identifier).
+    #' @return A list representing a simulation log entry with a \emph{successful} boolean and a status message template (with a placeholder for the sample identifier).
     run = function() {
       self$results <- NULL
       self$attached$warnings <- NULL

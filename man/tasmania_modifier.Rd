@@ -6,11 +6,11 @@
 \format{
 A \emph{raster::RasterBrick} object:
 \describe{
-  \item{dimensions}{36 rows, 34 columns, 11 layers}
-  \item{resolution}{10km by 10km grid cells}
-  \item{extent}{-211571.8, 128428.2, -182583.2, 177416.8  (xmin, xmax, ymin, ymax)}
-  \item{CRS}{+proj=laea +lat_0=-42.2 +lon_0=147 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs}
-  \item{values}{region defined by 1224 cells with values between 0-1. Values of 1 indicate extensive land use modification)}
+\item{dimensions}{36 rows, 34 columns, 11 layers}
+\item{resolution}{10km by 10km grid cells}
+\item{extent}{-211571.8, 128428.2, -182583.2, 177416.8  (xmin, xmax, ymin, ymax)}
+\item{CRS}{+proj=laea +lat_0=-42.2 +lon_0=147 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs}
+\item{values}{region defined by 1224 cells with values between 0-1. Values of 1 indicate extensive land use modification)}
 }
 }
 \source{

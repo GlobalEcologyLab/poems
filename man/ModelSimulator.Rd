@@ -142,7 +142,7 @@ Runs a model simulator (function), stores the results, and creates a status log 
 }
 
 \subsection{Returns}{
-A list representing a simulation log entry with a \emph{successful} boolean and a status message template (with a \emph{\%s} placeholder for the sample identifier).
+A list representing a simulation log entry with a \emph{successful} boolean and a status message template (with a placeholder for the sample identifier).
 }
 }
 \if{html}{\out{<hr>}}

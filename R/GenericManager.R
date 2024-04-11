@@ -73,7 +73,7 @@ GenericManager <- R6Class("GenericManager",
 
     #' @description
     #' Substitutes the specified sample details into a status message (using sprintf) and returns the result.
-    #' @param status_message Character string message with a \emph{\%s} placeholder for sample details.
+    #' @param status_message Character string message with a placeholder for sample details.
     #' @param sample_index Row index of sample data frame containing details of substitution parameters.
     #' @return Status message with substituted sample details.
     get_message_sample = function(status_message, sample_index) {

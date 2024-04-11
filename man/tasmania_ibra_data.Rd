@@ -6,10 +6,10 @@
 \format{
 A data frame with 9 rows and 4 variables:
 \describe{
-  \item{index}{Cross-reference index for each bioregion}
-  \item{key}{Additional alphabetical cross-reference for each bioregion}
-  \item{abbr}{Abbreviated name for each bioregion}
-  \item{name}{Full name for each bioregion}
+\item{index}{Cross-reference index for each bioregion}
+\item{key}{Additional alphabetical cross-reference for each bioregion}
+\item{abbr}{Abbreviated name for each bioregion}
+\item{name}{Full name for each bioregion}
 }
 }
 \source{

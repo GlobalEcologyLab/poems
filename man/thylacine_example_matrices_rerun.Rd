@@ -6,8 +6,8 @@
 \format{
 A list containing the following matrices:
 \describe{
-  \item{bounty_slope}{2,000 row by 3 column matrix of calculated slope of total bounty submitted across 3 intervals for each sample simulation}
-  \item{ibra_extirpation}{2,000 row by 9 column matrix of extirpation dates for each IBRA bioregion for each sample simulation}
+\item{bounty_slope}{2,000 row by 3 column matrix of calculated slope of total bounty submitted across 3 intervals for each sample simulation}
+\item{ibra_extirpation}{2,000 row by 9 column matrix of extirpation dates for each IBRA bioregion for each sample simulation}
 }
 }
 \source{

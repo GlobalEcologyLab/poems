@@ -256,7 +256,7 @@ Generator <- R6Class("Generator",
     #' @description
     #' Adds a file template for reading raster/RData(RDS)/CSV files for a given model attribute.
     #' @param param Name of model attribute to be read from a file.
-    #' @param path_template Template string for the file path with \emph{\%s} placeholders (see \code{\link{sprintf}}) for simulation sample parameters.
+    #' @param path_template Template string for the file path with placeholders (see \code{\link{sprintf}}) for simulation sample parameters.
     #' @param path_params Array of the names of the simulation sample parameters to be substituted (in order) into the path template.
     #' @param file_type File type raster \emph{"GRD"} (default), \emph{"TIF"}, \emph{"RData/RDS"} or \emph{"CSV"} to be read.
     add_file_template = function(param, path_template, path_params = c(), file_type = "GRD") {

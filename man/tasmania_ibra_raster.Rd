@@ -6,11 +6,11 @@
 \format{
 A \emph{raster::RasterLayer} object:
 \describe{
-  \item{dimensions}{32 rows by 40 columns grid}
-  \item{resolution}{0.1 by 0.1 degree grid cells}
-  \item{extent}{longitude 144.5 to 148.5 degrees; latitude -43.8025 to -40.6025 degrees}
-  \item{CRS}{WGS84 longitude-latitude}
-  \item{values}{IBRA bioregions defined by cells with values 1 to 9 (as per \code{index} in \code{\link{tasmania_ibra_data}})}
+\item{dimensions}{32 rows by 40 columns grid}
+\item{resolution}{0.1 by 0.1 degree grid cells}
+\item{extent}{longitude 144.5 to 148.5 degrees; latitude -43.8025 to -40.6025 degrees}
+\item{CRS}{WGS84 longitude-latitude}
+\item{values}{IBRA bioregions defined by cells with values 1 to 9 (as per \code{index} in \code{\link{tasmania_ibra_data}})}
 }
 }
 \source{

@@ -31,20 +31,20 @@ population_transformation(
 
 \item{transformation}{A user-defined function (optionally nested in a list with additional attributes) for performing transformation: \code{function(params)}, where \emph{params} is a list passed to the function containing:
 \describe{
-  \item{\code{replicates}}{Number of replicate simulation runs.}
-  \item{\code{time_steps}}{Number of simulation time steps.}
-  \item{\code{years_per_step}}{Number of years per time step.}
-  \item{\code{populations}}{Number of populations.}
-  \item{\code{stages}}{Number of life cycle stages.}
-  \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
-  \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
-  \item{\code{r}}{Simulation replicate.}
-  \item{\code{tm}}{Simulation time step.}
-  \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
-  \item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
-  \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-  \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
-  \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
+\item{\code{replicates}}{Number of replicate simulation runs.}
+\item{\code{time_steps}}{Number of simulation time steps.}
+\item{\code{years_per_step}}{Number of years per time step.}
+\item{\code{populations}}{Number of populations.}
+\item{\code{stages}}{Number of life cycle stages.}
+\item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
+\item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
+\item{\code{r}}{Simulation replicate.}
+\item{\code{tm}}{Simulation time step.}
+\item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
+\item{\code{stage_abundance}}{Matrix of (current) abundance for each stage (rows) and population (columns) at time step.}
+\item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
+\item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
+\item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
 }
 returns a transformed stage abundance matrix (or a list with stage abundance and carrying capacity)}
 
@@ -54,14 +54,14 @@ returns a transformed stage abundance matrix (or a list with stage abundance and
 }
 \value{
 Abundance (and capacity) transformation function: \code{function(r, tm, carrying_capacity, stage_abundance, occupied_indices)}, where:
-  \describe{
-    \item{\code{r}}{Simulation replicate.}
-    \item{\code{tm}}{Simulation time step.}
-    \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
-    \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
-    \item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
-    \item{\code{returns}}{List with transformed stage abundance matrix (and optionally carrying capacity).}
-  }
+\describe{
+\item{\code{r}}{Simulation replicate.}
+\item{\code{tm}}{Simulation time step.}
+\item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
+\item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
+\item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
+\item{\code{returns}}{List with transformed stage abundance matrix (and optionally carrying capacity).}
+}
 }
 \description{
 Modular functions for the population simulator for performing a transformation of

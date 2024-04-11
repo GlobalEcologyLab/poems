@@ -18,9 +18,16 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 
 The poems package provides a framework of interoperable *R6* (Chang,
 2020) classes for building ensembles of viable models via the
-pattern-oriented modeling (POM) approach (Grimm et al., 2005). The
-package includes classes for encapsulating and generating model
-parameters, and managing the POM workflow. The workflow includes:
+pattern-oriented modeling (POM) approach (Grimm et al., 2005).
+Pattern-oriented modeling is a vigorous form of statistical validation
+in which simulations and their parameter settings are summarized using
+key metrics and converged toward multiple observed patterns, or targets.
+
+The package provides a process-based population model related to the
+functionality of RAMAS or Vortex, but in a free and open source format,
+with high customizability. The package includes classes for
+encapsulating and generating model parameters, and managing the POM
+workflow. The workflow includes:
 
 1.  Model setup including generated spatial layers and demographic
     population model parameters.
@@ -40,7 +47,7 @@ The package includes a spatially explicit demographic population model
 simulation engine, which incorporates default functionality for density
 dependence, correlated environmental stochasticity, stage-based
 transitions, and distance-based dispersal. The user may customize the
-simulator by defining functionality for trans-locations, harvesting,
+simulator by defining functionality for translocations, harvesting,
 mortality, and other processes, as well as defining the sequence order
 for the simulator processes. The framework could also be adapted for use
 with other model simulators by utilizing its extendable (inheritable)
@@ -103,47 +110,47 @@ results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1] 1047 1111 1167 1308 1320
+#> [1] 1031 1226 1249 1409 1358
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 628 659 676 791 766
+#> [1] 603 748 724 868 789
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 419 452 491 517 554
+#> [1] 428 478 525 541 569
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   53  100  127  163  218
-#> [2,]   92  141  165  189  177
-#> [3,]  153  166  159  177  181
-#> [4,]  158  166  157  194  207
-#> [5,]  173  190  172  201  167
-#> [6,]  211  173  203  182  181
-#> [7,]  207  175  184  202  189
+#> [1,]   55  118  191  202  186
+#> [2,]  105  159  171  204  187
+#> [3,]  114  157  164  183  163
+#> [4,]  172  205  195  219  223
+#> [5,]  177  198  183  213  216
+#> [6,]  204  197  197  197  194
+#> [7,]  204  192  148  191  189
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   29   58   68   88  120
-#> [2,]   53   91   88  113  115
-#> [3,]   95   95   92  111  100
-#> [4,]   95  100   99  109  130
-#> [5,]  108  115   93  126   91
-#> [6,]  125  102  121  122  102
-#> [7,]  123   98  115  122  108
+#> [1,]   31   74  111  128  111
+#> [2,]   65   94   95  121  104
+#> [3,]   68  104   95  133   81
+#> [4,]   97  113  118  120  142
+#> [5,]  100  134  106  125  118
+#> [6,]  120  116  110  122  114
+#> [7,]  122  113   89  119  119
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   24   42   59   75   98
-#> [2,]   39   50   77   76   62
-#> [3,]   58   71   67   66   81
-#> [4,]   63   66   58   85   77
-#> [5,]   65   75   79   75   76
-#> [6,]   86   71   82   60   79
-#> [7,]   84   77   69   80   81
+#> [1,]   24   44   80   74   75
+#> [2,]   40   65   76   83   83
+#> [3,]   46   53   69   50   82
+#> [4,]   75   92   77   99   81
+#> [5,]   77   64   77   88   98
+#> [6,]   84   81   87   75   80
+#> [7,]   82   79   59   72   70
 raster::plot(region$raster_from_values(results$abundance[, 5]),
   main = "Final abundance", xlab = "Longitude (degrees)",
   ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue"

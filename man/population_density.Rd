@@ -28,19 +28,19 @@ population_density(
 
 \item{density_dependence}{Density dependence can be "ceiling" (default), "logistic" (Ricker), or a user-defined function (optionally nested in a list with additional attributes) for adjusting transition rates: \code{function(params)}, where \emph{params} is a list passed to the function containing:
 \describe{
-  \item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}
-  \item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
-  \item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
-  \item{\code{carrying_capacity}}{Array of carrying capacity values for each population.}
-  \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns).}
-  \item{\code{population_abundance}}{Array of summed population abundances for all stages.}
-  \item{\code{density_abundance}}{Array of summed population abundances for stages affected by density.}
-  \item{\code{growth_rate_max}}{Maximum growth rate value or array for populations.}
-  \item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
-  \item{\code{calculate_multipliers}}{Function (\code{function(growth_rates)}) for finding multipliers (when stages > 1) to apply to affected transitions that result in target growth rates (dominant eigenvalues).}
-  \item{\code{apply_multipliers}}{Function (\code{function(transition_array, multipliers}) for applying (when stages > 1) multipliers to the affected transition rates within a transition array (returns multiplied transition array).}
-  \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
-  \item{\code{additional attributes}}{Additional attributes when density dependence is optionally nested in a list.}
+\item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}
+\item{\code{fecundity_mask}}{Matrix of 0-1 to indicate which (proportions) of transition rates refer to fecundity.}
+\item{\code{fecundity_max}}{Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).}
+\item{\code{carrying_capacity}}{Array of carrying capacity values for each population.}
+\item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns).}
+\item{\code{population_abundance}}{Array of summed population abundances for all stages.}
+\item{\code{density_abundance}}{Array of summed population abundances for stages affected by density.}
+\item{\code{growth_rate_max}}{Maximum growth rate value or array for populations.}
+\item{\code{occupied_indices}}{Array of indices for populations occupied at (current) time step.}
+\item{\code{calculate_multipliers}}{Function (\code{function(growth_rates)}) for finding multipliers (when stages > 1) to apply to affected transitions that result in target growth rates (dominant eigenvalues).}
+\item{\code{apply_multipliers}}{Function (\code{function(transition_array, multipliers}) for applying (when stages > 1) multipliers to the affected transition rates within a transition array (returns multiplied transition array).}
+\item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
+\item{\code{additional attributes}}{Additional attributes when density dependence is optionally nested in a list.}
 }
 returns an adjusted transition array for occupied populations}
 
@@ -56,17 +56,17 @@ returns an adjusted transition array for occupied populations}
 }
 \value{
 Density dependent calculation function, either:
-  \describe{
-    \item{\code{function(carrying_capacity, stage_abundance)}}{For ceiling density dependence function, OR}
-    \item{\code{function(transition_array, carrying_capacity, stage_abundance, occupied_indices)}}{For user-defined density dependence function, where:
-      \describe{
-        \item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}
-        \item{\code{carrying_capacity}}{Array of carrying capacity values for each population.}
-        \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns).}
-        \item{\code{occupied_indices}}{Array of indices for populations occupied.}
-      }
-    }
-  }
+\describe{
+\item{\code{function(carrying_capacity, stage_abundance)}}{For ceiling density dependence function, OR}
+\item{\code{function(transition_array, carrying_capacity, stage_abundance, occupied_indices)}}{For user-defined density dependence function, where:
+\describe{
+\item{\code{transition_array}}{3D array of transition rates: stages by stages by populations.}
+\item{\code{carrying_capacity}}{Array of carrying capacity values for each population.}
+\item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns).}
+\item{\code{occupied_indices}}{Array of indices for populations occupied.}
+}
+}
+}
 }
 \description{
 Modular functions for the population simulator for performing density dependent

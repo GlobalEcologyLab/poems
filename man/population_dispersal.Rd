@@ -35,25 +35,25 @@ population_dispersal(
 
 \item{dispersal}{Either a matrix of dispersal rates between populations (source columns to target rows) or a list of data frames of non-zero dispersal rates and indices for constructing a compact dispersal matrix, and optional changing rates over time (as per class \code{\link{DispersalGenerator}} \emph{dispersal_data} attribute). Alternatively a user-defined function (optionally nested in a list with additional attributes) may be used: \code{function(params)}, where \emph{params} is a list passed to the function containing:
 \describe{
-  \item{\code{replicates}}{Number of replicate simulation runs.}
-  \item{\code{time_steps}}{Number of simulation time steps.}
-  \item{\code{years_per_step}}{Number of years per time step.}
-  \item{\code{populations}}{Number of populations.}
-  \item{\code{stages}}{Number of life cycle stages.}
-  \item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
-  \item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
-  \item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}
-  \item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold}.}
-  \item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.}
-  \item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or vice versa.}
-  \item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or vice versa.}
-  \item{\code{r}}{Simulation replicate.}
-  \item{\code{tm}}{Simulation time step.}
-  \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
-  \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
-  \item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
-  \item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
-  \item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
+\item{\code{replicates}}{Number of replicate simulation runs.}
+\item{\code{time_steps}}{Number of simulation time steps.}
+\item{\code{years_per_step}}{Number of years per time step.}
+\item{\code{populations}}{Number of populations.}
+\item{\code{stages}}{Number of life cycle stages.}
+\item{\code{demographic_stochasticity}}{Boolean for optionally choosing demographic stochasticity for the transformation.}
+\item{\code{density_stages}}{Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.}
+\item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.}
+\item{\code{dispersal_source_n_k}}{Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k <= \emph{cutoff} (p = 0) to n/k >= \emph{threshold}.}
+\item{\code{dispersal_target_k}}{Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k <= \emph{threshold}.}
+\item{\code{dispersal_target_n}}{Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n >= \emph{threshold} to n <= \emph{cutoff} (r = 0) or vice versa.}
+\item{\code{dispersal_target_n_k}}{Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k >= \emph{threshold} to n/k <= \emph{cutoff} (r = 0) or vice versa.}
+\item{\code{r}}{Simulation replicate.}
+\item{\code{tm}}{Simulation time step.}
+\item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
+\item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
+\item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
+\item{\code{simulator}}{\code{\link{SimulatorReference}} object with dynamically accessible \emph{attached} and \emph{results} lists.}
+\item{\code{additional attributes}}{Additional attributes when the transformation is optionally nested in a list.}
 }
 returns the post-dispersal abundance matrix}
 
@@ -71,14 +71,14 @@ returns the post-dispersal abundance matrix}
 }
 \value{
 Dispersal function: \code{function(r, tm, carrying_capacity, stage_abundance, occupied_indices)}, where:
-  \describe{
-    \item{\code{r}}{Simulation replicate.}
-    \item{\code{tm}}{Simulation time step.}
-    \item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
-    \item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
-    \item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
-    \item{\code{returns}}{New stage abundance matrix with dispersal applied.}
-  }
+\describe{
+\item{\code{r}}{Simulation replicate.}
+\item{\code{tm}}{Simulation time step.}
+\item{\code{carrying_capacity}}{Array of carrying capacity values for each population at time step.}
+\item{\code{stage_abundance}}{Matrix of abundance for each stage (rows) and population (columns) at time step.}
+\item{\code{occupied_indices}}{Array of indices for populations occupied at time step.}
+\item{\code{returns}}{New stage abundance matrix with dispersal applied.}
+}
 }
 \description{
 Modular functions for the population simulator for performing dispersal of stage

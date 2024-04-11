@@ -270,7 +270,7 @@ Adds a file template for reading raster/RData(RDS)/CSV files for a given model a
 \describe{
 \item{\code{param}}{Name of model attribute to be read from a file.}
 
-\item{\code{path_template}}{Template string for the file path with \emph{\%s} placeholders (see \code{\link{sprintf}}) for simulation sample parameters.}
+\item{\code{path_template}}{Template string for the file path with placeholders (see \code{\link{sprintf}}) for simulation sample parameters.}
 
 \item{\code{path_params}}{Array of the names of the simulation sample parameters to be substituted (in order) into the path template.}
 

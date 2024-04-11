@@ -28,12 +28,12 @@ population_results(
 }
 \value{
 List of result functions:
-  \describe{
-    \item{\code{initialize_attributes = function())}}{Constructs and returns an initialized nested list for the selected result attributes.}
-    \item{\code{initialize_replicate = function(results)}}{Initializes and returns nested result attributes at the start of each replicate.}
-    \item{\code{calculate_at_timestep = function(r, tm, stage_abundance, harvested, results)}}{Appends and calculates (non-NULL) results and returns nested result attributes at the end of each time step (tm) within replicate (r).}
-    \item{\code{finalize_attributes = function(results)}}{Finalizes result calculations at the end of the simulation.}
-  }
+\describe{
+\item{\code{initialize_attributes = function())}}{Constructs and returns an initialized nested list for the selected result attributes.}
+\item{\code{initialize_replicate = function(results)}}{Initializes and returns nested result attributes at the start of each replicate.}
+\item{\code{calculate_at_timestep = function(r, tm, stage_abundance, harvested, results)}}{Appends and calculates (non-NULL) results and returns nested result attributes at the end of each time step (tm) within replicate (r).}
+\item{\code{finalize_attributes = function(results)}}{Finalizes result calculations at the end of the simulation.}
+}
 }
 \description{
 Modular functions for the population simulator for initializing, calculating and

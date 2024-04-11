@@ -6,11 +6,11 @@
 \format{
 A list containing the following matrices:
 \describe{
-  \item{extirpation}{200 row by 795 column matrix of cell extirpation dates for the 'best' 200 models}
-  \item{total_bounty}{200 row by 80 column matrix of bounty submitted each year for the 'best' 200 models}
-  \item{ibra_bounty}{200 row by 9 column matrix of total bounty submitted each IBRA bioregion for the 'best' 200 models}
-  \item{bounty_slope}{20,000 row by 3 column matrix of calculated slope of total bounty submitted across 3 intervals for each sample simulation}
-  \item{ibra_extirpation}{20,000 row by 9 column matrix of extirpation dates for each IBRA bioregion for each sample simulation}
+\item{extirpation}{200 row by 795 column matrix of cell extirpation dates for the 'best' 200 models}
+\item{total_bounty}{200 row by 80 column matrix of bounty submitted each year for the 'best' 200 models}
+\item{ibra_bounty}{200 row by 9 column matrix of total bounty submitted each IBRA bioregion for the 'best' 200 models}
+\item{bounty_slope}{20,000 row by 3 column matrix of calculated slope of total bounty submitted across 3 intervals for each sample simulation}
+\item{ibra_extirpation}{20,000 row by 9 column matrix of extirpation dates for each IBRA bioregion for each sample simulation}
 }
 }
 \source{

@@ -114,7 +114,7 @@ Substitutes the specified sample details into a status message (using sprintf) a
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{status_message}}{Character string message with a \emph{\%s} placeholder for sample details.}
+\item{\code{status_message}}{Character string message with a placeholder for sample details.}
 
 \item{\code{sample_index}}{Row index of sample data frame containing details of substitution parameters.}
 }

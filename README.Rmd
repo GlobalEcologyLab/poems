@@ -13,6 +13,18 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r srr-tags, eval = FALSE, echo = FALSE}
+#' General statistical software standards addressed in documentation outside of .R files
+#'
+#' @srrstats {G1.0} References from the literature for this package are given in the References section of this document.
+#' @srrstats {G1.1} The README explains how this package relates to other algorithms.
+#' @srrstats {G1.2} A life-cycle statement is provided in the CONTRIBUTING.md document.
+#' @srrstats {G1.3} Here we define the statistical term "pattern-oriented modeling."
+#' @srrstats {G1.4} All documentation of functions and classes is done with roxygen2 tags. 
+#' There are no non-exported functions or classes.
+#' 
+```
+
 # poems: Pattern-oriented ensemble modeling system (for spatially explicit populations) <img src='man/figures/logo.svg' align="right" height="125" />
 
 <!-- badges: start -->
@@ -25,7 +37,14 @@ knitr::opts_chunk$set(
 
 The poems package provides a framework of interoperable *R6* (Chang, 2020) classes
 for building ensembles of viable models via the pattern-oriented modeling (POM)
-approach (Grimm et al., 2005). The package includes classes for encapsulating and 
+approach (Grimm et al., 2005). Pattern-oriented modeling is a vigorous form of 
+statistical validation in which simulations and their parameter settings are
+summarized using key metrics and converged toward multiple observed patterns,
+or targets.
+
+The package provides a process-based population model related to the 
+functionality of RAMAS or Vortex, but in a free and open source 
+format, with high customizability. The package includes classes for encapsulating and 
 generating model parameters, and managing the POM workflow. The workflow includes:
 
 1. Model setup including generated spatial layers and demographic population 
@@ -42,7 +61,7 @@ However, alternative user-defined functionality could be employed.
 The package includes a spatially explicit demographic population model simulation
 engine, which incorporates default functionality for density dependence, correlated 
 environmental stochasticity, stage-based transitions, and distance-based dispersal. 
-The user may customize the simulator by defining functionality for trans-locations, 
+The user may customize the simulator by defining functionality for translocations, 
 harvesting, mortality, and other processes, as well as defining the sequence order 
 for the simulator processes. The framework could also be adapted for use with other 
 model simulators by utilizing its extendable (inheritable) base classes.

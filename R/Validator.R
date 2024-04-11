@@ -1,8 +1,14 @@
 #' R6 class representing a pattern-oriented validator.
 #'
+#' @srrstats {G1.3} We clearly define here what pattern-oriented validation is.
+#' 
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class for pattern-oriented validation and simulation
-#' model ensemble selection. The class wraps functionality for the validation approach,
+#' model ensemble selection. Pattern-oriented validation is a statistical
+#' approach to compare patterns generated in simulations against observed
+#' empirical patterns.
+#' 
+#' The class wraps functionality for the validation approach,
 #' typically utilizing an external library, the default being the approximate Bayesian
 #' computation (ABC) \code{\link[abc:abc]{abc}} library, and includes methods for
 #' resolving non-finite metrics, centering and scaling the validator inputs, running

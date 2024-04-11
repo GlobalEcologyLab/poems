@@ -6,10 +6,10 @@
 \format{
 A data frame with 20,000 rows and 4 variables:
 \describe{
-  \item{index}{Example simulation number from 1 to 20,000}
-  \item{bounty_slope_error}{Root mean squared error (RMSE) from estimated total bounty submitted across three intervals (see vignette)}
-  \item{ibra_extirpation_error}{RMSE from estimated extirpation date for each IBRA bioregion (see vignette)}
-  \item{total_extinction}{Total extinction date for each example simulation (\code{NA} when persistent beyond 1967)}
+\item{index}{Example simulation number from 1 to 20,000}
+\item{bounty_slope_error}{Root mean squared error (RMSE) from estimated total bounty submitted across three intervals (see vignette)}
+\item{ibra_extirpation_error}{RMSE from estimated extirpation date for each IBRA bioregion (see vignette)}
+\item{total_extinction}{Total extinction date for each example simulation (\code{NA} when persistent beyond 1967)}
 }
 }
 \source{
