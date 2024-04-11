@@ -8,7 +8,7 @@ abundance at a specified time step via dispersal rates provided."><meta property
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">poems</a>
 
@@ -109,58 +109,58 @@ abundance at a specified time step via dispersal rates provided.</p>
 <dd><p>Either a matrix of dispersal rates between populations (source columns to target rows) or a list of data frames of non-zero dispersal rates and indices for constructing a compact dispersal matrix, and optional changing rates over time (as per class <code><a href="DispersalGenerator.html">DispersalGenerator</a></code> <em>dispersal_data</em> attribute). Alternatively a user-defined function (optionally nested in a list with additional attributes) may be used: <code>function(params)</code>, where <em>params</em> is a list passed to the function containing:</p><dl><dt><code>replicates</code></dt>
 <dd><p>Number of replicate simulation runs.</p></dd>
 
-  <dt><code>time_steps</code></dt>
+<dt><code>time_steps</code></dt>
 <dd><p>Number of simulation time steps.</p></dd>
 
-  <dt><code>years_per_step</code></dt>
+<dt><code>years_per_step</code></dt>
 <dd><p>Number of years per time step.</p></dd>
 
-  <dt><code>populations</code></dt>
+<dt><code>populations</code></dt>
 <dd><p>Number of populations.</p></dd>
 
-  <dt><code>stages</code></dt>
+<dt><code>stages</code></dt>
 <dd><p>Number of life cycle stages.</p></dd>
 
-  <dt><code>demographic_stochasticity</code></dt>
+<dt><code>demographic_stochasticity</code></dt>
 <dd><p>Boolean for optionally choosing demographic stochasticity for the transformation.</p></dd>
 
-  <dt><code>density_stages</code></dt>
+<dt><code>density_stages</code></dt>
 <dd><p>Array of booleans or numeric (0,1) for each stage to indicate which stages are affected by density.</p></dd>
 
-  <dt><code>dispersal_stages</code></dt>
+<dt><code>dispersal_stages</code></dt>
 <dd><p>Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal.</p></dd>
 
-  <dt><code>dispersal_source_n_k</code></dt>
+<dt><code>dispersal_source_n_k</code></dt>
 <dd><p>Dispersal proportion (p) density dependence via source population abundance divided by carrying capacity (n/k), where p is reduced via a linear slope (defined by two list items) from n/k &lt;= <em>cutoff</em> (p = 0) to n/k &gt;= <em>threshold</em>.</p></dd>
 
-  <dt><code>dispersal_target_k</code></dt>
+<dt><code>dispersal_target_k</code></dt>
 <dd><p>Dispersal rate (r) density dependence via target population carrying capacity (k), where r is reduced via a linear slope (through the origin) when k &lt;= <em>threshold</em>.</p></dd>
 
-  <dt><code>dispersal_target_n</code></dt>
+<dt><code>dispersal_target_n</code></dt>
 <dd><p>Dispersal rate (r) density dependence via target population abundance (n), where r is reduced via a linear slope (defined by two list items) from n &gt;= <em>threshold</em> to n &lt;= <em>cutoff</em> (r = 0) or vice versa.</p></dd>
 
-  <dt><code>dispersal_target_n_k</code></dt>
+<dt><code>dispersal_target_n_k</code></dt>
 <dd><p>Dispersal rate (r) density dependence via target population abundance divided by carrying capacity (n/k), where r is reduced via a linear slope (defined by two list items) from n/k &gt;= <em>threshold</em> to n/k &lt;= <em>cutoff</em> (r = 0) or vice versa.</p></dd>
 
-  <dt><code>r</code></dt>
+<dt><code>r</code></dt>
 <dd><p>Simulation replicate.</p></dd>
 
-  <dt><code>tm</code></dt>
+<dt><code>tm</code></dt>
 <dd><p>Simulation time step.</p></dd>
 
-  <dt><code>carrying_capacity</code></dt>
+<dt><code>carrying_capacity</code></dt>
 <dd><p>Array of carrying capacity values for each population at time step.</p></dd>
 
-  <dt><code>stage_abundance</code></dt>
+<dt><code>stage_abundance</code></dt>
 <dd><p>Matrix of abundance for each stage (rows) and population (columns) at time step.</p></dd>
 
-  <dt><code>occupied_indices</code></dt>
+<dt><code>occupied_indices</code></dt>
 <dd><p>Array of indices for populations occupied at time step.</p></dd>
 
-  <dt><code>simulator</code></dt>
+<dt><code>simulator</code></dt>
 <dd><p><code><a href="SimulatorReference.html">SimulatorReference</a></code> object with dynamically accessible <em>attached</em> and <em>results</em> lists.</p></dd>
 
-  <dt><code>additional attributes</code></dt>
+<dt><code>additional attributes</code></dt>
 <dd><p>Additional attributes when the transformation is optionally nested in a list.</p></dd>
 
 
@@ -195,27 +195,25 @@ abundance at a specified time step via dispersal rates provided.</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Dispersal function: <code>function(r, tm, carrying_capacity, stage_abundance, occupied_indices)</code>, where:</p>
-<p></p>
-<dl><dt><code>r</code></dt>
+<p>Dispersal function: <code>function(r, tm, carrying_capacity, stage_abundance, occupied_indices)</code>, where:</p><dl><dt><code>r</code></dt>
 <dd><p>Simulation replicate.</p></dd>
 
-    <dt><code>tm</code></dt>
+<dt><code>tm</code></dt>
 <dd><p>Simulation time step.</p></dd>
 
-    <dt><code>carrying_capacity</code></dt>
+<dt><code>carrying_capacity</code></dt>
 <dd><p>Array of carrying capacity values for each population at time step.</p></dd>
 
-    <dt><code>stage_abundance</code></dt>
+<dt><code>stage_abundance</code></dt>
 <dd><p>Matrix of abundance for each stage (rows) and population (columns) at time step.</p></dd>
 
-    <dt><code>occupied_indices</code></dt>
+<dt><code>occupied_indices</code></dt>
 <dd><p>Array of indices for populations occupied at time step.</p></dd>
 
-    <dt><code>returns</code></dt>
+<dt><code>returns</code></dt>
 <dd><p>New stage abundance matrix with dispersal applied.</p></dd>
 
-  
+
 </dl></div>
 
     <div class="section level2">
@@ -271,7 +269,7 @@ abundance at a specified time step via dispersal rates provided.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

@@ -29,7 +29,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">poems</a>
 
@@ -84,7 +84,7 @@
                         <h4 data-toc-skip class="author">Global ChEC
 Lab</h4>
             
-            <h4 data-toc-skip class="date">2024-04-04</h4>
+            <h4 data-toc-skip class="date">2024-04-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GlobalEcologyLab/poems/blob/HEAD/vignettes/simple_example.Rmd" class="external-link"><code>vignettes/simple_example.Rmd</code></a></small>
       <div class="d-none name"><code>simple_example.Rmd</code></div>
@@ -297,7 +297,7 @@ values via probabilistic distributions.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">capacity_gen</span><span class="op">$</span><span class="fu">generate</span><span class="op">(</span>input_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>initial_n <span class="op">=</span> <span class="fl">500</span>, density_max <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="co"># test</span></span>
 <span><span class="co">#&gt; $initial_abundance</span></span>
-<span><span class="co">#&gt; [1] 64 90 68 81 51 73 73</span></span>
+<span><span class="co">#&gt; [1] 63 83 61 97 39 70 87</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $carrying_capacity</span></span>
 <span><span class="co">#&gt; [1]  80 100  70  90  60  70  80</span></span></code></pre></div>
@@ -456,48 +456,48 @@ to (with) known or desired target patterns (in step 6).</p>
 <span><span class="co">#&gt; [1] "generation_log.txt" "simulation_log.txt"</span></span>
 <span><span class="va">results_manager</span><span class="op">$</span><span class="va">summary_metric_data</span></span>
 <span><span class="co">#&gt;    index trend_n total_h</span></span>
-<span><span class="co">#&gt; 1      1   -1.67     514</span></span>
-<span><span class="co">#&gt; 2      2   -5.75     311</span></span>
-<span><span class="co">#&gt; 3      3   -0.50     462</span></span>
-<span><span class="co">#&gt; 4      4   -4.00     497</span></span>
-<span><span class="co">#&gt; 5      5   -1.25     281</span></span>
-<span><span class="co">#&gt; 6      6   -2.67     728</span></span>
-<span><span class="co">#&gt; 7      7    0.11     230</span></span>
-<span><span class="co">#&gt; 8      8   -8.38     596</span></span>
-<span><span class="co">#&gt; 9      9    0.00     533</span></span>
-<span><span class="co">#&gt; 10    10   -0.75     409</span></span>
-<span><span class="co">#&gt; 11    11   -1.50     574</span></span>
-<span><span class="co">#&gt; 12    12   -7.33     600</span></span>
+<span><span class="co">#&gt; 1      1   -7.43     514</span></span>
+<span><span class="co">#&gt; 2      2    2.50     347</span></span>
+<span><span class="co">#&gt; 3      3   -5.20     472</span></span>
+<span><span class="co">#&gt; 4      4   -4.00     481</span></span>
+<span><span class="co">#&gt; 5      5   -1.33     279</span></span>
+<span><span class="co">#&gt; 6      6  -11.57     751</span></span>
+<span><span class="co">#&gt; 7      7   -9.22     218</span></span>
+<span><span class="co">#&gt; 8      8  -10.00     606</span></span>
+<span><span class="co">#&gt; 9      9    2.00     523</span></span>
+<span><span class="co">#&gt; 10    10   -3.83     418</span></span>
+<span><span class="co">#&gt; 11    11   -6.00     631</span></span>
+<span><span class="co">#&gt; 12    12   -6.75     574</span></span>
 <span><span class="va">results_manager</span><span class="op">$</span><span class="va">summary_matrix_list</span></span>
 <span><span class="co">#&gt; $n</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
-<span><span class="co">#&gt;  [1,]  533  513  554  527  525  503  541  512  533   518</span></span>
-<span><span class="co">#&gt;  [2,]  480  427  396  396  430  398  423  399  390   381</span></span>
-<span><span class="co">#&gt;  [3,]  498  445  456  462  461  461  476  449  483   442</span></span>
-<span><span class="co">#&gt;  [4,]  427  411  392  388  378  380  412  403  389   374</span></span>
-<span><span class="co">#&gt;  [5,]  459  436  454  458  439  440  476  461  439   426</span></span>
-<span><span class="co">#&gt;  [6,]  447  455  445  467  462  443  463  439  428   426</span></span>
-<span><span class="co">#&gt;  [7,]  441  462  432  429  421  409  463  445  462   442</span></span>
-<span><span class="co">#&gt;  [8,]  456  437  393  416  386  377  403  382  378   370</span></span>
-<span><span class="co">#&gt;  [9,]  412  424  403  346  377  359  384  384  404   412</span></span>
-<span><span class="co">#&gt; [10,]  512  476  427  446  455  501  457  484  445   470</span></span>
-<span><span class="co">#&gt; [11,]  464  495  437  472  433  453  450  466  446   473</span></span>
-<span><span class="co">#&gt; [12,]  393  358  338  362  338  313  317  299  330   327</span></span>
+<span><span class="co">#&gt;  [1,]  570  561  532  488  461  515  541  505  509   486</span></span>
+<span><span class="co">#&gt;  [2,]  438  430  443  448  440  444  476  457  428   460</span></span>
+<span><span class="co">#&gt;  [3,]  461  504  498  502  473  452  452  430  476   450</span></span>
+<span><span class="co">#&gt;  [4,]  463  362  389  373  409  346  417  381  401   339</span></span>
+<span><span class="co">#&gt;  [5,]  445  428  472  430  450  410  426  448  455   416</span></span>
+<span><span class="co">#&gt;  [6,]  503  512  471  499  478  508  419  414  431   401</span></span>
+<span><span class="co">#&gt;  [7,]  463  441  435  419  411  402  394  376  405   380</span></span>
+<span><span class="co">#&gt;  [8,]  496  448  416  379  384  384  372  364  391   380</span></span>
+<span><span class="co">#&gt;  [9,]  389  407  370  353  377  352  389  386  388   403</span></span>
+<span><span class="co">#&gt; [10,]  520  498  457  466  505  460  450  475  476   466</span></span>
+<span><span class="co">#&gt; [11,]  532  498  519  526  530  522  508  502  446   484</span></span>
+<span><span class="co">#&gt; [12,]  372  352  341  312  329  304  321  291  310   298</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $h</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
-<span><span class="co">#&gt;  [1,]   52   51   53   51   53   49   54   50   52    49</span></span>
-<span><span class="co">#&gt;  [2,]   39   33   28   28   33   31   32   30   28    29</span></span>
-<span><span class="co">#&gt;  [3,]   48   45   45   44   47   45   48   46   49    45</span></span>
-<span><span class="co">#&gt;  [4,]   53   54   49   48   48   44   52   52   48    49</span></span>
-<span><span class="co">#&gt;  [5,]   28   28   27   28   28   27   32   29   26    28</span></span>
-<span><span class="co">#&gt;  [6,]   72   73   74   75   76   72   77   71   68    70</span></span>
-<span><span class="co">#&gt;  [7,]   23   24   21   22   21   24   26   22   24    23</span></span>
-<span><span class="co">#&gt;  [8,]   69   64   59   63   58   56   57   56   58    56</span></span>
-<span><span class="co">#&gt;  [9,]   57   57   53   45   52   50   53   52   58    56</span></span>
-<span><span class="co">#&gt; [10,]   45   41   37   40   39   42   39   44   39    43</span></span>
-<span><span class="co">#&gt; [11,]   56   61   55   60   54   57   56   61   53    61</span></span>
-<span><span class="co">#&gt; [12,]   70   63   62   62   62   56   54   53   60    58</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1,]   56   55   53   47   47   53   54   49   51    49</span></span>
+<span><span class="co">#&gt;  [2,]   33   33   34   37   34   35   37   35   33    36</span></span>
+<span><span class="co">#&gt;  [3,]   46   50   51   52   49   45   47   42   46    44</span></span>
+<span><span class="co">#&gt;  [4,]   58   44   50   47   50   43   49   46   51    43</span></span>
+<span><span class="co">#&gt;  [5,]   29   28   31   27   28   23   26   30   29    28</span></span>
+<span><span class="co">#&gt;  [6,]   79   84   77   83   76   85   68   66   70    63</span></span>
+<span><span class="co">#&gt;  [7,]   25   22   21   22   23   23   20   20   22    20</span></span>
+<span><span class="co">#&gt;  [8,]   74   68   63   59   57   57   56   54   60    58</span></span>
+<span><span class="co">#&gt;  [9,]   54   56   50   48   51   48   54   55   53    54</span></span>
+<span><span class="co">#&gt; [10,]   47   44   39   40   43   40   40   42   42    41</span></span>
+<span><span class="co">#&gt; [11,]   68   61   65   67   68   64   63   62   55    58</span></span>
+<span><span class="co">#&gt; [12,]   65   62   63   57   57   51   58   52   58    51</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-6-build-a-validator-to-select-a-model-ensemble">Step 6: Build a validator to select a model ensemble<a class="anchor" aria-label="anchor" href="#step-6-build-a-validator-to-select-a-model-ensemble"></a>
@@ -535,9 +535,9 @@ advanced vignettes).</p>
 <span><span class="co">#&gt; [1] "validation_diagnostics.pdf"</span></span>
 <span><span class="va">validator</span><span class="op">$</span><span class="va">selected_simulations</span> <span class="co"># top 3 models (stable abundance and high harvest)</span></span>
 <span><span class="co">#&gt;   index    weight</span></span>
-<span><span class="co">#&gt; 1     3 0.0000000</span></span>
-<span><span class="co">#&gt; 2     9 0.7782577</span></span>
-<span><span class="co">#&gt; 3    11 0.4330242</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     4 0.2419865</span></span>
+<span><span class="co">#&gt; 2     9 0.7559572</span></span>
+<span><span class="co">#&gt; 3    11 0.0000000</span></span></code></pre></div>
 <p>We encourage the user to examine the generated diagnostics (PDF)
 output file, and to become acquainted with the analysis that this
 information facilitates (see the <em>abc</em> documentation). As our
@@ -604,7 +604,7 @@ pp. 987–991.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer>

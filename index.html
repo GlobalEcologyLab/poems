@@ -29,7 +29,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">poems</a>
 
@@ -82,7 +82,8 @@
 </div>
 <!-- badges: start -->
 
-<p>The poems package provides a framework of interoperable <em>R6</em> (Chang, 2020) classes for building ensembles of viable models via the pattern-oriented modeling (POM) approach (Grimm et al., 2005). The package includes classes for encapsulating and generating model parameters, and managing the POM workflow. The workflow includes:</p>
+<p>The poems package provides a framework of interoperable <em>R6</em> (Chang, 2020) classes for building ensembles of viable models via the pattern-oriented modeling (POM) approach (Grimm et al., 2005). Pattern-oriented modeling is a vigorous form of statistical validation in which simulations and their parameter settings are summarized using key metrics and converged toward multiple observed patterns, or targets.</p>
+<p>The package provides a process-based population model related to the functionality of RAMAS or Vortex, but in a free and open source format, with high customizability. The package includes classes for encapsulating and generating model parameters, and managing the POM workflow. The workflow includes:</p>
 <ol style="list-style-type: decimal">
 <li>Model setup including generated spatial layers and demographic population model parameters.</li>
 <li>Generating model parameters via Latin hypercube sampling (Iman &amp; Conover, 1980).</li>
@@ -91,7 +92,7 @@
 <li>Validating and selecting an ensemble of models that best match known patterns.</li>
 </ol>
 <p>By default, model validation and selection utilizes an approximate Bayesian computation (ABC) approach (Beaumont et al., 2002) using the <em>abc</em> package (Csillery et al., 2015). However, alternative user-defined functionality could be employed.</p>
-<p>The package includes a spatially explicit demographic population model simulation engine, which incorporates default functionality for density dependence, correlated environmental stochasticity, stage-based transitions, and distance-based dispersal. The user may customize the simulator by defining functionality for trans-locations, harvesting, mortality, and other processes, as well as defining the sequence order for the simulator processes. The framework could also be adapted for use with other model simulators by utilizing its extendable (inheritable) base classes.</p>
+<p>The package includes a spatially explicit demographic population model simulation engine, which incorporates default functionality for density dependence, correlated environmental stochasticity, stage-based transitions, and distance-based dispersal. The user may customize the simulator by defining functionality for translocations, harvesting, mortality, and other processes, as well as defining the sequence order for the simulator processes. The framework could also be adapted for use with other model simulators by utilizing its extendable (inheritable) base classes.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -144,47 +145,47 @@
 <span><span class="va">results</span> <span class="co"># examine</span></span>
 <span><span class="co">#&gt; $all</span></span>
 <span><span class="co">#&gt; $all$abundance</span></span>
-<span><span class="co">#&gt; [1] 1047 1111 1167 1308 1320</span></span>
+<span><span class="co">#&gt; [1] 1031 1226 1249 1409 1358</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $all$abundance_stages</span></span>
 <span><span class="co">#&gt; $all$abundance_stages[[1]]</span></span>
-<span><span class="co">#&gt; [1] 628 659 676 791 766</span></span>
+<span><span class="co">#&gt; [1] 603 748 724 868 789</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $all$abundance_stages[[2]]</span></span>
-<span><span class="co">#&gt; [1] 419 452 491 517 554</span></span>
+<span><span class="co">#&gt; [1] 428 478 525 541 569</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $abundance</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">#&gt; [1,]   53  100  127  163  218</span></span>
-<span><span class="co">#&gt; [2,]   92  141  165  189  177</span></span>
-<span><span class="co">#&gt; [3,]  153  166  159  177  181</span></span>
-<span><span class="co">#&gt; [4,]  158  166  157  194  207</span></span>
-<span><span class="co">#&gt; [5,]  173  190  172  201  167</span></span>
-<span><span class="co">#&gt; [6,]  211  173  203  182  181</span></span>
-<span><span class="co">#&gt; [7,]  207  175  184  202  189</span></span>
+<span><span class="co">#&gt; [1,]   55  118  191  202  186</span></span>
+<span><span class="co">#&gt; [2,]  105  159  171  204  187</span></span>
+<span><span class="co">#&gt; [3,]  114  157  164  183  163</span></span>
+<span><span class="co">#&gt; [4,]  172  205  195  219  223</span></span>
+<span><span class="co">#&gt; [5,]  177  198  183  213  216</span></span>
+<span><span class="co">#&gt; [6,]  204  197  197  197  194</span></span>
+<span><span class="co">#&gt; [7,]  204  192  148  191  189</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $abundance_stages</span></span>
 <span><span class="co">#&gt; $abundance_stages[[1]]</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">#&gt; [1,]   29   58   68   88  120</span></span>
-<span><span class="co">#&gt; [2,]   53   91   88  113  115</span></span>
-<span><span class="co">#&gt; [3,]   95   95   92  111  100</span></span>
-<span><span class="co">#&gt; [4,]   95  100   99  109  130</span></span>
-<span><span class="co">#&gt; [5,]  108  115   93  126   91</span></span>
-<span><span class="co">#&gt; [6,]  125  102  121  122  102</span></span>
-<span><span class="co">#&gt; [7,]  123   98  115  122  108</span></span>
+<span><span class="co">#&gt; [1,]   31   74  111  128  111</span></span>
+<span><span class="co">#&gt; [2,]   65   94   95  121  104</span></span>
+<span><span class="co">#&gt; [3,]   68  104   95  133   81</span></span>
+<span><span class="co">#&gt; [4,]   97  113  118  120  142</span></span>
+<span><span class="co">#&gt; [5,]  100  134  106  125  118</span></span>
+<span><span class="co">#&gt; [6,]  120  116  110  122  114</span></span>
+<span><span class="co">#&gt; [7,]  122  113   89  119  119</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $abundance_stages[[2]]</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">#&gt; [1,]   24   42   59   75   98</span></span>
-<span><span class="co">#&gt; [2,]   39   50   77   76   62</span></span>
-<span><span class="co">#&gt; [3,]   58   71   67   66   81</span></span>
-<span><span class="co">#&gt; [4,]   63   66   58   85   77</span></span>
-<span><span class="co">#&gt; [5,]   65   75   79   75   76</span></span>
-<span><span class="co">#&gt; [6,]   86   71   82   60   79</span></span>
-<span><span class="co">#&gt; [7,]   84   77   69   80   81</span></span>
+<span><span class="co">#&gt; [1,]   24   44   80   74   75</span></span>
+<span><span class="co">#&gt; [2,]   40   65   76   83   83</span></span>
+<span><span class="co">#&gt; [3,]   46   53   69   50   82</span></span>
+<span><span class="co">#&gt; [4,]   75   92   77   99   81</span></span>
+<span><span class="co">#&gt; [5,]   77   64   77   88   98</span></span>
+<span><span class="co">#&gt; [6,]   84   81   87   75   80</span></span>
+<span><span class="co">#&gt; [7,]   82   79   59   72   70</span></span>
 <span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">region</span><span class="op">$</span><span class="fu">raster_from_values</span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">abundance</span><span class="op">[</span>, <span class="fl">5</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Final abundance"</span>, xlab <span class="op">=</span> <span class="st">"Longitude (degrees)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Latitude (degrees)"</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">300</span><span class="op">)</span>, colNA <span class="op">=</span> <span class="st">"blue"</span></span>
@@ -273,7 +274,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer>

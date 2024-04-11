@@ -38,7 +38,7 @@ by utilizing its extendable (inheritable) base classes."><meta property="og:imag
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">poems</a>
 
@@ -115,88 +115,88 @@ by utilizing its extendable (inheritable) base classes.</p>
 workflow for building an ensemble of simulation models.
 
 <img src="figures/framework.png" alt=""></p><ol><li><p>Create a simulation model template (a <code><a href="SimulationModel.html">SimulationModel</a></code> or
-    inherited class object) with appropriate fixed parameters for the study domain.
-    Also define a study region via the <code><a href="Region.html">Region</a></code> class if the
-    simulations are to be spatially explicit.</p></li>
+inherited class object) with appropriate fixed parameters for the study domain.
+Also define a study region via the <code><a href="Region.html">Region</a></code> class if the
+simulations are to be spatially explicit.</p></li>
 <li><p>Create generators (<code><a href="Generator.html">Generator</a></code> or inherited class objects) for
-    dynamically generating (non-singular) model parameters represented by data
-    structures, such as arrays or lists.</p></li>
+dynamically generating (non-singular) model parameters represented by data
+structures, such as arrays or lists.</p></li>
 <li><p>Generate a data frame of sampled variable model parameters using the
-    <code><a href="LatinHypercubeSampler.html">LatinHypercubeSampler</a></code>. This will include singular model parameter
-    values as well as input parameters for the generators.</p></li>
+<code><a href="LatinHypercubeSampler.html">LatinHypercubeSampler</a></code>. This will include singular model parameter
+values as well as input parameters for the generators.</p></li>
 <li><p>Create a <code><a href="SimulationManager.html">SimulationManager</a></code> object configured with the
-    simulation model (template), the generators, and the sample parameter data
-    frame. Running this manager sets and runs the models via the simulator function
-    for each set (row) of sampled parameters, utilising the generators when
-    required. The results of each model simulation run are written to a file. A
-    simulation log file is also created.</p></li>
+simulation model (template), the generators, and the sample parameter data
+frame. Running this manager sets and runs the models via the simulator function
+for each set (row) of sampled parameters, utilising the generators when
+required. The results of each model simulation run are written to a file. A
+simulation log file is also created.</p></li>
 <li><p>Create a <code><a href="ResultsManager.html">ResultsManager</a></code> object configured with the sample
-    parameter data and result file details. Running this manager constructs a data
-    frame of configured summary metrics, one row for each simulation result file.
-    The manager utilizes the <code><a href="SimulationResults.html">SimulationResults</a></code> (or inherited) class
-    to encapsulate, and dynamically generate additional derived, results. The
-    metrics are generated via user-defined specifications and functions for
-    calculating each metric from the results (objects).</p></li>
+parameter data and result file details. Running this manager constructs a data
+frame of configured summary metrics, one row for each simulation result file.
+The manager utilizes the <code><a href="SimulationResults.html">SimulationResults</a></code> (or inherited) class
+to encapsulate, and dynamically generate additional derived, results. The
+metrics are generated via user-defined specifications and functions for
+calculating each metric from the results (objects).</p></li>
 <li><p>Create a <code><a href="Validator.html">Validator</a></code> object configured with the sample
-    parameter data, summary metrics, and target (observed) pattern values for each
-    metric. By default, the validator utilizes an approximate Bayesian computation
-    (ABC) validation method via the <code><a href="https://rdrr.io/pkg/abc/man/abc.html" class="external-link">abc</a></code> library, although
-    the validator (call) function can be configured to utilize other library or
-    user-defined functions. Running the validator (with appropriate call function
-    configuration) produces an ensemble of models (indices to sampled parameters)
-    that were found to best match the targets. Diagnostic outputs may also be
-    produced (depending on the call function and its configuration).</p></li>
+parameter data, summary metrics, and target (observed) pattern values for each
+metric. By default, the validator utilizes an approximate Bayesian computation
+(ABC) validation method via the <code><a href="https://rdrr.io/pkg/abc/man/abc.html" class="external-link">abc</a></code> library, although
+the validator (call) function can be configured to utilize other library or
+user-defined functions. Running the validator (with appropriate call function
+configuration) produces an ensemble of models (indices to sampled parameters)
+that were found to best match the targets. Diagnostic outputs may also be
+produced (depending on the call function and its configuration).</p></li>
 <li><p>The selected models may then be utilized for further studies, such as
-    alternative model scenarios or counterfactuals. This can be achieved by
-    utilizing the selected subset of parameter samples to form inputs for further
-    model simulations (by repeating the steps above).</p></li>
+alternative model scenarios or counterfactuals. This can be achieved by
+utilizing the selected subset of parameter samples to form inputs for further
+model simulations (by repeating the steps above).</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="population-modeling-components">Population modeling components<a class="anchor" aria-label="anchor" href="#population-modeling-components"></a></h2>
     
 
 <ul><li><p><code><a href="population_simulator.html">population_simulator</a></code> function: The simulation engine's main
-    function processes the model input parameters, controls the flow, calling other
-    function modules as required, and returns the results of each simulation.</p></li>
+function processes the model input parameters, controls the flow, calling other
+function modules as required, and returns the results of each simulation.</p></li>
 <li><p><code><a href="population_density.html">population_density</a></code> function: Module for configuring
-    and performing density dependence calculations at each simulation time step.
-    A user-defined function may be utilized.</p></li>
+and performing density dependence calculations at each simulation time step.
+A user-defined function may be utilized.</p></li>
 <li><p><code><a href="population_env_stoch.html">population_env_stoch</a></code> function: Module for configuring and
-    stochastically applying environmental variability to stage-based population
-    transition rates at each simulation time step.</p></li>
+stochastically applying environmental variability to stage-based population
+transition rates at each simulation time step.</p></li>
 <li><p><code><a href="population_transitions.html">population_transitions</a></code> function: Module for configuring and
-    performing stage-based demographic transitions of population abundances at each
-    simulation time step.</p></li>
+performing stage-based demographic transitions of population abundances at each
+simulation time step.</p></li>
 <li><p><code><a href="population_transformation.html">population_transformation</a></code> function: Module for configuring and
-    performing user-defined transformations to staged population abundances. This
-    functionality is utilized when defining functions for <code>translocation</code>,
-    <code>harvest</code>, <code>mortality</code>, or other custom transformative functions.</p></li>
+performing user-defined transformations to staged population abundances. This
+functionality is utilized when defining functions for <code>translocation</code>,
+<code>harvest</code>, <code>mortality</code>, or other custom transformative functions.</p></li>
 <li><p><code><a href="population_dispersal.html">population_dispersal</a></code> function: Module for configuring and
-    performing dispersal calculations at each simulation time step. A user-defined
-    function may be utilized.</p></li>
+performing dispersal calculations at each simulation time step. A user-defined
+function may be utilized.</p></li>
 <li><p><code><a href="population_results.html">population_results</a></code> function: Module for configuring,
-    initializing, and collating simulation results.</p></li>
+initializing, and collating simulation results.</p></li>
 <li><p><code><a href="PopulationModel.html">PopulationModel</a></code> class: Inherited from
-    <code><a href="SimulationModel.html">SimulationModel</a></code>, this class encapsulates the input parameters
-    utilized by the <code><a href="population_simulator.html">population_simulator</a></code>.</p></li>
+<code><a href="SimulationModel.html">SimulationModel</a></code>, this class encapsulates the input parameters
+utilized by the <code><a href="population_simulator.html">population_simulator</a></code>.</p></li>
 <li><p><code><a href="SimulatorReference.html">SimulatorReference</a></code> class: This simple
-    <code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6</a></code> class enables user-defined functionality to maintain
-    persistent (attached) attributes and to write to the simulator results.</p></li>
+<code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6</a></code> class enables user-defined functionality to maintain
+persistent (attached) attributes and to write to the simulator results.</p></li>
 <li><p><code><a href="SpatialCorrelation.html">SpatialCorrelation</a></code> class: Provides functionality for
-    generating parameters that can be utilized when optionally applying a spatial
-    correlation within the simulator's environmental variability calculations.</p></li>
+generating parameters that can be utilized when optionally applying a spatial
+correlation within the simulator's environmental variability calculations.</p></li>
 <li><p><code><a href="DispersalGenerator.html">DispersalGenerator</a></code> class: Inherited from
-    <code><a href="Generator.html">Generator</a></code>, this class provides functionality for generating
-    distance-based dispersal parameters that can be utilized when performing
-    dispersal calculations.</p></li>
+<code><a href="Generator.html">Generator</a></code>, this class provides functionality for generating
+distance-based dispersal parameters that can be utilized when performing
+dispersal calculations.</p></li>
 <li><p><code><a href="DispersalFriction.html">DispersalFriction</a></code> class: Provides functionality for
-    adjusting the (equivalent) distance between population cells given a
-    spatio-temporal frictional landscape. These adjustments may be utilized by the
-    <code><a href="DispersalGenerator.html">DispersalGenerator</a></code>.</p></li>
+adjusting the (equivalent) distance between population cells given a
+spatio-temporal frictional landscape. These adjustments may be utilized by the
+<code><a href="DispersalGenerator.html">DispersalGenerator</a></code>.</p></li>
 <li><p><code><a href="PopulationResults.html">PopulationResults</a></code> class: Inherited from
-    <code><a href="SimulationResults.html">SimulationResults</a></code>, this class encapsulates the results generated
-    by the <code><a href="population_simulator.html">population_simulator</a></code>, as well as dynamically generating
-    additional derived results.</p></li>
+<code><a href="SimulationResults.html">SimulationResults</a></code>, this class encapsulates the results generated
+by the <code><a href="population_simulator.html">population_simulator</a></code>, as well as dynamically generating
+additional derived results.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -311,7 +311,7 @@ vol. 310, no. 5750, pp. 987–991.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
