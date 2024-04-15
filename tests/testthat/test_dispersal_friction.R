@@ -85,32 +85,46 @@ test_that("distance multiplier calculation errors", {
   )
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = "wrong"),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices - 1),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices + 1),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = dispersal_indices / 3),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = as.vector(dispersal_indices)),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = cbind(dispersal_indices, dispersal_indices[, 1])),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
   dispersal_indices <- which(distance_matrix > 0, arr.ind = TRUE)
   expect_error(
     dispersal_friction$calculate_distance_multipliers(dispersal_indices = rbind(dispersal_indices, dispersal_indices)),
-    "Dispersal indices must be a two-column matrix representing the target and source coordinate index for each in-range migration"
+    "Dispersal indices must be a two-column matrix representing the 
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix"
   )
 })
 

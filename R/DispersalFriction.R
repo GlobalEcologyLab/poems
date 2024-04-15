@@ -118,7 +118,7 @@ DispersalFriction <- R6Class("DispersalFriction",
         nrow(dispersal_indices) > self$region$region_cells^2 ||
         max(dispersal_indices) > self$region$region_cells) {
         stop("Dispersal indices must be a two-column matrix representing the 
-        target and source coordinate index for each in-range migration, or an
+        target and source coordinate index for each in-range migration, or a
         data.frame or array that can be converted to such a two-column matrix", call. = FALSE)
       }
 
