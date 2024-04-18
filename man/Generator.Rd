@@ -255,7 +255,8 @@ List containing generated model output attributes and/or any error/warning messa
 \if{html}{\out{<a id="method-Generator-add_file_template"></a>}}
 \if{latex}{\out{\hypertarget{method-Generator-add_file_template}{}}}
 \subsection{Method \code{add_file_template()}}{
-Adds a file template for reading raster/RData(RDS)/CSV files for a given model attribute.
+Adds a file template for reading raster/RData(RDS)/CSV files for a given
+model attribute.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Generator$add_file_template(
   param,
@@ -270,11 +271,14 @@ Adds a file template for reading raster/RData(RDS)/CSV files for a given model a
 \describe{
 \item{\code{param}}{Name of model attribute to be read from a file.}
 
-\item{\code{path_template}}{Template string for the file path with placeholders (see \code{\link{sprintf}}) for simulation sample parameters.}
+\item{\code{path_template}}{Template string for the file path with placeholders
+(see \code{\link{sprintf}}) for simulation sample parameters.}
 
-\item{\code{path_params}}{Array of the names of the simulation sample parameters to be substituted (in order) into the path template.}
+\item{\code{path_params}}{Array of the names of the simulation sample
+parameters to be substituted (in order) into the path template.}
 
-\item{\code{file_type}}{File type raster \emph{"GRD"} (default), \emph{"TIF"}, \emph{"RData/RDS"} or \emph{"CSV"} to be read.}
+\item{\code{file_type}}{File type raster \emph{"GRD"} (default), \emph{"TIF"},
+\emph{"RData/RDS"}, \emph{"QS"}, or \emph{"CSV"} to be read.}
 }
 \if{html}{\out{</div>}}
 }
