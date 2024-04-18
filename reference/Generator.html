@@ -283,7 +283,8 @@ functions, generating sample distributions, or built-in functions (assigned as
 
 </div><p></p><hr><a id="method-Generator-add_file_template"></a><div class="section">
 <h3 id="method-add-file-template-">Method <code>add_file_template()</code><a class="anchor" aria-label="anchor" href="#method-add-file-template-"></a></h3>
-<p>Adds a file template for reading raster/RData(RDS)/CSV files for a given model attribute.</p><div class="section">
+<p>Adds a file template for reading raster/RData(RDS)/CSV files for a given
+model attribute.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Generator</span><span class="op">$</span><span class="fu">add_file_template</span><span class="op">(</span></span>
 <span>  <span class="va">param</span>,</span>
@@ -300,15 +301,18 @@ functions, generating sample distributions, or built-in functions (assigned as
 
 
 <dt><code>path_template</code></dt>
-<dd><p>Template string for the file path with placeholders (see <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></code>) for simulation sample parameters.</p></dd>
+<dd><p>Template string for the file path with placeholders
+(see <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></code>) for simulation sample parameters.</p></dd>
 
 
 <dt><code>path_params</code></dt>
-<dd><p>Array of the names of the simulation sample parameters to be substituted (in order) into the path template.</p></dd>
+<dd><p>Array of the names of the simulation sample
+parameters to be substituted (in order) into the path template.</p></dd>
 
 
 <dt><code>file_type</code></dt>
-<dd><p>File type raster <em>"GRD"</em> (default), <em>"TIF"</em>, <em>"RData/RDS"</em> or <em>"CSV"</em> to be read.</p></dd>
+<dd><p>File type raster <em>"GRD"</em> (default), <em>"TIF"</em>,
+<em>"RData/RDS"</em>, <em>"QS"</em>, or <em>"CSV"</em> to be read.</p></dd>
 
 
 </dl><p></p></div>
