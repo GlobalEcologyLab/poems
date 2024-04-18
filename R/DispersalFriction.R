@@ -1,5 +1,7 @@
 #' R6 class representing a dispersal friction.
-#'
+#' @srrstats {G4.0} WHen it writes to disk, this function writes .RData files 
+#' only and does not accept any other specification of file type/suffix.
+#' 
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class functionality for modeling sea, ice and other
 #' frictional barriers to dispersal within a spatially-explicit population model. The

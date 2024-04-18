@@ -1,6 +1,8 @@
 #' R6 class representing a pattern-oriented validator.
 #'
 #' @srrstats {G1.3} We clearly define here what pattern-oriented validation is.
+#' @srrstats {G4.0} When validation diagnostics are written to disk, they are
+#' always written as .pdf files. No alternative file suffix is accepted.
 #' 
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class for pattern-oriented validation and simulation

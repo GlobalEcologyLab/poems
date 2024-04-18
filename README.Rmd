@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 #' @srrstats {G1.3} Here we define the statistical term "pattern-oriented modeling."
 #' @srrstats {G1.4} All documentation of functions and classes is done with roxygen2 tags. 
 #' There are no non-exported functions or classes.
-#' 
+#' @srrstats {SP2.1} `poems` uses `sf` and not `sp`.
 ```
 
 # poems: Pattern-oriented ensemble modeling system (for spatially explicit populations) <img src='man/figures/logo.svg' align="right" height="125" />
