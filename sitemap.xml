@@ -1,153 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://globalecologylab.github.io/poems/404.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/articles/simple_example.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/articles/thylacine_example.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/articles/translocation_example.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/index.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/DispersalFriction.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/DispersalGenerator.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/DispersalTemplate.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/GenerativeTemplate.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/Generator.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/GenericClass.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/GenericManager.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/GenericModel.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/LatinHypercubeSampler.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/ModelSimulator.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/PopulationModel.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/PopulationResults.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/Region.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/ResultsManager.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/SimulationManager.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/SimulationModel.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/SimulationResults.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/SimulatorReference.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/SpatialCorrelation.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/SpatialModel.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/Validator.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/poems-package.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/poems.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_density.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_dispersal.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_env_stoch.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_results.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_simulator.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_transformation.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/population_transitions.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/tasmania_ibra_data.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/tasmania_ibra_raster.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/tasmania_modifier.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/tasmania_raster.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/thylacine_bounty_record.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/thylacine_example_matrices.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/thylacine_example_matrices_rerun.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/thylacine_example_metrics.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/thylacine_example_metrics_rerun.html</loc>
-  </url>
-  <url>
-    <loc>https://globalecologylab.github.io/poems/reference/thylacine_hs_raster.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://globalecologylab.github.io/poems/404.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/CONTRIBUTING.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/articles/index.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/articles/simple_example.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/articles/thylacine_example.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/articles/translocation_example.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/authors.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/index.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/news/index.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/DispersalFriction.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/DispersalGenerator.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/DispersalTemplate.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/GenerativeTemplate.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/Generator.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/GenericClass.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/GenericManager.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/GenericModel.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/LatinHypercubeSampler.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/ModelSimulator.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/PopulationModel.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/PopulationResults.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/Region.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/ResultsManager.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/SimulationManager.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/SimulationModel.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/SimulationResults.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/SimulatorReference.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/SpatialCorrelation.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/SpatialModel.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/Validator.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/index.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/poems-package.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/poems.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_density.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_dispersal.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_env_stoch.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_results.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_simulator.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_transformation.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/population_transitions.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/tasmania_ibra_data.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/tasmania_ibra_raster.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/tasmania_modifier.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/tasmania_raster.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/thylacine_bounty_record.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/thylacine_example_matrices.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/thylacine_example_matrices_rerun.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/thylacine_example_metrics.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/thylacine_example_metrics_rerun.html</loc></url>
+<url><loc>https://globalecologylab.github.io/poems/reference/thylacine_hs_raster.html</loc></url>
 </urlset>
+
