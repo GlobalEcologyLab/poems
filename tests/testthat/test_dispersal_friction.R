@@ -76,7 +76,7 @@ test_that("distance multiplier calculation errors", {
     "Distance multipliers calculation requires region/coordinates to be set first"
   )
   # Dispersal indices incorrect or not consistent with coordinates
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE)*1000
   dispersal_indices <- which(distance_matrix > 0 & distance_matrix <= 350000, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
   dispersal_friction <- DispersalFriction$new(
@@ -130,7 +130,7 @@ test_that("distance multiplier calculation errors", {
 
 test_that("distance multiplier calculations", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- fossil::earth.dist(coordinates) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE)
   dispersal_indices <- which(distance_matrix > 1 & distance_matrix <= 350, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
   conductance_matrix <- array(1, c(16, 10))
@@ -209,7 +209,7 @@ test_that("distance multiplier calculations", {
   # No conductance values uses region raster set to 1 for non-NA values
   coordinates <- coordinates[-c(2, 5, 6), ] # isolate (1, 1)
   region <- Region$new(coordinates = coordinates)
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE)
   dispersal_indices <- which(distance_matrix > 0 & distance_matrix <= 350, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
   dispersal_friction <- DispersalFriction$new(region = region)

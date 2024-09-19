@@ -1,3 +1,8 @@
+# version 1.3.1
+
+## Bug fixes
+- `poems` no longer depends on `geosphere`. I am hopeful that this will clear up the test failures on CRAN's m1mac.
+
 # version 1.3.0
 
 Every update is an enhancement this time around:

@@ -259,7 +259,6 @@ test_that("calculate distance data with dispersal friction object", {
       breaks = c(1, seq(100, 400, 20), Inf)
     ))
   }
-  distance_data_changes[[2]] <- distance_data_changes[[2]][-c(13, 179), ] # > Dmax in both t = 1 and 2
   for (i in c(3, 5)) { # reverse changes
     distance_data_changes[[i]] <- distance_data_base[which(distance_multipliers[[i - 1]] != 1), ]
   }
@@ -333,7 +332,7 @@ test_that("calculate dispersals with dispersal friction", {
     region = region, distance_classes = seq(100, 400, 20),
     proportion = 0.4, breadth = 110, max_distance = 300
   )
-  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
+  distance_matrix <- fossil::earth.dist(coordinates[-c(2, 5, 6), ], dist = F) # km
   distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   dispersal_gen$calculate_dispersals()
@@ -383,7 +382,7 @@ test_that("cloning and generation", {
   dispersal_clone <- dispersal_gen$new_clone(breadth = 120)
   expect_true(dispersal_clone$generative_requirements_satisfied()[[1]])
   expect_is(dispersal_clone$dispersal_data[[1]], "data.frame") # generated
-  expect_equal(dim(dispersal_clone$dispersal_data[[1]]), c(228, 5))
+  expect_equal(dim(dispersal_clone$dispersal_data[[1]]), c(220, 5))
   expect_null(dispersal_clone$error_messages)
   # Generation
   expect_equal(

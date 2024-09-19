@@ -549,7 +549,7 @@ test_that("density dependent dispersal", {
     distance_scale = 1000,
     distance_classes = seq(100, 400, 20)
   )
-  distance_matrix <- fossil::earth.dist(coordinates, dist = F)
+  distance_matrix <- fossil::earth.dist(region$coordinates, dist = F)
   distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   dispersal_gen$calculate_dispersals(type = "matrix")
