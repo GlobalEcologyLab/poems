@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/GlobalEcologyLab/poems",
   "issueTracker": "https://github.com/GlobalEcologyLab/poems/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.3 (2024-02-29)",
+  "runtimePlatform": "R version 4.4.1 (2024-06-14)",
   "author": [
     {
       "@type": "Person",
@@ -186,31 +186,18 @@
     },
     "5": {
       "@type": "SoftwareApplication",
-      "identifier": "gdistance",
-      "name": "gdistance",
-      "version": ">= 1.3.6",
+      "identifier": "fossil",
+      "name": "fossil",
+      "version": ">= 0.4.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=gdistance"
+      "sameAs": "https://CRAN.R-project.org/package=fossil"
     },
     "6": {
-      "@type": "SoftwareApplication",
-      "identifier": "geosphere",
-      "name": "geosphere",
-      "version": ">= 1.5.10",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=geosphere"
-    },
-    "7": {
       "@type": "SoftwareApplication",
       "identifier": "lhs",
       "name": "lhs",
@@ -223,7 +210,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lhs"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "metRology",
       "name": "metRology",
@@ -236,7 +223,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=metRology"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "R6",
       "name": "R6",
@@ -249,7 +236,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=R6"
     },
-    "10": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "raster",
       "name": "raster",
@@ -262,7 +249,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=raster"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "trend",
       "name": "trend",
@@ -275,7 +262,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=trend"
     },
-    "12": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "truncnorm",
       "name": "truncnorm",
@@ -288,9 +275,33 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=truncnorm"
     },
+    "12": {
+      "@type": "SoftwareApplication",
+      "identifier": "gdistance",
+      "name": "gdistance",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gdistance"
+    },
+    "13": {
+      "@type": "SoftwareApplication",
+      "identifier": "qs",
+      "name": "qs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=qs"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "5644.237KB",
+  "fileSize": "5644.727KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
