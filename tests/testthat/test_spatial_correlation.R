@@ -37,7 +37,7 @@ test_that("initialization and parameter setting", {
 test_that("calculate distance matrix", {
   # Latitude/longitude coordinates
   coordinates1 <- array(c(1:4, 4:1), c(7, 2))
-  distance_matrix1 <- geosphere::distm(coordinates1, coordinates1, fun = geosphere::distGeo)
+  distance_matrix1 <- fossil::earth.dist(coordinates, dist = FALSE)*1000
   spatial_correlation <- SpatialCorrelation$new()
   expect_error(
     spatial_correlation$calculate_distance_matrix(),
@@ -84,7 +84,7 @@ test_that("calculate distance matrix", {
 test_that("calculate correlations", {
   # Default threshold (0.0000001)
   coordinates <- array(c(1:4, 4:1), c(7, 2))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000 # km
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE) # km
   correlation_matrix <- 0.6 * exp(-1 * distance_matrix / 200)
   diag(correlation_matrix) <- 1
   spatial_correlation <- SpatialCorrelation$new(correlation_amplitude = 0.6, correlation_breadth = 200)
@@ -119,7 +119,7 @@ test_that("calculate correlations", {
 
 test_that("calculate Cholesky decomposition", {
   coordinates <- array(c(1:4, 4:1), c(7, 2))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000 # km
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   correlation_matrix <- 0.6 * exp(-1 * distance_matrix / 200)
   diag(correlation_matrix) <- 1
   spatial_correlation <- SpatialCorrelation$new(
@@ -137,7 +137,7 @@ test_that("calculate Cholesky decomposition", {
 
 test_that("calculate compact decomposition", {
   coordinates <- array(c(1:4, 4:1), c(7, 2))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000 # km
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   correlation_matrix <- 0.6 * exp(-1 * distance_matrix / 32)
   diag(correlation_matrix) <- 1
   spatial_correlation <- SpatialCorrelation$new(
@@ -158,7 +158,7 @@ test_that("calculate compact decomposition", {
 
 test_that("generate correlated normal deviates", {
   coordinates <- array(c(1:4, 4:1), c(7, 2))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000 # km
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   correlation_matrix <- 0.6 * exp(-1 * distance_matrix / 32)
   diag(correlation_matrix) <- 1
   spatial_correlation <- SpatialCorrelation$new(

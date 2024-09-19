@@ -13,18 +13,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r srr-tags, eval = FALSE, echo = FALSE}
-#' General statistical software standards addressed in documentation outside of .R files
-#'
-#' @srrstats {G1.0} References from the literature for this package are given in the References section of this document.
-#' @srrstats {G1.1} The README explains how this package relates to other algorithms.
-#' @srrstats {G1.2} A life-cycle statement is provided in the CONTRIBUTING.md document.
-#' @srrstats {G1.3} Here we define the statistical term "pattern-oriented modeling."
-#' @srrstats {G1.4} All documentation of functions and classes is done with roxygen2 tags. 
-#' There are no non-exported functions or classes.
-#' @srrstats {SP2.1} `poems` uses `sf` and not `sp`.
-```
-
 # poems: Pattern-oriented ensemble modeling system (for spatially explicit populations) <img src='man/figures/logo.svg' align="right" height="125" />
 
 <!-- badges: start -->

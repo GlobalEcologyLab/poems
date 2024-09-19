@@ -43,7 +43,7 @@ test_that("initialization and parameter setting", {
 test_that("calculate distance matrix and classes", {
   # Region with longlat coordinates
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo)
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE)*1000
   dispersal_gen <- DispersalGenerator$new()
   expect_error(
     dispersal_gen$calculate_distance_matrix(),
@@ -78,7 +78,7 @@ test_that("calculate distance matrix and classes", {
 
 test_that("calculate distance data", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   dispersal_gen <- DispersalGenerator$new()
   # Manually calculate expected distance data (no dispersal friction)
   distance_data <- which(distance_matrix > 1 & distance_matrix <= 400, arr.ind = TRUE)
@@ -121,7 +121,7 @@ test_that("calculate distance data", {
 
 test_that("calculate dispersals", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20))
   # Pre-calculation required
   expect_equal(
@@ -167,7 +167,7 @@ test_that("calculate dispersals", {
 
 test_that("connect dispersal friction object", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20))
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   # Errors, warnings, consistency checks
@@ -232,7 +232,7 @@ test_that("connect dispersal friction object", {
 test_that("calculate distance data with dispersal friction object", {
   # Region and conductance values with longlat coordinates
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   # Distance data base as before
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20))
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
@@ -279,7 +279,7 @@ test_that("calculate distance data with dispersal friction object", {
 
 test_that("calculate dispersals with dispersal friction", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   conductance_matrix <- array(1, c(16, 10))
   conductance_matrix[1, 1] <- 0.5
   conductance_matrix[c(2, 3, 5, 6, 7, 9, 10, 11), 2] <- 0 # isolate coordinate (1, 1)
@@ -333,7 +333,7 @@ test_that("calculate dispersals with dispersal friction", {
     region = region, distance_classes = seq(100, 400, 20),
     proportion = 0.4, breadth = 110, max_distance = 300
   )
-  distance_matrix <- geosphere::distm(region$coordinates, region$coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
   dispersal_gen$calculate_distance_data(distance_matrix = distance_matrix)
   dispersal_gen$calculate_dispersals()
@@ -353,7 +353,7 @@ test_that("calculate dispersals with dispersal friction", {
 
 test_that("cloning and generation", {
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- geosphere::distm(coordinates, coordinates, fun = geosphere::distGeo) / 1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = F) # km
   distance_matrix[which(distance_matrix < 1)] <- 0 # ensure actual zero distance for self-referenced cells
   dispersal_gen <- DispersalGenerator$new(coordinates = coordinates, distance_classes = seq(100, 400, 20))
   expect_equal(dispersal_gen$generative_requirements, list(dispersal_data = "default"))

@@ -1,6 +1,4 @@
 #' R6 class representing a simulation manager.
-#' @srrstats {G4.0} When a results file suffix is not provided, this class
-#' fills it in with .RData.
 #'
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class to represent a manager for running multiple model

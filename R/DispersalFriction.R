@@ -1,7 +1,5 @@
 #' R6 class representing a dispersal friction.
-#' @srrstats {G4.0} WHen it writes to disk, this function writes .RData files 
-#' only and does not accept any other specification of file type/suffix.
-#' 
+#'
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class functionality for modeling sea, ice and other
 #' frictional barriers to dispersal within a spatially-explicit population model. The
@@ -108,18 +106,18 @@ DispersalFriction <- R6Class("DispersalFriction",
         dispersal_indices <- as.matrix(dispersal_indices)
       }
 
-      # Convert to matrix if array 
+      # Convert to matrix if array
       if (is.array(dispersal_indices)) {
         dispersal_indices <- as.matrix(dispersal_indices)
       }
 
       # Ensure dispersal indices are correctly set and are consistent with coordinates
-      if (is.null(dispersal_indices) || !all(is.integer(dispersal_indices)) || 
+      if (is.null(dispersal_indices) || !all(is.integer(dispersal_indices)) ||
         !all(dispersal_indices >= 1) ||
         !is.matrix(dispersal_indices) || ncol(dispersal_indices) != 2 ||
         nrow(dispersal_indices) > self$region$region_cells^2 ||
         max(dispersal_indices) > self$region$region_cells) {
-        stop("Dispersal indices must be a two-column matrix representing the 
+        stop("Dispersal indices must be a two-column matrix representing the
         target and source coordinate index for each in-range migration, or a
         data.frame or array that can be converted to such a two-column matrix", call. = FALSE)
       }

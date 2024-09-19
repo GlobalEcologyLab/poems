@@ -1,13 +1,11 @@
 #' R6 class representing a generic manager.
-#' @srrstats {G4.0} When a results file suffix is not provided, this class 
-#' defaults to .RData.
-#' 
+#'
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class to represent a generic (abstract) manager for
 #' generating or processing simulation results, as well as optionally generating values
 #' via generators.
-#' 
-#' @examples 
+#'
+#' @examples
 #' generic_manager <- GenericManager$new(
 #'  attr1 = 22:23,
 #'  results_filename_attributes = c("attr1", "example")
