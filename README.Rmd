@@ -57,12 +57,23 @@ model simulators by utilizing its extendable (inheritable) base classes.
 
 ## Installation
 
-You can install poems from [GitHub](https://github.com/) using:
+You can install poems from the CRAN repository:
+
+``` r
+install.packages("poems")
+```
+
+Or you can install the development version of poems from [GitHub](https://github.com/) using:
 
 ``` r
 # install.packages("devtools")
 remotes::install_github("GlobalEcologyLab/poems")
 ```
+
+## The poemsverse
+
+`poems` can do spatial population models on its own, but it also provides the engine behind two extension packages: [paleopop](https://github.com/GlobalEcologyLab/paleopop) and [epizootic](https://github.com/viralemergence/epizootic). `paleopop` is an extension for simulating populations over very long timescales, and `epizootic` is an extension for simulating disease dynamics in wild populations.
+
 ## Example
 
 The following simple example demonstrates how to run a single spatially explicit 

@@ -56,12 +56,29 @@ base classes.
 
 ## Installation
 
-You can install poems from [GitHub](https://github.com/) using:
+You can install poems from the CRAN repository:
+
+``` r
+install.packages("poems")
+```
+
+Or you can install the development version of poems from
+[GitHub](https://github.com/) using:
 
 ``` r
 # install.packages("devtools")
 remotes::install_github("GlobalEcologyLab/poems")
 ```
+
+## The poemsverse
+
+`poems` can do spatial population models on its own, but it also
+provides the engine behind two extension packages:
+[paleopop](https://github.com/GlobalEcologyLab/paleopop) and
+[epizootic](https://github.com/viralemergence/epizootic). `paleopop` is
+an extension for simulating populations over very long timescales, and
+`epizootic` is an extension for simulating disease dynamics in wild
+populations.
 
 ## Example
 
@@ -111,47 +128,47 @@ results <- population_simulator(pop_model)
 results # examine
 #> $all
 #> $all$abundance
-#> [1]  977 1090 1238 1256 1341
+#> [1] 1010 1077 1229 1288 1405
 #> 
 #> $all$abundance_stages
 #> $all$abundance_stages[[1]]
-#> [1] 574 643 755 731 847
+#> [1] 604 615 761 744 841
 #> 
 #> $all$abundance_stages[[2]]
-#> [1] 403 447 483 525 494
+#> [1] 406 462 468 544 564
 #> 
 #> 
 #> 
 #> $abundance
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   59  134  157  147  173
-#> [2,]   90  102  157  169  197
-#> [3,]  133  156  192  202  191
-#> [4,]  168  149  154  180  168
-#> [5,]  163  180  178  193  192
-#> [6,]  171  181  192  189  219
-#> [7,]  193  188  208  176  201
+#> [1,]   50   91  143  174  204
+#> [2,]   91  139  167  190  204
+#> [3,]  126  136  162  201  196
+#> [4,]  161  159  175  195  193
+#> [5,]  185  181  182  170  202
+#> [6,]  195  189  195  174  198
+#> [7,]  202  182  205  184  208
 #> 
 #> $abundance_stages
 #> $abundance_stages[[1]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   28   76  100   83  108
-#> [2,]   55   56  103   94  133
-#> [3,]   83   91  108  121  115
-#> [4,]  101   96   82  129   86
-#> [5,]   95  109  113  102  141
-#> [6,]  103  105  115   93  132
-#> [7,]  109  110  134  109  132
+#> [1,]   33   54   90  107  134
+#> [2,]   56   83  100  113  126
+#> [3,]   64   79   98  111  103
+#> [4,]  102   82  110  115  114
+#> [5,]  100  113  109  103  118
+#> [6,]  125  107  118   88  126
+#> [7,]  124   97  136  107  120
 #> 
 #> $abundance_stages[[2]]
 #>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   31   58   57   64   65
-#> [2,]   35   46   54   75   64
-#> [3,]   50   65   84   81   76
-#> [4,]   67   53   72   51   82
-#> [5,]   68   71   65   91   51
-#> [6,]   68   76   77   96   87
-#> [7,]   84   78   74   67   69
+#> [1,]   17   37   53   67   70
+#> [2,]   35   56   67   77   78
+#> [3,]   62   57   64   90   93
+#> [4,]   59   77   65   80   79
+#> [5,]   85   68   73   67   84
+#> [6,]   70   82   77   86   72
+#> [7,]   78   85   69   77   88
 raster::plot(region$raster_from_values(results$abundance[, 5]),
   main = "Final abundance", xlab = "Longitude (degrees)",
   ylab = "Latitude (degrees)", zlim = c(0, 300), colNA = "blue"
