@@ -28,3 +28,10 @@ The words marked as misspelled in the 1 NOTE are:
   translocations (28:49)
 
 Conover, Iman, et and al are all from an academic citation. Stochasticity and translocations are words, indeed common ones in our field of ecology.
+
+## revdepcheck results
+
+We checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
