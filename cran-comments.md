@@ -2,16 +2,17 @@
 * local macOS 15 install, Intel chip, R 4.4.1
 * Windows, R-devel (via win-builder)
 * macOS, Apple Silicon chip, R 4.4.1 (via mac-builder)
+* Ubuntu 24.04, R-devel (via Github Actions)
+* Ubuntu 24.04, R 4.4.1 (via Github Actions)
+* Ubuntu 24.04, R 3.6 (via Github Actions)
 
 ## R CMD check results
 
-0 ERRORs, 0 WARNINGs, 1 NOTE.
+0 ERRORs, 0 WARNINGs, 0 NOTEs.
 
 ## Past R CMD check results
 
-Previously, `poems` was archived due to some tests failing on certain Apple Silicon systems due to a dependency on `geosphere`. We have removed the dependency on `geosphere` altogether. Tests on CRAN's mac-builder are passing.
-
-`poems` has also been turned away from CRAN due to long vignette runtimes. I have cut down vignette runtime to a third of what it was previously, which should hopefully solve this issue.
+`poems` was erroring out in R-devel in certain Linux distros due to a faulty test. I have now fixed this.
 
 ## Other notes
 

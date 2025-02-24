@@ -1,3 +1,8 @@
+# version 1.3.2
+
+## Bug fixes
+One of the tests for the ResultsManager object was failing on Fedora and Debian R-devel. This test has now been fixed.
+
 # version 1.3.1
 
 ## Bug fixes
