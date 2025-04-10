@@ -37,19 +37,41 @@
 #'   }
 #' @export population_env_stoch
 
-population_env_stoch <- function(populations,
-                                 fecundity_matrix,
-                                 fecundity_max,
-                                 survival_matrix,
-                                 standard_deviation,
-                                 correlation) {
+population_env_stoch <- function(
+  populations,
+  fecundity_matrix,
+  fecundity_max,
+  survival_matrix,
+  standard_deviation,
+  correlation
+) {
   # Extract stages from fecundity matrix dimensions
   stages <- nrow(fecundity_matrix)
 
   # Fecundity and survival indices for selecting variable transition rates for occupied populations
-  fecundity_indices <- matrix(which(array(fecundity_matrix * standard_deviation, c(stages, stages, populations)) > 0), ncol = populations)
-  survival_indices <- matrix(which(array(survival_matrix * standard_deviation, c(stages, stages, populations)) > 0), ncol = populations)
-  multiple_survival_columns <- which(.colSums(+(survival_matrix > 0), m = stages, n = stages) > 1)
+  fecundity_indices <- matrix(
+    which(
+      array(
+        fecundity_matrix * standard_deviation,
+        c(stages, stages, populations)
+      ) >
+        0
+    ),
+    ncol = populations
+  )
+  survival_indices <- matrix(
+    which(
+      array(
+        survival_matrix * standard_deviation,
+        c(stages, stages, populations)
+      ) >
+        0
+    ),
+    ncol = populations
+  )
+  multiple_survival_columns <- which(
+    .colSums(+(survival_matrix > 0), m = stages, n = stages) > 1
+  )
 
   # Flag for environmental correlation
   use_env_correlation <- FALSE
@@ -59,36 +81,73 @@ population_env_stoch <- function(populations,
     # Calculate the transposed Cholesky decomposition of any correlation matrix in the list
     if ("correlation_matrix" %in% names(correlation)) {
       correlation$correlation_matrix <- chol(correlation$correlation_matrix)
-      names(correlation)[which(names(correlation) == "correlation_matrix")] <- "t_decomposition_matrix"
+      names(correlation)[which(
+        names(correlation) == "correlation_matrix"
+      )] <- "t_decomposition_matrix"
     }
 
     # Compact any transposed Cholesky decomposition into the minimal number of rows, plus mapped to the original matrix
     if ("t_decomposition_matrix" %in% names(correlation)) {
       # Calculate non-zero decomposition data from the decomposition matrix
-      t_decomposition_data <- which(correlation$t_decomposition_matrix != 0, arr.ind = TRUE, useNames = TRUE)
-      t_decomposition_data <- as.data.frame(cbind(t_decomposition_data, correlation$t_decomposition_matrix[t_decomposition_data]))
+      t_decomposition_data <- which(
+        correlation$t_decomposition_matrix != 0,
+        arr.ind = TRUE,
+        useNames = TRUE
+      )
+      t_decomposition_data <- as.data.frame(cbind(
+        t_decomposition_data,
+        correlation$t_decomposition_matrix[t_decomposition_data]
+      ))
       names(t_decomposition_data) <- c("row", "col", "value")
-      t_decomposition_data <- t_decomposition_data[order(t_decomposition_data$col, t_decomposition_data$row), ]
+      t_decomposition_data <- t_decomposition_data[
+        order(t_decomposition_data$col, t_decomposition_data$row),
+      ]
       correlation$t_decomposition_matrix <- NULL # release from memory
 
       # Create a compact transposed decomposition matrix
-      t_decomposition_nonzero_rows <- tabulate(t_decomposition_data$col, nbins = populations)
+      t_decomposition_nonzero_rows <- tabulate(
+        t_decomposition_data$col,
+        nbins = populations
+      )
       t_decomposition_compact_rows <- max(t_decomposition_nonzero_rows)
-      correlation$t_decomposition_compact_matrix <- array(1:t_decomposition_compact_rows, c(t_decomposition_compact_rows, populations))
+      correlation$t_decomposition_compact_matrix <- array(
+        1:t_decomposition_compact_rows,
+        c(t_decomposition_compact_rows, populations)
+      )
       correlation$t_decomposition_compact_matrix <- (correlation$t_decomposition_compact_matrix *
         (correlation$t_decomposition_compact_matrix <=
-          matrix(t_decomposition_nonzero_rows, nrow = t_decomposition_compact_rows, ncol = populations, byrow = TRUE)))
-      t_decomposition_compact_indices <- which(correlation$t_decomposition_compact_matrix != 0)
-      correlation$t_decomposition_compact_matrix[t_decomposition_compact_indices] <- t_decomposition_data$value
+          matrix(
+            t_decomposition_nonzero_rows,
+            nrow = t_decomposition_compact_rows,
+            ncol = populations,
+            byrow = TRUE
+          )))
+      t_decomposition_compact_indices <- which(
+        correlation$t_decomposition_compact_matrix != 0
+      )
+      correlation$t_decomposition_compact_matrix[
+        t_decomposition_compact_indices
+      ] <- t_decomposition_data$value
 
       # Create a map to the original region grid rows
-      correlation$t_decomposition_compact_map <- array(NA, c(t_decomposition_compact_rows, populations))
-      correlation$t_decomposition_compact_map[t_decomposition_compact_indices] <- t_decomposition_data$row
+      correlation$t_decomposition_compact_map <- array(
+        NA,
+        c(t_decomposition_compact_rows, populations)
+      )
+      correlation$t_decomposition_compact_map[
+        t_decomposition_compact_indices
+      ] <- t_decomposition_data$row
     }
   }
 
   # Unpack compact decompostion
-  if (is.list(correlation) && all(names(correlation) %in% c("t_decomposition_compact_matrix", "t_decomposition_compact_map"))) {
+  if (
+    is.list(correlation) &&
+      all(
+        names(correlation) %in%
+          c("t_decomposition_compact_matrix", "t_decomposition_compact_map")
+      )
+  ) {
     use_env_correlation <- TRUE
     t_decomposition_compact_matrix <- correlation$t_decomposition_compact_matrix
     t_decomposition_compact_map <- correlation$t_decomposition_compact_map
@@ -105,47 +164,101 @@ population_env_stoch <- function(populations,
 
     # Generate correlated normal deviates for each occupied population (as per Burgman, Ferson & Akcakaya, 1993)
     if (use_env_correlation) {
-      occupied_correlated_deviates <- .colSums(t_decomposition_compact_matrix[, occupied_indices] * stats::rnorm(populations)[t_decomposition_compact_map[, occupied_indices]],
-        m = t_decomposition_compact_rows, n = occupied_populations, na.rm = TRUE
+      occupied_correlated_deviates <- .colSums(
+        t_decomposition_compact_matrix[, occupied_indices] *
+          stats::rnorm(populations)[t_decomposition_compact_map[,
+            occupied_indices
+          ]],
+        m = t_decomposition_compact_rows,
+        n = occupied_populations,
+        na.rm = TRUE
       )
     } else {
       occupied_correlated_deviates <- stats::rnorm(occupied_populations)
     }
 
     # Sample fecundities from the Lognormal distribution (as per Burgman, Ferson & Akcakaya, 1993)
-    occupied_fecundity_indices <- as.vector(fecundity_indices[, occupied_indices])
+    occupied_fecundity_indices <- as.vector(fecundity_indices[,
+      occupied_indices
+    ])
     occupied_fecundities <- fecundity_array[occupied_fecundity_indices]
-    log_common <- log((standard_deviation[fecundity_indices[, 1]] / occupied_fecundities)^2 + 1)
+    log_common <- log(
+      (standard_deviation[fecundity_indices[, 1]] / occupied_fecundities)^2 + 1
+    )
     log_common[which(occupied_fecundities == 0)] <- 0
-    deviate_indices <- rep(1:occupied_populations, each = length(fecundity_indices[, 1]))
-    fecundity_array[occupied_fecundity_indices] <- occupied_fecundities * exp(sqrt(log_common) * occupied_correlated_deviates[deviate_indices] - 0.5 * log_common)
+    deviate_indices <- rep(
+      1:occupied_populations,
+      each = length(fecundity_indices[, 1])
+    )
+    fecundity_array[occupied_fecundity_indices] <- occupied_fecundities *
+      exp(
+        sqrt(log_common) *
+          occupied_correlated_deviates[deviate_indices] -
+          0.5 * log_common
+      )
     if (is.numeric(fecundity_max)) {
-      fecundity_array[occupied_fecundity_indices][which(fecundity_array[occupied_fecundity_indices] > fecundity_max)] <- fecundity_max
+      fecundity_array[occupied_fecundity_indices][which(
+        fecundity_array[occupied_fecundity_indices] > fecundity_max
+      )] <- fecundity_max
     }
 
     # Sample survivals from the Beta distribution
     occupied_survival_indices <- as.vector(survival_indices[, occupied_indices])
     occupied_survivals <- survival_array[occupied_survival_indices]
     occupied_standard_deviations <- standard_deviation[survival_indices[, 1]] # single population
-    excessive_sd_indices <- which(occupied_standard_deviations >= sqrt(occupied_survivals * (1 - occupied_survivals)))
-    if (length(excessive_sd_indices)) { # resolves limitation of calculating alpha and beta parameters (shouldn't occur often)
-      occupied_standard_deviations <- rep(occupied_standard_deviations, occupied_populations)
-      occupied_standard_deviations[excessive_sd_indices] <- sqrt(occupied_survivals * (1 - occupied_survivals))[excessive_sd_indices] - 0.001
+    excessive_sd_indices <- which(
+      occupied_standard_deviations >=
+        sqrt(occupied_survivals * (1 - occupied_survivals))
+    )
+    if (length(excessive_sd_indices)) {
+      # resolves limitation of calculating alpha and beta parameters (shouldn't occur often)
+      occupied_standard_deviations <- rep(
+        occupied_standard_deviations,
+        occupied_populations
+      )
+      occupied_standard_deviations[excessive_sd_indices] <- sqrt(
+        occupied_survivals * (1 - occupied_survivals)
+      )[excessive_sd_indices] -
+        0.001
     }
-    occupied_alpha <- occupied_survivals * (occupied_survivals * (1 - occupied_survivals) / occupied_standard_deviations^2 - 1)
-    occupied_beta <- (1 - occupied_survivals) * (occupied_survivals * (1 - occupied_survivals) / occupied_standard_deviations^2 - 1)
-    deviate_indices <- rep(1:occupied_populations, each = length(survival_indices[, 1]))
-    survival_array[occupied_survival_indices] <- stats::qbeta(stats::pnorm(occupied_correlated_deviates[deviate_indices]), occupied_alpha, occupied_beta)
+    occupied_alpha <- occupied_survivals *
+      (occupied_survivals *
+        (1 - occupied_survivals) /
+        occupied_standard_deviations^2 -
+        1)
+    occupied_beta <- (1 - occupied_survivals) *
+      (occupied_survivals *
+        (1 - occupied_survivals) /
+        occupied_standard_deviations^2 -
+        1)
+    deviate_indices <- rep(
+      1:occupied_populations,
+      each = length(survival_indices[, 1])
+    )
+    survival_array[occupied_survival_indices] <- stats::qbeta(
+      stats::pnorm(occupied_correlated_deviates[deviate_indices]),
+      occupied_alpha,
+      occupied_beta
+    )
 
     # Resolve any excessive survivals (column sums > 1)
-    for (mult_surv_col in multiple_survival_columns) { # only possible when multiple survival rates in a stage matrix column
-      mult_surv_col_sums <- .colSums(survival_array[, mult_surv_col, occupied_indices], m = stages, n = occupied_populations)
+    for (mult_surv_col in multiple_survival_columns) {
+      # only possible when multiple survival rates in a stage matrix column
+      mult_surv_col_sums <- .colSums(
+        survival_array[, mult_surv_col, occupied_indices],
+        m = stages,
+        n = occupied_populations
+      )
       excessive_indices <- which(mult_surv_col_sums > 1)
       survival_array[, mult_surv_col, occupied_indices[excessive_indices]] <-
-        survival_array[, mult_surv_col, occupied_indices[excessive_indices]] / mult_surv_col_sums[rep(excessive_indices, each = stages)]
+        survival_array[, mult_surv_col, occupied_indices[excessive_indices]] /
+        mult_surv_col_sums[rep(excessive_indices, each = stages)]
     }
 
-    return(list(fecundity_array = fecundity_array, survival_array = survival_array))
+    return(list(
+      fecundity_array = fecundity_array,
+      survival_array = survival_array
+    ))
   }
 
   return(calculate)

@@ -56,10 +56,10 @@
 #' @include SpatialModel.R
 #' @export SimulationModel
 
-SimulationModel <- R6Class("SimulationModel",
+SimulationModel <- R6Class(
+  "SimulationModel",
   inherit = SpatialModel,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -84,17 +84,21 @@ SimulationModel <- R6Class("SimulationModel",
       super$initialize(...)
       if (!is.null(template)) {
         # Any passed model attributes and/or aliases will subsequently be accessed via template, but set locally via super.
-        if ("model_attributes" %in% names(list(...))) { # clear locally
+        if ("model_attributes" %in% names(list(...))) {
+          # clear locally
           self$model_attributes <- NULL
         }
-        if ("attribute_aliases" %in% names(list(...))) { # clear locally
+        if ("attribute_aliases" %in% names(list(...))) {
+          # clear locally
           self$attribute_aliases <- NULL
         }
         self$template_model <- template
-        if ("model_attributes" %in% names(list(...))) { # set again via template
+        if ("model_attributes" %in% names(list(...))) {
+          # set again via template
           self$model_attributes <- list(...)[["model_attributes"]]
         }
-        if ("attribute_aliases" %in% names(list(...))) { # set again via template
+        if ("attribute_aliases" %in% names(list(...))) {
+          # set again via template
           self$attribute_aliases <- list(...)[["attribute_aliases"]]
         }
       }
@@ -108,7 +112,10 @@ SimulationModel <- R6Class("SimulationModel",
     #' @param ... Parameters passed via the inherited class constructor (defined in initialize and run via new).
     #' @return New object of the current (inherited) class.
     new_clone = function(...) {
-      return(super$new_clone(required_attributes = self$required_attributes, ...))
+      return(super$new_clone(
+        required_attributes = self$required_attributes,
+        ...
+      ))
     },
 
     #' @description
@@ -116,7 +123,10 @@ SimulationModel <- R6Class("SimulationModel",
     #' @return List of all attribute names.
     get_attribute_names = function() {
       if (!is.null(self$template_model)) {
-        return(unique(c(self$template_model$get_attribute_names(), names(self$attached))))
+        return(unique(c(
+          self$template_model$get_attribute_names(),
+          names(self$attached)
+        )))
       } else {
         return(super$get_attribute_names())
       }
@@ -127,7 +137,8 @@ SimulationModel <- R6Class("SimulationModel",
     #' @param params Array of attribute names to return (all when NULL).
     #' @return List of selected or all attributes values.
     get_attributes = function(params = NULL) {
-      if (!is.null(self$template_model)) { # resolve scope via sample attributes
+      if (!is.null(self$template_model)) {
+        # resolve scope via sample attributes
         attribute_list <- list()
         if (is.null(params)) {
           params <- self$get_attribute_names()
@@ -139,11 +150,17 @@ SimulationModel <- R6Class("SimulationModel",
             attribute <- param
           }
           attribute_root <- unlist(strsplit(attribute, "$", fixed = TRUE))[1]
-          if (attribute_root %in% self$sample_attributes ||
-            !attribute_root %in% self$template_model$get_attribute_names()) {
+          if (
+            attribute_root %in%
+              self$sample_attributes ||
+              !attribute_root %in% self$template_model$get_attribute_names()
+          ) {
             attribute_list <- c(attribute_list, super$get_attributes(param))
           } else {
-            attribute_list <- c(attribute_list, self$template_model$get_attributes(param))
+            attribute_list <- c(
+              attribute_list,
+              self$template_model$get_attributes(param)
+            )
           }
         }
         return(attribute_list)
@@ -158,7 +175,8 @@ SimulationModel <- R6Class("SimulationModel",
     #' @param ... Parameters/attributes passed individually.
     set_attributes = function(params = list(), ...) {
       params <- c(list(...), params) # prioritise individual parameters
-      if (!is.null(self$template_model)) { # resolve scope via sample attributes
+      if (!is.null(self$template_model)) {
+        # resolve scope via sample attributes
         sample_params <- list()
         template_params <- list()
         for (param in names(params)) {
@@ -168,8 +186,11 @@ SimulationModel <- R6Class("SimulationModel",
             attribute <- param
           }
           attribute_root <- unlist(strsplit(attribute, "$", fixed = TRUE))[1]
-          if (attribute_root %in% self$sample_attributes ||
-            !attribute_root %in% self$template_model$get_attribute_names()) {
+          if (
+            attribute_root %in%
+              self$sample_attributes ||
+              !attribute_root %in% self$template_model$get_attribute_names()
+          ) {
             sample_params[[param]] <- params[[param]]
           } else {
             template_params[[param]] <- params[[param]]
@@ -192,28 +213,47 @@ SimulationModel <- R6Class("SimulationModel",
       if (is.list(params)) {
         param_list <- c(list(...), params) # prioritise individual parameters
         params <- unique(names(param_list))
-      } else { # params is a vector of names
+      } else {
+        # params is a vector of names
         param_list <- list(...)
         params <- unique(c(names(param_list), params))
         self$sample_attributes <- NULL # redefine
       }
-      for (i in 1:length(params)) { # substitute aliases
+      for (i in 1:length(params)) {
+        # substitute aliases
         if (params[i] %in% names(self$attribute_aliases)) {
           param_alias <- params[i]
-          split_names <- unlist(strsplit(self$attribute_aliases[[param_alias]], "$", fixed = TRUE))
+          split_names <- unlist(strsplit(
+            self$attribute_aliases[[param_alias]],
+            "$",
+            fixed = TRUE
+          ))
           params[i] <- split_names[1] # list root only
           self$sample_attributes <- unique(c(self$sample_attributes, params[i]))
-          if (length(split_names) > 1 && !is.null(self$template_model) &&
-            length(self$get_attributes(params[i])) == 0) { # copy template values
+          if (
+            length(split_names) > 1 &&
+              !is.null(self$template_model) &&
+              length(self$get_attributes(params[i])) == 0
+          ) {
+            # copy template values
             self$set_attributes(self$template_model$get_attributes(params[i]))
           }
-          if (!(params[i] %in% self$get_attribute_names() || params[i] %in% names(self$attached) ||
-            param_alias %in% self$get_attribute_names() || param_alias %in% names(self$attached))) {
+          if (
+            !(params[i] %in%
+              self$get_attribute_names() ||
+              params[i] %in% names(self$attached) ||
+              param_alias %in% self$get_attribute_names() ||
+              param_alias %in% names(self$attached))
+          ) {
             self$attached[[params[i]]] <- NA # attach any attributes not present
           }
         } else {
           self$sample_attributes <- unique(c(self$sample_attributes, params[i]))
-          if (!(params[i] %in% self$get_attribute_names() || params[i] %in% names(self$attached))) {
+          if (
+            !(params[i] %in%
+              self$get_attribute_names() ||
+              params[i] %in% names(self$attached))
+          ) {
             self$attached[[params[i]]] <- NA # attach any attributes not present
           }
         }
@@ -234,37 +274,64 @@ SimulationModel <- R6Class("SimulationModel",
     #' @param params Optional array of parameter/attribute names.
     #' @return List of booleans (or NAs) to indicate consistency of selected/all attributes.
     list_consistency = function(params = NULL) {
-      if (is.null(params)) { # all model attributes
+      if (is.null(params)) {
+        # all model attributes
         return(self$list_consistency(self$model_attributes))
-      } else { # listed attributes
+      } else {
+        # listed attributes
         params <- c(params)
         consistent_list <- list()
         for (param in params) {
           param_value <- self$get_attributes(param)[[param]]
-          if (is.null(param_value)) { # ignore incomplete attributes
+          if (is.null(param_value)) {
+            # ignore incomplete attributes
             consistent_list[[param]] <- NA
           } else {
             consistent_list[[param]] <-
-              switch(param,
+              switch(
+                param,
                 region = ("Region" %in% class(param_value)),
                 time_steps = (is.numeric(param_value) && param_value > 0),
                 years_per_step = (is.numeric(param_value) && param_value > 0),
                 results_selection = is.character(param_value),
-                { # default for other attributes
-                  if (!is.list(param_value)) { # place in list
+                {
+                  # default for other attributes
+                  if (!is.list(param_value)) {
+                    # place in list
                     param_value <- list(param_value)
                   }
                   values_consistent <- array(NA, length(param_value))
                   for (i in 1:length(param_value)) {
-                    if (!is.null(self$region) && any(class(param_value[[i]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-                      values_consistent[i] <- (self$region$raster_is_consistent(param_value[[i]]) &&
-                        raster::nlayers(param_value[[i]]) %in% c(1, self$time_steps))
-                    } else if (!is.null(self$region) && is.numeric(param_value[[i]])) {
-                      values_consistent[i] <- (nrow(as.matrix(param_value[[i]])) %in% c(1, self$region$region_cells, self$time_steps) &&
-                        ncol(as.matrix(param_value[[i]])) %in% c(1, self$region$region_cells, self$time_steps))
+                    if (
+                      !is.null(self$region) &&
+                        any(
+                          class(param_value[[i]]) %in%
+                            c("RasterLayer", "RasterStack", "RasterBrick")
+                        )
+                    ) {
+                      values_consistent[
+                        i
+                      ] <- (self$region$raster_is_consistent(param_value[[
+                        i
+                      ]]) &&
+                        raster::nlayers(param_value[[i]]) %in%
+                          c(1, self$time_steps))
+                    } else if (
+                      !is.null(self$region) && is.numeric(param_value[[i]])
+                    ) {
+                      values_consistent[i] <- (nrow(as.matrix(param_value[[
+                        i
+                      ]])) %in%
+                        c(1, self$region$region_cells, self$time_steps) &&
+                        ncol(as.matrix(param_value[[i]])) %in%
+                          c(1, self$region$region_cells, self$time_steps))
                     } else if (is.numeric(param_value[[i]])) {
-                      values_consistent[i] <- (nrow(as.matrix(param_value[[i]])) %in% c(1, self$time_steps) &&
-                        ncol(as.matrix(param_value[[i]])) %in% c(1, self$time_steps))
+                      values_consistent[i] <- (nrow(as.matrix(param_value[[
+                        i
+                      ]])) %in%
+                        c(1, self$time_steps) &&
+                        ncol(as.matrix(param_value[[i]])) %in%
+                          c(1, self$time_steps))
                     }
                   }
                   all(values_consistent)
@@ -314,14 +381,19 @@ SimulationModel <- R6Class("SimulationModel",
       for (param in self$model_attributes) {
         if (param %in% self$required_attributes) {
           if (param == "region") {
-            complete_list[[param]] <- ifelse(is.null(self$region), FALSE,
+            complete_list[[param]] <- ifelse(
+              is.null(self$region),
+              FALSE,
               self$is_consistent(param) &&
-                (!is.null(self$region$coordinates) || !is.null(self$region$region_raster))
+                (!is.null(self$region$coordinates) ||
+                  !is.null(self$region$region_raster))
             )
           } else {
-            complete_list[[param]] <- length(self$get_attributes(param)) > 0 && self$is_consistent(param)
+            complete_list[[param]] <- length(self$get_attributes(param)) > 0 &&
+              self$is_consistent(param)
           }
-        } else { # still must be consistent
+        } else {
+          # still must be consistent
           if (length(self$get_attributes(param)) > 0) {
             complete_list[[param]] <- self$is_consistent(param)
           } else {
@@ -357,7 +429,6 @@ SimulationModel <- R6Class("SimulationModel",
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Associated (default) simulation function #
@@ -365,7 +436,12 @@ SimulationModel <- R6Class("SimulationModel",
 
     # Model attributes #
     .model_attributes = c(
-      "region", "coordinates", "random_seed", "replicates", "time_steps", "years_per_step",
+      "region",
+      "coordinates",
+      "random_seed",
+      "replicates",
+      "time_steps",
+      "years_per_step",
       "results_selection"
     ),
     # .region            [inherited]
@@ -377,7 +453,12 @@ SimulationModel <- R6Class("SimulationModel",
 
     # Attributes accessible via model get/set methods #
     .active_attributes = c(
-      "region", "coordinates", "random_seed", "replicates", "time_steps", "years_per_step",
+      "region",
+      "coordinates",
+      "random_seed",
+      "replicates",
+      "time_steps",
+      "years_per_step",
       "results_selection"
     ),
 
@@ -401,7 +482,6 @@ SimulationModel <- R6Class("SimulationModel",
 
   # Active binding accessors for private model attributes (above) #
   active = list(
-
     # Associated (default) simulation function #
 
     #' @field simulation_function Name (character string) or source path of the default simulation function, which takes a model as an input and returns the simulation results.
@@ -445,11 +525,20 @@ SimulationModel <- R6Class("SimulationModel",
           self$template_model$region <- value
         } else {
           if ("Region" %in% class(value)) {
-            if ((value$use_raster && is.null(value$region_raster)) || (!value$use_raster && is.null(value$coordinates))) {
-              warning("Spatial region has not been defined within the region object", call. = FALSE)
+            if (
+              (value$use_raster && is.null(value$region_raster)) ||
+                (!value$use_raster && is.null(value$coordinates))
+            ) {
+              warning(
+                "Spatial region has not been defined within the region object",
+                call. = FALSE
+              )
             }
           } else if (!is.null(value)) {
-            stop("Region should be a Region (or inherited class) object", call. = FALSE)
+            stop(
+              "Region should be a Region (or inherited class) object",
+              call. = FALSE
+            )
           }
           private$.region <- value
         }
@@ -457,7 +546,8 @@ SimulationModel <- R6Class("SimulationModel",
     },
 
     #' @field coordinates Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).
-    coordinates = function(value) { # inherited
+    coordinates = function(value) {
+      # inherited
       if (missing(value)) {
         super$coordinates
       } else {
@@ -467,7 +557,10 @@ SimulationModel <- R6Class("SimulationModel",
 
     #' @field random_seed Number to seed the random number generation for stochasticity.
     random_seed = function(value) {
-      if (is.null(self$template_model) || "random_seed" %in% self$sample_attributes) {
+      if (
+        is.null(self$template_model) ||
+          "random_seed" %in% self$sample_attributes
+      ) {
         if (missing(value)) {
           private$.random_seed
         } else {
@@ -485,13 +578,19 @@ SimulationModel <- R6Class("SimulationModel",
     #' @field replicates Number of replicate simulation runs.
     replicates = function(value) {
       if (missing(value)) {
-        if (is.null(self$template_model) || "replicates" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "replicates" %in% self$sample_attributes
+        ) {
           private$.replicates
         } else {
           self$template_model$replicates
         }
       } else {
-        if (is.null(self$template_model) || "replicates" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "replicates" %in% self$sample_attributes
+        ) {
           private$.replicates <- value
         } else {
           self$template_model$replicates <- value
@@ -502,13 +601,19 @@ SimulationModel <- R6Class("SimulationModel",
     #' @field time_steps Number of simulation time steps.
     time_steps = function(value) {
       if (missing(value)) {
-        if (is.null(self$template_model) || "time_steps" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "time_steps" %in% self$sample_attributes
+        ) {
           private$.time_steps
         } else {
           self$template_model$time_steps
         }
       } else {
-        if (is.null(self$template_model) || "time_steps" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "time_steps" %in% self$sample_attributes
+        ) {
           private$.time_steps <- value
         } else {
           self$template_model$time_steps <- value
@@ -519,13 +624,19 @@ SimulationModel <- R6Class("SimulationModel",
     #' @field years_per_step Number of years per time step.
     years_per_step = function(value) {
       if (missing(value)) {
-        if (is.null(self$template_model) || "years_per_step" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "years_per_step" %in% self$sample_attributes
+        ) {
           private$.years_per_step
         } else {
           self$template_model$years_per_step
         }
       } else {
-        if (is.null(self$template_model) || "years_per_step" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "years_per_step" %in% self$sample_attributes
+        ) {
           private$.years_per_step <- value
         } else {
           self$template_model$years_per_step <- value
@@ -536,13 +647,19 @@ SimulationModel <- R6Class("SimulationModel",
     #' @field results_selection List of simulator-dependent attributes to be included in the returned results of each simulation run.
     results_selection = function(value) {
       if (missing(value)) {
-        if (is.null(self$template_model) || "results_selection" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "results_selection" %in% self$sample_attributes
+        ) {
           private$.results_selection
         } else {
           self$template_model$results_selection
         }
       } else {
-        if (is.null(self$template_model) || "results_selection" %in% self$sample_attributes) {
+        if (
+          is.null(self$template_model) ||
+            "results_selection" %in% self$sample_attributes
+        ) {
           private$.results_selection <- value
         } else {
           self$template_model$results_selection <- value
@@ -562,7 +679,10 @@ SimulationModel <- R6Class("SimulationModel",
         }
       } else {
         if (!is.null(value) && !is.list(value)) {
-          stop("Attribute aliases should be a list (form: alias = \"attribute\")", call. = FALSE)
+          stop(
+            "Attribute aliases should be a list (form: alias = \"attribute\")",
+            call. = FALSE
+          )
         }
         if (!is.null(self$template_model)) {
           self$template_model$attribute_aliases <- value
@@ -579,8 +699,11 @@ SimulationModel <- R6Class("SimulationModel",
       } else {
         if ("SimulationModel" %in% class(value)) {
           private$.template_model <- value
-        } else { # construct a model having the same (potentially inherited) class as the template
-          private$.template_model <- self$object_generator$new(params = as.list(value))
+        } else {
+          # construct a model having the same (potentially inherited) class as the template
+          private$.template_model <- self$object_generator$new(
+            params = as.list(value)
+          )
         }
       }
     },
@@ -614,7 +737,8 @@ SimulationModel <- R6Class("SimulationModel",
     # Errors and warnings accessors #
 
     #' @field error_messages A vector of error messages encountered when setting model attributes.
-    error_messages = function(value) { # inherited
+    error_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$error_messages
       } else {
@@ -623,7 +747,8 @@ SimulationModel <- R6Class("SimulationModel",
     },
 
     #' @field warning_messages A vector of warning messages encountered when setting model attributes.
-    warning_messages = function(value) { # inherited
+    warning_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$warning_messages
       } else {

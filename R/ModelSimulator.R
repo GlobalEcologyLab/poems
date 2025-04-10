@@ -31,10 +31,10 @@
 #' @include GenericClass.R
 #' @export ModelSimulator
 
-ModelSimulator <- R6Class("ModelSimulator",
+ModelSimulator <- R6Class(
+  "ModelSimulator",
   inherit = GenericClass,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -52,7 +52,12 @@ ModelSimulator <- R6Class("ModelSimulator",
     #' @param simulation_function Optional name (character string) or direct assignment (assigned or loaded via source path) of the simulation function, which takes a \code{\link{SimulationModel}} (or inherited class) as an input and returns the simulation results.
     #' @param sample_id Optional identifier for the simulation sample.
     #' @param ... Additional parameters passed individually are attached.
-    initialize = function(simulation_model = NULL, simulation_function = NULL, sample_id = NULL, ...) {
+    initialize = function(
+      simulation_model = NULL,
+      simulation_function = NULL,
+      sample_id = NULL,
+      ...
+    ) {
       super$initialize(...)
       self$simulation_model <- simulation_model
       self$simulation_function <- simulation_function
@@ -66,7 +71,10 @@ ModelSimulator <- R6Class("ModelSimulator",
     #' @param ... Parameters passed via the inherited class constructor (defined in initialize and run via new).
     #' @return New object of the current (inherited) class.
     new_clone = function(...) {
-      return(super$new_clone(simulation_function = self$simulation_function, ...))
+      return(super$new_clone(
+        simulation_function = self$simulation_function,
+        ...
+      ))
     },
 
     # New methods #
@@ -92,10 +100,16 @@ ModelSimulator <- R6Class("ModelSimulator",
       self$results <- NULL
       self$attached$warnings <- NULL
       if (is.null(self$simulation_function)) {
-        stop("The simulation function needs to be set before the simulation can be run", call. = FALSE)
+        stop(
+          "The simulation function needs to be set before the simulation can be run",
+          call. = FALSE
+        )
       }
       if (is.null(self$simulation_model)) {
-        stop("The simulation model needs to be set before the simulation can be run", call. = FALSE)
+        stop(
+          "The simulation model needs to be set before the simulation can be run",
+          call. = FALSE
+        )
       }
       if (self$simulation_model$is_complete()) {
         run_status <- NULL
@@ -105,15 +119,22 @@ ModelSimulator <- R6Class("ModelSimulator",
               withCallingHandlers(
                 {
                   if (is.function(self$simulation_function)) {
-                    self$results <- self$simulation_function(self$simulation_model)
-                  } else { # assume character name
-                    self$results <- eval(parse(text = as.character(self$simulation_function)))(self$simulation_model)
+                    self$results <- self$simulation_function(
+                      self$simulation_model
+                    )
+                  } else {
+                    # assume character name
+                    self$results <- eval(parse(
+                      text = as.character(self$simulation_function)
+                    ))(self$simulation_model)
                   }
                 },
                 warning = function(w) {
                   self$attached$warnings <- c(
                     self$attached$warnings,
-                    gsub("simpleWarning", "Warning",
+                    gsub(
+                      "simpleWarning",
+                      "Warning",
                       gsub("\n", "", as.character(w), fixed = TRUE),
                       fixed = TRUE
                     )
@@ -123,41 +144,61 @@ ModelSimulator <- R6Class("ModelSimulator",
             )
             if (!is.null(self$attached$warnings)) {
               list(
-                successful = TRUE, message = "Model %s simulation ran successfully with warnings",
+                successful = TRUE,
+                message = "Model %s simulation ran successfully with warnings",
                 warnings = self$attached$warnings
               )
             } else {
-              list(successful = TRUE, message = "Model %s simulation ran successfully")
+              list(
+                successful = TRUE,
+                message = "Model %s simulation ran successfully"
+              )
             }
           },
           error = function(e) {
             list(
-              successful = FALSE, message = "Model %s simulation ran unsuccessfully with errors",
+              successful = FALSE,
+              message = "Model %s simulation ran unsuccessfully with errors",
               errors = c(as.character(e))
             )
           }
         )
         if (is.null(run_status)) {
-          run_status <- list(successful = FALSE, message = "Model %s simulation had unknown failure without errors")
+          run_status <- list(
+            successful = FALSE,
+            message = "Model %s simulation had unknown failure without errors"
+          )
         }
         return(run_status)
       } else {
         incomplete_message <- "Model %s attributes are incomplete"
         if (!self$simulation_model$is_consistent()) {
-          incomplete_message <- paste(incomplete_message, "/inconsistent", sep = "")
+          incomplete_message <- paste(
+            incomplete_message,
+            "/inconsistent",
+            sep = ""
+          )
         }
-        incomplete_message <- paste0(incomplete_message, ": ", paste(self$simulation_model$incomplete_attributes(), collapse = ", "))
+        incomplete_message <- paste0(
+          incomplete_message,
+          ": ",
+          paste(self$simulation_model$incomplete_attributes(), collapse = ", ")
+        )
         return(list(successful = FALSE, message = incomplete_message))
       }
     }
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Simulator attributes #
-    .simulator_attributes = c("simulation_model", "simulation_function", "sample_id", "results"),
+    .simulator_attributes = c(
+      "simulation_model",
+      "simulation_function",
+      "sample_id",
+      "results"
+    ),
     .simulation_model = NULL,
     .simulation_function = NULL,
     .sample_id = NULL,
@@ -166,14 +207,16 @@ ModelSimulator <- R6Class("ModelSimulator",
 
   # Active binding accessors for private simulator attributes (above) #
   active = list(
-
     #' @field simulation_model A SimulationModel object or an inherited class object.
     simulation_model = function(value) {
       if (missing(value)) {
         private$.simulation_model
       } else {
         if (!is.null(value) && !("SimulationModel" %in% class(value))) {
-          stop("Model must be a SimulationModel or inherited class object", call. = FALSE)
+          stop(
+            "Model must be a SimulationModel or inherited class object",
+            call. = FALSE
+          )
         } else {
           private$.simulation_model <- value
         }
@@ -185,13 +228,25 @@ ModelSimulator <- R6Class("ModelSimulator",
       if (missing(value)) {
         private$.simulation_function
       } else {
-        if (is.character(value) && file.exists(value) && length(grep(".R", toupper(value), fixed = TRUE))) {
+        if (
+          is.character(value) &&
+            file.exists(value) &&
+            length(grep(".R", toupper(value), fixed = TRUE))
+        ) {
           tryCatch(
             {
               simulation_function <- source(value)$value # direct assignment from a file
             },
             error = function(e) {
-              stop(paste("Error loading function from file", value, ":", as.character(e)), call. = FALSE)
+              stop(
+                paste(
+                  "Error loading function from file",
+                  value,
+                  ":",
+                  as.character(e)
+                ),
+                call. = FALSE
+              )
             }
           )
           if (is.function(simulation_function)) {
@@ -199,10 +254,17 @@ ModelSimulator <- R6Class("ModelSimulator",
           } else {
             stop(paste("Could not assign function", value), call. = FALSE)
           }
-        } else { # character or direct assignment
-          if (is.null(value) || is.function(value) ||
-            (is.character(value) &&
-              tryCatch(is.function(eval(parse(text = value))), error = function(e) FALSE))) {
+        } else {
+          # character or direct assignment
+          if (
+            is.null(value) ||
+              is.function(value) ||
+              (is.character(value) &&
+                tryCatch(
+                  is.function(eval(parse(text = value))),
+                  error = function(e) FALSE
+                ))
+          ) {
             if (is.character(value)) {
               value <- eval(parse(text = value))
             }

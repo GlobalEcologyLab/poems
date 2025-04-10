@@ -3,9 +3,12 @@
 #' @description
 #' \code{\link[R6:R6Class]{R6}} class that generates Latin hypercube samples (using
 #' \code{\link[lhs:randomLHS]{randomLHS}}) for parameters drawn from configured
-#' distributions: \code{\link[stats:Uniform]{uniform}}, \code{\link[stats:Poisson]{Poisson}},
-#' \code{\link[stats:Normal]{normal}}, \code{\link[stats:Lognormal]{lognormal}},
-#' \code{\link[stats:Beta]{beta}}, \code{\link[truncnorm:qtruncnorm]{truncated normal}} or
+#' distributions: \code{\link[stats:Uniform]{uniform}},
+#' \code{\link[stats:Poisson]{Poisson}},
+#' \code{\link[stats:Normal]{normal}},
+#' \code{\link[stats:Lognormal]{lognormal}},
+#' \code{\link[stats:Beta]{beta}},
+#' \code{\link[truncnorm:qtruncnorm]{truncated normal}} or
 #' \code{\link[metRology:qtri]{triangular}}.
 #' It generates a data frame of sample values.
 #'
@@ -31,10 +34,10 @@
 #' @include GenericClass.R
 #' @export LatinHypercubeSampler
 
-LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
+LatinHypercubeSampler <- R6Class(
+  "LatinHypercubeSampler",
   inherit = GenericClass,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -68,10 +71,14 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param parameter_name Character string name of sample parameter.
     #' @param classes Vector of class values.
     set_class_parameter = function(parameter_name, classes) {
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "class", classes = classes)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "class",
+        classes = classes
+      )
     },
 
     #' @description
@@ -80,14 +87,28 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param lower Lower bound of the uniform distribution (default = 0).
     #' @param upper Upper bound of the uniform distribution (default = 1).
     #' @param decimals Optional number of decimals applied to generated samples.
-    set_uniform_parameter = function(parameter_name, lower = 0, upper = 1, decimals = NULL) {
+    set_uniform_parameter = function(
+      parameter_name,
+      lower = 0,
+      upper = 1,
+      decimals = NULL
+    ) {
       if (lower > upper) {
-        stop("Uniform distribution lower must not greater than upper", call. = FALSE)
+        stop(
+          "Uniform distribution lower must not greater than upper",
+          call. = FALSE
+        )
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "uniform", lower = lower, upper = upper, decimals = decimals)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "uniform",
+        lower = lower,
+        upper = upper,
+        decimals = decimals
+      )
     },
 
     #' @description
@@ -96,14 +117,28 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param mean Mean parameter for the normal distribution (default = 0).
     #' @param sd Standard deviation parameter for the normal distribution (default = 1).
     #' @param decimals Optional number of decimals applied to generated samples.
-    set_normal_parameter = function(parameter_name, mean = 0, sd = 1, decimals = NULL) {
+    set_normal_parameter = function(
+      parameter_name,
+      mean = 0,
+      sd = 1,
+      decimals = NULL
+    ) {
       if (sd < 0) {
-        stop("Normal distribution standard deviation (sd) parameter must be non-negative", call. = FALSE)
+        stop(
+          "Normal distribution standard deviation (sd) parameter must be non-negative",
+          call. = FALSE
+        )
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "normal", mean = mean, sd = sd, decimals = decimals)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "normal",
+        mean = mean,
+        sd = sd,
+        decimals = decimals
+      )
     },
 
     #' @description
@@ -112,12 +147,19 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param lambda Lambda parameter for the Poisson distribution. Must be positive (default = 1).
     set_poisson_parameter = function(parameter_name, lambda = 1) {
       if (lambda < 0) {
-        stop("Poisson distribution lambda parameter must be non-negative", call. = FALSE)
+        stop(
+          "Poisson distribution lambda parameter must be non-negative",
+          call. = FALSE
+        )
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "poisson", lambda = lambda)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "poisson",
+        lambda = lambda
+      )
     },
 
     #' @description
@@ -128,22 +170,42 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param mean Optional (overriding) regular mean parameter for the lognormal distribution (default = NULL).
     #' @param sd Optional (overriding) standard deviation parameter for the lognormal distribution (default = NULL).
     #' @param decimals Optional number of decimals applied to generated samples.
-    set_lognormal_parameter = function(parameter_name, meanlog = 0, sdlog = 1, mean = NULL, sd = NULL, decimals = NULL) {
+    set_lognormal_parameter = function(
+      parameter_name,
+      meanlog = 0,
+      sdlog = 1,
+      mean = NULL,
+      sd = NULL,
+      decimals = NULL
+    ) {
       if (sdlog < 0) {
-        stop("Lognormal distribution standard deviation (sdlog) parameter must be non-negative", call. = FALSE)
+        stop(
+          "Lognormal distribution standard deviation (sdlog) parameter must be non-negative",
+          call. = FALSE
+        )
       }
-      if (!is.null(mean) && !is.null(sd)) { # override/transform
+      if (!is.null(mean) && !is.null(sd)) {
+        # override/transform
         if (mean > 0 && sd > 0) {
           meanlog <- log(mean^2 / sqrt(mean^2 + sd^2))
           sdlog <- sqrt(log(1 + sd^2 / mean^2))
         } else {
-          stop("Lognormal distribution regular (overriding) mean and standard deviation parameters must be greater than zero", call. = FALSE)
+          stop(
+            "Lognormal distribution regular (overriding) mean and standard deviation parameters must be greater than zero",
+            call. = FALSE
+          )
         }
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "lognormal", meanlog = meanlog, sdlog = sdlog, decimals = decimals)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "lognormal",
+        meanlog = meanlog,
+        sdlog = sdlog,
+        decimals = decimals
+      )
     },
 
     #' @description
@@ -154,23 +216,43 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param mean Optional (overriding) mean parameter for the beta distribution (default = NULL).
     #' @param sd Optional (overriding) standard deviation parameter for the beta distribution (default = NULL).
     #' @param decimals Optional number of decimals applied to generated samples.
-    set_beta_parameter = function(parameter_name, alpha = 1, beta = 1, mean = NULL, sd = NULL, decimals = NULL) {
+    set_beta_parameter = function(
+      parameter_name,
+      alpha = 1,
+      beta = 1,
+      mean = NULL,
+      sd = NULL,
+      decimals = NULL
+    ) {
       if (alpha <= 0 || beta <= 0) {
-        stop("Beta distribution alpha and beta shaping parameters must be greater than zero", call. = FALSE)
+        stop(
+          "Beta distribution alpha and beta shaping parameters must be greater than zero",
+          call. = FALSE
+        )
       }
-      if (!is.null(mean) && !is.null(sd)) { # override/transform
+      if (!is.null(mean) && !is.null(sd)) {
+        # override/transform
         if (mean > 0 && sd > 0 && mean < 1 && sd < 1) {
           sd <- pmin(sd, sqrt(mean * (1 - mean)) * 0.999) # Limit sd to < sqrt(mean*(1 - mean))
           alpha <- mean * (mean * (1 - mean) / sd^2 - 1)
           beta <- (1 - mean) * (mean * (1 - mean) / sd^2 - 1)
         } else {
-          stop("Beta distribution (overriding) mean and standard deviation parameters must be between zero and one (exclusively)", call. = FALSE)
+          stop(
+            "Beta distribution (overriding) mean and standard deviation parameters must be between zero and one (exclusively)",
+            call. = FALSE
+          )
         }
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "beta", alpha = alpha, beta = beta, decimals = decimals)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "beta",
+        alpha = alpha,
+        beta = beta,
+        decimals = decimals
+      )
     },
 
     #' @description
@@ -181,14 +263,32 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param lower Lower bound of the truncated normal distribution (default = -Inf, meaning no lower bound).
     #' @param upper Upper bound of the truncated normal distribution (default = Inf, meaning no upper bound).
     #' @param decimals Optional number of decimals that generated samples are rounded to.
-    set_truncnorm_parameter = function(parameter_name, mean = 0, sd = 1, lower = -Inf, upper = Inf, decimals = NULL) {
+    set_truncnorm_parameter = function(
+      parameter_name,
+      mean = 0,
+      sd = 1,
+      lower = -Inf,
+      upper = Inf,
+      decimals = NULL
+    ) {
       if (lower > upper || mean < lower || mean > upper) {
-        stop("Truncated normal distribution parameters must comply with: lower <= mean <= upper", call. = FALSE)
+        stop(
+          "Truncated normal distribution parameters must comply with: lower <= mean <= upper",
+          call. = FALSE
+        )
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "truncated normal", mean = mean, sd = sd, lower = lower, upper = upper, decimals = decimals)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "truncated normal",
+        mean = mean,
+        sd = sd,
+        lower = lower,
+        upper = upper,
+        decimals = decimals
+      )
     },
 
     #' @description
@@ -198,14 +298,30 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
     #' @param upper Upper bound of the triangular distribution (default = 1).
     #' @param mode Mode (or peak) of the triangular distribution (default = (lower + upper)/2).
     #' @param decimals Optional number of decimals applied to generated samples.
-    set_triangular_parameter = function(parameter_name, lower = 0, upper = 1, mode = (lower + upper) / 2, decimals = NULL) {
+    set_triangular_parameter = function(
+      parameter_name,
+      lower = 0,
+      upper = 1,
+      mode = (lower + upper) / 2,
+      decimals = NULL
+    ) {
       if (lower > upper || mode < lower || mode > upper) {
-        stop("Triangular distribution parameters must comply with: lower <= mode <= upper", call. = FALSE)
+        stop(
+          "Triangular distribution parameters must comply with: lower <= mode <= upper",
+          call. = FALSE
+        )
       }
-      if (!(parameter_name %in% self$parameter_names)) { # add parameter name
+      if (!(parameter_name %in% self$parameter_names)) {
+        # add parameter name
         self$parameter_names <- c(self$parameter_names, parameter_name)
       }
-      self$parameter_distributions[[parameter_name]] <- list(type = "triangular", lower = lower, upper = upper, mode = mode, decimals = decimals)
+      self$parameter_distributions[[parameter_name]] <- list(
+        type = "triangular",
+        lower = lower,
+        upper = upper,
+        mode = mode,
+        decimals = decimals
+      )
     },
 
     #' @description
@@ -220,50 +336,103 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
       }
 
       # Ensure distributions are set for all parameters
-      if (!is.null(self$parameter_names) && !is.null(self$parameter_distributions) && all(self$parameter_names %in% names(self$parameter_distributions))) {
+      if (
+        !is.null(self$parameter_names) &&
+          !is.null(self$parameter_distributions) &&
+          all(self$parameter_names %in% names(self$parameter_distributions))
+      ) {
         # Generate uniform 0-1 LHS
-        sample_data <- as.data.frame(randomLHS(number, length(self$parameter_names)))
+        sample_data <- as.data.frame(randomLHS(
+          number,
+          length(self$parameter_names)
+        ))
         names(sample_data) <- self$parameter_names
 
         # Apply distributions for each parameter
         for (param in self$parameter_names) {
           distribution <- self$parameter_distributions[[param]]
           if (distribution$type == "class") {
-            sample_data[[param]] <- distribution$classes[as.numeric(cut(sample_data[[param]], breaks = c(0, (1:length(distribution$classes) / length(distribution$classes)))))]
+            sample_data[[param]] <- distribution$classes[as.numeric(cut(
+              sample_data[[param]],
+              breaks = c(
+                0,
+                (1:length(distribution$classes) / length(distribution$classes))
+              )
+            ))]
           } else if (distribution$type == "uniform") {
-            sample_data[[param]] <- distribution$lower + sample_data[[param]] * (distribution$upper - distribution$lower)
+            sample_data[[param]] <- distribution$lower +
+              sample_data[[param]] * (distribution$upper - distribution$lower)
           } else if (distribution$type == "normal") {
-            sample_data[[param]] <- stats::qnorm(sample_data[[param]], mean = distribution$mean, sd = distribution$sd)
+            sample_data[[param]] <- stats::qnorm(
+              sample_data[[param]],
+              mean = distribution$mean,
+              sd = distribution$sd
+            )
           } else if (distribution$type == "lognormal") {
-            sample_data[[param]] <- stats::qlnorm(sample_data[[param]], meanlog = distribution$meanlog, sdlog = distribution$sdlog)
+            sample_data[[param]] <- stats::qlnorm(
+              sample_data[[param]],
+              meanlog = distribution$meanlog,
+              sdlog = distribution$sdlog
+            )
           } else if (distribution$type == "beta") {
-            sample_data[[param]] <- stats::qbeta(sample_data[[param]], shape1 = distribution$alpha, shape2 = distribution$beta)
+            sample_data[[param]] <- stats::qbeta(
+              sample_data[[param]],
+              shape1 = distribution$alpha,
+              shape2 = distribution$beta
+            )
           } else if (distribution$type == "triangular") {
-            sample_data[[param]] <- qtri(sample_data[[param]], min = distribution$lower, max = distribution$upper, mode = distribution$mode)
+            sample_data[[param]] <- qtri(
+              sample_data[[param]],
+              min = distribution$lower,
+              max = distribution$upper,
+              mode = distribution$mode
+            )
           } else if (distribution$type == "poisson") {
-            sample_data[[param]] <- qpois(sample_data[[param]], lambda = distribution$lambda)
+            sample_data[[param]] <- qpois(
+              sample_data[[param]],
+              lambda = distribution$lambda
+            )
           } else if (distribution$type == "truncated normal") {
-            sample_data[[param]] <- qtruncnorm(sample_data[[param]], a = distribution$lower, b = distribution$upper, mean = distribution$mean, sd = distribution$sd)
+            sample_data[[param]] <- qtruncnorm(
+              sample_data[[param]],
+              a = distribution$lower,
+              b = distribution$upper,
+              mean = distribution$mean,
+              sd = distribution$sd
+            )
           }
           if (!is.null(distribution$decimals)) {
-            sample_data[[param]] <- round(sample_data[[param]], distribution$decimals)
+            sample_data[[param]] <- round(
+              sample_data[[param]],
+              distribution$decimals
+            )
           }
         }
 
         return(sample_data)
       } else {
-        parameters_not_set <- self$parameter_names[which(!(self$parameter_names %in% names(self$parameter_distributions)))]
+        parameters_not_set <- self$parameter_names[which(
+          !(self$parameter_names %in% names(self$parameter_distributions))
+        )]
         if (length(parameters_not_set)) {
-          stop(sprintf("Parameter distributions need to be set before generating samples: %s", paste(parameters_not_set, collapse = ", ")), call. = FALSE)
+          stop(
+            sprintf(
+              "Parameter distributions need to be set before generating samples: %s",
+              paste(parameters_not_set, collapse = ", ")
+            ),
+            call. = FALSE
+          )
         } else {
-          stop("Parameter distributions need to be set before generating samples.", call. = FALSE)
+          stop(
+            "Parameter distributions need to be set before generating samples.",
+            call. = FALSE
+          )
         }
       }
     }
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Sample generation attributes #
@@ -273,7 +442,6 @@ LatinHypercubeSampler <- R6Class("LatinHypercubeSampler",
 
   # Active binding accessors for private attributes (above) #
   active = list(
-
     #' @field parameter_names A vector of sample parameter names.
     parameter_names = function(value) {
       if (missing(value)) {

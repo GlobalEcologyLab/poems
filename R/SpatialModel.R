@@ -25,10 +25,10 @@
 #' @include Region.R
 #' @export SpatialModel
 
-SpatialModel <- R6Class("SpatialModel",
+SpatialModel <- R6Class(
+  "SpatialModel",
   inherit = GenericModel,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -68,7 +68,6 @@ SpatialModel <- R6Class("SpatialModel",
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Model attributes #
@@ -88,11 +87,11 @@ SpatialModel <- R6Class("SpatialModel",
 
   # Active binding accessors for private model attributes (above) #
   active = list(
-
     # Model attribute accessors #
 
     #' @field model_attributes A vector of model attribute names.
-    model_attributes = function(value) { # inherited
+    model_attributes = function(value) {
+      # inherited
       if (missing(value)) {
         super$model_attributes
       } else {
@@ -106,11 +105,20 @@ SpatialModel <- R6Class("SpatialModel",
         private$.region
       } else {
         if ("Region" %in% class(value)) {
-          if ((value$use_raster && is.null(value$region_raster)) || (!value$use_raster && is.null(value$coordinates))) {
-            warning("Spatial region has not been defined within the region object", call. = FALSE)
+          if (
+            (value$use_raster && is.null(value$region_raster)) ||
+              (!value$use_raster && is.null(value$coordinates))
+          ) {
+            warning(
+              "Spatial region has not been defined within the region object",
+              call. = FALSE
+            )
           }
         } else if (!is.null(value)) {
-          stop("Region should be a Region (or inherited class) object", call. = FALSE)
+          stop(
+            "Region should be a Region (or inherited class) object",
+            call. = FALSE
+          )
         }
         private$.region <- value
       }
@@ -129,7 +137,8 @@ SpatialModel <- R6Class("SpatialModel",
     # Dynamic attribute accessors #
 
     #' @field attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
-    attribute_aliases = function(value) { # inherited
+    attribute_aliases = function(value) {
+      # inherited
       if (missing(value)) {
         super$attribute_aliases
       } else {
@@ -140,7 +149,8 @@ SpatialModel <- R6Class("SpatialModel",
     # Errors and warnings accessors #
 
     #' @field error_messages A vector of error messages encountered when setting model attributes.
-    error_messages = function(value) { # inherited
+    error_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$error_messages
       } else {
@@ -149,7 +159,8 @@ SpatialModel <- R6Class("SpatialModel",
     },
 
     #' @field warning_messages A vector of warning messages encountered when setting model attributes.
-    warning_messages = function(value) { # inherited
+    warning_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$warning_messages
       } else {

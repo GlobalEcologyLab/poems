@@ -51,10 +51,10 @@
 #' @include DispersalTemplate.R
 #' @export DispersalGenerator
 
-DispersalGenerator <- R6Class("DispersalGenerator",
+DispersalGenerator <- R6Class(
+  "DispersalGenerator",
   inherit = Generator,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -90,18 +90,28 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @param dispersal_friction Optional \code{\link{DispersalFriction}} (or inherited class) object for dispersal distance multiplier data.
     #' @param attribute_aliases Optional list of extra alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
     #' @param ... Parameters passed via a \emph{params} list or individually.
-    initialize = function(generative_template = NULL,
-                          generative_requirements = NULL,
-                          dispersal_friction = NULL,
-                          attribute_aliases = NULL, ...) {
-      if (is.null(generative_template)) { # when new object
+    initialize = function(
+      generative_template = NULL,
+      generative_requirements = NULL,
+      dispersal_friction = NULL,
+      attribute_aliases = NULL,
+      ...
+    ) {
+      if (is.null(generative_template)) {
+        # when new object
         self$generative_template <- DispersalTemplate$new()
         attribute_aliases <- c(
           attribute_aliases, # Append default aliases
           list(
-            proportion = "dispersal_proportion", dispersal_p = "dispersal_proportion", p = "dispersal_proportion",
-            breadth = "dispersal_breadth", dispersal_b = "dispersal_breadth", b = "dispersal_breadth",
-            max_distance = "dispersal_max_distance", dispersal_r = "dispersal_max_distance", r = "dispersal_max_distance"
+            proportion = "dispersal_proportion",
+            dispersal_p = "dispersal_proportion",
+            p = "dispersal_proportion",
+            breadth = "dispersal_breadth",
+            dispersal_b = "dispersal_breadth",
+            b = "dispersal_breadth",
+            max_distance = "dispersal_max_distance",
+            dispersal_r = "dispersal_max_distance",
+            r = "dispersal_max_distance"
           )
         )
         param_names <- names(c(list(...), list(...)$params))
@@ -109,7 +119,11 @@ DispersalGenerator <- R6Class("DispersalGenerator",
           self$description <- "dispersal"
         }
         if (!("inputs" %in% param_names)) {
-          self$inputs <- c("dispersal_proportion", "dispersal_breadth", "dispersal_max_distance")
+          self$inputs <- c(
+            "dispersal_proportion",
+            "dispersal_breadth",
+            "dispersal_max_distance"
+          )
         } else {
           param_list <- list(...)
           if ("inputs" %in% param_list$params) {
@@ -129,7 +143,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       super$initialize(
         generative_template = generative_template,
         generative_requirements = generative_requirements,
-        attribute_aliases = attribute_aliases, ...
+        attribute_aliases = attribute_aliases,
+        ...
       )
       if (!is.null(dispersal_friction)) {
         self$dispersal_friction <- dispersal_friction
@@ -142,20 +157,37 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     generative_requirements_satisfied = function() {
       satisfied <- super$generative_requirements_satisfied()
       if (is.list(satisfied)) {
-        function_params <- c("dispersal_proportion", "dispersal_breadth", "dispersal_max_distance")
-        function_data_required <- (length(self$get_attributes(function_params)) +
-          length(which(self$get_attribute_aliases(function_params) %in% self$inputs)) < 3)
-        dispersal_matrix_default <- ("dispersal_matrix" %in% names(satisfied) && self$generative_requirements$dispersal_matrix == "default")
+        function_params <- c(
+          "dispersal_proportion",
+          "dispersal_breadth",
+          "dispersal_max_distance"
+        )
+        function_data_required <- (length(self$get_attributes(
+          function_params
+        )) +
+          length(which(
+            self$get_attribute_aliases(function_params) %in% self$inputs
+          )) <
+          3)
+        dispersal_matrix_default <- ("dispersal_matrix" %in%
+          names(satisfied) &&
+          self$generative_requirements$dispersal_matrix == "default")
         if (dispersal_matrix_default) {
-          satisfied$dispersal_matrix <- (!is.null(self$coordinates) && !is.null(self$distance_classes) &&
-            (!is.null(self$dispersal_function_data) || !function_data_required) &&
+          satisfied$dispersal_matrix <- (!is.null(self$coordinates) &&
+            !is.null(self$distance_classes) &&
+            (!is.null(self$dispersal_function_data) ||
+              !function_data_required) &&
             !is.null(self$distance_data))
         }
-        dispersal_data_default <- ("dispersal_data" %in% names(satisfied) && self$generative_requirements$dispersal_data == "default")
+        dispersal_data_default <- ("dispersal_data" %in%
+          names(satisfied) &&
+          self$generative_requirements$dispersal_data == "default")
         if (dispersal_data_default) {
-          satisfied$dispersal_data <- (!is.null(self$coordinates) && !is.null(self$distance_classes) &&
+          satisfied$dispersal_data <- (!is.null(self$coordinates) &&
+            !is.null(self$distance_classes) &&
             (!is.null(self$dispersal_function_data) || !function_data_required))
-          satisfied$dispersal_data <- (satisfied$dispersal_data && !is.null(self$distance_data))
+          satisfied$dispersal_data <- (satisfied$dispersal_data &&
+            !is.null(self$distance_data))
         }
         # Add any attributes that are missing (for error message)
         if (dispersal_matrix_default || dispersal_data_default) {
@@ -197,19 +229,39 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       if (!is.null(self$region)) {
         coordinates <- self$region$coordinates
         if (is.null(coordinates)) {
-          stop("Distance matrix calculation requires the region to be defined with coordinates or a raster first", call. = FALSE)
+          stop(
+            "Distance matrix calculation requires the region to be defined with coordinates or a raster first",
+            call. = FALSE
+          )
         }
-        if (!self$region$use_raster || (is.logical(use_longlat) && use_longlat) ||
-          length(grep("longlat", as.character(raster::crs(self$region$region_raster)), fixed = TRUE)) > 0) {
-          return(earth.dist(coordinates, dist = FALSE) * 1000 / self$distance_scale)
-        } else { # assume coordinates in meters
+        if (
+          !self$region$use_raster ||
+            (is.logical(use_longlat) && use_longlat) ||
+            length(grep(
+              "longlat",
+              as.character(raster::crs(self$region$region_raster)),
+              fixed = TRUE
+            )) >
+              0
+        ) {
+          return(
+            earth.dist(coordinates, dist = FALSE) * 1000 / self$distance_scale
+          )
+        } else {
+          # assume coordinates in meters
           if (is.na(raster::crs(self$region$region_raster))) {
-            warning("No coordinate reference system (CRS) specified: assuming coordinates are in meters", call. = FALSE)
+            warning(
+              "No coordinate reference system (CRS) specified: assuming coordinates are in meters",
+              call. = FALSE
+            )
           }
           return(as.matrix(stats::dist(coordinates)) / self$distance_scale)
         }
       } else {
-        stop("Distance matrix calculation requires region/coordinates to be set first", call. = FALSE)
+        stop(
+          "Distance matrix calculation requires region/coordinates to be set first",
+          call. = FALSE
+        )
       }
     },
 
@@ -225,14 +277,29 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       }
 
       # Ensure coordinates and distance classes are set
-      if (is.null(self$coordinates) || is.null(self$region) || self$region$region_cells == 0 || is.null(self$distance_classes)) {
-        stop("Distance data calculation requires region/coordinates and distance classes to be set first", call. = FALSE)
+      if (
+        is.null(self$coordinates) ||
+          is.null(self$region) ||
+          self$region$region_cells == 0 ||
+          is.null(self$distance_classes)
+      ) {
+        stop(
+          "Distance data calculation requires region/coordinates and distance classes to be set first",
+          call. = FALSE
+        )
       }
 
       # Ensure pre-calculated distance matrix is consistent with coordinates
       if (!is.null(distance_matrix) && self$region$region_cells > 0) {
-        if (!is.matrix(distance_matrix) || nrow(distance_matrix) != self$region$region_cells || ncol(distance_matrix) != self$region$region_cells) {
-          stop("Distance matrix dimensions must be consistent with region/coordinates", call. = FALSE)
+        if (
+          !is.matrix(distance_matrix) ||
+            nrow(distance_matrix) != self$region$region_cells ||
+            ncol(distance_matrix) != self$region$region_cells
+        ) {
+          stop(
+            "Distance matrix dimensions must be consistent with region/coordinates",
+            call. = FALSE
+          )
         }
       }
 
@@ -242,27 +309,42 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       }
 
       # Calculate the indices of distances within the maximum dispersal range
-      distance_data <- which(distance_matrix > 0 & distance_matrix <= max(self$distance_classes), arr.ind = TRUE)
-      distance_data <- distance_data[order(distance_data[, 2], distance_data[, 1]), ]
+      distance_data <- which(
+        distance_matrix > 0 & distance_matrix <= max(self$distance_classes),
+        arr.ind = TRUE
+      )
+      distance_data <- distance_data[
+        order(distance_data[, 2], distance_data[, 1]),
+      ]
       colnames(distance_data) <- c("target_pop", "source_pop")
       distances_within_range <- distance_matrix[distance_data]
       distance_matrix <- NULL # release from memory
 
       # Ensure distance data is present
       if (length(distance_data) == 0) {
-        stop("No distance data was generated with the current distance classes", call. = FALSE)
+        stop(
+          "No distance data was generated with the current distance classes",
+          call. = FALSE
+        )
       }
 
       # Calculate dispersal friction object distance multipliers for the within range indices
       if (!is.null(self$dispersal_friction)) {
-        distance_multipliers <- self$dispersal_friction$calculate_distance_multipliers(distance_data)
-        if (length(distance_multipliers) == 1) { # apply multipliers and update distances
+        distance_multipliers <- self$dispersal_friction$calculate_distance_multipliers(
+          distance_data
+        )
+        if (length(distance_multipliers) == 1) {
+          # apply multipliers and update distances
           if (!is.null(self$dispersal_friction$write_to_dir)) {
-            distances_within_range <- distances_within_range * readRDS(distance_multipliers[[1]])
+            distances_within_range <- distances_within_range *
+              readRDS(distance_multipliers[[1]])
           } else {
-            distances_within_range <- distances_within_range * distance_multipliers[[1]]
+            distances_within_range <- distances_within_range *
+              distance_multipliers[[1]]
           }
-          out_of_range <- which(distances_within_range > max(self$distance_classes))
+          out_of_range <- which(
+            distances_within_range > max(self$distance_classes)
+          )
           distances_within_range <- distances_within_range[-out_of_range]
           distance_data <- distance_data[-out_of_range, ]
         }
@@ -274,27 +356,56 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       dispersal_rows <- tabulate(distance_data$source_pop, nbins = populations)
       compact_rows <- max(dispersal_rows)
       compact_matrix <- array(1:compact_rows, c(compact_rows, populations))
-      compact_matrix <- compact_matrix * (compact_matrix <= matrix(dispersal_rows, nrow = compact_rows, ncol = populations, byrow = TRUE))
+      compact_matrix <- compact_matrix *
+        (compact_matrix <=
+          matrix(
+            dispersal_rows,
+            nrow = compact_rows,
+            ncol = populations,
+            byrow = TRUE
+          ))
       # Map the row of each compact matrix to the original target population
-      distance_data$compact_row <- which(compact_matrix > 0, arr.ind = TRUE, useNames = FALSE)[, 1]
+      distance_data$compact_row <- which(
+        compact_matrix > 0,
+        arr.ind = TRUE,
+        useNames = FALSE
+      )[, 1]
 
       # Calculate base (no friction) distance classes for distances within the maximum dispersal range
-      base_distance_classes <- as.numeric(cut(distances_within_range, breaks = c(0, self$distance_classes)))
-      self$distance_data <- list(base = data.frame(distance_data, distance_class = base_distance_classes))
+      base_distance_classes <- as.numeric(cut(
+        distances_within_range,
+        breaks = c(0, self$distance_classes)
+      ))
+      self$distance_data <- list(
+        base = data.frame(distance_data, distance_class = base_distance_classes)
+      )
 
       # Calculate the sequential changes in distance class using dispersal friction object distance multipliers
-      if (!is.null(self$dispersal_friction) && length(distance_multipliers) > 1) {
+      if (
+        !is.null(self$dispersal_friction) && length(distance_multipliers) > 1
+      ) {
         current_distance_classes <- base_distance_classes
         sequential_distance_data <- list()
         for (i in 1:length(distance_multipliers)) {
           previous_distance_classes <- current_distance_classes
           if (!is.null(self$dispersal_friction$write_to_dir)) {
-            current_distance_classes <- as.numeric(cut(distances_within_range * readRDS(distance_multipliers[[i]]), breaks = c(0, self$distance_classes, Inf)))
+            current_distance_classes <- as.numeric(cut(
+              distances_within_range * readRDS(distance_multipliers[[i]]),
+              breaks = c(0, self$distance_classes, Inf)
+            ))
           } else {
-            current_distance_classes <- as.numeric(cut(distances_within_range * distance_multipliers[[i]], breaks = c(0, self$distance_classes, Inf)))
+            current_distance_classes <- as.numeric(cut(
+              distances_within_range * distance_multipliers[[i]],
+              breaks = c(0, self$distance_classes, Inf)
+            ))
           }
-          changed_indices <- which(current_distance_classes != previous_distance_classes)
-          sequential_distance_data[[i]] <- data.frame(distance_data[changed_indices, ], distance_class = current_distance_classes[changed_indices])
+          changed_indices <- which(
+            current_distance_classes != previous_distance_classes
+          )
+          sequential_distance_data[[i]] <- data.frame(
+            distance_data[changed_indices, ],
+            distance_class = current_distance_classes[changed_indices]
+          )
         }
         distance_multipliers <- NULL # release from memory
         self$distance_data$changes <- sequential_distance_data
@@ -308,71 +419,168 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     calculate_dispersals = function(type = "data") {
       # Ensure distance data are calculated
       if (is.null(self$distance_data)) {
-        return("Dispersal distance data needs to be calculated before dispersals can be generated")
+        return(
+          "Dispersal distance data needs to be calculated before dispersals can be generated"
+        )
       }
 
       # Calculate dispersals using distance data and sampled dispersal function parameters
-      if (!is.null(self$dispersal_proportion) && !is.null(self$dispersal_breadth) && !is.null(self$dispersal_max_distance)) {
+      if (
+        !is.null(self$dispersal_proportion) &&
+          !is.null(self$dispersal_breadth) &&
+          !is.null(self$dispersal_max_distance)
+      ) {
         # Calculate dispersal rates for each distance class (discrete values)
-        dispersal_rate_classes <- c(ifelse(self$distance_classes <= self$dispersal_max_distance, self$dispersal_proportion * exp(-1 * self$distance_classes / self$dispersal_breadth), 0), 0)
+        dispersal_rate_classes <- c(
+          ifelse(
+            self$distance_classes <= self$dispersal_max_distance,
+            self$dispersal_proportion *
+              exp(-1 * self$distance_classes / self$dispersal_breadth),
+            0
+          ),
+          0
+        )
 
         # Select base (non-friction) data for non-zero dispersal classes
-        nonzero_base_data <- self$distance_data$base[which(self$distance_data$base$distance_class <= length(which(dispersal_rate_classes > 0))), ]
+        nonzero_base_data <- self$distance_data$base[
+          which(
+            self$distance_data$base$distance_class <=
+              length(which(dispersal_rate_classes > 0))
+          ),
+        ]
 
         # Calculate a compact matrix of dispersals for the base (non-friction) data (original compact indices)
         base_compact_rows <- max(self$distance_data$base$compact_row)
         populations <- self$region$region_cells
         compact_matrix <- array(0, c(base_compact_rows, populations))
-        compact_dispersal_indices <- as.matrix(nonzero_base_data[, c("compact_row", "source_pop")])
-        compact_matrix[compact_dispersal_indices] <- dispersal_rate_classes[nonzero_base_data$distance_class]
+        compact_dispersal_indices <- as.matrix(nonzero_base_data[, c(
+          "compact_row",
+          "source_pop"
+        )])
+        compact_matrix[compact_dispersal_indices] <- dispersal_rate_classes[
+          nonzero_base_data$distance_class
+        ]
 
         # Calculate multipliers to set the total proportion migrating from each cell (without friction) to <= p
-        multipliers <- self$dispersal_proportion / .colSums(compact_matrix, m = base_compact_rows, n = populations)
+        multipliers <- self$dispersal_proportion /
+          .colSums(compact_matrix, m = base_compact_rows, n = populations)
         multipliers[which(!is.finite(multipliers) | multipliers > 1)] <- 1
 
         # Apply multipliers to the base compact dispersal matrix
-        compact_matrix <- compact_matrix * matrix(multipliers, nrow = base_compact_rows, ncol = populations, byrow = TRUE)
+        compact_matrix <- compact_matrix *
+          matrix(
+            multipliers,
+            nrow = base_compact_rows,
+            ncol = populations,
+            byrow = TRUE
+          )
 
         # Extract dispersal rates and round when required (then update non-zero base/non-friction dispersal data)
-        nonzero_base_data$dispersal_rate <- compact_matrix[compact_dispersal_indices]
+        nonzero_base_data$dispersal_rate <- compact_matrix[
+          compact_dispersal_indices
+        ]
         if (!is.null(self$decimals)) {
-          nonzero_base_data$dispersal_rate <- round(nonzero_base_data$dispersal_rate, self$decimals)
-          nonzero_base_data <- nonzero_base_data[which(nonzero_base_data$dispersal_rate > 0), ]
-          compact_dispersal_indices <- as.matrix(nonzero_base_data[, c("compact_row", "source_pop")])
+          nonzero_base_data$dispersal_rate <- round(
+            nonzero_base_data$dispersal_rate,
+            self$decimals
+          )
+          nonzero_base_data <- nonzero_base_data[
+            which(nonzero_base_data$dispersal_rate > 0),
+          ]
+          compact_dispersal_indices <- as.matrix(nonzero_base_data[, c(
+            "compact_row",
+            "source_pop"
+          )])
         }
 
         # Calculate indices for constructing further compacted dispersal matrices for emigrants and immigrants
-        dispersal_rows <- tabulate(nonzero_base_data$source_pop, nbins = populations)
-        dispersal_cols <- tabulate(nonzero_base_data$target_pop, nbins = populations)
+        dispersal_rows <- tabulate(
+          nonzero_base_data$source_pop,
+          nbins = populations
+        )
+        dispersal_cols <- tabulate(
+          nonzero_base_data$target_pop,
+          nbins = populations
+        )
         nonzero_compact_rows <- max(dispersal_rows, dispersal_cols)
         if (nonzero_compact_rows) {
-          compact_emigrant_matrix <- array(1:nonzero_compact_rows, c(nonzero_compact_rows, populations))
-          compact_immigrant_matrix <- compact_emigrant_matrix * (compact_emigrant_matrix <= matrix(dispersal_cols, nrow = nonzero_compact_rows, ncol = populations, byrow = TRUE))
-          compact_emigrant_matrix <- compact_emigrant_matrix * (compact_emigrant_matrix <= matrix(dispersal_rows, nrow = nonzero_compact_rows, ncol = populations, byrow = TRUE))
+          compact_emigrant_matrix <- array(
+            1:nonzero_compact_rows,
+            c(nonzero_compact_rows, populations)
+          )
+          compact_immigrant_matrix <- compact_emigrant_matrix *
+            (compact_emigrant_matrix <=
+              matrix(
+                dispersal_cols,
+                nrow = nonzero_compact_rows,
+                ncol = populations,
+                byrow = TRUE
+              ))
+          compact_emigrant_matrix <- compact_emigrant_matrix *
+            (compact_emigrant_matrix <=
+              matrix(
+                dispersal_rows,
+                nrow = nonzero_compact_rows,
+                ncol = populations,
+                byrow = TRUE
+              ))
           # Map the row of each compact matrix to the original target (for emigrants) or source (for immigrants) populations
-          nonzero_base_data$emigrant_row <- which(compact_emigrant_matrix > 0, arr.ind = TRUE, useNames = FALSE)[, 1]
-          nonzero_base_data$immigrant_row <- which(compact_immigrant_matrix > 0, arr.ind = TRUE, useNames = FALSE)[, 1]
-          target_sorted_indices <- nonzero_base_data[order(nonzero_base_data$target_pop, nonzero_base_data$source_pop), c("target_pop", "source_pop")]
-          nonzero_base_data$immigrant_row <- nonzero_base_data$immigrant_row[order(target_sorted_indices$source_pop, target_sorted_indices$target_pop)]
+          nonzero_base_data$emigrant_row <- which(
+            compact_emigrant_matrix > 0,
+            arr.ind = TRUE,
+            useNames = FALSE
+          )[, 1]
+          nonzero_base_data$immigrant_row <- which(
+            compact_immigrant_matrix > 0,
+            arr.ind = TRUE,
+            useNames = FALSE
+          )[, 1]
+          target_sorted_indices <- nonzero_base_data[
+            order(nonzero_base_data$target_pop, nonzero_base_data$source_pop),
+            c("target_pop", "source_pop")
+          ]
+          nonzero_base_data$immigrant_row <- nonzero_base_data$immigrant_row[order(
+            target_sorted_indices$source_pop,
+            target_sorted_indices$target_pop
+          )]
         } else {
           nonzero_base_data$emigrant_row <- numeric(0)
           nonzero_base_data$immigrant_row <- numeric(0)
         }
 
         # Calculate the sequential changes in dispersals when dispersal friction object is present
-        if (!is.null(self$dispersal_friction) && !is.null(self$distance_data$changes) && nonzero_compact_rows) {
+        if (
+          !is.null(self$dispersal_friction) &&
+            !is.null(self$distance_data$changes) &&
+            nonzero_compact_rows
+        ) {
           # Calculate the initial dispersal data by applying the first (friction) distance changes to the (compact) base data
-          compact_matrix[as.matrix(self$distance_data$changes[[1]][, c("compact_row", "source_pop")])] <-
-            dispersal_rate_classes[self$distance_data$changes[[1]]$distance_class] * multipliers[self$distance_data$changes[[1]]$source_pop]
+          compact_matrix[as.matrix(self$distance_data$changes[[1]][, c(
+            "compact_row",
+            "source_pop"
+          )])] <-
+            dispersal_rate_classes[
+              self$distance_data$changes[[1]]$distance_class
+            ] *
+            multipliers[self$distance_data$changes[[1]]$source_pop]
 
           # Construct the dispersal data from the base (non-friction) data for the non-zero base indices (ensures all indices present for changes)
-          self$dispersal_data <- list(data.frame(nonzero_base_data[, c("target_pop", "source_pop", "emigrant_row", "immigrant_row")],
+          self$dispersal_data <- list(data.frame(
+            nonzero_base_data[, c(
+              "target_pop",
+              "source_pop",
+              "emigrant_row",
+              "immigrant_row"
+            )],
             dispersal_rate = compact_matrix[compact_dispersal_indices]
           ))
 
           # Round when required
           if (!is.null(self$decimals)) {
-            self$dispersal_data[[1]]$dispersal_rate <- round(self$dispersal_data[[1]]$dispersal_rate, self$decimals)
+            self$dispersal_data[[1]]$dispersal_rate <- round(
+              self$dispersal_data[[1]]$dispersal_rate,
+              self$decimals
+            )
             compact_matrix <- compact_matrix * 0 > 0 # all FALSE
             compact_matrix[compact_dispersal_indices] <- TRUE # used to resolve decimal rounding in changes
           } else {
@@ -381,62 +589,122 @@ DispersalGenerator <- R6Class("DispersalGenerator",
 
           if (type == "data") {
             # Map the original distance classes and the new emigrant and immigrant row indices via compact matrices
-            original_distance_class_map <- emigrant_row_map <- immigrant_row_map <- array(NA, c(base_compact_rows, populations))
-            original_distance_class_map[as.matrix(self$distance_data$base[, c("compact_row", "source_pop")])] <- self$distance_data$base$distance_class
-            emigrant_row_map[as.matrix(nonzero_base_data[, c("compact_row", "source_pop")])] <- nonzero_base_data$emigrant_row
-            immigrant_row_map[as.matrix(nonzero_base_data[, c("compact_row", "source_pop")])] <- nonzero_base_data$immigrant_row
+            original_distance_class_map <- emigrant_row_map <- immigrant_row_map <- array(
+              NA,
+              c(base_compact_rows, populations)
+            )
+            original_distance_class_map[as.matrix(self$distance_data$base[, c(
+              "compact_row",
+              "source_pop"
+            )])] <- self$distance_data$base$distance_class
+            emigrant_row_map[as.matrix(nonzero_base_data[, c(
+              "compact_row",
+              "source_pop"
+            )])] <- nonzero_base_data$emigrant_row
+            immigrant_row_map[as.matrix(nonzero_base_data[, c(
+              "compact_row",
+              "source_pop"
+            )])] <- nonzero_base_data$immigrant_row
 
             # Calculate subsequent changes in dispersals
             for (i in 2:length(self$distance_data$changes)) {
               # Select data for non-zero dispersal classes
-              original_distance_classes <- original_distance_class_map[as.matrix(self$distance_data$changes[[i]][, c("compact_row", "source_pop")])]
-              nonzero_dispersal_indices <- which(original_distance_classes <= length(which(dispersal_rate_classes > 0)))
-              nonzero_change_data <- self$distance_data$changes[[i]][nonzero_dispersal_indices, ]
+              original_distance_classes <- original_distance_class_map[as.matrix(self$distance_data$changes[[
+                i
+              ]][, c("compact_row", "source_pop")])]
+              nonzero_dispersal_indices <- which(
+                original_distance_classes <=
+                  length(which(dispersal_rate_classes > 0))
+              )
+              nonzero_change_data <- self$distance_data$changes[[i]][
+                nonzero_dispersal_indices,
+              ]
 
               # Select rows that don't round to zero in the base data
               if (!is.null(self$decimals)) {
-                nonzero_change_data <- nonzero_change_data[which(compact_matrix[as.matrix(nonzero_change_data[, c("compact_row", "source_pop")])]), ]
+                nonzero_change_data <- nonzero_change_data[
+                  which(compact_matrix[as.matrix(nonzero_change_data[, c(
+                    "compact_row",
+                    "source_pop"
+                  )])]),
+                ]
               }
 
               # Calculate/construct dispersal rates using class and multiplier (based on non-friction data)
-              self$dispersal_data[[i]] <- data.frame(nonzero_change_data[, c("target_pop", "source_pop")],
-                emigrant_row = emigrant_row_map[as.matrix(nonzero_change_data[, c("compact_row", "source_pop")])],
-                immigrant_row = immigrant_row_map[as.matrix(nonzero_change_data[, c("compact_row", "source_pop")])],
-                dispersal_rate = dispersal_rate_classes[nonzero_change_data$distance_class] * multipliers[nonzero_change_data$source_pop]
+              self$dispersal_data[[i]] <- data.frame(
+                nonzero_change_data[, c("target_pop", "source_pop")],
+                emigrant_row = emigrant_row_map[as.matrix(nonzero_change_data[, c(
+                  "compact_row",
+                  "source_pop"
+                )])],
+                immigrant_row = immigrant_row_map[as.matrix(nonzero_change_data[, c(
+                  "compact_row",
+                  "source_pop"
+                )])],
+                dispersal_rate = dispersal_rate_classes[
+                  nonzero_change_data$distance_class
+                ] *
+                  multipliers[nonzero_change_data$source_pop]
               )
               # Round when required
-              if (!is.null(self$decimals) && length(self$dispersal_data[[i]]) > 0) {
-                self$dispersal_data[[i]]$dispersal_rate <- round(self$dispersal_data[[i]]$dispersal_rate, self$decimals)
+              if (
+                !is.null(self$decimals) && length(self$dispersal_data[[i]]) > 0
+              ) {
+                self$dispersal_data[[i]]$dispersal_rate <- round(
+                  self$dispersal_data[[i]]$dispersal_rate,
+                  self$decimals
+                )
               }
             }
-          } else { # matrix
+          } else {
+            # matrix
             self$dispersal_matrix <- array(0, c(populations, populations))
-            self$dispersal_matrix[as.matrix(self$dispersal_data[[1]][, c("target_pop", "source_pop")])] <- self$dispersal_data[[1]]$dispersal_rate
+            self$dispersal_matrix[as.matrix(self$dispersal_data[[1]][, c(
+              "target_pop",
+              "source_pop"
+            )])] <- self$dispersal_data[[1]]$dispersal_rate
           }
-        } else { # no dispersal friction object
+        } else {
+          # no dispersal friction object
 
           # Set dispersals from non-zero dispersal data
           if (type == "matrix") {
             self$dispersal_matrix <- array(0, c(populations, populations))
-            self$dispersal_matrix[as.matrix(nonzero_base_data[, c("target_pop", "source_pop")])] <- nonzero_base_data$dispersal_rate
+            self$dispersal_matrix[as.matrix(nonzero_base_data[, c(
+              "target_pop",
+              "source_pop"
+            )])] <- nonzero_base_data$dispersal_rate
           } else {
-            self$dispersal_data <- list(nonzero_base_data[, c("target_pop", "source_pop", "emigrant_row", "immigrant_row", "dispersal_rate")])
+            self$dispersal_data <- list(nonzero_base_data[, c(
+              "target_pop",
+              "source_pop",
+              "emigrant_row",
+              "immigrant_row",
+              "dispersal_rate"
+            )])
           }
         }
       } else {
-        return("Dispersal calculation requires sample parameter settings for proportion, breadth & maximum distance (look-up data may be missing)")
+        return(
+          "Dispersal calculation requires sample parameter settings for proportion, breadth & maximum distance (look-up data may be missing)"
+        )
       }
     }
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Model attributes #
     .model_attributes = c(
-      "region", "coordinates", "dispersal_proportion", "dispersal_breadth", "dispersal_max_distance",
-      "dispersal_index", "dispersal_matrix", "dispersal_data"
+      "region",
+      "coordinates",
+      "dispersal_proportion",
+      "dispersal_breadth",
+      "dispersal_max_distance",
+      "dispersal_index",
+      "dispersal_matrix",
+      "dispersal_data"
     ),
     .region = NULL,
     .dispersal_proportion = NULL,
@@ -448,12 +716,32 @@ DispersalGenerator <- R6Class("DispersalGenerator",
 
     # Attributes accessible via model get/set methods #
     .active_attributes = c(
-      "region", "coordinates", "description", "inputs", "outputs", "file_templates", "function_templates",
-      "distribution_templates", "uses_correlations", "spatial_correlation", "temporal_correlation",
-      "time_steps", "decimals", "occupancy_mask", "template_attached", "dispersal_friction",
-      "distance_classes", "distance_scale", "distance_data", "dispersal_function_data",
-      "dispersal_proportion", "dispersal_breadth", "dispersal_max_distance", "dispersal_index",
-      "dispersal_matrix", "dispersal_data"
+      "region",
+      "coordinates",
+      "description",
+      "inputs",
+      "outputs",
+      "file_templates",
+      "function_templates",
+      "distribution_templates",
+      "uses_correlations",
+      "spatial_correlation",
+      "temporal_correlation",
+      "time_steps",
+      "decimals",
+      "occupancy_mask",
+      "template_attached",
+      "dispersal_friction",
+      "distance_classes",
+      "distance_scale",
+      "distance_data",
+      "dispersal_function_data",
+      "dispersal_proportion",
+      "dispersal_breadth",
+      "dispersal_max_distance",
+      "dispersal_index",
+      "dispersal_matrix",
+      "dispersal_data"
     )
 
     # Dynamic attributes #
@@ -470,11 +758,11 @@ DispersalGenerator <- R6Class("DispersalGenerator",
 
   # Active binding accessors for private attributes (above and template nested) #
   active = list(
-
     # Model attributes accessors #
 
     #' @field model_attributes A vector of model attribute names.
-    model_attributes = function(value) { # inherited
+    model_attributes = function(value) {
+      # inherited
       if (missing(value)) {
         super$model_attributes
       } else {
@@ -483,7 +771,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field region A \code{\link{Region}} (or inherited class) object specifying the study region.
-    region = function(value) { # inherited
+    region = function(value) {
+      # inherited
       if (missing(value)) {
         super$region
       } else {
@@ -492,7 +781,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field coordinates Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).
-    coordinates = function(value) { # inherited
+    coordinates = function(value) {
+      # inherited
       if (missing(value)) {
         super$coordinates
       } else {
@@ -503,7 +793,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     # Template-nested model attribute accessors #
 
     #' @field description A brief description of what the generator generates.
-    description = function(value) { # inherited
+    description = function(value) {
+      # inherited
       if (missing(value)) {
         super$description
       } else {
@@ -512,7 +803,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field inputs An array of input attribute names for the generator.
-    inputs = function(value) { # inherited
+    inputs = function(value) {
+      # inherited
       if (missing(value)) {
         super$inputs
       } else {
@@ -521,7 +813,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field outputs An array of output attribute names for the generator.
-    outputs = function(value) { # inherited
+    outputs = function(value) {
+      # inherited
       if (missing(value)) {
         super$outputs
       } else {
@@ -530,7 +823,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field file_templates A nested list of file template attributes.
-    file_templates = function(value) { # inherited
+    file_templates = function(value) {
+      # inherited
       if (missing(value)) {
         super$file_templates
       } else {
@@ -539,7 +833,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field function_templates A nested list of function template attributes.
-    function_templates = function(value) { # inherited
+    function_templates = function(value) {
+      # inherited
       if (missing(value)) {
         super$function_templates
       } else {
@@ -548,7 +843,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field distribution_templates A list of distribution template attributes.
-    distribution_templates = function(value) { # inherited
+    distribution_templates = function(value) {
+      # inherited
       if (missing(value)) {
         super$distribution_templates
       } else {
@@ -557,7 +853,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field uses_correlations A boolean to indicate that a \code{\link{SpatialCorrelation}} (or inherited class) object is used for generating correlated random deviates.
-    uses_correlations = function(value) { # inherited
+    uses_correlations = function(value) {
+      # inherited
       if (missing(value)) {
         super$uses_correlations
       } else {
@@ -566,7 +863,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field spatial_correlation A \code{\link{SpatialCorrelation}} (or inherited class) object for generating correlated random deviates.
-    spatial_correlation = function(value) { # inherited
+    spatial_correlation = function(value) {
+      # inherited
       if (missing(value)) {
         super$spatial_correlation
       } else {
@@ -575,7 +873,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field temporal_correlation Absolute correlation coefficient between simulation time steps for all grid cells (0-1; default = 1).
-    temporal_correlation = function(value) { # inherited
+    temporal_correlation = function(value) {
+      # inherited
       if (missing(value)) {
         super$temporal_correlation
       } else {
@@ -584,7 +883,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field time_steps Number of simulation time steps.
-    time_steps = function(value) { # inherited
+    time_steps = function(value) {
+      # inherited
       if (missing(value)) {
         super$time_steps
       } else {
@@ -593,7 +893,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field decimals Number of decimal places applied to generated data outputs (default: NULL = no rounding).
-    decimals = function(value) { # inherited
+    decimals = function(value) {
+      # inherited
       if (missing(value)) {
         super$decimals
       } else {
@@ -602,7 +903,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field occupancy_mask Optional binary mask array (matrix), data frame, or raster (stack) for generated (time-series) data outputs.
-    occupancy_mask = function(value) { # inherited
+    occupancy_mask = function(value) {
+      # inherited
       if (missing(value)) {
         super$occupancy_mask
       } else {
@@ -611,7 +913,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field template_attached A list of template-nested dynamically attached model attributes that are maintained via shallow or \emph{new} cloning.
-    template_attached = function(value) { # inherited
+    template_attached = function(value) {
+      # inherited
       if (missing(value)) {
         super$template_attached
       } else {
@@ -625,29 +928,67 @@ DispersalGenerator <- R6Class("DispersalGenerator",
         self$generative_template$dispersal_friction
       } else {
         if (!is.null(value) && !("DispersalFriction" %in% class(value))) {
-          stop("Dispersal friction must be a DispersalFriction or inherited class object", call. = FALSE)
+          stop(
+            "Dispersal friction must be a DispersalFriction or inherited class object",
+            call. = FALSE
+          )
         } else if (!is.null(value)) {
           # Protect consistency of existing distance data associated with an existing dispersal friction object
-          if (!is.null(self$distance_data) && !is.null(self$dispersal_friction)) {
-            stop("Dispersal generator distance data is already associated with the existing dispersal friction object", call. = FALSE)
+          if (
+            !is.null(self$distance_data) && !is.null(self$dispersal_friction)
+          ) {
+            stop(
+              "Dispersal generator distance data is already associated with the existing dispersal friction object",
+              call. = FALSE
+            )
             # Check region/coordinates consistency
-          } else if (!is.null(value$region) && !is.null(self$region) &&
-            (value$region$region_cells != self$region$region_cells ||
-              !all(value$coordinates == self$coordinates) ||
-              (self$region$use_raster && !self$region$raster_is_consistent(value$region$region_raster)))) {
-            stop("Dispersal friction object is inconsistent with the dispersal generator region/coordinates", call. = FALSE)
-          } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$conductance) &&
-            any(class(value$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick")) &&
-            (self$region$use_raster && !self$region$raster_is_consistent(value$conductance) ||
-              !self$region$use_raster)) {
-            stop("Conductance raster is inconsistent with the dispersal generator region", call. = FALSE)
-          } else if (is.null(value$region) && !is.null(self$region) && !is.null(value$conductance) &&
-            is.matrix(value$conductance) &&
-            nrow(value$conductance) != self$region$region_cells) {
-            stop("Conductance matrix dimensions are inconsistent with the dispersal generator region/coordinates ", call. = FALSE)
+          } else if (
+            !is.null(value$region) &&
+              !is.null(self$region) &&
+              (value$region$region_cells != self$region$region_cells ||
+                !all(value$coordinates == self$coordinates) ||
+                (self$region$use_raster &&
+                  !self$region$raster_is_consistent(
+                    value$region$region_raster
+                  )))
+          ) {
+            stop(
+              "Dispersal friction object is inconsistent with the dispersal generator region/coordinates",
+              call. = FALSE
+            )
+          } else if (
+            is.null(value$region) &&
+              !is.null(self$region) &&
+              !is.null(value$conductance) &&
+              any(
+                class(value$conductance) %in%
+                  c("RasterLayer", "RasterStack", "RasterBrick")
+              ) &&
+              (self$region$use_raster &&
+                !self$region$raster_is_consistent(value$conductance) ||
+                !self$region$use_raster)
+          ) {
+            stop(
+              "Conductance raster is inconsistent with the dispersal generator region",
+              call. = FALSE
+            )
+          } else if (
+            is.null(value$region) &&
+              !is.null(self$region) &&
+              !is.null(value$conductance) &&
+              is.matrix(value$conductance) &&
+              nrow(value$conductance) != self$region$region_cells
+          ) {
+            stop(
+              "Conductance matrix dimensions are inconsistent with the dispersal generator region/coordinates ",
+              call. = FALSE
+            )
           } else if (!is.null(self$distance_data)) {
             # Existing distance data will lack temporal changes
-            warning("Dispersal generator distance data will need to be re-calculated with the dispersal friction object", call. = FALSE)
+            warning(
+              "Dispersal generator distance data will need to be re-calculated with the dispersal friction object",
+              call. = FALSE
+            )
             self$distance_data <- NULL
           }
           # Copy region/coordinates appropriately
@@ -657,9 +998,13 @@ DispersalGenerator <- R6Class("DispersalGenerator",
             self$region <- value$region
           }
           self$generative_template$dispersal_friction <- value
-        } else { # set model (to NULL)
+        } else {
+          # set model (to NULL)
           self$generative_template$dispersal_friction <- value
-          if (!is.null(self$distance_data) && "changes" %in% names(self$distance_data)) {
+          if (
+            !is.null(self$distance_data) &&
+              "changes" %in% names(self$distance_data)
+          ) {
             self$distance_data$changes <- NULL
           }
         }
@@ -669,15 +1014,28 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field distance_classes Vector of distance interval boundaries for calculating discrete dispersal rates.
     distance_classes = function(value) {
       if (missing(value)) {
-        if (is.null(self$generative_template$distance_classes) && is.numeric(self$dispersal_max_distance)) {
+        if (
+          is.null(self$generative_template$distance_classes) &&
+            is.numeric(self$dispersal_max_distance)
+        ) {
           # Use max distance to generate classes (up to 1000|max_distance_classes)
-          seq_step <- max(trunc(self$dispersal_max_distance / self$max_distance_classes), 1)
-          self$generative_template$distance_classes <- seq(seq_step, self$dispersal_max_distance, seq_step)
+          seq_step <- max(
+            trunc(self$dispersal_max_distance / self$max_distance_classes),
+            1
+          )
+          self$generative_template$distance_classes <- seq(
+            seq_step,
+            self$dispersal_max_distance,
+            seq_step
+          )
         }
         self$generative_template$distance_classes
       } else {
         if (!is.null(self$distance_data)) {
-          stop("Dispersal generator distance data is already associated with the existing distance classes", call. = FALSE)
+          stop(
+            "Dispersal generator distance data is already associated with the existing distance classes",
+            call. = FALSE
+          )
         } else {
           self$generative_template$distance_classes <- value
         }
@@ -718,15 +1076,26 @@ DispersalGenerator <- R6Class("DispersalGenerator",
       } else {
         if (is.character(value) && file.exists(value)) {
           if (length(grep(".CSV", toupper(value), fixed = TRUE))) {
-            self$generative_template$dispersal_function_data <- utils::read.csv(file = value)
-          } else if (length(grep(".RDATA", toupper(value), fixed = TRUE)) || length(grep(".RDS", toupper(value), fixed = TRUE))) {
-            self$generative_template$dispersal_function_data <- readRDS(file = value)
+            self$generative_template$dispersal_function_data <- utils::read.csv(
+              file = value
+            )
+          } else if (
+            length(grep(".RDATA", toupper(value), fixed = TRUE)) ||
+              length(grep(".RDS", toupper(value), fixed = TRUE))
+          ) {
+            self$generative_template$dispersal_function_data <- readRDS(
+              file = value
+            )
           } else {
-            self$generative_template$dispersal_function_data <- utils::read.table(file = value)
+            self$generative_template$dispersal_function_data <- utils::read.table(
+              file = value
+            )
           }
         } else {
           if (!is.null(value)) {
-            self$generative_template$dispersal_function_data <- as.data.frame(value)
+            self$generative_template$dispersal_function_data <- as.data.frame(
+              value
+            )
           } else {
             self$generative_template$dispersal_function_data <- value
           }
@@ -739,13 +1108,21 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field dispersal_proportion Dispersal function: \emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion and limit of dispersers between model cells.
     dispersal_proportion = function(value) {
       if (missing(value)) {
-        if (any(self$get_attribute_aliases("dispersal_proportion") %in% self$inputs)) {
+        if (
+          any(
+            self$get_attribute_aliases("dispersal_proportion") %in% self$inputs
+          )
+        ) {
           private$.dispersal_proportion
         } else {
           self$generative_template$dispersal_proportion
         }
       } else {
-        if (any(self$get_attribute_aliases("dispersal_proportion") %in% self$inputs)) {
+        if (
+          any(
+            self$get_attribute_aliases("dispersal_proportion") %in% self$inputs
+          )
+        ) {
           private$.dispersal_proportion <- value
         } else {
           self$generative_template$dispersal_proportion <- value
@@ -756,20 +1133,37 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field dispersal_breadth Dispersal function: \emph{p*exp(-distance/b)} \emph{b} parameter. Represents the breadth of the dispersal between model cells. Typically estimated via average migration distance.
     dispersal_breadth = function(value) {
       if (missing(value)) {
-        if (!is.null(self$dispersal_function_data) && !is.null(self$dispersal_index) &&
-          any(self$get_attribute_aliases("dispersal_breadth") %in% names(self$dispersal_function_data))) {
+        if (
+          !is.null(self$dispersal_function_data) &&
+            !is.null(self$dispersal_index) &&
+            any(
+              self$get_attribute_aliases("dispersal_breadth") %in%
+                names(self$dispersal_function_data)
+            )
+        ) {
           # Use function look-up data
-          function_data_column <- which(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_breadth"))
-          self$dispersal_function_data[[function_data_column]][self$dispersal_index]
+          function_data_column <- which(
+            names(self$dispersal_function_data) %in%
+              self$get_attribute_aliases("dispersal_breadth")
+          )
+          self$dispersal_function_data[[function_data_column]][
+            self$dispersal_index
+          ]
         } else {
-          if (any(self$get_attribute_aliases("dispersal_breadth") %in% self$inputs)) {
+          if (
+            any(
+              self$get_attribute_aliases("dispersal_breadth") %in% self$inputs
+            )
+          ) {
             private$.dispersal_breadth
           } else {
             self$generative_template$dispersal_breadth
           }
         }
       } else {
-        if (any(self$get_attribute_aliases("dispersal_breadth") %in% self$inputs)) {
+        if (
+          any(self$get_attribute_aliases("dispersal_breadth") %in% self$inputs)
+        ) {
           private$.dispersal_breadth <- value
         } else {
           self$generative_template$dispersal_breadth <- value
@@ -780,38 +1174,92 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field dispersal_max_distance Dispersal maximum distance or range (\emph{r}) parameter limits the use of the dispersal function: \emph{p*exp(-distance/b)}. The function is utilized when \emph{distance <= r} otherwise the dispersal rate is set to zero.
     dispersal_max_distance = function(value) {
       if (missing(value)) {
-        if (!is.null(self$dispersal_function_data) && !is.null(self$dispersal_index) &&
-          any(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_max_distance"))) {
+        if (
+          !is.null(self$dispersal_function_data) &&
+            !is.null(self$dispersal_index) &&
+            any(
+              names(self$dispersal_function_data) %in%
+                self$get_attribute_aliases("dispersal_max_distance")
+            )
+        ) {
           # Use function look-up data
-          function_data_column <- which(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_max_distance"))
-          self$dispersal_function_data[[function_data_column]][self$dispersal_index]
-        } else if (is.null(private$.dispersal_max_distance) && is.null(self$generative_template$dispersal_max_distance) &&
-          is.numeric(self$distance_classes)) {
+          function_data_column <- which(
+            names(self$dispersal_function_data) %in%
+              self$get_attribute_aliases("dispersal_max_distance")
+          )
+          self$dispersal_function_data[[function_data_column]][
+            self$dispersal_index
+          ]
+        } else if (
+          is.null(private$.dispersal_max_distance) &&
+            is.null(self$generative_template$dispersal_max_distance) &&
+            is.numeric(self$distance_classes)
+        ) {
           max(self$distance_classes)
         } else {
-          if (any(self$get_attribute_aliases("dispersal_max_distance") %in% self$inputs)) {
+          if (
+            any(
+              self$get_attribute_aliases("dispersal_max_distance") %in%
+                self$inputs
+            )
+          ) {
             private$.dispersal_max_distance
           } else {
             self$generative_template$dispersal_max_distance
           }
         }
       } else {
-        if (any(self$get_attribute_aliases("dispersal_max_distance") %in% self$inputs)) {
+        if (
+          any(
+            self$get_attribute_aliases("dispersal_max_distance") %in%
+              self$inputs
+          )
+        ) {
           private$.dispersal_max_distance <- value
         } else {
           self$generative_template$dispersal_max_distance <- value
         }
-        if (!is.null(self$dispersal_function_data) && is.null(self$dispersal_index) && is.numeric(value)) {
+        if (
+          !is.null(self$dispersal_function_data) &&
+            is.null(self$dispersal_index) &&
+            is.numeric(value)
+        ) {
           # Use maximum distance to derive function data index
-          if (!(names(self$dispersal_function_data)[1] %in% self$get_attribute_aliases(c("dispersal_proportion", "dispersal_breadth", "dispersal_max_distance")))) {
+          if (
+            !(names(self$dispersal_function_data)[1] %in%
+              self$get_attribute_aliases(c(
+                "dispersal_proportion",
+                "dispersal_breadth",
+                "dispersal_max_distance"
+              )))
+          ) {
             # Assume first column provides distance intervals (non-inclusive lower bounds)
-            dispersal_index <- as.numeric(cut(value, breaks = c(self$dispersal_function_data[, 1], Inf)))
-            if (is.finite(dispersal_index)) self$dispersal_index <- dispersal_index
-          } else if (any(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_max_distance"))) {
+            dispersal_index <- as.numeric(cut(
+              value,
+              breaks = c(self$dispersal_function_data[, 1], Inf)
+            ))
+            if (is.finite(dispersal_index))
+              self$dispersal_index <- dispersal_index
+          } else if (
+            any(
+              names(self$dispersal_function_data) %in%
+                self$get_attribute_aliases("dispersal_max_distance")
+            )
+          ) {
             # Use max_distance column as distance intervals (non-inclusive lower bounds)
-            function_data_column <- which(names(self$dispersal_function_data) %in% self$get_attribute_aliases("dispersal_max_distance"))
-            dispersal_index <- as.numeric(cut(value, breaks = c(self$dispersal_function_data[[function_data_column]], Inf)))
-            if (is.finite(dispersal_index)) self$dispersal_index <- dispersal_index
+            function_data_column <- which(
+              names(self$dispersal_function_data) %in%
+                self$get_attribute_aliases("dispersal_max_distance")
+            )
+            dispersal_index <- as.numeric(cut(
+              value,
+              breaks = c(
+                self$dispersal_function_data[[function_data_column]],
+                Inf
+              )
+            ))
+            if (is.finite(dispersal_index))
+              self$dispersal_index <- dispersal_index
           }
         }
       }
@@ -835,13 +1283,17 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field dispersal_matrix Dispersal matrix calculated via dispersal function.
     dispersal_matrix = function(value) {
       if (missing(value)) {
-        if (is.null(private$.dispersal_matrix) && "dispersal_matrix" %in% names(self$generative_requirements)) {
+        if (
+          is.null(private$.dispersal_matrix) &&
+            "dispersal_matrix" %in% names(self$generative_requirements)
+        ) {
           template_type <- self$generative_requirements[["dispersal_matrix"]]
           if (template_type == "file") {
             private$.dispersal_matrix <- self$read_file("dispersal_matrix")
           } else if (template_type == "function") {
             private$.dispersal_matrix <- self$run_function("dispersal_matrix")
-          } else if (template_type == "default") { # use internal function
+          } else if (template_type == "default") {
+            # use internal function
             message <- self$calculate_dispersals(type = "matrix")
             if (is.character(message)) {
               self$error_messages <- message
@@ -857,13 +1309,17 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     #' @field dispersal_data Data frame of non-zero dispersal rates including indices for the construction of compact matrices (columns: target_pop, source_pop, emigrant_row, immigrant_row, dispersal_rate).
     dispersal_data = function(value) {
       if (missing(value)) {
-        if (is.null(private$.dispersal_data) && "dispersal_data" %in% names(self$generative_requirements)) {
+        if (
+          is.null(private$.dispersal_data) &&
+            "dispersal_data" %in% names(self$generative_requirements)
+        ) {
           template_type <- self$generative_requirements[["dispersal_data"]]
           if (template_type == "file") {
             private$.dispersal_data <- self$read_file("dispersal_data")
           } else if (template_type == "function") {
             private$.dispersal_data <- self$run_function("dispersal_data")
-          } else if (template_type == "default") { # use internal function
+          } else if (template_type == "default") {
+            # use internal function
             message <- self$calculate_dispersals(type = "data")
             if (is.character(message)) {
               self$error_messages <- message
@@ -879,7 +1335,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     # Dynamic attribute accessors #
 
     #' @field attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
-    attribute_aliases = function(value) { # inherited
+    attribute_aliases = function(value) {
+      # inherited
       if (missing(value)) {
         super$attribute_aliases
       } else {
@@ -890,7 +1347,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     # Generative attribute accessors #
 
     #' @field generative_template A nested \code{\link{DispersalTemplate}} (or inherited class) object for model attributes that are maintained via shallow or \emph{new} cloning.
-    generative_template = function(value) { # inherited
+    generative_template = function(value) {
+      # inherited
       if (missing(value)) {
         super$generative_template
       } else {
@@ -899,7 +1357,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field generative_requirements A list of attribute names and the template setting (\emph{"file"}, \emph{"function"}, or \emph{"default"}) that is required to generate their values.
-    generative_requirements = function(value) { # inherited
+    generative_requirements = function(value) {
+      # inherited
       if (missing(value)) {
         super$generative_requirements
       } else {
@@ -910,7 +1369,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     # Errors and warnings accessors #
 
     #' @field error_messages A vector of error messages encountered when setting model attributes.
-    error_messages = function(value) { # inherited
+    error_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$error_messages
       } else {
@@ -919,7 +1379,8 @@ DispersalGenerator <- R6Class("DispersalGenerator",
     },
 
     #' @field warning_messages A vector of warning messages encountered when setting model attributes.
-    warning_messages = function(value) { # inherited
+    warning_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$warning_messages
       } else {

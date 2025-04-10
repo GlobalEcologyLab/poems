@@ -170,17 +170,37 @@
 
 population_simulator <- function(inputs) {
   # Stop if minimal inputs are not present
-  if (is.null(inputs$time_steps) || is.null(inputs$populations) || is.null(inputs$initial_abundance) ||
-    is.null(inputs$stage_matrix) || is.null(inputs$carrying_capacity)) {
+  if (
+    is.null(inputs$time_steps) ||
+      is.null(inputs$populations) ||
+      is.null(inputs$initial_abundance) ||
+      is.null(inputs$stage_matrix) ||
+      is.null(inputs$carrying_capacity)
+  ) {
     incomplete_inputs <- if (is.null(inputs$time_steps)) "time_steps"
-    incomplete_inputs <- c(incomplete_inputs, if (is.null(inputs$populations)) "populations")
-    incomplete_inputs <- c(incomplete_inputs, if (is.null(inputs$initial_abundance)) "initial_abundance")
-    incomplete_inputs <- c(incomplete_inputs, if (is.null(inputs$stage_matrix)) "stage_matrix")
-    incomplete_inputs <- c(incomplete_inputs, if (is.null(inputs$carrying_capacity)) "carrying_capacity")
-    stop(paste(
-      "Minimal inputs required to run simulation should include:",
-      paste(incomplete_inputs, collapse = ", ")
-    ), call. = FALSE)
+    incomplete_inputs <- c(
+      incomplete_inputs,
+      if (is.null(inputs$populations)) "populations"
+    )
+    incomplete_inputs <- c(
+      incomplete_inputs,
+      if (is.null(inputs$initial_abundance)) "initial_abundance"
+    )
+    incomplete_inputs <- c(
+      incomplete_inputs,
+      if (is.null(inputs$stage_matrix)) "stage_matrix"
+    )
+    incomplete_inputs <- c(
+      incomplete_inputs,
+      if (is.null(inputs$carrying_capacity)) "carrying_capacity"
+    )
+    stop(
+      paste(
+        "Minimal inputs required to run simulation should include:",
+        paste(incomplete_inputs, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
 
   ## Unpack inputs and calculate/initialize re-usable variables ##
@@ -191,7 +211,11 @@ population_simulator <- function(inputs) {
   }
   replicates <- ifelse(is.null(inputs$replicates), 1, inputs$replicates)
   time_steps <- inputs$time_steps
-  years_per_step <- ifelse(is.null(inputs$years_per_step), 1, inputs$years_per_step)
+  years_per_step <- ifelse(
+    is.null(inputs$years_per_step),
+    1,
+    inputs$years_per_step
+  )
   populations <- inputs$populations
 
   # Stage-based transition matrix
@@ -199,28 +223,56 @@ population_simulator <- function(inputs) {
   stages <- ifelse(is.null(inputs$stages), nrow(stage_matrix), inputs$stages)
 
   # Initial abundance for each stage and population
-  if ("PopulationModel" %in% class(inputs) && !is.null(inputs$region) && inputs$region$use_raster &&
-    any(class(inputs$initial_abundance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-    initial_abundance <- as.matrix(inputs$initial_abundance[inputs$region$region_indices])
+  if (
+    "PopulationModel" %in%
+      class(inputs) &&
+      !is.null(inputs$region) &&
+      inputs$region$use_raster &&
+      any(
+        class(inputs$initial_abundance) %in%
+          c("RasterLayer", "RasterStack", "RasterBrick")
+      )
+  ) {
+    initial_abundance <- as.matrix(inputs$initial_abundance[
+      inputs$region$region_indices
+    ])
   } else {
     initial_abundance <- as.matrix(inputs$initial_abundance)
   }
   if (nrow(initial_abundance) == populations) {
     initial_abundance <- t(initial_abundance) # population columns
   }
-  if (stages > 1 && nrow(initial_abundance) == 1) { # distribute rows via stable stages
-    stable_stage_dist <- ((stage_matrix %*% (Re((eigen(stage_matrix)$vectors)[, 1]))) / (sum((stage_matrix %*% (Re((eigen(stage_matrix)$vectors)[, 1]))))))[, 1]
-    stage_abundance <- as.matrix(round(matrix(stable_stage_dist)[, rep(1, populations)] * initial_abundance[rep(1, stages), ]))
-    abundance_corrections <- initial_abundance - .colSums(stage_abundance, m = stages, n = populations)
-    for (i in which(abundance_corrections != 0)) { # ensure the original initial abundance values are retained
-      sample_indices <- sample(1:stages, size = abs(abundance_corrections[i]), replace = TRUE, prob = stable_stage_dist)
+  if (stages > 1 && nrow(initial_abundance) == 1) {
+    # distribute rows via stable stages
+    stable_stage_dist <- ((stage_matrix %*%
+      (Re((eigen(stage_matrix)$vectors)[, 1]))) /
+      (sum((stage_matrix %*% (Re((eigen(stage_matrix)$vectors)[, 1]))))))[, 1]
+    stage_abundance <- as.matrix(round(
+      matrix(stable_stage_dist)[, rep(1, populations)] *
+        initial_abundance[rep(1, stages), ]
+    ))
+    abundance_corrections <- initial_abundance -
+      .colSums(stage_abundance, m = stages, n = populations)
+    for (i in which(abundance_corrections != 0)) {
+      # ensure the original initial abundance values are retained
+      sample_indices <- sample(
+        1:stages,
+        size = abs(abundance_corrections[i]),
+        replace = TRUE,
+        prob = stable_stage_dist
+      )
       for (sample_index in sample_indices) {
-        stage_abundance[sample_index, i] <- stage_abundance[sample_index, i] + ifelse(abundance_corrections[i] > 0, 1, -1)
+        stage_abundance[sample_index, i] <- stage_abundance[sample_index, i] +
+          ifelse(abundance_corrections[i] > 0, 1, -1)
       }
     }
     initial_abundance <- stage_abundance
   }
-  population_abundance <- .colSums(initial_abundance, m = stages, n = populations)
+  population_abundance <- .colSums(
+    initial_abundance,
+    m = stages,
+    n = populations
+  )
 
   # Fecundity and survival matrices
   fecundity_mask <- inputs$fecundity_mask
@@ -236,22 +288,40 @@ population_simulator <- function(inputs) {
   survival_matrix <- (1 - fecundity_mask) * stage_matrix
 
   # Transition setup (generates function)
-  demographic_stochasticity <- ifelse(is.null(inputs$demographic_stochasticity), TRUE, inputs$demographic_stochasticity)
+  demographic_stochasticity <- ifelse(
+    is.null(inputs$demographic_stochasticity),
+    TRUE,
+    inputs$demographic_stochasticity
+  )
   transition_function <- population_transitions(
-    populations, demographic_stochasticity, fecundity_matrix,
-    fecundity_max, survival_matrix
+    populations,
+    demographic_stochasticity,
+    fecundity_matrix,
+    fecundity_max,
+    survival_matrix
   )
 
   # Environmental stochasticity and correlation setup (generates function)
-  standard_deviation <- ifelse(is.null(inputs$standard_deviation), 0, inputs$standard_deviation)
-  if (stages > 1 && length(standard_deviation) == 1) { # calculate via dominant eigen value
-    standard_deviation <- stage_matrix * standard_deviation / Re((eigen(stage_matrix, only.values = TRUE)$values)[1])
+  standard_deviation <- ifelse(
+    is.null(inputs$standard_deviation),
+    0,
+    inputs$standard_deviation
+  )
+  if (stages > 1 && length(standard_deviation) == 1) {
+    # calculate via dominant eigen value
+    standard_deviation <- stage_matrix *
+      standard_deviation /
+      Re((eigen(stage_matrix, only.values = TRUE)$values)[1])
   }
   environmental_stochasticity <- any(standard_deviation * stage_matrix > 0)
   if (environmental_stochasticity) {
     env_stoch_function <- population_env_stoch(
-      populations, fecundity_matrix, fecundity_max, survival_matrix,
-      standard_deviation, inputs$correlation
+      populations,
+      fecundity_matrix,
+      fecundity_max,
+      survival_matrix,
+      standard_deviation,
+      inputs$correlation
     )
   }
 
@@ -259,17 +329,32 @@ population_simulator <- function(inputs) {
   simulator <- SimulatorReference$new()
 
   # Capacity and density dependence setup (generates functions)
-  if ("PopulationModel" %in% class(inputs) && !is.null(inputs$region) && inputs$region$use_raster &&
-    any(class(inputs$carrying_capacity) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-    carrying_capacity_matrix <- matrix(inputs$carrying_capacity[inputs$region$region_indices], nrow = populations)
+  if (
+    "PopulationModel" %in%
+      class(inputs) &&
+      !is.null(inputs$region) &&
+      inputs$region$use_raster &&
+      any(
+        class(inputs$carrying_capacity) %in%
+          c("RasterLayer", "RasterStack", "RasterBrick")
+      )
+  ) {
+    carrying_capacity_matrix <- matrix(
+      inputs$carrying_capacity[inputs$region$region_indices],
+      nrow = populations
+    )
   } else {
-    carrying_capacity_matrix <- matrix(inputs$carrying_capacity, nrow = populations)
+    carrying_capacity_matrix <- matrix(
+      inputs$carrying_capacity,
+      nrow = populations
+    )
   }
   if (any(is.na(carrying_capacity_matrix))) {
     carrying_capacity_matrix[which(is.na(carrying_capacity_matrix))] <- 0
   }
   carrying_capacity_t_max <- ncol(carrying_capacity_matrix)
-  if (carrying_capacity_t_max == 1) { # no temporal trend in K
+  if (carrying_capacity_t_max == 1) {
+    # no temporal trend in K
     carrying_capacity <- carrying_capacity_matrix[, 1]
   }
   density_dependence <- inputs$density_dependence
@@ -277,28 +362,58 @@ population_simulator <- function(inputs) {
     density_dependence <- "ceiling"
   }
   density_stages <- inputs$density_stages
-  density_function <- population_density(populations, stage_matrix, fecundity_mask, fecundity_max, density_dependence,
-    inputs$growth_rate_max, inputs$density_affects, density_stages,
-    density_precision = inputs$density_precision, simulator
+  density_function <- population_density(
+    populations,
+    stage_matrix,
+    fecundity_mask,
+    fecundity_max,
+    density_dependence,
+    inputs$growth_rate_max,
+    inputs$density_affects,
+    density_stages,
+    density_precision = inputs$density_precision,
+    simulator
   )
   if ((is.function(density_dependence) || is.list(density_dependence))) {
     density_dependence <- "adjusts_transitions"
   }
 
   # Translocation, harvest, mortality, and translocation (generates nested functions for transforming abundances)
-  if (is.null(density_stages)) { # default is all
+  if (is.null(density_stages)) {
+    # default is all
     density_stages <- rep(1, stages)
   }
-  translocation_function <- population_transformation(replicates, time_steps, years_per_step, populations, demographic_stochasticity,
-    density_stages, inputs$translocation, simulator,
+  translocation_function <- population_transformation(
+    replicates,
+    time_steps,
+    years_per_step,
+    populations,
+    demographic_stochasticity,
+    density_stages,
+    inputs$translocation,
+    simulator,
     name = "translocation"
   )
-  harvest_function <- population_transformation(replicates, time_steps, years_per_step, populations, demographic_stochasticity,
-    density_stages, inputs$harvest, simulator,
+  harvest_function <- population_transformation(
+    replicates,
+    time_steps,
+    years_per_step,
+    populations,
+    demographic_stochasticity,
+    density_stages,
+    inputs$harvest,
+    simulator,
     name = "harvest"
   )
-  mortality_function <- population_transformation(replicates, time_steps, years_per_step, populations, demographic_stochasticity,
-    density_stages, inputs$mortality, simulator,
+  mortality_function <- population_transformation(
+    replicates,
+    time_steps,
+    years_per_step,
+    populations,
+    demographic_stochasticity,
+    density_stages,
+    inputs$mortality,
+    simulator,
     name = "mortality"
   )
 
@@ -308,25 +423,48 @@ population_simulator <- function(inputs) {
     dispersal_stages <- array(1, stages)
   }
   dispersal_source_n_k <- inputs$dispersal_source_n_k
-  if (is.null(dispersal_source_n_k)) { # try aliases
-    dispersal_source_n_k <- list(cutoff = inputs$dispersal_n_k_cutoff, threshold = inputs$dispersal_n_k_threshold)
+  if (is.null(dispersal_source_n_k)) {
+    # try aliases
+    dispersal_source_n_k <- list(
+      cutoff = inputs$dispersal_n_k_cutoff,
+      threshold = inputs$dispersal_n_k_threshold
+    )
   }
   dispersal_target_k <- inputs$dispersal_target_k
-  if (is.null(dispersal_target_k)) { # try alias
+  if (is.null(dispersal_target_k)) {
+    # try alias
     dispersal_target_k <- inputs$dispersal_k_threshold
   }
   dispersal_target_n <- inputs$dispersal_target_n
-  if (is.null(dispersal_target_n)) { # try aliases
-    dispersal_target_n <- list(threshold = inputs$dispersal_n_threshold, cutoff = inputs$dispersal_n_cutoff)
+  if (is.null(dispersal_target_n)) {
+    # try aliases
+    dispersal_target_n <- list(
+      threshold = inputs$dispersal_n_threshold,
+      cutoff = inputs$dispersal_n_cutoff
+    )
   }
   dispersal_target_n_k <- inputs$dispersal_target_n_k
-  if (is.null(dispersal_target_n_k)) { # try aliases
-    dispersal_target_n_k <- list(threshold = inputs$dispersal_target_n_k_threshold, cutoff = inputs$dispersal_target_n_k_cutoff)
+  if (is.null(dispersal_target_n_k)) {
+    # try aliases
+    dispersal_target_n_k <- list(
+      threshold = inputs$dispersal_target_n_k_threshold,
+      cutoff = inputs$dispersal_target_n_k_cutoff
+    )
   }
   dispersal_function <- population_dispersal(
-    replicates, time_steps, years_per_step, populations, demographic_stochasticity,
-    density_stages, inputs$dispersal, dispersal_stages, dispersal_source_n_k,
-    dispersal_target_k, dispersal_target_n, dispersal_target_n_k, simulator
+    replicates,
+    time_steps,
+    years_per_step,
+    populations,
+    demographic_stochasticity,
+    density_stages,
+    inputs$dispersal,
+    dispersal_stages,
+    dispersal_source_n_k,
+    dispersal_target_k,
+    dispersal_target_n,
+    dispersal_target_n_k,
+    simulator
   )
 
   # Abundance threshold
@@ -335,27 +473,56 @@ population_simulator <- function(inputs) {
   # Simulation order
   simulation_order <- inputs$simulation_order
   if (!is.character(simulation_order)) {
-    simulation_order <- c("transition", "translocation", "harvest", "mortality", "dispersal", "results")
+    simulation_order <- c(
+      "transition",
+      "translocation",
+      "harvest",
+      "mortality",
+      "dispersal",
+      "results"
+    )
   }
   if (!"results" %in% simulation_order) {
     simulation_order <- c(simulation_order, "results")
   }
 
   # Other user-defined abundance transformation functions
-  other_user_defined <- simulation_order[which(!(simulation_order %in% c("transition", "translocation", "harvest", "mortality", "dispersal", "results")))]
+  other_user_defined <- simulation_order[which(
+    !(simulation_order %in%
+      c(
+        "transition",
+        "translocation",
+        "harvest",
+        "mortality",
+        "dispersal",
+        "results"
+      ))
+  )]
   if (length(other_user_defined)) {
     other_functions <- list()
     for (other in other_user_defined) {
       if (other %in% names(inputs)) {
-        other_functions[[other]] <- population_transformation(replicates, time_steps, years_per_step, populations,
-          demographic_stochasticity, density_stages,
-          inputs[[other]], simulator,
+        other_functions[[other]] <- population_transformation(
+          replicates,
+          time_steps,
+          years_per_step,
+          populations,
+          demographic_stochasticity,
+          density_stages,
+          inputs[[other]],
+          simulator,
           name = other
         )
       } else if ("PopulationModel" %in% class(inputs)) {
-        other_functions[[other]] <- population_transformation(replicates, time_steps, years_per_step, populations,
-          demographic_stochasticity, density_stages,
-          inputs$get_attribute(other), simulator,
+        other_functions[[other]] <- population_transformation(
+          replicates,
+          time_steps,
+          years_per_step,
+          populations,
+          demographic_stochasticity,
+          density_stages,
+          inputs$get_attribute(other),
+          simulator,
           name = other
         )
       }
@@ -364,8 +531,13 @@ population_simulator <- function(inputs) {
 
   # Results setup (generates nested functions) - results placed in simulator reference object for user-defined function accessiblity
   results_selection <- inputs$results_selection
-  result_functions <- population_results(replicates, time_steps, inputs$coordinates, initial_abundance,
-    results_selection = results_selection, result_stages = inputs$result_stages
+  result_functions <- population_results(
+    replicates,
+    time_steps,
+    inputs$coordinates,
+    initial_abundance,
+    results_selection = results_selection,
+    result_stages = inputs$result_stages
   )
   results_list <- result_functions$initialize_attributes()
 
@@ -373,7 +545,11 @@ population_simulator <- function(inputs) {
   for (r in 1:replicates) {
     # Initialize populations
     stage_abundance <- initial_abundance
-    population_abundance <- .colSums(initial_abundance, m = stages, n = populations)
+    population_abundance <- .colSums(
+      initial_abundance,
+      m = stages,
+      n = populations
+    )
     occupied_indices <- which(as.logical(population_abundance)) # > 0
     occupied_populations <- length(occupied_indices)
 
@@ -394,7 +570,10 @@ population_simulator <- function(inputs) {
 
       # Load carrying capacity for each population for time if temporal trend in K
       if (carrying_capacity_t_max > 1) {
-        carrying_capacity <- carrying_capacity_matrix[, min(tm, carrying_capacity_t_max)]
+        carrying_capacity <- carrying_capacity_matrix[, min(
+          tm,
+          carrying_capacity_t_max
+        )]
       }
 
       ## Run simulation processes in configured order ##
@@ -404,11 +583,25 @@ population_simulator <- function(inputs) {
           if (occupied_populations) {
             # Apply density dependence function to transition array and set fecundity and survival arrays
             if (density_dependence %in% c("logistic", "adjusts_transitions")) {
-              transition_array <- density_function(transition_array, carrying_capacity, stage_abundance, occupied_indices)
-              fecundity_array <- transition_array * array(fecundity_mask, c(stages, stages, populations))
-              survival_array <- transition_array * (1 - array(fecundity_mask, c(stages, stages, populations)))
+              transition_array <- density_function(
+                transition_array,
+                carrying_capacity,
+                stage_abundance,
+                occupied_indices
+              )
+              fecundity_array <- transition_array *
+                array(fecundity_mask, c(stages, stages, populations))
+              survival_array <- transition_array *
+                (1 - array(fecundity_mask, c(stages, stages, populations)))
               # Remove populations without capacity
-              zero_indices <- which(.colSums(transition_array[, , occupied_indices], m = stages * stages, n = occupied_populations) <= 0)
+              zero_indices <- which(
+                .colSums(
+                  transition_array[,, occupied_indices],
+                  m = stages * stages,
+                  n = occupied_populations
+                ) <=
+                  0
+              )
               if (length(zero_indices)) {
                 stage_abundance[, occupied_indices[zero_indices]] <- 0
                 population_abundance[occupied_indices[zero_indices]] <- 0
@@ -416,75 +609,148 @@ population_simulator <- function(inputs) {
                 occupied_populations <- length(occupied_indices)
               }
             } else {
-              fecundity_array <- array(fecundity_matrix, c(stages, stages, populations))
-              survival_array <- array(survival_matrix, c(stages, stages, populations))
+              fecundity_array <- array(
+                fecundity_matrix,
+                c(stages, stages, populations)
+              )
+              survival_array <- array(
+                survival_matrix,
+                c(stages, stages, populations)
+              )
             }
           }
 
           if (occupied_populations) {
             # Apply environmental stochasticity to fecundity and survival arrays
             if (environmental_stochasticity) {
-              generated_arrays <- env_stoch_function(fecundity_array, survival_array, occupied_indices)
+              generated_arrays <- env_stoch_function(
+                fecundity_array,
+                survival_array,
+                occupied_indices
+              )
               fecundity_array <- generated_arrays$fecundity_array
               survival_array <- generated_arrays$survival_array
             }
 
             # Perform stage-based transitions
-            stage_abundance <- transition_function(fecundity_array, survival_array, stage_abundance, occupied_indices)
+            stage_abundance <- transition_function(
+              fecundity_array,
+              survival_array,
+              stage_abundance,
+              occupied_indices
+            )
 
             # Limit abundances to carrying capacity when "ceiling" density dependence
             if (density_dependence == "ceiling") {
-              stage_abundance <- density_function(carrying_capacity, stage_abundance)
+              stage_abundance <- density_function(
+                carrying_capacity,
+                stage_abundance
+              )
             }
           }
         }
 
         ## Translocation calculations ##
         if (process == "translocation" && is.function(translocation_function)) {
-          transformed <- translocation_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
+          transformed <- translocation_function(
+            r,
+            tm,
+            carrying_capacity,
+            stage_abundance,
+            occupied_indices
+          )
           stage_abundance <- transformed$stage_abundance
-          if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
+          if ("carrying_capacity" %in% names(transformed))
+            carrying_capacity <- transformed$carrying_capacity
         }
 
         ## Harvest calculations ##
         if (process == "harvest") {
           if (occupied_populations && is.function(harvest_function)) {
             preharvest_abundance <- stage_abundance
-            transformed <- harvest_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
+            transformed <- harvest_function(
+              r,
+              tm,
+              carrying_capacity,
+              stage_abundance,
+              occupied_indices
+            )
             stage_abundance <- transformed$stage_abundance
-            if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
+            if ("carrying_capacity" %in% names(transformed))
+              carrying_capacity <- transformed$carrying_capacity
             harvested <- preharvest_abundance - stage_abundance
           } else {
             harvested <- 0 * stage_abundance
           }
           if ("harvested" %in% results_selection) {
-            results_list <- result_functions$calculate_at_timestep(r, tm, NULL, harvested, results_list)
+            results_list <- result_functions$calculate_at_timestep(
+              r,
+              tm,
+              NULL,
+              harvested,
+              results_list
+            )
           }
         }
 
         ## Mortality calculations ##
-        if (occupied_populations && process == "mortality" && is.function(mortality_function)) {
-          transformed <- mortality_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
+        if (
+          occupied_populations &&
+            process == "mortality" &&
+            is.function(mortality_function)
+        ) {
+          transformed <- mortality_function(
+            r,
+            tm,
+            carrying_capacity,
+            stage_abundance,
+            occupied_indices
+          )
           stage_abundance <- transformed$stage_abundance
-          if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
+          if ("carrying_capacity" %in% names(transformed))
+            carrying_capacity <- transformed$carrying_capacity
         }
 
         ## Dispersal calculations ##
-        if (occupied_populations && process == "dispersal" && is.function(dispersal_function)) {
-          stage_abundance <- dispersal_function(r, tm, carrying_capacity, stage_abundance, occupied_indices)
+        if (
+          occupied_populations &&
+            process == "dispersal" &&
+            is.function(dispersal_function)
+        ) {
+          stage_abundance <- dispersal_function(
+            r,
+            tm,
+            carrying_capacity,
+            stage_abundance,
+            occupied_indices
+          )
         }
 
         ## Other user-defined abundance transformation functions ##
-        if (process %in% other_user_defined && is.function(other_functions[[process]])) {
-          transformed <- other_functions[[process]](r, tm, carrying_capacity, stage_abundance, occupied_indices)
+        if (
+          process %in%
+            other_user_defined &&
+            is.function(other_functions[[process]])
+        ) {
+          transformed <- other_functions[[process]](
+            r,
+            tm,
+            carrying_capacity,
+            stage_abundance,
+            occupied_indices
+          )
           stage_abundance <- transformed$stage_abundance
-          if ("carrying_capacity" %in% names(transformed)) carrying_capacity <- transformed$carrying_capacity
+          if ("carrying_capacity" %in% names(transformed))
+            carrying_capacity <- transformed$carrying_capacity
         }
 
         ## Apply threshold to population abundances ##
         if (process == "results") {
           if (occupied_populations && !is.null(abundance_threshold)) {
-            below_threshold_indices <- which(as.logical(population_abundance) & population_abundance <= abundance_threshold)
+            below_threshold_indices <- which(
+              as.logical(population_abundance) &
+                population_abundance <= abundance_threshold
+            )
             if (length(below_threshold_indices)) {
               stage_abundance[, below_threshold_indices] <- 0
               population_abundance[below_threshold_indices] <- 0
@@ -493,19 +759,33 @@ population_simulator <- function(inputs) {
         }
 
         # Update population abundance and occupied indices
-        population_abundance <- .colSums(stage_abundance, m = stages, n = populations)
+        population_abundance <- .colSums(
+          stage_abundance,
+          m = stages,
+          n = populations
+        )
         occupied_indices <- which(as.logical(population_abundance)) # > 0
         occupied_populations <- length(occupied_indices)
 
         ## Results calculation/collection ##
         if (process == "results") {
-          results_list <- result_functions$calculate_at_timestep(r, tm, stage_abundance, NULL, results_list)
+          results_list <- result_functions$calculate_at_timestep(
+            r,
+            tm,
+            stage_abundance,
+            NULL,
+            results_list
+          )
         }
       } ## end simulation order loop ##
     } ### End time steps ###
 
     ## Results calculation/collection ##
-    results_list <- result_functions$calculate_at_replicate(r, stage_abundance, results_list)
+    results_list <- result_functions$calculate_at_replicate(
+      r,
+      stage_abundance,
+      results_list
+    )
   } ### End replicates ###
 
   ## Finalize results calculation and collation ##

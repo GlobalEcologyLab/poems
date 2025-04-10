@@ -88,10 +88,10 @@
 #' @include ModelSimulator.R
 #' @export SimulationManager
 
-SimulationManager <- R6Class("SimulationManager",
+SimulationManager <- R6Class(
+  "SimulationManager",
   inherit = GenericManager,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -117,7 +117,9 @@ SimulationManager <- R6Class("SimulationManager",
       self$model_template <- model_template
       if (!("model_simulator" %in% names(list(...)))) {
         if (!is.null(model_template)) {
-          self$model_simulator <- ModelSimulator$new(simulation_function = model_template$simulation_function)
+          self$model_simulator <- ModelSimulator$new(
+            simulation_function = model_template$simulation_function
+          )
         } else {
           self$model_simulator <- ModelSimulator$new()
         }
@@ -159,14 +161,19 @@ SimulationManager <- R6Class("SimulationManager",
         stop("No output directory set for results", call. = FALSE)
       }
       if (!dir.exists(self$results_dir)) {
-        stop(paste("Could not find results directory", self$results_dir), call. = FALSE)
+        stop(
+          paste("Could not find results directory", self$results_dir),
+          call. = FALSE
+        )
       }
       if (is.null(self$results_ext)) {
         self$results_ext <- ".RData" # reinstate default
       }
 
       # Create a nested simulation (or descendant) model for cloning
-      self$nested_model <- self$model_template$new_clone(template = self$model_template)
+      self$nested_model <- self$model_template$new_clone(
+        template = self$model_template
+      )
 
       # Allow extra attachments to be passed
       if ("nested_model" %in% names(self$attached)) {
@@ -174,17 +181,26 @@ SimulationManager <- R6Class("SimulationManager",
       }
 
       # Resolve sample attributes and attach them separately (as aliases) to the model to avoid repetition
-      model_sample_columns <- which(names(self$sample_data) %in% self$nested_model$get_attribute_aliases())
+      model_sample_columns <- which(
+        names(self$sample_data) %in% self$nested_model$get_attribute_aliases()
+      )
       if (length(model_sample_columns) > 0) {
-        self$nested_model$attached$sample_model_names <- names(self$sample_data)[model_sample_columns]
+        self$nested_model$attached$sample_model_names <- names(
+          self$sample_data
+        )[model_sample_columns]
         self$nested_model$sample_attributes <- self$nested_model$attached$sample_model_names
       }
       if (!is.null(self$generators)) {
         self$nested_model$attached$sample_generative_names <- list()
         for (i in 1:length(self$generators)) {
           if (all(self$generators[[i]]$inputs %in% names(self$sample_data))) {
-            self$nested_model$attached$sample_generative_names[[i]] <- self$generators[[i]]$outputs
-            self$nested_model$sample_attributes <- unique(c(self$nested_model$sample_attributes, self$generators[[i]]$outputs))
+            self$nested_model$attached$sample_generative_names[[
+              i
+            ]] <- self$generators[[i]]$outputs
+            self$nested_model$sample_attributes <- unique(c(
+              self$nested_model$sample_attributes,
+              self$generators[[i]]$outputs
+            ))
           }
         }
       }
@@ -193,14 +209,25 @@ SimulationManager <- R6Class("SimulationManager",
       model <- self$nested_model$clone()
       self$set_model_sample(model, 1)
       if (length(model$error_messages)) {
-        stop(c("Error(s) setting model sample attributes: ", model$error_messages), call. = FALSE)
+        stop(
+          c("Error(s) setting model sample attributes: ", model$error_messages),
+          call. = FALSE
+        )
       }
       if (!model$is_complete()) {
         incomplete_message <- "Model attributes are incomplete"
         if (!model$is_consistent()) {
-          incomplete_message <- paste(incomplete_message, "/inconsistent", sep = "")
+          incomplete_message <- paste(
+            incomplete_message,
+            "/inconsistent",
+            sep = ""
+          )
         }
-        incomplete_message <- paste0(incomplete_message, ": ", paste(model$incomplete_attributes(), collapse = ", "))
+        incomplete_message <- paste0(
+          incomplete_message,
+          ": ",
+          paste(model$incomplete_attributes(), collapse = ", ")
+        )
         stop(incomplete_message, call. = FALSE)
       }
       model <- NULL # release from memory
@@ -211,40 +238,64 @@ SimulationManager <- R6Class("SimulationManager",
         i = 1:nrow(self$sample_data),
         .packages = c("raster"),
         .errorhandling = c("pass")
-      ) %dopar% {
-        # Clone the model
-        model <- self$nested_model$clone()
+      ) %dopar%
+        {
+          # Clone the model
+          model <- self$nested_model$clone()
 
-        # Set the model sample attributes
-        self$set_model_sample(model, i)
-        if (length(model$error_messages)) {
-          return(list(successful = FALSE, message = self$get_message_sample("Error(s) setting model %s sample attributes", i), errors = model$error_messages))
-        }
-
-        # Create and run the simulator
-        simulator <- self$model_simulator$new_clone(simulation_model = model, sample_id = i)
-        simulator_run_status <- simulator$run()
-
-        # Substitute sample details into the simulator run status message
-        simulator_run_status$message <- self$get_message_sample(simulator_run_status$message, i)
-
-        # Save results
-        if (!is.null(simulator$results)) {
-          results_file <- file.path(self$results_dir, paste0(self$get_results_filename(i), self$results_ext))
-          suppressWarnings(try(
-            saveRDS(simulator$results, file = results_file),
-            silent = TRUE
-          ))
-          if (file.exists(results_file)) {
-            simulator_run_status$message <- paste0(simulator_run_status$message, " and the results were saved")
-          } else {
-            simulator_run_status$successful <- FALSE
-            simulator_run_status$message <- paste0(simulator_run_status$message, ", but the results could not be saved in ", results_file)
+          # Set the model sample attributes
+          self$set_model_sample(model, i)
+          if (length(model$error_messages)) {
+            return(list(
+              successful = FALSE,
+              message = self$get_message_sample(
+                "Error(s) setting model %s sample attributes",
+                i
+              ),
+              errors = model$error_messages
+            ))
           }
-        }
 
-        return(simulator_run_status)
-      }
+          # Create and run the simulator
+          simulator <- self$model_simulator$new_clone(
+            simulation_model = model,
+            sample_id = i
+          )
+          simulator_run_status <- simulator$run()
+
+          # Substitute sample details into the simulator run status message
+          simulator_run_status$message <- self$get_message_sample(
+            simulator_run_status$message,
+            i
+          )
+
+          # Save results
+          if (!is.null(simulator$results)) {
+            results_file <- file.path(
+              self$results_dir,
+              paste0(self$get_results_filename(i), self$results_ext)
+            )
+            suppressWarnings(try(
+              saveRDS(simulator$results, file = results_file),
+              silent = TRUE
+            ))
+            if (file.exists(results_file)) {
+              simulator_run_status$message <- paste0(
+                simulator_run_status$message,
+                " and the results were saved"
+              )
+            } else {
+              simulator_run_status$successful <- FALSE
+              simulator_run_status$message <- paste0(
+                simulator_run_status$message,
+                ", but the results could not be saved in ",
+                results_file
+              )
+            }
+          }
+
+          return(simulator_run_status)
+        }
       doParallel::stopImplicitCluster()
 
       # Summarize and write log to a file
@@ -261,17 +312,33 @@ SimulationManager <- R6Class("SimulationManager",
       sample_list <- as.list(self$sample_data[sample_index, ])
       names(sample_list) <- names(self$sample_data)
       if (!is.null(model$attached$sample_model_names)) {
-        model$set_sample_attributes(params = sample_list[model$attached$sample_model_names])
+        model$set_sample_attributes(
+          params = sample_list[model$attached$sample_model_names]
+        )
       }
       if (!is.null(self$generators)) {
         for (i in 1:length(self$generators)) {
-          if (!is.null(self$nested_model$attached$sample_generative_names[[i]])) {
+          if (
+            !is.null(self$nested_model$attached$sample_generative_names[[i]])
+          ) {
             tryCatch(
               {
-                model$set_sample_attributes(params = self$generators[[i]]$generate(input_values = sample_list[self$generators[[i]]$inputs]))
+                model$set_sample_attributes(
+                  params = self$generators[[i]]$generate(
+                    input_values = sample_list[self$generators[[i]]$inputs]
+                  )
+                )
               },
               error = function(e) {
-                stop(paste("produced when generating", self$generators[[i]]$description, ":", as.character(e)), call. = FALSE)
+                stop(
+                  paste(
+                    "produced when generating",
+                    self$generators[[i]]$description,
+                    ":",
+                    as.character(e)
+                  ),
+                  call. = FALSE
+                )
               }
             )
           }
@@ -288,7 +355,10 @@ SimulationManager <- R6Class("SimulationManager",
       warning_indices <- c()
       for (i in 1:length(simulation_log)) {
         if (is.null(simulation_log[[i]]$successful)) {
-          simulation_log[[i]] <- list(message = as.character(simulation_log[[i]]), successful = FALSE)
+          simulation_log[[i]] <- list(
+            message = as.character(simulation_log[[i]]),
+            successful = FALSE
+          )
         }
         successful_array[i] <- simulation_log[[i]]$successful
         if (!is.null(simulation_log[[i]]$warnings)) {
@@ -299,7 +369,8 @@ SimulationManager <- R6Class("SimulationManager",
       simulation_log <- list(
         summary = sprintf(
           "%s of %s sample models ran and saved results successfully",
-          length(which(successful_array)), length(simulation_log)
+          length(which(successful_array)),
+          length(simulation_log)
         ),
         failed_indices = which(!successful_array),
         warning_indices = warning_indices,
@@ -315,18 +386,44 @@ SimulationManager <- R6Class("SimulationManager",
           file_con <- file(log_file, "w")
           writeLines(c(simulation_log$summary), con = file_con)
           if (length(simulation_log$failed_indices)) {
-            writeLines(c("", paste(length(simulation_log$failed_indices), "failed runs/errors:")), con = file_con)
+            writeLines(
+              c(
+                "",
+                paste(
+                  length(simulation_log$failed_indices),
+                  "failed runs/errors:"
+                )
+              ),
+              con = file_con
+            )
             for (i in simulation_log$failed_indices) {
-              writeLines(c("", paste("Sample", i, ":"), simulation_log$full_log[[i]]$message), con = file_con)
+              writeLines(
+                c(
+                  "",
+                  paste("Sample", i, ":"),
+                  simulation_log$full_log[[i]]$message
+                ),
+                con = file_con
+              )
               if (!is.null(simulation_log$full_log[[i]]$errors)) {
                 writeLines(simulation_log$full_log[[i]]$errors, con = file_con)
               }
             }
           }
           if (length(warning_indices)) {
-            writeLines(c("", paste(length(warning_indices), "warnings:")), con = file_con)
+            writeLines(
+              c("", paste(length(warning_indices), "warnings:")),
+              con = file_con
+            )
             for (i in warning_indices) {
-              writeLines(c("", paste("Sample", i, ":"), simulation_log$full_log[[i]]$message), con = file_con)
+              writeLines(
+                c(
+                  "",
+                  paste("Sample", i, ":"),
+                  simulation_log$full_log[[i]]$message
+                ),
+                con = file_con
+              )
               writeLines(simulation_log$full_log[[i]]$warnings, con = file_con)
             }
           }
@@ -339,13 +436,19 @@ SimulationManager <- R6Class("SimulationManager",
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Manager attributes #
     .manager_attributes = c(
-      "sample_data", "model_template", "nested_model", "generators", "model_simulator",
-      "parallel_cores", "results_dir", "results_ext", "results_filename_attributes"
+      "sample_data",
+      "model_template",
+      "nested_model",
+      "generators",
+      "model_simulator",
+      "parallel_cores",
+      "results_dir",
+      "results_ext",
+      "results_filename_attributes"
     ),
     # .sample_data                   [inherited]
     .model_template = NULL,
@@ -364,9 +467,9 @@ SimulationManager <- R6Class("SimulationManager",
 
   # Active binding accessors for private manager attributes (above) #
   active = list(
-
     #' @field sample_data A data frame of sampled parameters for each simulation/result.
-    sample_data = function(value) { # inherited
+    sample_data = function(value) {
+      # inherited
       if (missing(value)) {
         super$sample_data
       } else {
@@ -380,9 +483,16 @@ SimulationManager <- R6Class("SimulationManager",
         private$.model_template
       } else {
         if (!is.null(value) && !("SimulationModel" %in% class(value))) {
-          stop("Model template must be a SimulationModel or inherited class object", call. = FALSE)
+          stop(
+            "Model template must be a SimulationModel or inherited class object",
+            call. = FALSE
+          )
         } else {
-          if (!is.null(value) && !is.null(self$model_simulator) && is.null(self$model_simulator$simulation_function)) {
+          if (
+            !is.null(value) &&
+              !is.null(self$model_simulator) &&
+              is.null(self$model_simulator$simulation_function)
+          ) {
             self$model_simulator$simulation_function <- value$simulation_function
           }
           private$.model_template <- value
@@ -396,7 +506,10 @@ SimulationManager <- R6Class("SimulationManager",
         private$.nested_model
       } else {
         if (!is.null(value) && !("SimulationModel" %in% class(value))) {
-          stop("Nested model must be a SimulationModel or inherited class object", call. = FALSE)
+          stop(
+            "Nested model must be a SimulationModel or inherited class object",
+            call. = FALSE
+          )
         } else {
           private$.nested_model <- value
         }
@@ -404,7 +517,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field generators A list of generators (\code{\link{Generator}} or inherited class) objects for generating simulation model values.
-    generators = function(value) { # inherited
+    generators = function(value) {
+      # inherited
       if (missing(value)) {
         super$generators
       } else {
@@ -418,7 +532,10 @@ SimulationManager <- R6Class("SimulationManager",
         private$.model_simulator
       } else {
         if (!is.null(value) && !("ModelSimulator" %in% class(value))) {
-          stop("Model simulator must be a ModelSimulator or inherited class object", call. = FALSE)
+          stop(
+            "Model simulator must be a ModelSimulator or inherited class object",
+            call. = FALSE
+          )
         } else {
           private$.model_simulator <- value
         }
@@ -426,7 +543,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field parallel_cores Number of cores for running the simulations in parallel.
-    parallel_cores = function(value) { # inherited
+    parallel_cores = function(value) {
+      # inherited
       if (missing(value)) {
         super$parallel_cores
       } else {
@@ -435,7 +553,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field results_dir Results directory path.
-    results_dir = function(value) { # inherited
+    results_dir = function(value) {
+      # inherited
       if (missing(value)) {
         super$results_dir
       } else {
@@ -444,7 +563,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field results_ext Result file extension (default is .RData).
-    results_ext = function(value) { # inherited
+    results_ext = function(value) {
+      # inherited
       if (missing(value)) {
         super$results_ext
       } else {
@@ -453,7 +573,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field results_filename_attributes A vector of: prefix (optional); attribute names (from the sample data frame); postfix (optional); utilized to construct results filenames.
-    results_filename_attributes = function(value) { # inherited
+    results_filename_attributes = function(value) {
+      # inherited
       if (missing(value)) {
         super$results_filename_attributes
       } else {
@@ -462,7 +583,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field error_messages A vector of error messages encountered when setting model attributes.
-    error_messages = function(value) { # inherited
+    error_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$error_messages
       } else {
@@ -471,7 +593,8 @@ SimulationManager <- R6Class("SimulationManager",
     },
 
     #' @field warning_messages A vector of warning messages encountered when setting model attributes.
-    warning_messages = function(value) { # inherited
+    warning_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$warning_messages
       } else {

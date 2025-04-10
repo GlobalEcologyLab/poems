@@ -18,10 +18,10 @@
 #' @include Generator.R
 #' @export GenericManager
 
-GenericManager <- R6Class("GenericManager",
+GenericManager <- R6Class(
+  "GenericManager",
   inherit = GenericClass,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -37,7 +37,10 @@ GenericManager <- R6Class("GenericManager",
     # Overwritten/overridden methods #
 
     #' @description
-    #' Initialization method sets any included attributes (\emph{sample_data}, \emph{generators}, \emph{parallel_cores}, \emph{results_dir}, \emph{results_filename_attributes}) and attaches other attributes individually listed.
+    #' Initialization method sets any included attributes (\emph{sample_data},
+    #' \emph{generators}, \emph{parallel_cores}, \emph{results_dir},
+    #' \emph{results_filename_attributes}) and attaches other attributes
+    #' individually listed.
     #' @param ... Parameters listed individually.
     initialize = function(...) {
       params <- list(...)
@@ -45,8 +48,11 @@ GenericManager <- R6Class("GenericManager",
       for (param in names(params)) {
         if (param %in% private$.manager_attributes) {
           eval(parse(text = sprintf("self$%s <- params$%s", param, param)))
-        } else { # attach
-          eval(parse(text = sprintf("self$attached$%s <- params$%s", param, param)))
+        } else {
+          # attach
+          eval(parse(
+            text = sprintf("self$attached$%s <- params$%s", param, param)
+          ))
         }
       }
       if (!is.null(self$error_messages)) {
@@ -79,11 +85,14 @@ GenericManager <- R6Class("GenericManager",
     get_message_sample = function(status_message, sample_index) {
       sample_vector <- c()
       if (!is.null(self$results_filename_attributes)) {
-        sample_attributes <- self$results_filename_attributes[which(self$results_filename_attributes %in% names(self$sample_data))]
+        sample_attributes <- self$results_filename_attributes[which(
+          self$results_filename_attributes %in% names(self$sample_data)
+        )]
         if (length(sample_attributes)) {
           for (i in 1:length(sample_attributes)) {
             sample_vector <- c(
-              sample_vector, gsub("_", " ", sample_attributes[i], fixed = TRUE),
+              sample_vector,
+              gsub("_", " ", sample_attributes[i], fixed = TRUE),
               as.character(self$sample_data[sample_index, sample_attributes[i]])
             )
           }
@@ -96,28 +105,63 @@ GenericManager <- R6Class("GenericManager",
     },
 
     #' @description
-    #' Constructs and returns the results filename based on the sample data frame index and results filename attributes.
-    #' @param sample_index Row index of sample data frame containing details of substitution parameters.
+    #' Constructs and returns the results filename based on the sample data
+    #' frame index and results filename attributes.
+    #' @param sample_index Row index of sample data frame containing details
+    #'  of substitution parameters.
     #' @return Results filename with substituted sample details.
     get_results_filename = function(sample_index) {
-      if (!is.null(self$results_filename_attributes) && !is.null(self$sample_data)) {
+      if (
+        !is.null(self$results_filename_attributes) && !is.null(self$sample_data)
+      ) {
         filename_vector <- c()
         postfix <- "results"
         pre_postfix_present <- c(FALSE, FALSE)
         for (i in 1:length(self$results_filename_attributes)) {
-          if (i == 1 && !(self$results_filename_attributes[i] %in% names(self$sample_data))) { # add prefix
-            filename_vector <- c(filename_vector, as.character(self$results_filename_attributes[i]))
+          if (
+            i == 1 &&
+              !(self$results_filename_attributes[i] %in%
+                names(self$sample_data))
+          ) {
+            # add prefix
+            filename_vector <- c(
+              filename_vector,
+              as.character(self$results_filename_attributes[i])
+            )
             pre_postfix_present[1] <- TRUE
-          } else if (self$results_filename_attributes[i] %in% names(self$sample_data)) { # add attribute and value
-            filename_vector <- c(filename_vector, self$results_filename_attributes[i], as.character(self$sample_data[sample_index, self$results_filename_attributes[i]]))
-          } else if (i == length(self$results_filename_attributes) && !(self$results_filename_attributes[i] %in% names(self$sample_data))) { # set postfix
+          } else if (
+            self$results_filename_attributes[i] %in% names(self$sample_data)
+          ) {
+            # add attribute and value
+            filename_vector <- c(
+              filename_vector,
+              self$results_filename_attributes[i],
+              as.character(self$sample_data[
+                sample_index,
+                self$results_filename_attributes[i]
+              ])
+            )
+          } else if (
+            i == length(self$results_filename_attributes) &&
+              !(self$results_filename_attributes[i] %in%
+                names(self$sample_data))
+          ) {
+            # set postfix
             postfix <- as.character(self$results_filename_attributes[i])
             pre_postfix_present[2] <- TRUE
-          } else { # add "mid-fix" anyway
-            filename_vector <- c(filename_vector, as.character(self$results_filename_attributes[i]))
+          } else {
+            # add "mid-fix" anyway
+            filename_vector <- c(
+              filename_vector,
+              as.character(self$results_filename_attributes[i])
+            )
           }
         }
-        if (length(self$results_filename_attributes) == length(which(pre_postfix_present))) { # insert sample index
+        if (
+          length(self$results_filename_attributes) ==
+            length(which(pre_postfix_present))
+        ) {
+          # insert sample index
           filename_vector <- c(filename_vector, as.character(sample_index))
         }
         filename_vector <- c(filename_vector, postfix)
@@ -130,12 +174,15 @@ GenericManager <- R6Class("GenericManager",
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Manager attributes #
     .manager_attributes = c(
-      "sample_data", "generators", "parallel_cores", "results_dir", "results_ext",
+      "sample_data",
+      "generators",
+      "parallel_cores",
+      "results_dir",
+      "results_ext",
       "results_filename_attributes"
     ),
     .sample_data = NULL,
@@ -152,7 +199,6 @@ GenericManager <- R6Class("GenericManager",
 
   # Active binding accessors for private manager attributes (above) #
   active = list(
-
     #' @field sample_data A data frame of sampled parameters for each simulation/result.
     sample_data = function(value) {
       if (missing(value)) {
@@ -168,14 +214,24 @@ GenericManager <- R6Class("GenericManager",
       }
     },
 
-    #' @field generators A list of generators (\code{\link{Generator}} or inherited class) objects for generating simulation model values.
+    #' @field generators A list of generators (\code{\link{Generator}} or
+    #' inherited class) objects for generating simulation model values.
     generators = function(value) {
       if (missing(value)) {
         private$.generators
       } else {
-        if (!is.null(value) && (!is.list(value) ||
-          !all(unlist(lapply(value, function(value) "Generator" %in% class(value)))))) {
-          stop("Generators must be a list of Generator or inherited class objects", call. = FALSE)
+        if (
+          !is.null(value) &&
+            (!is.list(value) ||
+              !all(unlist(lapply(
+                value,
+                function(value) "Generator" %in% class(value)
+              ))))
+        ) {
+          stop(
+            "Generators must be a list of Generator or inherited class objects",
+            call. = FALSE
+          )
         } else {
           private$.generators <- value
         }
@@ -209,7 +265,9 @@ GenericManager <- R6Class("GenericManager",
       }
     },
 
-    #' @field results_filename_attributes A vector of: prefix (optional); attribute names (from the sample data frame); postfix (optional); utilized to construct results filenames.
+    #' @field results_filename_attributes A vector of: prefix (optional);
+    #' attribute names (from the sample data frame); postfix (optional);
+    #' utilized to construct results filenames.
     results_filename_attributes = function(value) {
       if (missing(value)) {
         private$.results_filename_attributes
@@ -237,7 +295,10 @@ GenericManager <- R6Class("GenericManager",
         private$.warning_messages
       } else {
         if (!is.null(value)) {
-          private$.warning_messages <- unique(c(private$.warning_messages, value))
+          private$.warning_messages <- unique(c(
+            private$.warning_messages,
+            value
+          ))
         } else {
           private$.warning_messages <- value
         }

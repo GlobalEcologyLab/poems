@@ -29,10 +29,10 @@
 #' @include GenericClass.R
 #' @export GenericModel
 
-GenericModel <- R6Class("GenericModel",
+GenericModel <- R6Class(
+  "GenericModel",
   inherit = GenericClass,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -50,7 +50,12 @@ GenericModel <- R6Class("GenericModel",
     #' @param attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
     #' @param params Parameters passed via a list.
     #' @param ... Parameters passed individually.
-    initialize = function(model_attributes = NULL, attribute_aliases = NULL, params = list(), ...) {
+    initialize = function(
+      model_attributes = NULL,
+      attribute_aliases = NULL,
+      params = list(),
+      ...
+    ) {
       super$initialize(...)
       if (!is.null(model_attributes)) {
         self$model_attributes <- model_attributes
@@ -68,7 +73,8 @@ GenericModel <- R6Class("GenericModel",
     new_clone = function(...) {
       return(super$new_clone(
         model_attributes = self$model_attributes,
-        attribute_aliases = self$attribute_aliases, ...
+        attribute_aliases = self$attribute_aliases,
+        ...
       ))
     },
 
@@ -78,7 +84,12 @@ GenericModel <- R6Class("GenericModel",
     #' Returns an array of all attribute names including public and private model attributes, as well as attached attributes, error and warning messages.
     #' @return Array of all attribute names.
     get_attribute_names = function() {
-      return(unique(c(self$model_attributes, names(self$attached), "error_messages", "warning_messages")))
+      return(unique(c(
+        self$model_attributes,
+        names(self$attached),
+        "error_messages",
+        "warning_messages"
+      )))
     },
 
     #' @description
@@ -99,16 +110,42 @@ GenericModel <- R6Class("GenericModel",
         }
         attribute_root <- unlist(strsplit(attribute, "$", fixed = TRUE))[1]
         attribute_root <- unlist(strsplit(attribute_root, "[", fixed = TRUE))[1]
-        if (attribute_root %in% names(self) || attribute_root %in% private$.active_attributes) {
-          eval(parse(text = sprintf("attribute_list$%s <- self$%s", param, attribute)))
+        if (
+          attribute_root %in%
+            names(self) ||
+            attribute_root %in% private$.active_attributes
+        ) {
+          eval(parse(
+            text = sprintf("attribute_list$%s <- self$%s", param, attribute)
+          ))
         } else if (attribute_root %in% names(private)) {
-          eval(parse(text = sprintf("attribute_list$%s <- private$%s", param, attribute)))
+          eval(parse(
+            text = sprintf("attribute_list$%s <- private$%s", param, attribute)
+          ))
         } else if (paste0(".", attribute_root) %in% names(private)) {
-          eval(parse(text = sprintf("attribute_list$%s <- private$.%s", param, attribute)))
-        } else if (attribute_root %in% c("model_attributes", "attribute_aliases", "error_messages", "warning_messages")) {
-          eval(parse(text = sprintf("attribute_list$%s <- self$%s", param, attribute)))
+          eval(parse(
+            text = sprintf("attribute_list$%s <- private$.%s", param, attribute)
+          ))
+        } else if (
+          attribute_root %in%
+            c(
+              "model_attributes",
+              "attribute_aliases",
+              "error_messages",
+              "warning_messages"
+            )
+        ) {
+          eval(parse(
+            text = sprintf("attribute_list$%s <- self$%s", param, attribute)
+          ))
         } else if (attribute_root %in% names(self$attached)) {
-          eval(parse(text = sprintf("attribute_list$%s <- self$attached$%s", param, attribute)))
+          eval(parse(
+            text = sprintf(
+              "attribute_list$%s <- self$attached$%s",
+              param,
+              attribute
+            )
+          ))
         } else {
           attribute_list[[param]] <- NULL
         }
@@ -135,7 +172,15 @@ GenericModel <- R6Class("GenericModel",
       } else {
         params <- params[which(params %in% self$get_attribute_names())]
       }
-      return(c(params, unique(names(self$attribute_aliases[unlist(lapply(params, grep, unlist(self$attribute_aliases), fixed = TRUE))]))))
+      return(c(
+        params,
+        unique(names(self$attribute_aliases[unlist(lapply(
+          params,
+          grep,
+          unlist(self$attribute_aliases),
+          fixed = TRUE
+        ))]))
+      ))
     },
 
     #' @description
@@ -152,25 +197,43 @@ GenericModel <- R6Class("GenericModel",
         }
         attribute_root <- unlist(strsplit(attribute, "$", fixed = TRUE))[1]
         attribute_root <- unlist(strsplit(attribute_root, "[", fixed = TRUE))[1]
-        if (attribute_root %in% names(self) || attribute_root %in% private$.active_attributes) {
+        if (
+          attribute_root %in%
+            names(self) ||
+            attribute_root %in% private$.active_attributes
+        ) {
           eval(parse(text = sprintf("self$%s <- params$%s", attribute, param)))
         } else if (attribute_root %in% names(private)) {
-          eval(parse(text = sprintf("private$%s <- params$%s", attribute, param)))
+          eval(parse(
+            text = sprintf("private$%s <- params$%s", attribute, param)
+          ))
         } else if (paste0(".", attribute_root) %in% names(private)) {
-          eval(parse(text = sprintf("private$.%s <- params$%s", attribute, param)))
-        } else if (attribute_root %in% c("model_attributes", "attribute_aliases", "error_messages", "warning_messages")) {
+          eval(parse(
+            text = sprintf("private$.%s <- params$%s", attribute, param)
+          ))
+        } else if (
+          attribute_root %in%
+            c(
+              "model_attributes",
+              "attribute_aliases",
+              "error_messages",
+              "warning_messages"
+            )
+        ) {
           eval(parse(text = sprintf("self$%s <- params$%s", attribute, param)))
         } else if (attribute %in% c("object_generator")) {
           # ignore - handled in generic class
-        } else { # attach
-          eval(parse(text = sprintf("self$attached$%s <- params$%s", attribute, param)))
+        } else {
+          # attach
+          eval(parse(
+            text = sprintf("self$attached$%s <- params$%s", attribute, param)
+          ))
         }
       }
     }
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Model attributes #
@@ -189,7 +252,6 @@ GenericModel <- R6Class("GenericModel",
 
   # Active binding accessors for private attributes (above) #
   active = list(
-
     # Model attribute accessors #
 
     #' @field model_attributes A vector of model attribute names.
@@ -209,7 +271,10 @@ GenericModel <- R6Class("GenericModel",
         private$.attribute_aliases
       } else {
         if (!is.null(value) && !is.list(value)) {
-          stop("Attribute aliases should be a list (form: alias = \"attribute\")", call. = FALSE)
+          stop(
+            "Attribute aliases should be a list (form: alias = \"attribute\")",
+            call. = FALSE
+          )
         }
         private$.attribute_aliases <- value
       }
@@ -236,7 +301,10 @@ GenericModel <- R6Class("GenericModel",
         private$.warning_messages
       } else {
         if (!is.null(value)) {
-          private$.warning_messages <- unique(c(private$.warning_messages, value))
+          private$.warning_messages <- unique(c(
+            private$.warning_messages,
+            value
+          ))
         } else {
           private$.warning_messages <- value
         }

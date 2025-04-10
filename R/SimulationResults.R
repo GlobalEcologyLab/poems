@@ -49,10 +49,10 @@
 #' @include SpatialModel.R
 #' @export SimulationResults
 
-SimulationResults <- R6Class("SimulationResults",
+SimulationResults <- R6Class(
+  "SimulationResults",
   inherit = SpatialModel,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -81,11 +81,17 @@ SimulationResults <- R6Class("SimulationResults",
           stop(paste("Could not read results from", results), call. = FALSE)
         }
         if (!is.list(results)) {
-          stop(paste("Could not read results from type/class", class(results)[1]), call. = FALSE)
+          stop(
+            paste("Could not read results from type/class", class(results)[1]),
+            call. = FALSE
+          )
         }
       }
       super$initialize(...)
-      self$attribute_aliases <- c(self$attribute_aliases, list(burn_in_duration = "burn_in_steps"))
+      self$attribute_aliases <- c(
+        self$attribute_aliases,
+        list(burn_in_duration = "burn_in_steps")
+      )
       if (!is.null(parent)) {
         self$parent <- parent
       } else {
@@ -107,8 +113,11 @@ SimulationResults <- R6Class("SimulationResults",
         super$new_clone(...)
       } else {
         super$new_clone(
-          time_steps = self$time_steps, burn_in_steps = self$burn_in_steps,
-          occupancy_mask = self$occupancy_mask, default = self$default, ...
+          time_steps = self$time_steps,
+          burn_in_steps = self$burn_in_steps,
+          occupancy_mask = self$occupancy_mask,
+          default = self$default,
+          ...
         )
       }
     },
@@ -119,7 +128,10 @@ SimulationResults <- R6Class("SimulationResults",
     #' @return Array of all attribute names with optional inclusion of attribute names of nested results for all cells.
     get_attribute_names = function(all = FALSE) {
       if (all && !is.null(self$all) && length(self$all$get_attribute_names())) {
-        return(c(super$get_attribute_names(), paste0("all$", self$all$get_attribute_names())))
+        return(c(
+          super$get_attribute_names(),
+          paste0("all$", self$all$get_attribute_names())
+        ))
       } else {
         return(super$get_attribute_names())
       }
@@ -134,7 +146,8 @@ SimulationResults <- R6Class("SimulationResults",
       attribute_list <- list()
       if (is.null(params)) {
         params <- self$get_attribute_names()
-        if (!is.null(self$parent)) { # include parent names
+        if (!is.null(self$parent)) {
+          # include parent names
           params <- unique(c(params, self$parent$get_attribute_names()))
         }
       }
@@ -142,45 +155,92 @@ SimulationResults <- R6Class("SimulationResults",
         param_root <- unlist(strsplit(param, "$", fixed = TRUE))[1]
         if (param_root == "all") {
           param_name <- unlist(strsplit(param, "$", fixed = TRUE))[2]
-          attribute_list[[param]] <- self$all$get_attributes(param_name)[[param_name]]
+          attribute_list[[param]] <- self$all$get_attributes(param_name)[[
+            param_name
+          ]]
         } else {
           attribute_list[[param]] <- super$get_attributes(param)[[param]]
-          if (!param %in% private$.active_attributes) { # not handled in an accessor
-            if (is.null(attribute_list[[param]]) && !is.null(self$parent)) { # calculate via parent
-              parent_value <- self$parent$get_attributes(param, remove_burn_in = FALSE)[[param]]
-              if (any(class(parent_value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+          if (!param %in% private$.active_attributes) {
+            # not handled in an accessor
+            if (is.null(attribute_list[[param]]) && !is.null(self$parent)) {
+              # calculate via parent
+              parent_value <- self$parent$get_attributes(
+                param,
+                remove_burn_in = FALSE
+              )[[param]]
+              if (
+                any(
+                  class(parent_value) %in%
+                    c("RasterLayer", "RasterStack", "RasterBrick")
+                )
+              ) {
                 parent_value <- parent_value[]
               }
               if (is.matrix(parent_value)) {
-                attribute_list[[param]] <- .colSums(parent_value, m = nrow(parent_value), n = ncol(parent_value), na.rm = TRUE)
+                attribute_list[[param]] <- .colSums(
+                  parent_value,
+                  m = nrow(parent_value),
+                  n = ncol(parent_value),
+                  na.rm = TRUE
+                )
                 self$set_attributes(attribute_list[param])
               }
             }
             # Apply occupancy mask and/or burn-in
-            if (is.numeric(attribute_list[[param]][]) && length(attribute_list[[param]][]) > 1) {
+            if (
+              is.numeric(attribute_list[[param]][]) &&
+                length(attribute_list[[param]][]) > 1
+            ) {
               if (is.null(self$parent) && !is.null(self$occupancy_mask)) {
-                if (nrow(as.matrix(attribute_list[[param]][])) == nrow(as.matrix(self$occupancy_mask[]))) {
-                  if (ncol(as.matrix(self$occupancy_mask[])) %in% c(1, ncol(as.matrix(attribute_list[[param]][])))) {
-                    attribute_list[[param]][] <- as.matrix(attribute_list[[param]][] * self$occupancy_mask[])
+                if (
+                  nrow(as.matrix(attribute_list[[param]][])) ==
+                    nrow(as.matrix(self$occupancy_mask[]))
+                ) {
+                  if (
+                    ncol(as.matrix(self$occupancy_mask[])) %in%
+                      c(1, ncol(as.matrix(attribute_list[[param]][])))
+                  ) {
+                    attribute_list[[param]][] <- as.matrix(
+                      attribute_list[[param]][] * self$occupancy_mask[]
+                    )
                   } else if (ncol(as.matrix(attribute_list[[param]][])) > 1) {
-                    self$error_messages <- sprintf("The column/layer dimension of the occupancy mask and the %s result are inconsistent", param)
+                    self$error_messages <- sprintf(
+                      "The column/layer dimension of the occupancy mask and the %s result are inconsistent",
+                      param
+                    )
                   }
                 } else if (is.matrix(attribute_list[[param]][])) {
-                  self$error_messages <- sprintf("The row/cell dimension of the occupancy mask and the %s result are inconsistent", param)
+                  self$error_messages <- sprintf(
+                    "The row/cell dimension of the occupancy mask and the %s result are inconsistent",
+                    param
+                  )
                 }
               }
             }
             if (remove_burn_in && !is.null(self$burn_in_steps)) {
               if (is.matrix(attribute_list[[param]][])) {
                 if (ncol(attribute_list[[param]][]) > self$burn_in_steps) {
-                  duration_indices <- (self$burn_in_steps + 1):ncol(as.matrix(attribute_list[[param]][]))
-                  if (any(class(attribute_list[[param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-                    attribute_list[[param]] <- attribute_list[[param]][[duration_indices]]
+                  duration_indices <- (self$burn_in_steps +
+                    1):ncol(as.matrix(attribute_list[[param]][]))
+                  if (
+                    any(
+                      class(attribute_list[[param]]) %in%
+                        c("RasterLayer", "RasterStack", "RasterBrick")
+                    )
+                  ) {
+                    attribute_list[[param]] <- attribute_list[[param]][[
+                      duration_indices
+                    ]]
                   } else {
-                    attribute_list[[param]] <- attribute_list[[param]][, duration_indices]
+                    attribute_list[[param]] <- attribute_list[[param]][,
+                      duration_indices
+                    ]
                   }
                 } else {
-                  self$error_messages <- sprintf("The burn-in steps exceed the number of columns/layers of the %s result", param)
+                  self$error_messages <- sprintf(
+                    "The burn-in steps exceed the number of columns/layers of the %s result",
+                    param
+                  )
                 }
               } else if (is.vector(attribute_list[[param]])) {
                 if (!is.null(self$parent)) {
@@ -188,14 +248,27 @@ SimulationResults <- R6Class("SimulationResults",
                 } else {
                   occupancy_mask <- self$occupancy_mask
                 }
-                if ((is.null(self$time_steps) && (is.null(occupancy_mask) || ncol(as.matrix(occupancy_mask[])) == 1)) ||
-                  (is.numeric(self$time_steps) && length(attribute_list[[param]]) == self$time_steps) ||
-                  (is.numeric(occupancy_mask[]) && length(attribute_list[[param]]) == ncol(as.matrix(occupancy_mask[])))) {
+                if (
+                  (is.null(self$time_steps) &&
+                    (is.null(occupancy_mask) ||
+                      ncol(as.matrix(occupancy_mask[])) == 1)) ||
+                    (is.numeric(self$time_steps) &&
+                      length(attribute_list[[param]]) == self$time_steps) ||
+                    (is.numeric(occupancy_mask[]) &&
+                      length(attribute_list[[param]]) ==
+                        ncol(as.matrix(occupancy_mask[])))
+                ) {
                   if (length(attribute_list[[param]]) > self$burn_in_steps) {
-                    duration_indices <- (self$burn_in_steps + 1):length(attribute_list[[param]])
-                    attribute_list[[param]] <- attribute_list[[param]][duration_indices]
+                    duration_indices <- (self$burn_in_steps +
+                      1):length(attribute_list[[param]])
+                    attribute_list[[param]] <- attribute_list[[param]][
+                      duration_indices
+                    ]
                   } else {
-                    self$error_messages <- sprintf("The burn-in steps exceed the length of the %s result", param)
+                    self$error_messages <- sprintf(
+                      "The burn-in steps exceed the length of the %s result",
+                      param
+                    )
                   }
                 }
               }
@@ -212,19 +285,45 @@ SimulationResults <- R6Class("SimulationResults",
     #' @param ... Parameters/attributes passed individually.
     set_attributes = function(params = list(), ...) {
       params <- c(list(...), params) # prioritise individual parameters
-      for (param in names(params)) { # check region raster consistency
-        if (!param %in% private$.active_attributes) { # not handled in an accessor
-          if (any(class(params[[param]]) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-            if (!is.null(self$region) && !self$region$raster_is_consistent(params[[param]])) {
-              self$error_messages <- sprintf("The %s result is not consistent with the defined region raster", param)
+      for (param in names(params)) {
+        # check region raster consistency
+        if (!param %in% private$.active_attributes) {
+          # not handled in an accessor
+          if (
+            any(
+              class(params[[param]]) %in%
+                c("RasterLayer", "RasterStack", "RasterBrick")
+            )
+          ) {
+            if (
+              !is.null(self$region) &&
+                !self$region$raster_is_consistent(params[[param]])
+            ) {
+              self$error_messages <- sprintf(
+                "The %s result is not consistent with the defined region raster",
+                param
+              )
               params[[param]] <- NULL
-            } else if (is.numeric(self$time_steps) && !raster::nlayers(params[[param]]) %in% c(1, self$time_steps)) {
-              self$error_messages <- sprintf("The number of raster layers in the %s result must be one or match the number of time steps", param)
+            } else if (
+              is.numeric(self$time_steps) &&
+                !raster::nlayers(params[[param]]) %in% c(1, self$time_steps)
+            ) {
+              self$error_messages <- sprintf(
+                "The number of raster layers in the %s result must be one or match the number of time steps",
+                param
+              )
               params[[param]] <- NULL
             }
-          } else if (is.numeric(params[[param]]) && !is.null(self$region) && self$region$use_raster &&
-            nrow(as.matrix(params[[param]])) == self$region$region_cells) {
-            self$error_messages <- sprintf("The %s result must be a raster layer, stack or brick (consistent with the defined region)", param)
+          } else if (
+            is.numeric(params[[param]]) &&
+              !is.null(self$region) &&
+              self$region$use_raster &&
+              nrow(as.matrix(params[[param]])) == self$region$region_cells
+          ) {
+            self$error_messages <- sprintf(
+              "The %s result must be a raster layer, stack or brick (consistent with the defined region)",
+              param
+            )
             params[[param]] <- NULL
           }
         }
@@ -236,18 +335,28 @@ SimulationResults <- R6Class("SimulationResults",
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("region", "time_steps", "burn_in_steps", "occupancy_mask"),
+    .model_attributes = c(
+      "region",
+      "time_steps",
+      "burn_in_steps",
+      "occupancy_mask"
+    ),
     # .region            [inherited]
     .time_steps = NULL,
     .burn_in_steps = NULL,
     .occupancy_mask = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "coordinates", "time_steps", "burn_in_steps", "occupancy_mask"),
+    .active_attributes = c(
+      "region",
+      "coordinates",
+      "time_steps",
+      "burn_in_steps",
+      "occupancy_mask"
+    ),
 
     # Model reference attributes #
     .all = NULL,
@@ -264,12 +373,12 @@ SimulationResults <- R6Class("SimulationResults",
 
   # Active binding accessors for private attributes (above) #
   active = list(
-
     # Model attributes accessors #
     #   Inherited class will dynamically generate results via other attributes wherever possible
 
     #' @field model_attributes A vector of model attribute names.
-    model_attributes = function(value) { # inherited
+    model_attributes = function(value) {
+      # inherited
       if (missing(value)) {
         super$model_attributes
       } else {
@@ -278,7 +387,8 @@ SimulationResults <- R6Class("SimulationResults",
     },
 
     #' @field region A \code{\link{Region}} (or inherited class) object specifying the study region.
-    region = function(value) { # inherited
+    region = function(value) {
+      # inherited
       if (missing(value)) {
         super$region
       } else {
@@ -287,7 +397,8 @@ SimulationResults <- R6Class("SimulationResults",
     },
 
     #' @field coordinates Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).
-    coordinates = function(value) { # inherited
+    coordinates = function(value) {
+      # inherited
       if (missing(value)) {
         super$coordinates
       } else {
@@ -321,8 +432,15 @@ SimulationResults <- R6Class("SimulationResults",
           private$.burn_in_steps
         }
       } else {
-        if (is.numeric(value) && is.numeric(self$time_steps) && value >= self$time_steps) {
-          stop("Burn-in must be less than the number of simulation time steps", call. = FALSE)
+        if (
+          is.numeric(value) &&
+            is.numeric(self$time_steps) &&
+            value >= self$time_steps
+        ) {
+          stop(
+            "Burn-in must be less than the number of simulation time steps",
+            call. = FALSE
+          )
         }
         if (!is.null(self$parent)) {
           self$parent$burn_in_steps <- value
@@ -341,14 +459,26 @@ SimulationResults <- R6Class("SimulationResults",
           private$.occupancy_mask
         }
       } else {
-        if (any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-          if (!is.null(self$region) && !self$region$raster_is_consistent(value)) {
-            stop("Occupancy mask raster must be consistent with the defined region raster", call. = FALSE)
+        if (
+          any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))
+        ) {
+          if (
+            !is.null(self$region) && !self$region$raster_is_consistent(value)
+          ) {
+            stop(
+              "Occupancy mask raster must be consistent with the defined region raster",
+              call. = FALSE
+            )
           }
           cells <- length(which(!is.na(value[[1]][])))
           width <- raster::nlayers(value)
-        } else if (!is.null(value) && !is.null(self$region) && self$region$use_raster) {
-          stop("Occupancy mask must be a raster layer, stack or brick consistent with the defined region", call. = FALSE)
+        } else if (
+          !is.null(value) && !is.null(self$region) && self$region$use_raster
+        ) {
+          stop(
+            "Occupancy mask must be a raster layer, stack or brick consistent with the defined region",
+            call. = FALSE
+          )
         } else if (is.matrix(value)) {
           cells <- nrow(value)
           width <- ncol(value)
@@ -356,11 +486,25 @@ SimulationResults <- R6Class("SimulationResults",
           cells <- length(value)
           width <- 1
         }
-        if (!is.null(value) && is.numeric(self$time_steps) && !width %in% c(1, self$time_steps)) {
-          stop("The number of occupancy mask layers/columns must be one or match the number of time steps", call. = FALSE)
+        if (
+          !is.null(value) &&
+            is.numeric(self$time_steps) &&
+            !width %in% c(1, self$time_steps)
+        ) {
+          stop(
+            "The number of occupancy mask layers/columns must be one or match the number of time steps",
+            call. = FALSE
+          )
         }
-        if (!is.null(value) && !is.null(self$region) && cells != self$region$region_cells) {
-          stop("The number of occupancy mask rows must be consistent with the region (finite) cells", call. = FALSE)
+        if (
+          !is.null(value) &&
+            !is.null(self$region) &&
+            cells != self$region$region_cells
+        ) {
+          stop(
+            "The number of occupancy mask rows must be consistent with the region (finite) cells",
+            call. = FALSE
+          )
         }
         private$.occupancy_mask <- value
       }
@@ -389,7 +533,10 @@ SimulationResults <- R6Class("SimulationResults",
     #' @field default Default value/attribute utilized when applying primitive metric functions (e.g. max) to the results.
     default = function(value) {
       if (missing(value)) {
-        if (is.character(private$.default) && private$.default %in% self$get_attribute_names(all = TRUE)) {
+        if (
+          is.character(private$.default) &&
+            private$.default %in% self$get_attribute_names(all = TRUE)
+        ) {
           self$get_attribute(private$.default)
         } else {
           private$.default
@@ -402,7 +549,8 @@ SimulationResults <- R6Class("SimulationResults",
     # Dynamic attribute accessors #
 
     #' @field attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
-    attribute_aliases = function(value) { # inherited
+    attribute_aliases = function(value) {
+      # inherited
       if (missing(value)) {
         super$attribute_aliases
       } else {
@@ -413,7 +561,8 @@ SimulationResults <- R6Class("SimulationResults",
     # Errors and warnings accessors #
 
     #' @field error_messages A vector of error messages encountered when setting model attributes.
-    error_messages = function(value) { # inherited
+    error_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$error_messages
       } else {
@@ -422,7 +571,8 @@ SimulationResults <- R6Class("SimulationResults",
     },
 
     #' @field warning_messages A vector of warning messages encountered when setting model attributes.
-    warning_messages = function(value) { # inherited
+    warning_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$warning_messages
       } else {

@@ -24,9 +24,9 @@
 #' @importFrom R6 R6Class
 #' @export GenericClass
 
-GenericClass <- R6Class("GenericClass",
+GenericClass <- R6Class(
+  "GenericClass",
   public = list(
-
     ## Attributes ##
 
     #' @field object_generator Class object generator used to create new clones, particularly for user inheritance.
@@ -58,12 +58,14 @@ GenericClass <- R6Class("GenericClass",
     #' @param ... Parameters passed via the inherited class constructor (defined in initialize and run via new).
     #' @return New object of the current (inherited) class.
     new_clone = function(...) {
-      return(self$object_generator$new(object_generator = self$object_generator, ...))
+      return(self$object_generator$new(
+        object_generator = self$object_generator,
+        ...
+      ))
     }
   ), # end public
 
   private = list(
-
     ## Attributes ##
   ) # end private
 )

@@ -61,10 +61,10 @@
 #' @include SpatialModel.R
 #' @export DispersalFriction
 
-DispersalFriction <- R6Class("DispersalFriction",
+DispersalFriction <- R6Class(
+  "DispersalFriction",
   inherit = SpatialModel,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -98,7 +98,10 @@ DispersalFriction <- R6Class("DispersalFriction",
 
       # Ensure region/coordinates are set
       if (is.null(self$coordinates) || self$region$region_cells == 0) {
-        stop("Distance multipliers calculation requires region/coordinates to be set first", call. = FALSE)
+        stop(
+          "Distance multipliers calculation requires region/coordinates to be set first",
+          call. = FALSE
+        )
       }
 
       # Convert to matrix if data.frame
@@ -112,14 +115,21 @@ DispersalFriction <- R6Class("DispersalFriction",
       }
 
       # Ensure dispersal indices are correctly set and are consistent with coordinates
-      if (is.null(dispersal_indices) || !all(is.integer(dispersal_indices)) ||
-        !all(dispersal_indices >= 1) ||
-        !is.matrix(dispersal_indices) || ncol(dispersal_indices) != 2 ||
-        nrow(dispersal_indices) > self$region$region_cells^2 ||
-        max(dispersal_indices) > self$region$region_cells) {
-        stop("Dispersal indices must be a two-column matrix representing the
+      if (
+        is.null(dispersal_indices) ||
+          !all(is.integer(dispersal_indices)) ||
+          !all(dispersal_indices >= 1) ||
+          !is.matrix(dispersal_indices) ||
+          ncol(dispersal_indices) != 2 ||
+          nrow(dispersal_indices) > self$region$region_cells^2 ||
+          max(dispersal_indices) > self$region$region_cells
+      ) {
+        stop(
+          "Dispersal indices must be a two-column matrix representing the
         target and source coordinate index for each in-range migration, or a
-        data.frame or array that can be converted to such a two-column matrix", call. = FALSE)
+        data.frame or array that can be converted to such a two-column matrix",
+          call. = FALSE
+        )
       }
 
       tryCatch(
@@ -128,10 +138,14 @@ DispersalFriction <- R6Class("DispersalFriction",
           if (self$region$use_raster) {
             raster_region <- self$region
           } else {
-            raster_region <- Region$new(coordinates = self$region$coordinates, use_raster = TRUE)
+            raster_region <- Region$new(
+              coordinates = self$region$coordinates,
+              use_raster = TRUE
+            )
           }
 
-          if (is.null(self$conductance)) { # set as 1 for all non-NA cells
+          if (is.null(self$conductance)) {
+            # set as 1 for all non-NA cells
             self$conductance <- raster_region$region_raster * 0 + 1
           }
 
@@ -139,9 +153,21 @@ DispersalFriction <- R6Class("DispersalFriction",
             # Calculate raster, transition matrix, then least cost distances for no friction
             no_friction_rast <- raster_region$region_raster
             no_friction_rast[] <- 1 # include NAs # [raster_region$region_indices] <- 1
-            no_friction_transitions <- transition(no_friction_rast, transitionFunction = mean, directions = self$transition_directions)
-            no_friction_transitions <- geoCorrection(no_friction_transitions, type = "c", scl = TRUE, multpl = FALSE)
-            no_friction_costs <- as.matrix(costDistance(no_friction_transitions, as.matrix(self$coordinates)))
+            no_friction_transitions <- transition(
+              no_friction_rast,
+              transitionFunction = mean,
+              directions = self$transition_directions
+            )
+            no_friction_transitions <- geoCorrection(
+              no_friction_transitions,
+              type = "c",
+              scl = TRUE,
+              multpl = FALSE
+            )
+            no_friction_costs <- as.matrix(costDistance(
+              no_friction_transitions,
+              as.matrix(self$coordinates)
+            ))
             no_friction_costs <- no_friction_costs[dispersal_indices]
             no_friction_transitions <- NULL # release from memory
           })
@@ -153,29 +179,53 @@ DispersalFriction <- R6Class("DispersalFriction",
             i = 1:ncol(as.matrix(self$conductance[])),
             .packages = c("raster", "gdistance"),
             .errorhandling = c("stop")
-          ) %dopar% {
-            suppressWarnings({
-              # Calculate raster, transition matrix, then least cost distances for friction for time step
-              if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-                conductance_rast <- raster::subset(self$conductance, i)
-              } else { # assume friction matrix
-                conductance_rast <- raster_region$region_raster
-                conductance_rast[raster_region$region_indices] <- self$conductance[, i]
+          ) %dopar%
+            {
+              suppressWarnings({
+                # Calculate raster, transition matrix, then least cost distances for friction for time step
+                if (
+                  any(
+                    class(self$conductance) %in%
+                      c("RasterLayer", "RasterStack", "RasterBrick")
+                  )
+                ) {
+                  conductance_rast <- raster::subset(self$conductance, i)
+                } else {
+                  # assume friction matrix
+                  conductance_rast <- raster_region$region_raster
+                  conductance_rast[
+                    raster_region$region_indices
+                  ] <- self$conductance[, i]
+                }
+                conductance_transitions <- transition(
+                  conductance_rast,
+                  transitionFunction = mean,
+                  directions = self$transition_directions
+                )
+                conductance_transitions <- geoCorrection(
+                  conductance_transitions,
+                  type = "c",
+                  scl = TRUE,
+                  multpl = FALSE
+                )
+                conductance_costs <- as.matrix(costDistance(
+                  conductance_transitions,
+                  as.matrix(self$coordinates)
+                ))
+                conductance_costs <- conductance_costs[dispersal_indices]
+                conductance_transitions <- NULL # release from memory
+              })
+              if (!is.null(self$write_to_dir)) {
+                file_path <- file.path(
+                  self$write_to_dir,
+                  sprintf("multipliers_%s.RData", i)
+                )
+                saveRDS(conductance_costs / no_friction_costs, file = file_path)
+                file_path # return to parallel rbind
+              } else {
+                conductance_costs / no_friction_costs # return to parallel rbind
               }
-              conductance_transitions <- transition(conductance_rast, transitionFunction = mean, directions = self$transition_directions)
-              conductance_transitions <- geoCorrection(conductance_transitions, type = "c", scl = TRUE, multpl = FALSE)
-              conductance_costs <- as.matrix(costDistance(conductance_transitions, as.matrix(self$coordinates)))
-              conductance_costs <- conductance_costs[dispersal_indices]
-              conductance_transitions <- NULL # release from memory
-            })
-            if (!is.null(self$write_to_dir)) {
-              file_path <- file.path(self$write_to_dir, sprintf("multipliers_%s.RData", i))
-              saveRDS(conductance_costs / no_friction_costs, file = file_path)
-              file_path # return to parallel rbind
-            } else {
-              conductance_costs / no_friction_costs # return to parallel rbind
             }
-          }
         },
         error = function(e) {
           self$error_messages <- gsub("\n", "", as.character(e), fixed = TRUE)
@@ -186,7 +236,16 @@ DispersalFriction <- R6Class("DispersalFriction",
       if (!is.null(self$error_messages)) {
         error_messages <- self$error_messages
         self$error_messages <- NULL
-        stop(paste(c("Encountered in calculating distance multipliers:", error_messages), collapse = "\n"), call. = FALSE)
+        stop(
+          paste(
+            c(
+              "Encountered in calculating distance multipliers:",
+              error_messages
+            ),
+            collapse = "\n"
+          ),
+          call. = FALSE
+        )
       } else {
         return(distance_multipliers)
       }
@@ -194,11 +253,17 @@ DispersalFriction <- R6Class("DispersalFriction",
   ), # end public
 
   private = list(
-
     ## Attributes ##
 
     # Model attributes #
-    .model_attributes = c("region", "coordinates", "parallel_cores", "write_to_dir", "transition_directions", "conductance"),
+    .model_attributes = c(
+      "region",
+      "coordinates",
+      "parallel_cores",
+      "write_to_dir",
+      "transition_directions",
+      "conductance"
+    ),
     .region = NULL,
     .parallel_cores = 1,
     .write_to_dir = NULL,
@@ -206,7 +271,14 @@ DispersalFriction <- R6Class("DispersalFriction",
     .conductance = NULL,
 
     # Attributes accessible via model get/set methods #
-    .active_attributes = c("region", "coordinates", "parallel_cores", "write_to_dir", "transition_directions", "conductance")
+    .active_attributes = c(
+      "region",
+      "coordinates",
+      "parallel_cores",
+      "write_to_dir",
+      "transition_directions",
+      "conductance"
+    )
 
     # Dynamic attributes #
     # .attribute_aliases [inherited]
@@ -218,11 +290,11 @@ DispersalFriction <- R6Class("DispersalFriction",
 
   # Active binding accessors for private attributes (above)
   active = list(
-
     # Model attribute accessors #
 
     #' @field model_attributes A vector of model attribute names.
-    model_attributes = function(value) { # inherited
+    model_attributes = function(value) {
+      # inherited
       if (missing(value)) {
         super$model_attributes
       } else {
@@ -236,43 +308,80 @@ DispersalFriction <- R6Class("DispersalFriction",
         private$.region
       } else {
         if ("Region" %in% class(value)) {
-          if ((value$use_raster && is.null(value$region_raster)) || (!value$use_raster && is.null(value$coordinates))) {
-            warning("Spatial region has not been defined within the region object", call. = FALSE)
+          if (
+            (value$use_raster && is.null(value$region_raster)) ||
+              (!value$use_raster && is.null(value$coordinates))
+          ) {
+            warning(
+              "Spatial region has not been defined within the region object",
+              call. = FALSE
+            )
           }
           if (!is.null(self$conductance)) {
-            if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+            if (
+              any(
+                class(self$conductance) %in%
+                  c("RasterLayer", "RasterStack", "RasterBrick")
+              )
+            ) {
               value$use_raster <- TRUE
               if (!value$raster_is_consistent(self$conductance)) {
-                stop("Region must be consistent with the conductance raster", call. = FALSE)
+                stop(
+                  "Region must be consistent with the conductance raster",
+                  call. = FALSE
+                )
               }
-            } else { # assume conductance matrix
-              if (value$region_cells > 0 && value$region_cells != nrow(self$conductance)) {
-                stop("Region must be consistent with conductance matrix dimensions", call. = FALSE)
+            } else {
+              # assume conductance matrix
+              if (
+                value$region_cells > 0 &&
+                  value$region_cells != nrow(self$conductance)
+              ) {
+                stop(
+                  "Region must be consistent with conductance matrix dimensions",
+                  call. = FALSE
+                )
               }
             }
           }
         } else if (!is.null(value)) {
-          stop("Region should be a Region (or inherited class) object", call. = FALSE)
+          stop(
+            "Region should be a Region (or inherited class) object",
+            call. = FALSE
+          )
         }
         private$.region <- value
       }
     },
 
     #' @field coordinates Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).
-    coordinates = function(value) { # use non-raster region
+    coordinates = function(value) {
+      # use non-raster region
       if (missing(value)) {
         self$region$coordinates
       } else {
         region <- Region$new(coordinates = value, use_raster = FALSE)
         if (!is.null(value) && !is.null(self$conductance)) {
-          if (any(class(self$conductance) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+          if (
+            any(
+              class(self$conductance) %in%
+                c("RasterLayer", "RasterStack", "RasterBrick")
+            )
+          ) {
             region$use_raster <- TRUE
             if (!region$raster_is_consistent(self$conductance)) {
-              stop("Region coordinates must be consistent with the conductance raster", call. = FALSE)
+              stop(
+                "Region coordinates must be consistent with the conductance raster",
+                call. = FALSE
+              )
             }
-          } else { # assume friction matrix
+          } else {
+            # assume friction matrix
             if (nrow(value) != nrow(self$conductance)) {
-              stop("Region coordinates must be consistent with conductance matrix dimensions", call. = FALSE)
+              stop(
+                "Region coordinates must be consistent with conductance matrix dimensions",
+                call. = FALSE
+              )
             }
           }
         }
@@ -295,7 +404,10 @@ DispersalFriction <- R6Class("DispersalFriction",
         private$.write_to_dir
       } else {
         if (!is.character(value) || !dir.exists(value)) {
-          stop("Dispersal friction: write_to_dir must be a existing directory path (string)", call. = FALSE)
+          stop(
+            "Dispersal friction: write_to_dir must be a existing directory path (string)",
+            call. = FALSE
+          )
         }
         private$.write_to_dir <- value
       }
@@ -318,7 +430,10 @@ DispersalFriction <- R6Class("DispersalFriction",
         if (is.character(value) && file.exists(value)) {
           if (length(grep(".CSV", toupper(value), fixed = TRUE))) {
             value <- utils::read.csv(file = value)
-          } else if (length(grep(".RDATA", toupper(value), fixed = TRUE)) || length(grep(".RDS", toupper(value), fixed = TRUE))) {
+          } else if (
+            length(grep(".RDATA", toupper(value), fixed = TRUE)) ||
+              length(grep(".RDS", toupper(value), fixed = TRUE))
+          ) {
             value <- readRDS(file = value)
           } else if (length(grep(".GRD", toupper(value), fixed = TRUE))) {
             value <- raster::brick(value)
@@ -327,14 +442,30 @@ DispersalFriction <- R6Class("DispersalFriction",
           }
         }
         if (!is.null(value)) {
-          if (any(class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
-            if (!is.null(self$region) && !self$region$raster_is_consistent(value)) {
-              stop("Conductance raster must be consistent with the defined region raster", call. = FALSE)
+          if (
+            any(
+              class(value) %in% c("RasterLayer", "RasterStack", "RasterBrick")
+            )
+          ) {
+            if (
+              !is.null(self$region) && !self$region$raster_is_consistent(value)
+            ) {
+              stop(
+                "Conductance raster must be consistent with the defined region raster",
+                call. = FALSE
+              )
             }
-          } else { # assume matrix-like object
+          } else {
+            # assume matrix-like object
             value <- as.matrix(value)
-            if (!is.null(self$region$coordinates) && nrow(value) != nrow(self$region$coordinates)) {
-              stop("Conductance matrix dimensions must be consistent with region/coordinates", call. = FALSE)
+            if (
+              !is.null(self$region$coordinates) &&
+                nrow(value) != nrow(self$region$coordinates)
+            ) {
+              stop(
+                "Conductance matrix dimensions must be consistent with region/coordinates",
+                call. = FALSE
+              )
             }
           }
         }
@@ -345,7 +476,8 @@ DispersalFriction <- R6Class("DispersalFriction",
     # Dynamic attribute accessors #
 
     #' @field attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
-    attribute_aliases = function(value) { # inherited
+    attribute_aliases = function(value) {
+      # inherited
       if (missing(value)) {
         super$attribute_aliases
       } else {
@@ -356,7 +488,8 @@ DispersalFriction <- R6Class("DispersalFriction",
     # Errors and warnings accessors #
 
     #' @field error_messages A vector of error messages encountered when setting model attributes.
-    error_messages = function(value) { # inherited
+    error_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$error_messages
       } else {
@@ -365,7 +498,8 @@ DispersalFriction <- R6Class("DispersalFriction",
     },
 
     #' @field warning_messages A vector of warning messages encountered when setting model attributes.
-    warning_messages = function(value) { # inherited
+    warning_messages = function(value) {
+      # inherited
       if (missing(value)) {
         super$warning_messages
       } else {

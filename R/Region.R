@@ -34,10 +34,10 @@
 #' @include GenericClass.R
 #' @export Region
 
-Region <- R6Class("Region",
+Region <- R6Class(
+  "Region",
   inherit = GenericClass,
   public = list(
-
     ## Attributes ##
 
     # object_generator [inherited]
@@ -59,10 +59,22 @@ Region <- R6Class("Region",
     #' @param region_raster A \emph{RasterLayer} object (see \code{\link[raster:raster-package]{raster}}) defining the region with finite cell indices (NAs elsewhere).
     #' @param use_raster Boolean to indicate that a raster is to be used to define the region (default TRUE).
     #' @param ... Additional parameters passed individually.
-    initialize = function(coordinates = NULL, template_raster = NULL, region_raster = NULL, use_raster = TRUE, ...) {
+    initialize = function(
+      coordinates = NULL,
+      template_raster = NULL,
+      region_raster = NULL,
+      use_raster = TRUE,
+      ...
+    ) {
       super$initialize(...)
-      if (!is.null(coordinates) && (!is.null(template_raster) || !is.null(region_raster))) {
-        stop("Region should be specified with a set of coordinates or a raster, not both", call. = FALSE)
+      if (
+        !is.null(coordinates) &&
+          (!is.null(template_raster) || !is.null(region_raster))
+      ) {
+        stop(
+          "Region should be specified with a set of coordinates or a raster, not both",
+          call. = FALSE
+        )
       }
       if (!is.null(use_raster)) {
         self$use_raster <- use_raster
@@ -72,9 +84,14 @@ Region <- R6Class("Region",
       }
       if (!is.null(template_raster)) {
         if (!("RasterLayer" %in% class(template_raster))) {
-          stop("Template raster should be a raster::RasterLayer (or inherited class) object", call. = FALSE)
+          stop(
+            "Template raster should be a raster::RasterLayer (or inherited class) object",
+            call. = FALSE
+          )
         }
-        template_raster[which(!is.na(template_raster[]))] <- 1:length(which(!is.na(template_raster[])))
+        template_raster[which(!is.na(template_raster[]))] <- 1:length(which(
+          !is.na(template_raster[])
+        ))
         self$region_raster <- template_raster
       }
       if (!is.null(region_raster)) {
@@ -91,10 +108,22 @@ Region <- R6Class("Region",
     raster_is_consistent = function(check_raster) {
       region_raster <- self$region_raster
       if (!is.null(region_raster)) {
-        if (any(class(check_raster) %in% c("RasterLayer", "RasterStack", "RasterBrick"))) {
+        if (
+          any(
+            class(check_raster) %in%
+              c("RasterLayer", "RasterStack", "RasterBrick")
+          )
+        ) {
           region_non_finites <- which(!is.finite(region_raster[]))
-          return(raster::compareRaster(check_raster, region_raster, stopiffalse = FALSE) &&
-            (all(!is.finite(check_raster[region_non_finites])) || !self$strict_consistency))
+          return(
+            raster::compareRaster(
+              check_raster,
+              region_raster,
+              stopiffalse = FALSE
+            ) &&
+              (all(!is.finite(check_raster[region_non_finites])) ||
+                !self$strict_consistency)
+          )
         } else {
           return(FALSE)
         }
@@ -110,13 +139,23 @@ Region <- R6Class("Region",
     raster_from_values = function(values) {
       value_matrix <- as.matrix(values)
       if (!self$use_raster) {
-        stop("Raster (or stack) can only be generated when the use_raster parameter is TRUE", call. = FALSE)
+        stop(
+          "Raster (or stack) can only be generated when the use_raster parameter is TRUE",
+          call. = FALSE
+        )
       }
       if (nrow(value_matrix) != self$region_cells) {
-        stop("Values must have a length or dimensions consistent with the number of region (non-NA) cells", call. = FALSE)
+        stop(
+          "Values must have a length or dimensions consistent with the number of region (non-NA) cells",
+          call. = FALSE
+        )
       }
-      if (ncol(value_matrix) > 1) { # stack/brick
-        value_raster <- raster::stack(replicate(ncol(value_matrix), self$region_raster))
+      if (ncol(value_matrix) > 1) {
+        # stack/brick
+        value_raster <- raster::stack(replicate(
+          ncol(value_matrix),
+          self$region_raster
+        ))
       } else {
         value_raster <- self$region_raster
       }
@@ -127,7 +166,6 @@ Region <- R6Class("Region",
   ), # end public
 
   private = list(
-
     ## Attributes ##
     .coordinates = NULL,
     .region_raster = NULL,
@@ -137,24 +175,34 @@ Region <- R6Class("Region",
 
   # Active binding accessors for private attributes (above) #
   active = list(
-
     #' @field coordinates Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).
     coordinates = function(value) {
       if (missing(value)) {
-        if (self$use_raster && (!is.null(private$.coordinates) || !is.null(private$.region_raster))) {
-          as.data.frame(raster::coordinates(self$region_raster)[self$region_indices, ])
+        if (
+          self$use_raster &&
+            (!is.null(private$.coordinates) || !is.null(private$.region_raster))
+        ) {
+          as.data.frame(raster::coordinates(self$region_raster)[
+            self$region_indices,
+          ])
         } else {
           private$.coordinates
         }
       } else {
         if (!is.null(value) && !is.null(self$region_raster)) {
-          stop("Region is already associated with a raster (and its coordinates)", call. = FALSE)
+          stop(
+            "Region is already associated with a raster (and its coordinates)",
+            call. = FALSE
+          )
         }
         if (is.character(value)) {
           if (file.exists(value)) {
             if (length(grep(".CSV", toupper(value), fixed = TRUE))) {
               value <- utils::read.csv(file = value)[, 1:2]
-            } else if (length(grep(".RDATA", toupper(value), fixed = TRUE)) || length(grep(".RDS", toupper(value), fixed = TRUE))) {
+            } else if (
+              length(grep(".RDATA", toupper(value), fixed = TRUE)) ||
+                length(grep(".RDS", toupper(value), fixed = TRUE))
+            ) {
               value <- readRDS(file = value)
             } else {
               value <- read.table(file = value)[, 1:2]
@@ -164,7 +212,8 @@ Region <- R6Class("Region",
           }
         }
         if (!is.null(value)) {
-          if (length(as.matrix(value)) == 2) { # single cell
+          if (length(as.matrix(value)) == 2) {
+            # single cell
             value <- as.list(value)
             self$use_raster <- FALSE
           }
@@ -178,10 +227,15 @@ Region <- R6Class("Region",
     #' @field region_raster A \emph{RasterLayer} object (see \code{\link[raster:raster-package]{raster}}) defining the region with finite values (NAs elsewhere).
     region_raster = function(value) {
       if (missing(value)) {
-        if (is.null(private$.region_raster) && !is.null(private$.coordinates) && self$use_raster) {
+        if (
+          is.null(private$.region_raster) &&
+            !is.null(private$.coordinates) &&
+            self$use_raster
+        ) {
           # suppressWarnings(raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
           #                                        crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")) # warnings?
-          raster::rasterFromXYZ(cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
+          raster::rasterFromXYZ(
+            cbind(private$.coordinates, cell = 1:nrow(private$.coordinates)),
             crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
           )
         } else {
@@ -189,12 +243,19 @@ Region <- R6Class("Region",
         }
       } else {
         if (!is.null(value) && !("RasterLayer" %in% class(value))) {
-          stop("Region raster should be a raster::RasterLayer (or inherited class) object", call. = FALSE)
+          stop(
+            "Region raster should be a raster::RasterLayer (or inherited class) object",
+            call. = FALSE
+          )
         }
         if (!is.null(value) && !is.null(private$.coordinates)) {
-          stop("Region is already associated with a set of coordinates", call. = FALSE)
+          stop(
+            "Region is already associated with a set of coordinates",
+            call. = FALSE
+          )
         }
-        if (raster::fromDisk(value)) { # move to memory
+        if (raster::fromDisk(value)) {
+          # move to memory
           raster::values(value) <- raster::values(value)
         }
         private$.region_raster <- value
@@ -229,7 +290,8 @@ Region <- R6Class("Region",
           } else {
             0
           }
-        } else { # use coordinates
+        } else {
+          # use coordinates
           if (!is.null(self$coordinates)) {
             nrow(self$coordinates)
           } else {
@@ -237,7 +299,10 @@ Region <- R6Class("Region",
           }
         }
       } else {
-        stop("Cannot set dynamically calculated number of region cells", call. = FALSE)
+        stop(
+          "Cannot set dynamically calculated number of region cells",
+          call. = FALSE
+        )
       }
     },
 
@@ -252,7 +317,8 @@ Region <- R6Class("Region",
           } else {
             NA
           }
-        } else { # use coordinates
+        } else {
+          # use coordinates
           if (!is.null(self$coordinates)) {
             1:nrow(self$coordinates)
           } else {
@@ -260,7 +326,10 @@ Region <- R6Class("Region",
           }
         }
       } else {
-        stop("Cannot set dynamically calculated region cell indices", call. = FALSE)
+        stop(
+          "Cannot set dynamically calculated region cell indices",
+          call. = FALSE
+        )
       }
     }
   ) # end active

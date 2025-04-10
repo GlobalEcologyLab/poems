@@ -13,9 +13,9 @@
 #' @importFrom R6 R6Class
 #' @export SimulatorReference
 
-SimulatorReference <- R6Class("SimulatorReference",
+SimulatorReference <- R6Class(
+  "SimulatorReference",
   public = list(
-
     ## Attributes ##
 
     #' @field attached A list of dynamically attached simulator attributes (name-value pairs).
