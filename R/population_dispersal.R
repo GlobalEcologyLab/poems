@@ -2,8 +2,8 @@
 #'
 #' Modular functions for the population simulator for performing dispersal of stage
 #' abundance at a specified time step via dispersal rates provided.
-#' 
-#' @examples 
+#'
+#' @examples
 #' # User-defined dispersal: one-quarter of dispersing stages move one population over
 #' simulator <- SimulatorReference$new()
 #' example_function <- function(params) {
@@ -12,33 +12,35 @@
 #'   return(params$stage_abundance - emigrants + emigrants[, c(7, 1:6)])
 #' }
 #' dispersal_function <- population_dispersal(
-#'  replicates = 4,
-#'  time_steps = 10,
-#'  years_per_step = 1,
-#'  populations = 7,
-#'  demographic_stochasticity = TRUE,
-#'  density_stages = c(0, 1, 1),
-#'  dispersal = example_function,
-#'  dispersal_stages = c(0, 1, 0.5),
-#'  dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
-#'  dispersal_target_k = 5,
-#'  dispersal_target_n = list(threshold = 10, cutoff = 15),
-#'  simulator = simulator
+#'   replicates = 4,
+#'   time_steps = 10,
+#'   years_per_step = 1,
+#'   populations = 7,
+#'   demographic_stochasticity = TRUE,
+#'   density_stages = c(0, 1, 1),
+#'   dispersal = example_function,
+#'   dispersal_stages = c(0, 1, 0.5),
+#'   dispersal_source_n_k = list(cutoff = -0.5, threshold = 1.5),
+#'   dispersal_target_k = 5,
+#'   dispersal_target_n = list(threshold = 10, cutoff = 15),
+#'   simulator = simulator
 #' )
 #' carrying_capacity <- rep(10, 7)
 #' stage_abundance <- matrix(
-#'  c(
-#'    7, 13, 0, 26, 0, 39, 47,
-#'    2, 0, 6, 8, 0, 12, 13,
-#'    0, 3, 4, 6, 0, 9, 10
-#'  ),
-#'  nrow = 3,
-#'  ncol = 7,
-#'  byrow = TRUE
+#'   c(
+#'     7, 13, 0, 26, 0, 39, 47,
+#'     2, 0, 6, 8, 0, 12, 13,
+#'     0, 3, 4, 6, 0, 9, 10
+#'   ),
+#'   nrow = 3,
+#'   ncol = 7,
+#'   byrow = TRUE
 #' )
 #' occupied_indices <- (1:7)[-5]
-#' dispersal_function(r = 2, tm = 6, carrying_capacity, stage_abundance,
-#'                    occupied_indices)
+#' dispersal_function(
+#'   r = 2, tm = 6, carrying_capacity, stage_abundance,
+#'   occupied_indices
+#' )
 #'
 #' @param replicates Number of replicate simulation runs.
 #' @param time_steps Number of simulation time steps.

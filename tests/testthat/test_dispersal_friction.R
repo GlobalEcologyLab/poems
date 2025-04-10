@@ -76,7 +76,7 @@ test_that("distance multiplier calculation errors", {
     "Distance multipliers calculation requires region/coordinates to be set first"
   )
   # Dispersal indices incorrect or not consistent with coordinates
-  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE)*1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE) * 1000
   dispersal_indices <- which(distance_matrix > 0 & distance_matrix <= 350000, arr.ind = TRUE)
   colnames(dispersal_indices) <- c("target_pop", "source_pop")
   dispersal_friction <- DispersalFriction$new(

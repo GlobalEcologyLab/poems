@@ -37,7 +37,7 @@ test_that("initialization and parameter setting", {
 test_that("calculate distance matrix", {
   # Latitude/longitude coordinates
   coordinates1 <- array(c(1:4, 4:1), c(7, 2))
-  distance_matrix1 <- fossil::earth.dist(coordinates1, dist = FALSE)*1000
+  distance_matrix1 <- fossil::earth.dist(coordinates1, dist = FALSE) * 1000
   spatial_correlation <- SpatialCorrelation$new()
   expect_error(
     spatial_correlation$calculate_distance_matrix(),

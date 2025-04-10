@@ -2,8 +2,8 @@
 #'
 #' A \emph{raster} dataset defining the grid cells of the Tasmanian study region for the
 #' Thylacine example vignette.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data(tasmania_raster)
 #' tasmania_region <- Region$new(
 #'   template_raster = tasmania_raster
@@ -27,8 +27,8 @@ NULL
 #' A \emph{raster} dataset (11 timesteps) defining the intensity land-use cover for each
 #' grid-cell in the Tasmania study region. NB. This dataset is projected and will not natively overlay
 #' the other \emph{raster} datasets contained in \emph{poems}.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data(tasmania_raster)
 #' data(tasmania_modifier)
 #' tasmania_region <- Region$new(
@@ -54,13 +54,14 @@ NULL
 #' A dataset describing the nine Interim Bioregionalisation of Australia (IBRA)
 #' bioregions for the Tasmanian study region of the Thylacine example vignette.
 #'
-#' @examples 
+#' @examples
 #' data(tasmania_ibra_data)
 #' data(tasmania_ibra_raster)
-#' raster::values(tasmania_ibra_raster)[!is.na(raster::values(tasmania_ibra_raster))] |> 
-#'  table() |> as.data.frame() |> 
-#'  merge(tasmania_ibra_data, by.x = "Var1", by.y = "index")
-#' 
+#' raster::values(tasmania_ibra_raster)[!is.na(raster::values(tasmania_ibra_raster))] |>
+#'   table() |>
+#'   as.data.frame() |>
+#'   merge(tasmania_ibra_data, by.x = "Var1", by.y = "index")
+#'
 #' @format A data frame with 9 rows and 4 variables:
 #' \describe{
 #'   \item{index}{Cross-reference index for each bioregion}
@@ -77,8 +78,8 @@ NULL
 #' A \emph{raster} dataset defining the grid cells of the nine Interim
 #' Bioregionalisation of Australia (IBRA) bioregions for the Tasmanian study region of
 #' the Thylacine example vignette.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data(tasmania_ibra_raster)
 #' data(tasmania_raster)
 #' tasmania_region <- Region$new(
@@ -104,10 +105,10 @@ NULL
 #' A \emph{raster} dataset defining estimated habitat suitability values for each grid
 #' cells of the Tasmanian study region of the Thylacine example vignette.
 #'
-#' @examples 
+#' @examples
 #' data(thylacine_hs_raster)
 #' raster::plot(thylacine_hs_raster, colNA = "blue")
-#' 
+#'
 #' @format A \emph{raster::RasterLayer} object:
 #' \describe{
 #'   \item{dimensions}{32 rows by 40 columns grid}
@@ -125,15 +126,17 @@ NULL
 #' A dataset containing the historical record of the Thylacine bounty numbers submitted
 #' across the Tasmanian study region, and for each of the nine Interim Bioregionalisation
 #' of Australia (IBRA) bioregions for Thylacine example vignette.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data(thylacine_bounty_record)
 #' summary(thylacine_bounty_record)
 #' # Assuming your data frame is named thylacine_bounty_record
-#' plot(thylacine_bounty_record$Year, thylacine_bounty_record$Total, type="l", 
-#'     main="Change in Total Bounties Over Time", 
-#'     xlab="Year", 
-#'     ylab="Total Bounties")
+#' plot(thylacine_bounty_record$Year, thylacine_bounty_record$Total,
+#'   type = "l",
+#'   main = "Change in Total Bounties Over Time",
+#'   xlab = "Year",
+#'   ylab = "Total Bounties"
+#' )
 #'
 #' @format A data frame with 22 rows and 11 variables:
 #' \describe{
@@ -159,12 +162,12 @@ NULL
 #' example vignette in demonstration mode. The values were obtained by running the
 #' vignette code for 20,000 model simulations with \code{DEMONSTRATION = FALSE}.
 #'
-#' @examples 
+#' @examples
 #' data(thylacine_example_metrics)
 #' hist(thylacine_example_metrics$bounty_slope_error)
 #' hist(thylacine_example_metrics$ibra_extirpation_error)
 #' hist(thylacine_example_metrics$total_extinction)
-#' 
+#'
 #' @format A data frame with 20,000 rows and 4 variables:
 #' \describe{
 #'   \item{index}{Example simulation number from 1 to 20,000}
@@ -183,13 +186,13 @@ NULL
 #' the vignette code for 20,000 model simulations with \code{DEMONSTRATION = FALSE}.
 #' Note that some matrices were only stored for the selected 'best' 200 models.
 #'
-#' @examples 
+#' @examples
 #' data(thylacine_example_matrices)
 #' data(tasmania_raster)
 #' region <- Region$new(template_raster = tasmania_raster)
-#' region$raster_from_values(thylacine_example_matrices$extirpation[1,]) |>
-#'  raster::plot(colNA = "blue")
-#' 
+#' region$raster_from_values(thylacine_example_matrices$extirpation[1, ]) |>
+#'   raster::plot(colNA = "blue")
+#'
 #' @format A list containing the following matrices:
 #' \describe{
 #'   \item{extirpation}{200 row by 795 column matrix of cell extirpation dates for the 'best' 200 models}
@@ -208,8 +211,8 @@ NULL
 #' Thylacine example vignette in demonstration mode. The values were obtained by running
 #' the vignette code for 10 replicate re-runs of the selected 'best' 200 model
 #' simulations with \code{DEMONSTRATION = FALSE}.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data(thylacine_example_metrics_rerun)
 #' hist(thylacine_example_metrics_rerun$bounty_slope_error)
 #' hist(thylacine_example_metrics_rerun$ibra_extirpation_error)
@@ -232,8 +235,8 @@ NULL
 #' Thylacine example vignette in demonstration mode. The values were obtained by running
 #' the vignette code for 10 replicate re-runs of the selected 'best' 200 model
 #' simulations with \code{DEMONSTRATION = FALSE}.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data(thylacine_example_matrices_rerun)
 #' rowMeans(thylacine_example_matrices_rerun$bounty_slope)
 #' rowMeans(thylacine_example_matrices_rerun$ibra_extirpation)

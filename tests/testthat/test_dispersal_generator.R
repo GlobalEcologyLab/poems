@@ -43,7 +43,7 @@ test_that("initialization and parameter setting", {
 test_that("calculate distance matrix and classes", {
   # Region with longlat coordinates
   coordinates <- data.frame(x = rep(1:4, 4), y = rep(1:4, each = 4))
-  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE)*1000
+  distance_matrix <- fossil::earth.dist(coordinates, dist = FALSE) * 1000
   dispersal_gen <- DispersalGenerator$new()
   expect_error(
     dispersal_gen$calculate_distance_matrix(),

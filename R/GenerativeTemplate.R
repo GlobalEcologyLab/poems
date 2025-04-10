@@ -7,13 +7,13 @@
 #' file, function and distribution templates, correlation parameters (for distribution
 #' generation), rounding decimals, occupancy mask, and any inherited class model
 #' attributes that need to be maintained when cloning.
-#' 
-#' @examples 
+#'
+#' @examples
 #' gen_template <- GenerativeTemplate$new()
 #' gen_template$occupancy_mask <- array(c(1, 1, 0, 0, 1, 1, 1))
 #' gen_template$decimals <- 4
 #' gen_template$description <- "Test generator"
-#' 
+#'
 #' coordinates <- data.frame(x = c(1:4, 4:2), y = c(1, 1:4, 4:3))
 #'
 #' generator <- Generator$new(

@@ -260,7 +260,7 @@ Generator <- R6Class("Generator",
     #' @param param Name of model attribute to be read from a file.
     #' @param path_template Template string for the file path with placeholders
     #'  (see \code{\link{sprintf}}) for simulation sample parameters.
-    #' @param path_params Array of the names of the simulation sample 
+    #' @param path_params Array of the names of the simulation sample
     #' parameters to be substituted (in order) into the path template.
     #' @param file_type File type raster \emph{"GRD"} (default), \emph{"TIF"},
     #'  \emph{"RData/RDS"}, \emph{"QS"}, or \emph{"CSV"} to be read.
@@ -270,9 +270,9 @@ Generator <- R6Class("Generator",
           self$file_templates[[param]] <- list()
           self$file_templates[[param]]$path_template <- path_template
           self$file_templates[[param]]$path_params <- c(path_params)
-          if (toupper(file_type) == "GRD" || toupper(file_type) == "RDS" || 
-          toupper(file_type) == "CSV" || toupper(file_type) == "TIF" || 
-          toupper(file_type) == "QS"
+          if (toupper(file_type) == "GRD" || toupper(file_type) == "RDS" ||
+            toupper(file_type) == "CSV" || toupper(file_type) == "TIF" ||
+            toupper(file_type) == "QS"
           ) {
             self$file_templates[[param]]$file_type <- toupper(file_type)
           } else {
