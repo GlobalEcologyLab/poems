@@ -68,7 +68,8 @@ via generators.</p>
 
 
 <dt><code>generators</code></dt>
-<dd><p>A list of generators (<code><a href="Generator.html">Generator</a></code> or inherited class) objects for generating simulation model values.</p></dd>
+<dd><p>A list of generators (<code><a href="Generator.html">Generator</a></code> or
+inherited class) objects for generating simulation model values.</p></dd>
 
 
 <dt><code>parallel_cores</code></dt>
@@ -84,7 +85,9 @@ via generators.</p>
 
 
 <dt><code>results_filename_attributes</code></dt>
-<dd><p>A vector of: prefix (optional); attribute names (from the sample data frame); postfix (optional); utilized to construct results filenames.</p></dd>
+<dd><p>A vector of: prefix (optional);
+attribute names (from the sample data frame); postfix (optional);
+utilized to construct results filenames.</p></dd>
 
 
 <dt><code>error_messages</code></dt>
@@ -111,7 +114,10 @@ via generators.</p>
 </ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="poems" data-topic="GenericClass" data-id="new_clone"><a href="GenericClass.html#method-new_clone"><code>poems::GenericClass$new_clone()</code></a></span></li>
 </ul></details></p><hr><a id="method-GenericManager-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
-<p>Initialization method sets any included attributes (<em>sample_data</em>, <em>generators</em>, <em>parallel_cores</em>, <em>results_dir</em>, <em>results_filename_attributes</em>) and attaches other attributes individually listed.</p><div class="section">
+<p>Initialization method sets any included attributes (<em>sample_data</em>,
+<em>generators</em>, <em>parallel_cores</em>, <em>results_dir</em>,
+<em>results_filename_attributes</em>) and attaches other attributes
+individually listed.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/GenericManager.html">GenericManager</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -171,7 +177,8 @@ via generators.</p>
 
 </div><p></p><hr><a id="method-GenericManager-get_results_filename"></a><div class="section">
 <h3 id="method-get-results-filename-">Method <code>get_results_filename()</code><a class="anchor" aria-label="anchor" href="#method-get-results-filename-"></a></h3>
-<p>Constructs and returns the results filename based on the sample data frame index and results filename attributes.</p><div class="section">
+<p>Constructs and returns the results filename based on the sample data
+frame index and results filename attributes.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GenericManager</span><span class="op">$</span><span class="fu">get_results_filename</span><span class="op">(</span><span class="va">sample_index</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -179,7 +186,8 @@ via generators.</p>
 <div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>sample_index</code></dt>
-<dd><p>Row index of sample data frame containing details of substitution parameters.</p></dd>
+<dd><p>Row index of sample data frame containing details
+of substitution parameters.</p></dd>
 
 
 </dl><p></p></div>
@@ -212,8 +220,8 @@ via generators.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">generic_manager</span> <span class="op">&lt;-</span> <span class="va">GenericManager</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span></span>
-<span class="r-in"><span> attr1 <span class="op">=</span> <span class="fl">22</span><span class="op">:</span><span class="fl">23</span>,</span></span>
-<span class="r-in"><span> results_filename_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attr1"</span>, <span class="st">"example"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  attr1 <span class="op">=</span> <span class="fl">22</span><span class="op">:</span><span class="fl">23</span>,</span></span>
+<span class="r-in"><span>  results_filename_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attr1"</span>, <span class="st">"example"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">generic_manager</span><span class="op">$</span><span class="fu">get_results_filename</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample_1_results"</span>

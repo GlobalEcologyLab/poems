@@ -111,7 +111,7 @@
 <span class="r-in"><span><span class="va">stage_abundance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">0</span>, <span class="fl">26</span>, <span class="fl">0</span>, <span class="fl">39</span>, <span class="fl">47</span>,</span></span>
 <span class="r-in"><span>  <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">13</span>,</span></span>
-<span class="r-in"><span> <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">0</span>, <span class="fl">9</span>, <span class="fl">10</span></span></span>
+<span class="r-in"><span>  <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">0</span>, <span class="fl">9</span>, <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">7</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">occupied_indices</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">transition_function</span> <span class="op">&lt;-</span> <span class="fu">population_transitions</span><span class="op">(</span></span></span>
@@ -119,8 +119,10 @@
 <span class="r-in"><span>  fecundity_matrix <span class="op">=</span> <span class="va">fecundity_matrix</span>, fecundity_max <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>  survival_matrix <span class="op">=</span> <span class="va">survival_matrix</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">transition_function</span><span class="op">(</span><span class="va">fecundity_array</span>, <span class="va">survival_array</span>, <span class="va">stage_abundance</span>, </span></span>
-<span class="r-in"><span>                    <span class="va">occupied_indices</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">transition_function</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">fecundity_array</span>, <span class="va">survival_array</span>, <span class="va">stage_abundance</span>,</span></span>
+<span class="r-in"><span>  <span class="va">occupied_indices</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    5   11   32   48    0   80   91</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    3    6    0   13    0   21   27</span>
