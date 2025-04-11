@@ -10,8 +10,8 @@ via generators.
 }
 \examples{
 generic_manager <- GenericManager$new(
- attr1 = 22:23,
- results_filename_attributes = c("attr1", "example")
+  attr1 = 22:23,
+  results_filename_attributes = c("attr1", "example")
 )
 generic_manager$get_results_filename(1)
 generic_manager$get_results_filename(2)
@@ -32,7 +32,8 @@ generic_manager$get_results_filename(2)
 \describe{
 \item{\code{sample_data}}{A data frame of sampled parameters for each simulation/result.}
 
-\item{\code{generators}}{A list of generators (\code{\link{Generator}} or inherited class) objects for generating simulation model values.}
+\item{\code{generators}}{A list of generators (\code{\link{Generator}} or
+inherited class) objects for generating simulation model values.}
 
 \item{\code{parallel_cores}}{Number of cores for running the simulations in parallel.}
 
@@ -40,7 +41,9 @@ generic_manager$get_results_filename(2)
 
 \item{\code{results_ext}}{Result file extension (default is .RData).}
 
-\item{\code{results_filename_attributes}}{A vector of: prefix (optional); attribute names (from the sample data frame); postfix (optional); utilized to construct results filenames.}
+\item{\code{results_filename_attributes}}{A vector of: prefix (optional);
+attribute names (from the sample data frame); postfix (optional);
+utilized to construct results filenames.}
 
 \item{\code{error_messages}}{A vector of error messages encountered.}
 
@@ -69,7 +72,10 @@ generic_manager$get_results_filename(2)
 \if{html}{\out{<a id="method-GenericManager-new"></a>}}
 \if{latex}{\out{\hypertarget{method-GenericManager-new}{}}}
 \subsection{Method \code{new()}}{
-Initialization method sets any included attributes (\emph{sample_data}, \emph{generators}, \emph{parallel_cores}, \emph{results_dir}, \emph{results_filename_attributes}) and attaches other attributes individually listed.
+Initialization method sets any included attributes (\emph{sample_data},
+\emph{generators}, \emph{parallel_cores}, \emph{results_dir},
+\emph{results_filename_attributes}) and attaches other attributes
+individually listed.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GenericManager$new(...)}\if{html}{\out{</div>}}
 }
@@ -128,7 +134,8 @@ Status message with substituted sample details.
 \if{html}{\out{<a id="method-GenericManager-get_results_filename"></a>}}
 \if{latex}{\out{\hypertarget{method-GenericManager-get_results_filename}{}}}
 \subsection{Method \code{get_results_filename()}}{
-Constructs and returns the results filename based on the sample data frame index and results filename attributes.
+Constructs and returns the results filename based on the sample data
+frame index and results filename attributes.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GenericManager$get_results_filename(sample_index)}\if{html}{\out{</div>}}
 }
@@ -136,7 +143,8 @@ Constructs and returns the results filename based on the sample data frame index
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sample_index}}{Row index of sample data frame containing details of substitution parameters.}
+\item{\code{sample_index}}{Row index of sample data frame containing details
+of substitution parameters.}
 }
 \if{html}{\out{</div>}}
 }

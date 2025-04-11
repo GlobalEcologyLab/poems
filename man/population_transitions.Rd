@@ -47,7 +47,7 @@ survival_array <- array(survival_matrix, c(3, 3, 7)) * variation_array
 stage_abundance <- matrix(c(
   7, 13, 0, 26, 0, 39, 47,
   2, 0, 6, 8, 0, 12, 13,
- 0, 3, 4, 6, 0, 9, 10
+  0, 3, 4, 6, 0, 9, 10
 ), nrow = 3, ncol = 7, byrow = TRUE)
 occupied_indices <- (1:7)[-5]
 transition_function <- population_transitions(
@@ -55,7 +55,9 @@ transition_function <- population_transitions(
   fecundity_matrix = fecundity_matrix, fecundity_max = NULL,
   survival_matrix = survival_matrix
 )
-transition_function(fecundity_array, survival_array, stage_abundance, 
-                    occupied_indices)
+transition_function(
+  fecundity_array, survival_array, stage_abundance,
+  occupied_indices
+)
 
 }

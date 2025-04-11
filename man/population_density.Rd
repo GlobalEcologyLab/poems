@@ -78,16 +78,16 @@ stage_matrix <- array(c(0, 0.5, 0, 3, 0, 0.7, 4, 0, 0.8), c(3, 3))
 fecundity_mask <- array(c(0, 0, 0, 1, 0, 0, 1, 0, 0), c(3, 3))
 simulator <- SimulatorReference$new()
 density_function <- population_density(
- populations = 7, stage_matrix = stage_matrix, fecundity_mask = fecundity_mask,
- fecundity_max = NULL, density_dependence = "ceiling",
- growth_rate_max = NULL, density_affects = NULL, density_stages = c(0, 1, 1),
- density_precision = NULL, simulator = simulator
+  populations = 7, stage_matrix = stage_matrix, fecundity_mask = fecundity_mask,
+  fecundity_max = NULL, density_dependence = "ceiling",
+  growth_rate_max = NULL, density_affects = NULL, density_stages = c(0, 1, 1),
+  density_precision = NULL, simulator = simulator
 )
 carrying_capacity <- rep(10, 7)
 stage_abundance <- matrix(c(
- 7, 13, 0, 26, 0, 39, 47,
- 2, 0, 6, 8, 0, 12, 13,
- 0, 3, 4, 6, 0, 9, 10
+  7, 13, 0, 26, 0, 39, 47,
+  2, 0, 6, 8, 0, 12, 13,
+  0, 3, 4, 6, 0, 9, 10
 ), nrow = 3, ncol = 7, byrow = TRUE)
 
 # Life cycle stages 2 and 3 (rows 2 and 3) all add up to 10 or less

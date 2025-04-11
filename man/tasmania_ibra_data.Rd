@@ -22,8 +22,9 @@ bioregions for the Tasmanian study region of the Thylacine example vignette.
 \examples{
 data(tasmania_ibra_data)
 data(tasmania_ibra_raster)
-raster::values(tasmania_ibra_raster)[!is.na(raster::values(tasmania_ibra_raster))] |> 
- table() |> as.data.frame() |> 
- merge(tasmania_ibra_data, by.x = "Var1", by.y = "index")
+raster::values(tasmania_ibra_raster)[!is.na(raster::values(tasmania_ibra_raster))] |>
+  table() |>
+  as.data.frame() |>
+  merge(tasmania_ibra_data, by.x = "Var1", by.y = "index")
 
 }

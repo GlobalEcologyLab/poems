@@ -88,12 +88,14 @@ transformation_function <- population_transformation(
 carrying_capacity <- rep(10, 7)
 carrying_capacity <- rep(10, 7)
 stage_abundance <- matrix(c(
- 7, 13, 0, 26, 0, 39, 47,
- 2, 0, 6, 8, 0, 12, 13,
- 0, 3, 4, 6, 0, 9, 10
+  7, 13, 0, 26, 0, 39, 47,
+  2, 0, 6, 8, 0, 12, 13,
+  0, 3, 4, 6, 0, 9, 10
 ), nrow = 3, ncol = 7, byrow = TRUE)
 occupied_indices <- (1:7)[-5]
-transformation_function(r = 2, tm = 6, carrying_capacity, stage_abundance,
-                        occupied_indices)
+transformation_function(
+  r = 2, tm = 6, carrying_capacity, stage_abundance,
+  occupied_indices
+)
 
 }

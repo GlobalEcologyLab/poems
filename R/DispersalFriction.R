@@ -1,19 +1,18 @@
 #' R6 class representing a dispersal friction.
 #'
 #' @description
-#' \code{\link[R6:R6Class]{R6}} class functionality for modeling sea, ice and
-#' other frictional barriers to dispersal within a spatially-explicit
-#' population model. The dispersal friction model utilizes the
+#' \code{\link[R6:R6Class]{R6}} class functionality for modeling sea, ice and other
+#' frictional barriers to dispersal within a spatially-explicit population model. The
+#' dispersal friction model utilizes the
 #' \code{\link[gdistance:gdistance]{gdistance}} package functionality to
 #' calculate distance multipliers to modify distance-based dispersal rates for
-#' simulated migrations in a spatio-temporal frictional landscape. The
-#' frictional landscape is defined via conductance/permeability values, the
-#' inverse of friction, which ranges from zero (barrier) to one (no friction)
-#' with values in-between representing some friction. For example, a
-#' conductance value of 1/5 = 0.2 represents a landscape in which simulated
-#' animals move 5 times slower than a non-friction landscape. In this example
-#' the resultant distance multiplier would be 5, thus reducing the effective
-#' dispersal range.
+#' simulated migrations in a spatio-temporal frictional landscape. The frictional
+#' landscape is defined via conductance/permeability values, the inverse of friction,
+#' which ranges from zero (barrier) to one (no friction) with values in-between
+#' representing some friction. For example, a conductance value of 1/5 = 0.2 represents
+#' a landscape in which simulated animals move 5 times slower than a non-friction
+#' landscape. In this example the resultant distance multiplier would be 5, thus
+#' reducing the effective dispersal range.
 #'
 #' @examplesIf interactive()
 #' #' U Island example region
@@ -21,8 +20,7 @@
 #'   x = rep(seq(177.01, 177.05, 0.01), 5),
 #'   y = rep(seq(-18.01, -18.05, -0.01), each = 5)
 #' )
-#' template_raster <- Region$new(coordinates = coordinates)$region_raster #'
-#' full extent
+#' template_raster <- Region$new(coordinates = coordinates)$region_raster #' full extent
 #' template_raster[][-c(7, 9, 12, 14, 17:19)] <- NA #' make U Island
 #' region <- Region$new(template_raster = template_raster)
 #' raster::plot(region$region_raster,
@@ -43,9 +41,7 @@
 #'   region = region,
 #'   conductance = c(1, 1, 1, 0.5, 1, 1, 1)
 #' )
-#' multipliers <- dispersal_friction$calculate_distance_multipliers(
-#'   dispersal_indices
-#' )
+#' multipliers <- dispersal_friction$calculate_distance_multipliers(dispersal_indices)
 #' cbind(dispersal_indices,
 #'   distance = distances[dispersal_indices],
 #'   multiplier = multipliers[[1]]
@@ -73,8 +69,7 @@ DispersalFriction <- R6Class(
 
     # object_generator [inherited]
 
-    #' @field attached A list of dynamically attached attributes (name-value
-    #' pairs).
+    #' @field attached A list of dynamically attached attributes (name-value pairs).
     attached = list(),
 
     ## Methods ##
@@ -91,14 +86,10 @@ DispersalFriction <- R6Class(
     # New methods #
 
     #' @description
-    #' Calculates and returns spatio-temporal dispersal distance multipliers
-    #' for each in-range migration.
-    #' @param dispersal_indices Two-column integer matrix, data.frame, or array
-    #' representing the target and source coordinate index for each in-range
-    #' migration.
+    #' Calculates and returns spatio-temporal dispersal distance multipliers for each in-range migration.
+    #' @param dispersal_indices Two-column integer matrix, data.frame, or array representing the target and source coordinate index for each in-range migration.
     #' @param ... Parameters passed via a \emph{params} list or individually.
-    #' @return Temporal list of dispersal distance multiplier arrays with
-    #' values for each in-range migration.
+    #' @return Temporal list of dispersal distance multiplier arrays with values for each in-range migration.
     calculate_distance_multipliers = function(dispersal_indices, ...) {
       # Set attributes
       if (length(list(...))) {
@@ -108,8 +99,7 @@ DispersalFriction <- R6Class(
       # Ensure region/coordinates are set
       if (is.null(self$coordinates) || self$region$region_cells == 0) {
         stop(
-          "Distance multipliers calculation requires region/coordinates to be 
-          set first",
+          "Distance multipliers calculation requires region/coordinates to be set first",
           call. = FALSE
         )
       }
@@ -124,8 +114,7 @@ DispersalFriction <- R6Class(
         dispersal_indices <- as.matrix(dispersal_indices)
       }
 
-      # Ensure dispersal indices are correctly set and are consistent with
-      # coordinates
+      # Ensure dispersal indices are correctly set and are consistent with coordinates
       if (
         is.null(dispersal_indices) ||
           !all(is.integer(dispersal_indices)) ||
@@ -137,9 +126,8 @@ DispersalFriction <- R6Class(
       ) {
         stop(
           "Dispersal indices must be a two-column matrix representing the
-          target and source coordinate index for each in-range migration, or a
-          data.frame or array that can be converted to such a two-column 
-          matrix",
+        target and source coordinate index for each in-range migration, or a
+        data.frame or array that can be converted to such a two-column matrix",
           call. = FALSE
         )
       }
@@ -162,11 +150,9 @@ DispersalFriction <- R6Class(
           }
 
           suppressWarnings({
-            # Calculate raster, transition matrix, then least cost distances
-            # for no friction
+            # Calculate raster, transition matrix, then least cost distances for no friction
             no_friction_rast <- raster_region$region_raster
-            no_friction_rast[] <- 1 # include NAs #
-            # [raster_region$region_indices] <- 1
+            no_friction_rast[] <- 1 # include NAs # [raster_region$region_indices] <- 1
             no_friction_transitions <- transition(
               no_friction_rast,
               transitionFunction = mean,
@@ -186,11 +172,9 @@ DispersalFriction <- R6Class(
             no_friction_transitions <- NULL # release from memory
           })
 
-          # Calculate the (within range) distance multipliers for each time
-          # step in parallel
+          # Calculate the (within range) distance multipliers for each time step in parallel
           registerDoParallel(cores = self$parallel_cores)
-          self <- self # Ensure that this object consistently becomes
-          # available within each parallel thread
+          self <- self # Ensure that this object consistently becomes available within each parallel thread
           distance_multipliers <- foreach(
             i = 1:ncol(as.matrix(self$conductance[])),
             .packages = c("raster", "gdistance"),
@@ -198,8 +182,7 @@ DispersalFriction <- R6Class(
           ) %dopar%
             {
               suppressWarnings({
-                # Calculate raster, transition matrix, then least cost
-                # distances for friction for time step
+                # Calculate raster, transition matrix, then least cost distances for friction for time step
                 if (
                   any(
                     class(self$conductance) %in%
@@ -319,8 +302,7 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field region A \code{\link{Region}} (or inherited class) object
-    #' specifying the study region.
+    #' @field region A \code{\link{Region}} (or inherited class) object specifying the study region.
     region = function(value) {
       if (missing(value)) {
         private$.region
@@ -356,8 +338,7 @@ DispersalFriction <- R6Class(
                   value$region_cells != nrow(self$conductance)
               ) {
                 stop(
-                  "Region must be consistent with conductance matrix 
-                  dimensions",
+                  "Region must be consistent with conductance matrix dimensions",
                   call. = FALSE
                 )
               }
@@ -373,10 +354,7 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field coordinates Data frame (or matrix) of X-Y population (WGS84)
-    #' coordinates in longitude (degrees West) and latitude (degrees North)
-    #' (get and set), or distance-based coordinates dynamically returned by
-    #' region raster (get only).
+    #' @field coordinates Data frame (or matrix) of X-Y population (WGS84) coordinates in longitude (degrees West) and latitude (degrees North) (get and set), or distance-based coordinates dynamically returned by region raster (get only).
     coordinates = function(value) {
       # use non-raster region
       if (missing(value)) {
@@ -393,8 +371,7 @@ DispersalFriction <- R6Class(
             region$use_raster <- TRUE
             if (!region$raster_is_consistent(self$conductance)) {
               stop(
-                "Region coordinates must be consistent with the conductance 
-                raster",
+                "Region coordinates must be consistent with the conductance raster",
                 call. = FALSE
               )
             }
@@ -402,8 +379,7 @@ DispersalFriction <- R6Class(
             # assume friction matrix
             if (nrow(value) != nrow(self$conductance)) {
               stop(
-                "Region coordinates must be consistent with conductance matrix 
-                dimensions",
+                "Region coordinates must be consistent with conductance matrix dimensions",
                 call. = FALSE
               )
             }
@@ -413,8 +389,7 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field parallel_cores Number of cores for running the simulations in
-    #' parallel.
+    #' @field parallel_cores Number of cores for running the simulations in parallel.
     parallel_cores = function(value) {
       if (missing(value)) {
         private$.parallel_cores
@@ -423,16 +398,14 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field write_to_dir Directory path for storing distance multipliers when
-    #' memory performance is an issue.
+    #' @field write_to_dir Directory path for storing distance multipliers when memory performance is an issue.
     write_to_dir = function(value) {
       if (missing(value)) {
         private$.write_to_dir
       } else {
         if (!is.character(value) || !dir.exists(value)) {
           stop(
-            "Dispersal friction: write_to_dir must be a existing directory path 
-            (string)",
+            "Dispersal friction: write_to_dir must be a existing directory path (string)",
             call. = FALSE
           )
         }
@@ -440,9 +413,7 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field transition_directions Number of transition directions or
-    #' neighbors in which cells are connected: usually 4, 8 (default), or 16
-    #' (see \code{\link[gdistance:transition]{gdistance::transition}}).
+    #' @field transition_directions Number of transition directions or neighbors in which cells are connected: usually 4, 8 (default), or 16 (see \code{\link[gdistance:transition]{gdistance::transition}}).
     transition_directions = function(value) {
       if (missing(value)) {
         private$.transition_directions
@@ -451,10 +422,7 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field conductance Matrix/raster of conductance (inverse friction)
-    #' values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for
-    #' each grid cell (rows/cells) at each simulation time step
-    #' (columns/layers).
+    #' @field conductance Matrix/raster of conductance (inverse friction) values (range: 0 = barrier; 0 < some friction < 1; 1 = no friction) for each grid cell (rows/cells) at each simulation time step (columns/layers).
     conductance = function(value) {
       if (missing(value)) {
         private$.conductance
@@ -480,12 +448,10 @@ DispersalFriction <- R6Class(
             )
           ) {
             if (
-              !is.null(self$region) &&
-                !self$region$raster_is_consistent(value)
+              !is.null(self$region) && !self$region$raster_is_consistent(value)
             ) {
               stop(
-                "Conductance raster must be consistent with the defined region 
-                raster",
+                "Conductance raster must be consistent with the defined region raster",
                 call. = FALSE
               )
             }
@@ -497,8 +463,7 @@ DispersalFriction <- R6Class(
                 nrow(value) != nrow(self$region$coordinates)
             ) {
               stop(
-                "Conductance matrix dimensions must be consistent with 
-                region/coordinates",
+                "Conductance matrix dimensions must be consistent with region/coordinates",
                 call. = FALSE
               )
             }
@@ -510,9 +475,7 @@ DispersalFriction <- R6Class(
 
     # Dynamic attribute accessors #
 
-    #' @field attribute_aliases A list of alternative alias names for model
-    #' attributes (form: \code{alias = "attribute"}) to be used with the set
-    #' and get attributes methods.
+    #' @field attribute_aliases A list of alternative alias names for model attributes (form: \code{alias = "attribute"}) to be used with the set and get attributes methods.
     attribute_aliases = function(value) {
       # inherited
       if (missing(value)) {
@@ -524,8 +487,7 @@ DispersalFriction <- R6Class(
 
     # Errors and warnings accessors #
 
-    #' @field error_messages A vector of error messages encountered when
-    #' setting model attributes.
+    #' @field error_messages A vector of error messages encountered when setting model attributes.
     error_messages = function(value) {
       # inherited
       if (missing(value)) {
@@ -535,8 +497,7 @@ DispersalFriction <- R6Class(
       }
     },
 
-    #' @field warning_messages A vector of warning messages encountered when
-    #' setting model attributes.
+    #' @field warning_messages A vector of warning messages encountered when setting model attributes.
     warning_messages = function(value) {
       # inherited
       if (missing(value)) {

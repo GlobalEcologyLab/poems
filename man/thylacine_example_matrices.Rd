@@ -26,7 +26,7 @@ Note that some matrices were only stored for the selected 'best' 200 models.
 data(thylacine_example_matrices)
 data(tasmania_raster)
 region <- Region$new(template_raster = tasmania_raster)
-region$raster_from_values(thylacine_example_matrices$extirpation[1,]) |>
- raster::plot(colNA = "blue")
+region$raster_from_values(thylacine_example_matrices$extirpation[1, ]) |>
+  raster::plot(colNA = "blue")
 
 }

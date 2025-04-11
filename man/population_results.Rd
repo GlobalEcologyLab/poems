@@ -46,8 +46,10 @@ initial_abundance <- matrix(c(
   2, 0, 6, 8, 0, 12, 13,
   0, 3, 4, 6, 0, 9, 10
 ), nrow = 3, ncol = 7, byrow = TRUE)
-results_selection <- c("abundance", "ema", "extirpation", 
-                        "extinction_location", "harvested", "occupancy")
+results_selection <- c(
+  "abundance", "ema", "extirpation",
+  "extinction_location", "harvested", "occupancy"
+)
 result_functions <- population_results(
   replicates = 1, time_steps = 10, coordinates, initial_abundance,
   results_selection = results_selection, result_stages = c(0, 1, 1)

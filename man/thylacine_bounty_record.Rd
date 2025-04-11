@@ -31,9 +31,11 @@ of Australia (IBRA) bioregions for Thylacine example vignette.
 data(thylacine_bounty_record)
 summary(thylacine_bounty_record)
 # Assuming your data frame is named thylacine_bounty_record
-plot(thylacine_bounty_record$Year, thylacine_bounty_record$Total, type="l", 
-    main="Change in Total Bounties Over Time", 
-    xlab="Year", 
-    ylab="Total Bounties")
+plot(thylacine_bounty_record$Year, thylacine_bounty_record$Total,
+  type = "l",
+  main = "Change in Total Bounties Over Time",
+  xlab = "Year",
+  ylab = "Total Bounties"
+)
 
 }

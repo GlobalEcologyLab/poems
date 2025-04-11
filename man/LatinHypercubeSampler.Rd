@@ -6,9 +6,12 @@
 \description{
 \code{\link[R6:R6Class]{R6}} class that generates Latin hypercube samples (using
 \code{\link[lhs:randomLHS]{randomLHS}}) for parameters drawn from configured
-distributions: \code{\link[stats:Uniform]{uniform}}, \code{\link[stats:Poisson]{Poisson}},
-\code{\link[stats:Normal]{normal}}, \code{\link[stats:Lognormal]{lognormal}},
-\code{\link[stats:Beta]{beta}}, \code{\link[truncnorm:qtruncnorm]{truncated normal}} or
+distributions: \code{\link[stats:Uniform]{uniform}},
+\code{\link[stats:Poisson]{Poisson}},
+\code{\link[stats:Normal]{normal}},
+\code{\link[stats:Lognormal]{lognormal}},
+\code{\link[stats:Beta]{beta}},
+\code{\link[truncnorm:qtruncnorm]{truncated normal}} or
 \code{\link[metRology:qtri]{triangular}}.
 It generates a data frame of sample values.
 }
