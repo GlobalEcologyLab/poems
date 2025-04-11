@@ -12,3 +12,6 @@ coverage:
         target: auto
         threshold: 1%
         informational: true
+
+codecov:
+ token: fedfb519-55d5-4308-98de-df6bb88738a6
