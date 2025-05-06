@@ -1069,7 +1069,8 @@ DispersalGenerator <- R6Class(
       }
     },
 
-    #' @field dispersal_function_data Data frame of discrete dispersal function values. Optional first column may provide distance intervals (non-inclusive lower bounds).
+    #' @field dispersal_function_data Data frame of discrete dispersal function
+    #' values. Optional first column may provide distance intervals (non-inclusive lower bounds).
     dispersal_function_data = function(value) {
       if (missing(value)) {
         self$generative_template$dispersal_function_data
@@ -1105,7 +1106,12 @@ DispersalGenerator <- R6Class(
 
     # Local and nested model attribute accessors #
 
-    #' @field dispersal_proportion Dispersal function: \emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion and limit of dispersers between model cells.
+    #' @field dispersal_proportion Dispersal function:
+    #' \emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion
+    #' and limit of dispersers between model cells. This represents a maximum
+    #' potential proportion of dispersers; other factors such as population
+    #' density and carrying capacity may limit the actual proportion of
+    #' dispersers.
     dispersal_proportion = function(value) {
       if (missing(value)) {
         if (

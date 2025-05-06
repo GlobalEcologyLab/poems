@@ -123,7 +123,10 @@ nested_model$harvest$rate
 
 \item{\code{dispersal}}{Simulator-dependent function, attribute or list of attributes for describing/parameterizing the dispersal (migration) strategy utilized (see \code{\link{population_simulator}}).}
 
-\item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage to indicate the degree to which each stage participates in dispersal (default is 1 for all stages).}
+\item{\code{dispersal_stages}}{Array of relative dispersal (0-1) for each stage
+to indicate the degree to which each stage participates in dispersal
+(default is 1 for all stages). This factor modifies dispersal
+proportion, not dispersal rate.}
 
 \item{\code{dispersal_source_n_k}}{Simulator-dependent attribute for describing/parameterizing dispersal dependent on source population abundance divided by carrying capacity (see \code{\link{population_simulator}}).}
 

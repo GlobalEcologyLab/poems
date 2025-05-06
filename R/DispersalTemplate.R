@@ -240,7 +240,12 @@ DispersalTemplate <- R6Class(
       }
     },
 
-    #' @field dispersal_proportion Dispersal function: \emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion and limit of dispersers between model cells.
+    #' @field dispersal_proportion Dispersal function:
+    #' \emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion
+    #' and limit of dispersers between model cells. This represents a maximum
+    #' potential proportion of dispersers; other factors such as population
+    #' density and carrying capacity may limit the actual proportion of
+    #' dispersers.
     dispersal_proportion = function(value) {
       if (missing(value)) {
         private$.dispersal_proportion

@@ -73,7 +73,12 @@ dispersal_gen$dispersal_proportion
 
 \item{\code{dispersal_function_data}}{Data frame of discrete dispersal function values. Optional first column may provide distance intervals (non-inclusive lower bounds).}
 
-\item{\code{dispersal_proportion}}{Dispersal function: \emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion and limit of dispersers between model cells.}
+\item{\code{dispersal_proportion}}{Dispersal function:
+\emph{p*exp(-distance/b)} \emph{p} parameter. Represents the proportion
+and limit of dispersers between model cells. This represents a maximum
+potential proportion of dispersers; other factors such as population
+density and carrying capacity may limit the actual proportion of
+dispersers.}
 
 \item{\code{dispersal_breadth}}{Dispersal function: \emph{p*exp(-distance/b)} \emph{b} parameter. Represents the breadth of the dispersal between model cells. Typically estimated via average migration distance.}
 
