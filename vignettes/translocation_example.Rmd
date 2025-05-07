@@ -26,10 +26,11 @@ Note that the examples are for a single stage matrix model.
 As before, We begin by loading the necessary packages.
 
 
-```r
+``` r
 library(poems)
 library(raster)
 library(sf)
+#> Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
 library(scales)
 library(stringi) # for randomly generating file names.
 
@@ -54,7 +55,7 @@ First, we'll define our study region. For this example, we utilise a
 `raster::RasterLayer()` of Thylacine habitat suitability.
 
 
-```r
+``` r
 # Region raster
 data(tasmania_raster)
 tasmania_raster
@@ -113,7 +114,7 @@ plot(tasmania_raster,
 Now we can define our `poems::Region`:
 
 
-```r
+``` r
 # Tasmania study region (735 non-NA cells stored in the order shown) #
 region <- Region$new(template_raster = tasmania_raster)
 region$region_raster
@@ -168,7 +169,7 @@ simulator. In this example, we will use a *Generator* object later on to
 apply the HS scaling.
 
 
-```r
+``` r
 # read in the land-use modifier
 data(tasmania_modifier)
 
@@ -183,7 +184,7 @@ plot(tasmania_modifier,
 <p class="caption">plot of chunk unnamed-chunk-4</p>
 </div>
 
-```r
+``` r
 
 # Habitat suitability
 data(thylacine_hs_raster)
@@ -210,7 +211,7 @@ the HS values yet. This means that our HS values are still static as
 shown by the plot below.
 
 
-```r
+``` r
 # static HS for the moment
 ## capacity generator will make it temporally dynamic
 plot(hs_raster,
@@ -237,7 +238,7 @@ data is compacted for computational efficiency (with large-scale
 models).
 
 
-```r
+``` r
 # Distance-based environmental correlation (via a compacted Cholesky decomposition)
 env_corr <- SpatialCorrelation$new(
   region = region,
@@ -256,7 +257,7 @@ wide-ranging species that occurs in varying habitats (e.g. red foxes in
 Australia).
 
 
-```r
+``` r
 # allow growth rates to vary by region using IBRA regions
 # Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell distribution
 data(tasmania_ibra_raster)
@@ -274,7 +275,7 @@ plot(ibra_raster,
 <p class="caption">plot of chunk unnamed-chunk-7</p>
 </div>
 
-```r
+``` r
 
 data(tasmania_ibra_data)
 tasmania_ibra_data
@@ -331,7 +332,7 @@ text(ibra_polygons, labels = "abbr", cex = 1.2, halo = TRUE)
 <p class="caption">plot of chunk unnamed-chunk-7</p>
 </div>
 
-```r
+``` r
 
 rmax_regional <- ibra_raster
 
@@ -363,7 +364,7 @@ plot(rmax_regional,
 <p class="caption">plot of chunk unnamed-chunk-7</p>
 </div>
 
-```r
+``` r
 
 # set upper and lower growth rates per region
 ibra_rmax <- cbind(tasmania_ibra_data,
@@ -405,7 +406,7 @@ timesteps are sequential from 1, and are not defined by, for example,
 calendar years.
 
 
-```r
+``` r
 # set up translocation locations and order
 intro_trans_ll <- sf_project(
   from = "EPSG:4326",
@@ -471,7 +472,7 @@ object, with a nested function that uses parameters from the model to
 make changes to the simulated populations.
 
 
-```r
+``` r
 # User-defined translocation function (list-nested) and alias ####
 
 translocation <- list(
@@ -531,7 +532,7 @@ region. This allows us to sample across the range of values within each
 region.
 
 
-```r
+``` r
 # Build a Rmax generator based on sampled IBRA Rmax range quantile
 rmax_gen <- Generator$new(
   description = "Rmax",
@@ -586,7 +587,7 @@ to pass `rmax_quantile` as a variable in a *LatinHypercubeSampler*
 class.
 
 
-```r
+``` r
 # Test multiple quantiles
 test_rmax <- lapply(seq(0, 1, 0.1), function(i) {
   region$raster_from_values(rmax_gen$generate(input_values = list(rmax_quantile = i))$growth_rate_max)
@@ -622,7 +623,7 @@ This generator controls dispersal across our region based on mean
 dispersal distance and proportion of dispersers.
 
 
-```r
+``` r
 # Dispersal generator ####
 # Set for veriable mean distance, max hard-coded at 150
 dispersal_gen <- DispersalGenerator$new(
@@ -663,7 +664,7 @@ appropriate. We can see in the plot below that as the proportion of
 dispersal decreases, so does the maximum dispersal distance.
 
 
-```r
+``` r
 # plot dispersal curves for mean dispersal rates
 disp_fun <- function(p, b, distance) {
   p * exp(-distance / b)
@@ -715,17 +716,17 @@ disp_test <- lapply(1:nrow(disp_mat), function(i) {
 <p class="caption">plot of chunk unnamed-chunk-13</p>
 </div>
 
-```r
+``` r
 dev.off()
-#> null device 
-#>           1
+#> pdf 
+#>   2
 ```
 
 Now that we're happy the curve follows the right form, we can generate
 some dispersal data to test our population model with.
 
 
-```r
+``` r
 # Generate sampled dispersals for p = 0.35, b = 40 (km)
 sample_dispersal_data <- dispersal_gen$generate(
   input_values = list(dispersal_p = 0.35, dispersal_b = 40)
@@ -763,7 +764,7 @@ parameters to work.
 consistent with the `translocation` function.
 
 
-```r
+``` r
 capacity_gen <- Generator$new(
   description = "capacity",
   spatial_correlation = env_corr,
@@ -840,7 +841,7 @@ Now we have defined our generator we can make some test data for the
 model
 
 
-```r
+``` r
 # Generate example initial abundance and declining carrying capacity time-series
 generated_k <- capacity_gen$generate(input_values = list(
   max_dens = 100, q_thresh = 0.90,
@@ -874,7 +875,7 @@ plot(example_initial_n_raster,
 <p class="caption">plot of chunk unnamed-chunk-16</p>
 </div>
 
-```r
+``` r
 
 # Plot the carrying capacity
 ## carrying capacity is forced to maximum theoretical value at first time step
@@ -911,7 +912,7 @@ Using the generators we've built we can now test if our simple
 population model works as expected.
 
 
-```r
+``` r
 # Template model ####
 model_template <- PopulationModel$new(
   region = region,
@@ -963,7 +964,7 @@ the dispersal patterns of the populations from their initial
 introduction.
 
 
-```r
+``` r
 abund_ras <- region$raster_from_values(results$abundance)
 abund_ras[[c(1, 6, 11)]]
 #> class      : RasterBrick 
@@ -998,7 +999,7 @@ run the template model again but with the `translocation` function
 turned off.
 
 
-```r
+``` r
 model$set_attributes(
   initial_abundance = example_initial_abundance,
   carrying_capacity = example_carrying_capacity,
@@ -1043,7 +1044,7 @@ model run.
 And now we can plot the difference.
 
 
-```r
+``` r
 plotmax <- round_any(max(abs(values(diff_ras)), na.rm = TRUE), 10, ceiling)
 plot(diff_ras[[c(1, 6, 11)]],
   zlim = c(-plotmax, plotmax),
@@ -1076,7 +1077,7 @@ thousands to tens of thousands, of samples.
 ### Define the latin-hypercube for sampling
 
 
-```r
+``` r
 # Latin-hypercube sampler ####
 lhs_gen <- LatinHypercubeSampler$new()
 
@@ -1161,7 +1162,7 @@ simulation results to disk. It also maintains a log of each simulation's
 success and any errors or warnings encountered.
 
 
-```r
+``` r
 OUTPUT_DIR <- tempdir()
 model <- model_template$clone()
 model$set_attributes(params = list(
@@ -1188,7 +1189,7 @@ system.time({
   run_output <- sim_manager$run()
 })
 #>    user  system elapsed 
-#>   2.817   0.255   3.108
+#>   3.777   0.422   4.213
 run_output$summary
 #> [1] "10 of 10 sample models ran and saved results successfully with warnings"
 ```
@@ -1208,7 +1209,7 @@ We can see from above that the `run_output$summary` shows that there
 were a number of simulations that didn't complete successfully:
 
 
-```r
+``` r
 run_output$summary
 #> [1] "10 of 10 sample models ran and saved results successfully with warnings"
 ```
@@ -1228,7 +1229,7 @@ latter.
 ### Extract results
 
 
-```r
+``` r
 # Extract timeseries of abundance from each of the sims
 # Load our results (list) into a PopulationResults object
 p_results <- PopulationResults$new(results = run_output)
@@ -1291,7 +1292,7 @@ the abundances in the first time step are the same as the `trans_n`
 values from our latin-hypercube samples.
 
 
-```r
+``` r
 identical(
   unlist(res_manager$summary_matrix_list$n[, 1]),
   unlist(sample_data$trans_n)
@@ -1305,7 +1306,7 @@ from these simulations, so now with a few more lines of code, we can
 generate averages of the simulations as rasters
 
 
-```r
+``` r
 best_sims <- c(2:4, 8)
 dim(res_manager$summary_matrix_list$distr_pop[best_sims, ])
 #> [1]    4 8085

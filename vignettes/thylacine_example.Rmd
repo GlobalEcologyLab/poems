@@ -1,7 +1,7 @@
 ---
 title: "Workflow example for the Tasmanian thylacine"
 author: "Global ChEC Lab"
-date: "2024-04-11"
+date: "2025-05-07"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Thylacine example}
@@ -33,7 +33,7 @@ simulations. You may also change the number of samples generated, set the number
 parallel cores available on your system, and set the simulation output directory.
 
 
-```r
+``` r
 library(poems)
 DEMONSTRATION <- TRUE # load pre-run data rather than running simulations
 SAMPLES <- 20000
@@ -63,7 +63,7 @@ majority of Tasmania, once inhabited by the *thylacine*. This *raster* of Tasman
 accompanies the *poems* package, and may be loaded via its variable name.
 
 
-```r
+``` r
 # Raster of Tasmania (note: islands removed where there was no evidence of thylacine occupancy).
 data(tasmania_raster)
 raster::plot(tasmania_raster,
@@ -86,7 +86,7 @@ To define our region, we will use this *raster* of Tasmania as a template for th
 are stored in the *raster*.
 
 
-```r
+``` r
 # Tasmania study region (795 cells stored in the order shown)
 region <- Region$new(template_raster = tasmania_raster)
 raster::plot(region$region_raster,
@@ -113,7 +113,7 @@ are included with the *poems* package. Here we also collate lists of indices and
 number of cells for each bioregion.
 
 
-```r
+``` r
 # Tasmania study Interim Bioregionalisation of Australia (IBRA) bioregion cell distribution
 data(tasmania_ibra_raster)
 raster::plot(tasmania_ibra_raster,
@@ -127,7 +127,7 @@ raster::plot(tasmania_ibra_raster,
 <p class="caption">plot of chunk unnamed-chunk-4</p>
 </div>
 
-```r
+``` r
 data(tasmania_ibra_data)
 tasmania_ibra_data # examine
 #>   index key abbr                        name
@@ -181,7 +181,7 @@ convenient to partially skip ahead to step 2 (building generators) and build our
 dispersal generator. 
 
 
-```r
+``` r
 # Build the dispersal generator and calculate distance data
 dispersal_gen <- DispersalGenerator$new(
   region = region,
@@ -208,7 +208,7 @@ cells for each grid-cell. At our defined spatial resolution, adjacent cells are 
 14 km from each cell.
 
 
-```r
+``` r
 # Define neighborhoods (of up to 9 adjacent cells) based on a 14 km range from each
 # grid cell for density dependence calculations (using a dispersal generator)
 distance_data <- dispersal_gen$distance_data[[1]]
@@ -238,7 +238,7 @@ included to prevent reproduction when a neighborhood has a single *thylacine*. W
 define an alias to the Allee parameter so we can sample it later.
 
 
-```r
+``` r
 # User-defined function for Ricker logistic density dependence via neighborhoods, with
 # Allee effects; also remove fecundities if single thylacine in a neighborhood
 density_dependence <- list(
@@ -305,7 +305,7 @@ IBRA bioregions based on *thylacine* bioregion densities. We define aliases for 
 harvest/bounty parameters so we can sample them later.
 
 
-```r
+``` r
 # Harvest bounty (economic) model user-defined function adapted from Bulte et al. (2003).
 harvest <- list(
 
@@ -400,7 +400,7 @@ Finally, we can build our template model with these user-defined functions and t
 associated parameters, as well as other fixed model parameters.
 
 
-```r
+``` r
 # Population (simulation) model template for fixed parameters
 model_template <- PopulationModel$new(
   region = region,
@@ -442,7 +442,7 @@ species distribution model (SDM) for the *thylacine*. The initial habitat suitab
 *raster* has also been included with the *poems* package.
 
 
-```r
+``` r
 # Initial thylacine habitat suitability
 data(thylacine_hs_raster)
 raster::plot(thylacine_hs_raster,
@@ -471,7 +471,7 @@ along with sampled values (inputs) for initial carrying capacity, percentage dec
 (in 7/9 IBRA bioregions), and the fraction of capacity for initial abundance (phi).
 
 
-```r
+``` r
 # Build a carrying capacity generator model based on habitat suitability and sampled
 # initial capacity, initial fraction (phi), & decline rate per year in selected bioregions.
 capacity_gen <- Generator$new(
@@ -528,7 +528,7 @@ We can test our generator with some example (mid-value) sample inputs and
 examine plots of the output initial abundance and carrying capacity (final).
 
 
-```r
+``` r
 # Generate example initial abundance and declining carrying capacity time-series
 generated_k <- capacity_gen$generate(input_values = list(
   k_init = 2800,
@@ -552,7 +552,7 @@ raster::plot(example_initial_n_raster,
 <p class="caption">plot of chunk unnamed-chunk-12</p>
 </div>
 
-```r
+``` r
 
 # Plot the example final carrying capacity
 example_final_raster <- region$region_raster
@@ -574,7 +574,7 @@ Our stage matrix generator adjusts our original stage matrix so that its
 equivalent (simple) growth rate (*lambda* - 1) is that of a sampled input rate.
 
 
-```r
+``` r
 # Build a stage matrix generator based on sampled growth rate
 stage_matrix_gen <- Generator$new(
   description = "stage matrix",
@@ -601,7 +601,7 @@ We can test our generator with an example (mid-value) sample input growth rate o
 (*lambda* = 1.25).
 
 
-```r
+``` r
 # Generate sampled stage matrix for growth rate: lambda = 1.25
 gen_stage_m <- stage_matrix_gen$generate(input_values = list(growth_r = 0.25))
 gen_stage_m # examine
@@ -621,7 +621,7 @@ will now use it to generate some example dispersal data, based on our best estim
 the *p* and *b* parameters.
 
 
-```r
+``` r
 # Generate sampled dispersals for p = 0.5, b = 7 (km)
 sample_dispersal_data <- dispersal_gen$generate(
   input_values = list(dispersal_p = 0.5, dispersal_b = 7)
@@ -645,7 +645,7 @@ model template and setting our example parameters before running the population
 simulator.
 
 
-```r
+``` r
 # Run the model with example parameters
 model <- model_template$clone()
 model$set_attributes(
@@ -681,7 +681,7 @@ generate 20,000 Latin hypercube samples of model and generator parameters using 
 across parameter ranges derived from Bulte et al. (2003), and via model trial runs.
 
 
-```r
+``` r
 # Create a LHS object
 lhs_gen <- LatinHypercubeSampler$new()
 
@@ -735,7 +735,7 @@ for the first two samples. The *poems* package provides example simulation summa
 for all 20,000 samples (which is used in our model ensemble selection and validation).
 
 
-```r
+``` r
 OUTPUT_DIR <- tempdir()
 # Build the simulation manager
 sim_manager <- SimulationManager$new(
@@ -756,8 +756,16 @@ run_output$summary
 if (DEMONSTRATION) {
   dir(OUTPUT_DIR, "*.RData") # includes 2 result files
 }
-#> [1] "sample_1_results.RData"          "sample_2_results.RData"         
-#> [3] "sample_93_rerun_1_results.RData" "sample_93_rerun_2_results.RData"
+#>  [1] "multipliers_1.RData"     "multipliers_10.RData"   
+#>  [3] "multipliers_2.RData"     "multipliers_3.RData"    
+#>  [5] "multipliers_4.RData"     "multipliers_5.RData"    
+#>  [7] "multipliers_6.RData"     "multipliers_7.RData"    
+#>  [9] "multipliers_8.RData"     "multipliers_9.RData"    
+#> [11] "sample_1_results.RData"  "sample_10_results.RData"
+#> [13] "sample_2_results.RData"  "sample_3_results.RData" 
+#> [15] "sample_4_results.RData"  "sample_5_results.RData" 
+#> [17] "sample_6_results.RData"  "sample_7_results.RData" 
+#> [19] "sample_8_results.RData"  "sample_9_results.RData"
 dir(OUTPUT_DIR, "*.txt") # plus simulation log
 #> [1] "generation_log.txt" "simulation_log.txt"
 ```
@@ -788,7 +796,7 @@ instead be initialized with the bounty or bioregion abundance values. The Tasman
 extinction time is directly available from the results object.
 
 
-```r
+``` r
 # Load our results (list) into a PopulationResults object
 p_results <- PopulationResults$new(
   results = results,
@@ -802,7 +810,7 @@ ibra_bounty_clone <- p_results$new_clone(
   trend_interval = (1888:1894) - 1887
 )
 ibra_bounty_clone$all$abundance_trend # 1888-1894 total bounty slope
-#> [1] -5
+#> [1] -4
 ibra_abundance <- t(array(unlist(lapply(
   p_results$get_attribute("ibra_indices"),
   function(indices) {
@@ -811,9 +819,9 @@ ibra_abundance <- t(array(unlist(lapply(
 )), c(80, 9)))
 ibra_abundance_clone <- p_results$new_clone(results = list(abundance = ibra_abundance))
 (1888:1967)[ibra_abundance_clone$extirpation] # IBRA extirpation
-#> [1] 1935 1930 1938 1937 1942 1939 1941 1941 1939
+#> [1] 1934 1935 1931 1942 1944 1941 1938 1943 1940
 (1888:1967)[p_results$all$extirpation] # total extinction
-#> [1] 1942
+#> [1] 1944
 ```
 
 ##### Generating summary metrics and matrices
@@ -840,7 +848,7 @@ We will load pre-generated example summaries for all 20,000 sample simulations, 
 with the *poems* package prior to our validation and ensemble selection (in step 6).
 
 
-```r
+``` r
 # Set targets for our summary metrics (used to calculate combined metric errors)
 slope_intervals <- c("1888-1894", "1895-1901", "1902-1909")
 targets <- list(
@@ -955,8 +963,8 @@ summary_metric_data <- results_manager$summary_metric_data
 summary_matrix_list <- results_manager$summary_matrix_list
 head(summary_metric_data) # examine
 #>   index bounty_slope_error ibra_extirpation_error total_extinction
-#> 1     1          11.271672               12.03121             1950
-#> 2     2           9.343379               32.79672               NA
+#> 1     1          10.772639               27.30842               NA
+#> 2     2           9.627893               31.34884               NA
 lapply(summary_matrix_list, dim) # dimensions
 #> $extirpation
 #> [1]   2 795
@@ -973,13 +981,13 @@ lapply(summary_matrix_list, dim) # dimensions
 #> $ibra_extirpation
 #> [1] 2 9
 head(summary_matrix_list$bounty_slope) # examine
-#>       [,1]      [,2]      [,3]
-#> [1,]  1.75 -9.666667 -3.083333
-#> [2,] -1.00 -2.600000 -3.000000
+#>           [,1] [,2]      [,3]
+#> [1,]  1.833333  -10 -4.583333
+#> [2,] -1.000000   -3 -2.619048
 head(summary_matrix_list$ibra_extirpation) # examine
 #>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
-#> [1,] 1939 1941 1941 1939 1950 1945 1946 1948 1945
-#> [2,] 1952 1954 1967   NA   NA   NA   NA   NA   NA
+#> [1,] 1944 1947 1954 1955   NA 1964 1961   NA 1965
+#> [2,] 1954 1946 1964 1964   NA   NA   NA   NA   NA
 ```
 
 Note that the summary matrix list collates the specified result for each simulation 
@@ -1001,7 +1009,7 @@ We will also calculate the error from the target confidence interval (CI) for ou
 simulated total extinction dates for our full metrics set.
 
 
-```r
+``` r
 # Demonstrate calculating RMSE metrics from matrices
 if (DEMONSTRATION) { # Calculate RMSE for bounty slopes
   bounty_slope_error2 <- sqrt(rowMeans((summary_matrix_list$bounty_slope -
@@ -1016,8 +1024,8 @@ if (DEMONSTRATION) { # Calculate RMSE for bounty slopes
   ) # examine
 }
 #>      bounty_slope_error bounty_slope_error2
-#> [1,]          11.271672           11.271672
-#> [2,]           9.343379            9.343379
+#> [1,]          10.772639           10.772639
+#> [2,]           9.627893            9.627893
 if (DEMONSTRATION) { # Calculate RMSE for IBRA extirpation
   ibra_extirpation <- summary_matrix_list$ibra_extirpation
   ibra_extirpation[is.na(ibra_extirpation)] <- 1968
@@ -1033,8 +1041,8 @@ if (DEMONSTRATION) { # Calculate RMSE for IBRA extirpation
   ) # examine
 }
 #>      ibra_extirpation_error ibra_extirpation_error2
-#> [1,]               12.03121                12.03121
-#> [2,]               32.79672                32.79672
+#> [1,]               27.30842                27.30842
+#> [2,]               31.34884                31.34884
 
 # Load full example metrics
 if (DEMONSTRATION) {
@@ -1090,7 +1098,7 @@ file in the configured output directory. We can configure this directory, becaus
 locating the default output directory generated via *tempdir()* can be tedious.
 
 
-```r
+``` r
 # Create a validator for selecting the 'best' example models
 validator <- Validator$new(
   simulation_parameters = sample_data,
@@ -1159,7 +1167,7 @@ the *poems* package, containing bounty slope and IBRA bioregion extirpations for
 a time-series and IBRA distribution of total bounty, which we will use later.
 
 
-```r
+``` r
 # Load pre-generated example matrices
 if (DEMONSTRATION) {
   data(thylacine_example_matrices)
@@ -1218,7 +1226,7 @@ the expected temporal contour of the total *thylacine* bounty. This inadequacy b
 clearer later, when we plot the total bounty across time for our model ensemble.
 
 
-```r
+``` r
 # Plot the simulation, targets, and selected metrics for extirpation
 extirpation <- cbind(
   summary_matrix_list$ibra_extirpation,
@@ -1275,7 +1283,7 @@ will examine two notable example parameters: density Allee effect and harvest
 catchability.
 
 
-```r
+``` r
 # Allee effect
 hist(sample_data$density_allee,
   breaks = 30, main = "Model ensemble Allee effect",
@@ -1290,7 +1298,7 @@ legend("topright", c("All", "Selected"), fill = c("gray", "blue"), cex = 0.8)
 <p class="caption">plot of chunk unnamed-chunk-25</p>
 </div>
 
-```r
+``` r
 
 # Harvest catchability
 hist(sample_data$harvest_q,
@@ -1317,7 +1325,7 @@ with our metric targets. Here we examine one notable correlation between our sel
 model opportunistic harvest rate and our catchability parameter.
 
 
-```r
+``` r
 plot(
   x = sample_data$harvest_ohr, y = sample_data$harvest_q, ylim = c(0, 0.0055),
   xlab = "Opportunistic harvest rate", ylab = "Bio-economic harvest catchability",
@@ -1362,7 +1370,7 @@ files via the *results_filename_attributes* attribute of the simulation and resu
 managers.
 
 
-```r
+``` r
 # Run replicates of 10 for each selected model
 sample_data_rerun <- cbind(sample = 1:nrow(sample_data), sample_data)
 sample_data_rerun <- cbind(sample_data_rerun[rep(selected_indices, each = 10), ],
@@ -1402,8 +1410,17 @@ run_output$summary
 if (DEMONSTRATION) {
   dir(OUTPUT_DIR, "*.RData") # includes 2 new result files
 }
-#> [1] "sample_1_results.RData"          "sample_2_results.RData"         
-#> [3] "sample_93_rerun_1_results.RData" "sample_93_rerun_2_results.RData"
+#>  [1] "multipliers_1.RData"             "multipliers_10.RData"           
+#>  [3] "multipliers_2.RData"             "multipliers_3.RData"            
+#>  [5] "multipliers_4.RData"             "multipliers_5.RData"            
+#>  [7] "multipliers_6.RData"             "multipliers_7.RData"            
+#>  [9] "multipliers_8.RData"             "multipliers_9.RData"            
+#> [11] "sample_1_results.RData"          "sample_10_results.RData"        
+#> [13] "sample_2_results.RData"          "sample_3_results.RData"         
+#> [15] "sample_4_results.RData"          "sample_5_results.RData"         
+#> [17] "sample_6_results.RData"          "sample_7_results.RData"         
+#> [19] "sample_8_results.RData"          "sample_9_results.RData"         
+#> [21] "sample_93_rerun_1_results.RData" "sample_93_rerun_2_results.RData"
 
 # Collate summary metrics for re-runs
 if (DEMONSTRATION) {
@@ -1420,8 +1437,8 @@ if (DEMONSTRATION) {
   results_manager$summary_metric_data # examine demo
 }
 #>   index bounty_slope_error ibra_extirpation_error total_extinction
-#> 1     1           11.61502               5.000000             1933
-#> 2     2           10.30186               4.168333             1933
+#> 1     1           10.29672               4.123106             1937
+#> 2     2           10.68613               5.852350             1932
 if (DEMONSTRATION) { # load full example metrics and (some) matrices
   data(thylacine_example_metrics_rerun)
   summary_metric_data_rerun <- thylacine_example_metrics_rerun
@@ -1457,7 +1474,7 @@ to better assess the impact of stochasticity. Note that simulations that persist
 represented via an extirpation date of 1968.
 
 
-```r
+``` r
 # Bounty slope error
 bounty_slope_error <- summary_metric_data$bounty_slope_error
 hist(bounty_slope_error,
@@ -1481,7 +1498,7 @@ legend("topright", c("All", "Target", "Selected", "Replicates"),
 <p class="caption">plot of chunk unnamed-chunk-28</p>
 </div>
 
-```r
+``` r
 
 # IBRA extirpation error
 ibra_extirpation_error <- summary_metric_data$ibra_extirpation_error
@@ -1506,7 +1523,7 @@ legend("topright", c("All", "Target", "Selected", "Replicates"),
 <p class="caption">plot of chunk unnamed-chunk-28</p>
 </div>
 
-```r
+``` r
 
 # Extinction time
 extinction_time <- summary_metric_data$total_extinction
@@ -1553,7 +1570,7 @@ model weights to calculate a weighted average of simulated bounty submitted for 
 selected ensemble and their replicates.
 
 
-```r
+``` r
 # Compare weighted ensemble model to actual historical bounty time-series
 data(thylacine_bounty_record)
 selected_bounty <- summary_matrix_list$total_bounty
@@ -1581,7 +1598,7 @@ We can also compare our simulated total bounty submitted, both across IBRA biore
 and Tasmania-wide, to our historical bounty record.
 
 
-```r
+``` r
 # Compare weighted ensemble model to actual historical bioregion bounty values
 selected_bounty <- cbind(
   summary_matrix_list$ibra_bounty,
@@ -1624,7 +1641,7 @@ As a final demonstration let's see how we can use our ensemble to examine our
 simulated spatio-temporal extirpation pattern. 
 
 
-```r
+``` r
 # Calculate the weighted cell extirpation dates
 selected_extirp <- summary_matrix_list$extirpation
 weighted_extirpation <- colSums(selected_extirp * selected_weights / sum(selected_weights))
