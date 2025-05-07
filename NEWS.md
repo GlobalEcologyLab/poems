@@ -1,3 +1,8 @@
+# version 1.3.3
+## Bug fixes
+- Fixed a bug that caused the `population_density` function to fail when population density was logistic and there were no growth rates (that is, a stagnant population).
+- Fixed a bug in `population_transitions` in which excess survivals were "overdrawn" from populations that were already at zero.
+
 # version 1.3.2
 
 ## Bug fixes

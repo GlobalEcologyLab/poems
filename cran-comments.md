@@ -1,10 +1,10 @@
 ## Test environments
-* local macOS 15 install, Intel chip, R 4.4.1
+* local macOS 15 install, Intel chip, R 4.5.0
 * Windows, R-devel (via win-builder)
-* macOS, Apple Silicon chip, R 4.4.1 (via mac-builder)
+* macOS, Apple Silicon chip, R 4.5.0 (via mac-builder)
 * Ubuntu 24.04, R-devel (via Github Actions)
-* Ubuntu 24.04, R 4.4.1 (via Github Actions)
-* Ubuntu 24.04, R 3.6 (via Github Actions)
+* Ubuntu 24.04, R 4.5.0 (via Github Actions)
+* Ubuntu 24.04, R 4.4.3 (via Github Actions)
 
 ## R CMD check results
 
@@ -12,7 +12,7 @@
 
 ## Past R CMD check results
 
-`poems` was erroring out in R-devel in certain Linux distros due to a faulty test. I have now fixed this.
+`poems` did not have a dependency on R 4.1.0 as it should have. I have now updated the DESCRIPTION file.
 
 ## Other notes
 
@@ -31,7 +31,7 @@ Conover, Iman, et and al are all from an academic citation. Stochasticity and tr
 
 ## revdepcheck results
 
-We checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+I checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 0 new problems
- * We failed to check 0 packages
+ * I saw 0 new problems
+ * I failed to check 0 packages
