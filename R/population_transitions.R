@@ -231,20 +231,33 @@ population_transitions <- function(
         n = occupied_populations
       ) -
         stage_abundance[mult_surv_col, occupied_indices])
+      # If there are excess survivals, reduce them randomly
       for (i in which(excessive_survivals > 0)) {
         pop_index <- occupied_indices[i]
-        sample_indices <- sample(
-          1:stages,
-          size = excessive_survivals[i],
-          replace = TRUE,
-          prob = survival_array[, mult_surv_col, pop_index]
-        )
-        for (sample_index in sample_indices) {
-          generated_survivals[
-            mult_surv_col,
-            sample_index,
-            pop_index
-          ] <- generated_survivals[mult_surv_col, sample_index, pop_index] - 1
+        excess_remaining <- excessive_survivals[i]
+
+        # Get current survivals for this column/population
+        current_surv <- generated_survivals[mult_surv_col, , pop_index]
+
+        # Keep reducing where possible until excess is resolved
+        while (excess_remaining > 0) {
+          # Only sample from transitions that still have survivors to reduce
+          valid_indices <- which(current_surv > 0)
+          if (length(valid_indices) > 0) {
+            sample_index <- sample(
+              valid_indices,
+              size = 1,
+              prob = survival_array[valid_indices, mult_surv_col, pop_index]
+            )
+
+            # Reduce by 1 and update tracking
+            generated_survivals[mult_surv_col, sample_index, pop_index] <-
+              generated_survivals[mult_surv_col, sample_index, pop_index] - 1
+            current_surv[sample_index] <- current_surv[sample_index] - 1
+            excess_remaining <- excess_remaining - 1
+          } else {
+            excess_remaining <- 0
+          }
         }
       }
     }

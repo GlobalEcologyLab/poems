@@ -573,7 +573,8 @@ population_simulator <- function(inputs) {
       # Set transition 3D array (a Leslie/Lefkovitch matrix for each population)
       transition_array <- array(stage_matrix, c(stages, stages, populations))
 
-      # Load carrying capacity for each population for time if temporal trend in K
+      # Load carrying capacity for each population for time if there's a
+      # temporal trend in K
       if (carrying_capacity_t_max > 1) {
         carrying_capacity <- carrying_capacity_matrix[, min(
           tm,
@@ -583,10 +584,13 @@ population_simulator <- function(inputs) {
 
       ## Run simulation processes in configured order ##
       for (process in simulation_order) {
-        ## Transition, density dependence and environmental stochasticity calculations ##
+        ## Transition, density dependence and environmental stochasticity
+        # calculations ##
         if (process == "transition") {
+
           if (occupied_populations) {
-            # Apply density dependence function to transition array and set fecundity and survival arrays
+            # Apply density dependence function to transition array and set
+            # fecundity and survival arrays
             if (density_dependence %in% c("logistic", "adjusts_transitions")) {
               transition_array <- density_function(
                 transition_array,
