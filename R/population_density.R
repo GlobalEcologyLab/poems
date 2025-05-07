@@ -296,19 +296,21 @@ population_density <- function(
         growth_rate <- occupied_growth_rate_max *
           (1 - density_abundance / carrying_capacity)
 
-        # Calculate and apply multipliers that result in transition matrix dominant eigenvalues corresponding to growth rate
-        if (stages > 1) {
-          # use lookup table
-          transition_array[,, occupied_indices] <- apply_multipliers(
-            array(
-              transition_array[,, occupied_indices],
-              c(stages, stages, occupied_populations)
-            ),
-            calculate_multipliers(growth_rate)
-          )
-        } else {
-          # calculate (single transition rate equals dominant eigenvalue)
-          transition_array[,, occupied_indices] <- exp(growth_rate)
+        if (length(growth_rate) > 0) {
+          # Calculate and apply multipliers that result in transition matrix dominant eigenvalues corresponding to growth rate
+          if (stages > 1) {
+            # use lookup table
+            transition_array[,, occupied_indices] <- apply_multipliers(
+              array(
+                transition_array[,, occupied_indices],
+                c(stages, stages, occupied_populations)
+              ),
+              calculate_multipliers(growth_rate)
+            )
+          } else {
+            # calculate (single transition rate equals dominant eigenvalue)
+            transition_array[,, occupied_indices] <- exp(growth_rate)
+          }
         }
 
         return(transition_array)
