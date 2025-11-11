@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/GlobalEcologyLab/poems",
   "issueTracker": "https://github.com/GlobalEcologyLab/poems/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.0 (2025-04-11)",
+  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -295,19 +295,19 @@
     },
     "13": {
       "@type": "SoftwareApplication",
-      "identifier": "qs",
-      "name": "qs",
+      "identifier": "qs2",
+      "name": "qs2",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=qs"
+      "sameAs": "https://CRAN.R-project.org/package=qs2"
     },
     "SystemRequirements": null
   },
-  "fileSize": "6407.82KB",
+  "fileSize": "5287.888KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -357,7 +357,7 @@
       }
     }
   ],
-  "releaseNotes": "https://github.com/GlobalEcologyLab/poems/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/GlobalEcologyLab/poems/blob/main/NEWS.md",
   "readme": "https://github.com/GlobalEcologyLab/poems/blob/main/README.md",
   "contIntegration": ["https://app.codecov.io/gh/GlobalEcologyLab/poems?branch=main", "https://github.com/GlobalEcologyLab/poems/actions/workflows/R-CMD-check.yaml"],
   "developmentStatus": "https://www.repostatus.org/#active",

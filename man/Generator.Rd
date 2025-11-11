@@ -278,7 +278,7 @@ model attribute.
 parameters to be substituted (in order) into the path template.}
 
 \item{\code{file_type}}{File type raster \emph{"GRD"} (default), \emph{"TIF"},
-\emph{"RData/RDS"}, \emph{"QS"}, or \emph{"CSV"} to be read.}
+\emph{"RData/RDS"}, \emph{"QS2"}, or \emph{"CSV"} to be read.}
 }
 \if{html}{\out{</div>}}
 }

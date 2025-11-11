@@ -1,7 +1,7 @@
 Package: poems
 Type: Package
 Title: Pattern-Oriented Ensemble Modeling System
-Version: 1.3.3
+Version: 1.4.0
 Authors@R: c(
     person("Sean", "Haythorne", email = "sean.haythorne@unimelb.edu.au", role = "aut"),
     person("Damien", "Fordham", email = "damien.fordham@adelaide.edu.au", role = "aut"),
@@ -30,7 +30,7 @@ Imports:
     trend (>= 1.1.4),
     truncnorm (>= 1.0),
     gdistance,
-    qs
+    qs2
 Collate: 
     'GenericClass.R'
     'Region.R'

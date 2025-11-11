@@ -1,18 +1,25 @@
 ## Test environments
-* local macOS 15 install, Intel chip, R 4.5.0
+* local macOS 15.6.1 install, Apple Silicon chip, R 4.5.1
 * Windows, R-devel (via win-builder)
 * macOS, Apple Silicon chip, R 4.5.0 (via mac-builder)
 * Ubuntu 24.04, R-devel (via Github Actions)
-* Ubuntu 24.04, R 4.5.0 (via Github Actions)
+* Ubuntu 24.04, R 4.5.2 (via Github Actions)
 * Ubuntu 24.04, R 4.4.3 (via Github Actions)
 
 ## R CMD check results
 
 0 ERRORs, 0 WARNINGs, 0 NOTEs.
 
-## Past R CMD check results
+## Changes in this version
 
-`poems` did not have a dependency on R 4.1.0 as it should have. I have now updated the DESCRIPTION file.
+This version (1.4.0) updates the dependency from the deprecated `qs` package to `qs2`. 
+
+**Important note**: `qs2` is not backward-compatible with `qs`. Users with existing `qs` data files will need to convert them to `qs2` format or continue using an older version of `poems`.
+
+New features:
+* Added support for reading `.qs2` files in the Generator class via the file_type = "QS2" parameter
+* Added comprehensive test coverage for QS2 file handling (21 new test assertions)
+* Updated all documentation to reflect the qs2 migration
 
 ## Other notes
 

@@ -198,6 +198,136 @@ test_that("file template reading raster", {
   )
 })
 
+test_that("file template reading QS2 data frame", {
+  TEST_DIRECTORY <- test_path("test_inputs")
+  coordinates <- data.frame(x = c(1:4, 4:2), y = c(1, 1:4, 4:3))
+  occupancy_mask <- array(c(1, 1, 0, 0, 1, 1, 1))
+  generator <- Generator$new(
+    description = "Test generator", decimals = 4,
+    region = Region$new(coordinates = coordinates, use_raster = FALSE),
+    occupancy_mask = occupancy_mask
+  )
+  generator$set_attributes(attr1 = 1, attr2 = 2)
+  # Test QS2 data frame reading
+  generator$add_file_template("attr3",
+    path_template = file.path(TEST_DIRECTORY, "Test_%s_%s_df.qs2"),
+    path_params = c("attr1", "attr2"), file_type = "QS2"
+  )
+  test_data <- generator$read_file("attr3")
+  expect_is(test_data, "data.frame")
+  expect_equal(generator$attached$attr3, test_data)
+  expect_equal(generator$file_templates$attr3$file_type, "QS2")
+  generator$attached$attr3 <- test_data * 2
+  expect_equal(generator$get_attribute("attr3"), test_data * 2)
+  generator$attached$attr3 <- NULL # clear
+  expect_equal(generator$get_attribute("attr3"), test_data)
+  expect_equal(generator$attached$attr3, test_data)
+  generator$attached$attr3 <- NULL # clear
+  generator$outputs <- "attr3"
+  expect_equal(generator$get_attribute("attr3"), round(test_data * occupancy_mask, 4))
+  generator$attached$attr3 <- NULL # clear
+  generator$occupancy_mask <- array(1, c(7, 10))
+  generator$occupancy_mask[3:4, 5:8] <- 0
+  expect_equal(generator$get_attribute("attr3"), round(test_data * generator$occupancy_mask, 4))
+  generator$attached$attr3 <- NULL # clear
+  # Via nested aliases
+  generator$set_attributes(attr0 = list(first = 1, second = 2), attr1 = NULL, attr2 = NULL)
+  generator$attribute_aliases <- list(a1 = "attr0$first", a2 = "attr0$second", a3 = "attr3", a3_1 = "attr3[1]")
+  generator$add_file_template("attr3",
+    path_template = file.path(TEST_DIRECTORY, "Test_%s_%s_df.qs2"),
+    path_params = c("a1", "a2"), file_type = "QS2"
+  )
+  expect_equal(generator$get_attribute("a3"), round(test_data * generator$occupancy_mask, 4))
+  generator$attached$attr3 <- NULL # clear
+  expect_equal(generator$get_attribute("a3_1"), test_data[1])
+  # Generate rasters from QS2 data frame
+  region <- Region$new(coordinates = coordinates, use_raster = TRUE)
+  generator <- Generator$new(
+    description = "Test generator", decimals = 4, outputs = "attr3",
+    region = region, occupancy_mask = region$raster_from_values(occupancy_mask)
+  )
+  generator$add_generative_requirements(attr3 = "file")
+  generator$add_file_template("attr3",
+    path_template = file.path(TEST_DIRECTORY, "Test_%s_%s_df.qs2"),
+    path_params = c("attr1", "attr2"), file_type = "QS2"
+  )
+  generator$set_attributes(attr1 = 1, attr2 = 2)
+  expect_equal(
+    unname(generator$get_attribute("attr3")[region$region_indices]),
+    unname(round(as.matrix(test_data * occupancy_mask), 4))
+  )
+})
+
+test_that("file template reading QS2 raster", {
+  TEST_DIRECTORY <- test_path("test_inputs")
+  coordinates <- data.frame(x = c(1:4, 4:2), y = c(1, 1:4, 4:3))
+  region <- Region$new(coordinates = coordinates, use_raster = TRUE)
+  occupancy_mask <- array(1, c(7, 10))
+  occupancy_mask[3:4, 5:8] <- 0
+  raster_occupancy_mask <- raster::stack(replicate(10, raster::raster(
+    vals = region$region_raster[],
+    nrows = 4, ncol = 4,
+    xmn = 0, xmx = 4000, ymn = 0, ymx = 4000,
+    crs = "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+  )))
+  raster_occupancy_mask[][region$region_indices, ] <- occupancy_mask[raster_occupancy_mask[][region$region_indices, 1], ]
+  raster::crs(raster_occupancy_mask) <- raster::crs(region$region_raster)
+  raster::extent(raster_occupancy_mask) <- raster::extent(region$region_raster)
+  generator <- Generator$new(
+    description = "Test generator", decimals = 4,
+    region = Region$new(coordinates = coordinates, use_raster = TRUE),
+    occupancy_mask = raster_occupancy_mask
+  )
+  generator$set_attributes(attr1 = 1, attr2 = 2)
+  # Via QS2
+  generator$add_file_template("attr3",
+    path_template = file.path(TEST_DIRECTORY, "Test_%s_%s.qs2"),
+    path_params = c("attr1", "attr2"), file_type = "QS2"
+  )
+  test_raster <- generator$read_file("attr3")
+  expect_is(test_raster, "RasterBrick")
+  expect_equal(generator$file_templates$attr3$file_type, "QS2")
+  expect_equal(generator$attached$attr3[], test_raster[])
+  generator$attached$attr3 <- test_raster * 2
+  expect_equal(generator$get_attribute("attr3")[], test_raster[] * 2)
+  generator$attached$attr3 <- NULL # clear
+  expect_equal(generator$get_attribute("attr3")[], test_raster[])
+  generator$attached$attr3 <- NULL # clear
+  # Via nested aliases
+  generator$set_attributes(attr0 = list(first = 1, second = 2))
+  generator$attribute_aliases <- list(
+    a1 = "attr0$first", a2 = "attr0$second", a3 = "attr3", a3_8 = "attr3[8]",
+    a3_X5 = "attr3[][, 5]"
+  )
+  generator$add_file_template("attr3",
+    path_template = file.path(TEST_DIRECTORY, "Test_%s_%s.qs2"),
+    path_params = c("a1", "a2"), file_type = "QS2"
+  )
+  generator$outputs <- "attr3"
+  expect_equal(generator$get_attribute("a3")[], (round(test_raster, 4) * raster_occupancy_mask)[])
+  generator$attached$attr3 <- NULL # clear
+  expect_equal(generator$get_attribute("a3_8"), test_raster[8])
+  generator$attached$attr3 <- NULL # clear
+  expect_equal(generator$get_attribute("a3_X5"), test_raster[][, 5])
+  # Generate arrays from QS2 rasters
+  generator <- Generator$new(
+    description = "Test generator", decimals = 4, outputs = "attr3",
+    region = region, generate_rasters = FALSE,
+    occupancy_mask = raster_occupancy_mask
+  )
+  expect_equal(unname(generator$occupancy_mask), occupancy_mask)
+  generator$add_generative_requirements(attr3 = "file")
+  generator$add_file_template("attr3",
+    path_template = file.path(TEST_DIRECTORY, "Test_%s_%s.qs2"),
+    path_params = c("attr1", "attr2"), file_type = "QS2"
+  )
+  generator$set_attributes(attr1 = 1, attr2 = 2)
+  expect_equal(
+    unname(generator$get_attribute("attr3")),
+    unname(round(as.matrix(test_raster[region$region_indices] * occupancy_mask), 4))
+  )
+})
+
 test_that("function execution template", {
   TEST_DIRECTORY <- test_path("test_inputs")
   generator <- Generator$new(description = "Test generator", decimals = 4, outputs = "attr4")

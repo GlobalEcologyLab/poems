@@ -81,7 +81,7 @@
 #'
 #' @importFrom R6 R6Class
 #' @importFrom metRology qtri
-#' @importFrom qs qread
+#' @importFrom qs2 qs_read
 #' @include SpatialModel.R
 #' @include GenerativeTemplate.R
 #' @export Generator
@@ -388,7 +388,7 @@ Generator <- R6Class(
     #' @param path_params Array of the names of the simulation sample
     #' parameters to be substituted (in order) into the path template.
     #' @param file_type File type raster \emph{"GRD"} (default), \emph{"TIF"},
-    #'  \emph{"RData/RDS"}, \emph{"QS"}, or \emph{"CSV"} to be read.
+    #'  \emph{"RData/RDS"}, \emph{"QS2"}, or \emph{"CSV"} to be read.
     add_file_template = function(
       param,
       path_template,
@@ -408,12 +408,12 @@ Generator <- R6Class(
               toupper(file_type) == "RDS" ||
               toupper(file_type) == "CSV" ||
               toupper(file_type) == "TIF" ||
-              toupper(file_type) == "QS"
+              toupper(file_type) == "QS2"
           ) {
             self$file_templates[[param]]$file_type <- toupper(file_type)
           } else {
             stop(
-              "The file type should be GRD (raster), TIF (raster), RDS, QS, or CSV",
+              "The file type should be GRD (raster), TIF (raster), RDS, QS2, or CSV",
               call. = FALSE
             )
           }
@@ -617,8 +617,8 @@ Generator <- R6Class(
             } else if (self$file_templates[[param]]$file_type == "RDS") {
               # RDS (RData)
               value_list[[param]] <- readRDS(file = file_path)
-            } else if (self$file_templates[[param]]$file_type == "QS") {
-              value_list[[param]] <- qread(file = file_path)
+            } else if (self$file_templates[[param]]$file_type == "QS2") {
+              value_list[[param]] <- qs_read(file = file_path)
             } else {
               # raster
               value_list[[param]] <- raster::brick(file_path)
@@ -687,10 +687,12 @@ Generator <- R6Class(
         sample_names <- names(sample)
         if (is.list(sample) && all(sample_names %in% c("mid", "window"))) {
           # window-based
-          if (is.character(sample$mid))
+          if (is.character(sample$mid)) {
             sample$mid <- self$get_attribute(sample$mid)
-          if (is.character(sample$window))
+          }
+          if (is.character(sample$window)) {
             sample$window <- self$get_attribute(sample$window)
+          }
           if (is.numeric(sample$mid) && is.numeric(sample$window)) {
             sample <- c(
               max(sample$mid - sample$window / 2, 0),

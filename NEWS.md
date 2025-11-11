@@ -1,3 +1,7 @@
+# version 1.4.0
+
+The R package `qs` will be deprecated soon, so `poems` has updated its `qs` dependency to `qs2`. Please note that `qs2` is not backward-compatible, so `poems` will no longer be able to handle `qs` data files. 
+
 # version 1.3.3
 ## Bug fixes
 - Fixed a bug that caused the `population_density` function to fail when population density was logistic and there were no growth rates (that is, a stagnant population).
