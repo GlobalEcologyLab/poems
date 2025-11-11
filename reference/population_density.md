@@ -1,0 +1,193 @@
+# Nested functions for population density dependence.
+
+Modular functions for the population simulator for performing density
+dependent adjustments to transition rates.
+
+## Usage
+
+``` r
+population_density(
+  populations,
+  stage_matrix,
+  fecundity_mask,
+  fecundity_max,
+  density_dependence,
+  growth_rate_max,
+  density_affects,
+  density_stages,
+  density_precision,
+  simulator
+)
+```
+
+## Arguments
+
+- populations:
+
+  Number of populations.
+
+- stage_matrix:
+
+  Matrix of transition (fecundity & survival) rates between stages at
+  each time step (Leslie/Lefkovitch matrix).
+
+- fecundity_mask:
+
+  Matrix of 0-1 to indicate which (proportions) of transition rates
+  refer to fecundity.
+
+- fecundity_max:
+
+  Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).
+
+- density_dependence:
+
+  Density dependence can be "ceiling" (default), "logistic" (Ricker), or
+  a user-defined function (optionally nested in a list with additional
+  attributes) for adjusting transition rates: `function(params)`, where
+  *params* is a list passed to the function containing:
+
+  `transition_array`
+
+  :   3D array of transition rates: stages by stages by populations.
+
+  `fecundity_mask`
+
+  :   Matrix of 0-1 to indicate which (proportions) of transition rates
+      refer to fecundity.
+
+  `fecundity_max`
+
+  :   Maximum transition fecundity rate (in Leslie/Lefkovitch matrix).
+
+  `carrying_capacity`
+
+  :   Array of carrying capacity values for each population.
+
+  `stage_abundance`
+
+  :   Matrix of abundance for each stage (rows) and population
+      (columns).
+
+  `population_abundance`
+
+  :   Array of summed population abundances for all stages.
+
+  `density_abundance`
+
+  :   Array of summed population abundances for stages affected by
+      density.
+
+  `growth_rate_max`
+
+  :   Maximum growth rate value or array for populations.
+
+  `occupied_indices`
+
+  :   Array of indices for populations occupied at (current) time step.
+
+  `calculate_multipliers`
+
+  :   Function (`function(growth_rates)`) for finding multipliers (when
+      stages \> 1) to apply to affected transitions that result in
+      target growth rates (dominant eigenvalues).
+
+  `apply_multipliers`
+
+  :   Function (`function(transition_array, multipliers`) for applying
+      (when stages \> 1) multipliers to the affected transition rates
+      within a transition array (returns multiplied transition array).
+
+  `simulator`
+
+  :   [`SimulatorReference`](https://globalecologylab.github.io/poems/reference/SimulatorReference.md)
+      object with dynamically accessible *attached* and *results* lists.
+
+  `additional attributes`
+
+  :   Additional attributes when density dependence is optionally nested
+      in a list.
+
+  returns an adjusted transition array for occupied populations
+
+- growth_rate_max:
+
+  Maximum growth rate (utilized by density dependence processes).
+
+- density_affects:
+
+  Matrix of booleans or numeric (0-1) indicating the transition vital
+  rates affected by density (default is all).
+
+- density_stages:
+
+  Array of booleans or numeric (0,1) for each stage to indicate which
+  stages are affected by density (default is all).
+
+- density_precision:
+
+  Numeric precision of the calculated multipliers (used when stages
+  \> 1) applied to affected transition rates (default is 3 decimal
+  places).
+
+- simulator:
+
+  [`SimulatorReference`](https://globalecologylab.github.io/poems/reference/SimulatorReference.md)
+  object with dynamically accessible *attached* and *results* lists.
+
+## Value
+
+Density dependent calculation function, either:
+
+- `function(carrying_capacity, stage_abundance)`:
+
+  For ceiling density dependence function, OR
+
+- `function(transition_array, carrying_capacity, stage_abundance, occupied_indices)`:
+
+  For user-defined density dependence function, where:
+
+  `transition_array`
+
+  :   3D array of transition rates: stages by stages by populations.
+
+  `carrying_capacity`
+
+  :   Array of carrying capacity values for each population.
+
+  `stage_abundance`
+
+  :   Matrix of abundance for each stage (rows) and population
+      (columns).
+
+  `occupied_indices`
+
+  :   Array of indices for populations occupied.
+
+## Examples
+
+``` r
+# Ceiling density dependence
+stage_matrix <- array(c(0, 0.5, 0, 3, 0, 0.7, 4, 0, 0.8), c(3, 3))
+fecundity_mask <- array(c(0, 0, 0, 1, 0, 0, 1, 0, 0), c(3, 3))
+simulator <- SimulatorReference$new()
+density_function <- population_density(
+  populations = 7, stage_matrix = stage_matrix, fecundity_mask = fecundity_mask,
+  fecundity_max = NULL, density_dependence = "ceiling",
+  growth_rate_max = NULL, density_affects = NULL, density_stages = c(0, 1, 1),
+  density_precision = NULL, simulator = simulator
+)
+carrying_capacity <- rep(10, 7)
+stage_abundance <- matrix(c(
+  7, 13, 0, 26, 0, 39, 47,
+  2, 0, 6, 8, 0, 12, 13,
+  0, 3, 4, 6, 0, 9, 10
+), nrow = 3, ncol = 7, byrow = TRUE)
+
+# Life cycle stages 2 and 3 (rows 2 and 3) all add up to 10 or less
+density_function(carrying_capacity, stage_abundance)
+#>      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+#> [1,]    7   13    0   26    0   39   47
+#> [2,]    2    0    6    6    0    6    6
+#> [3,]    0    3    4    4    0    4    4
+```
